@@ -15,7 +15,7 @@ spec.loader.exec_module(custom_m_codes)
 def test_custom_m_codes(monkeypatch, tmp_path):
     mock_dcs_socket_path = os.path.join(tmp_path, "dsf.socket")
     monkeypatch.setattr(
-        "pydsfapi.connections.InterceptConnection.connect.__defaults__",
+        "dsf.connections.InterceptConnection.connect.__defaults__",
         (mock_dcs_socket_path,),
     )
 

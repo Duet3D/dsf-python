@@ -16,7 +16,7 @@ spec.loader.exec_module(send_simple_code)
 def test_send_simple_code(monkeypatch, tmp_path):
     mock_dcs_socket_path = os.path.join(tmp_path, "dsf.socket")
     monkeypatch.setattr(
-        "pydsfapi.connections.CommandConnection.connect.__defaults__",
+        "dsf.connections.CommandConnection.connect.__defaults__",
         (mock_dcs_socket_path,),
     )
 

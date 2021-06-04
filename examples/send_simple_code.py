@@ -6,7 +6,7 @@ Example of a command connection to send arbitrary commands to the machine
 Make sure when running this script to have access to the DSF UNIX socket owned by the dsf user.
 """
 
-from pydsfapi.connections import CommandConnection
+from dsf.connections import CommandConnection
 
 
 def send_simple_code():

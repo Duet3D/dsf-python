@@ -1,9 +1,9 @@
-.. pydsfapi documentation master file, created by
+.. dsf documentation master file, created by
    sphinx-quickstart on Sun Mar 28 21:52:22 2021.
    You can adapt this file completely to your liking, but it should at least
    contain the root `toctree` directive.
 
-Welcome to pydsfapi's documentation!
+Welcome to dsf's documentation!
 ====================================
 
 .. toctree::
@@ -13,17 +13,17 @@ Welcome to pydsfapi's documentation!
 API
 ===
 
-.. automodule:: pydsfapi
+.. automodule:: dsf
    :members:
-.. automodule:: pydsfapi.connections
+.. automodule:: dsf.connections
    :members:
-.. automodule:: pydsfapi.http_endpoint
+.. automodule:: dsf.http_endpoint
    :members:
-.. automodule:: pydsfapi.commands
+.. automodule:: dsf.commands
    :members:
-.. automodule:: pydsfapi.initmessages
+.. automodule:: dsf.initmessages
    :members:
-.. automodule:: pydsfapi.model
+.. automodule:: dsf.model
    :members:
 
 

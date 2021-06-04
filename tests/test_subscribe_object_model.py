@@ -15,7 +15,7 @@ spec.loader.exec_module(subscribe_object_model)
 def test_subscribe_object_model(monkeypatch, tmp_path):
     mock_dcs_socket_path = os.path.join(tmp_path, "dsf.socket")
     monkeypatch.setattr(
-        "pydsfapi.connections.SubscribeConnection.connect.__defaults__",
+        "dsf.connections.SubscribeConnection.connect.__defaults__",
         (mock_dcs_socket_path,),
     )
 

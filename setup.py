@@ -7,7 +7,7 @@ here = pathlib.Path(__file__).parent.resolve()
 long_description = (here / "README.md").read_text(encoding="utf-8")
 
 setup(
-    name="pydsfapi",
+    name="dsf",
     version="3.3.0",
     description="Python interface to access DuetSoftwareFramework",
     long_description=long_description,

@@ -15,7 +15,7 @@ spec.loader.exec_module(custom_http_endpoint)
 def test_custom_http_endpoint(monkeypatch, tmp_path):
     mock_dcs_socket_path = os.path.join(tmp_path, "dsf.socket")
     monkeypatch.setattr(
-        "pydsfapi.connections.CommandConnection.connect.__defaults__",
+        "dsf.connections.CommandConnection.connect.__defaults__",
         (mock_dcs_socket_path,),
     )
 

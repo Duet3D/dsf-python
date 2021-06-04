@@ -21,7 +21,7 @@ as well as sent back to the server.
 from enum import Enum, IntEnum
 from typing import List
 
-from pydsfapi.commands.codechannel import CodeChannel
+from dsf.commands.codechannel import CodeChannel
 
 from .basecommands import BaseCommand
 from .codeparameter import CodeParameter

@@ -6,8 +6,8 @@ Example of a subscribe connection to get the machine model
 Make sure when running this script to have access to the DSF UNIX socket owned by the dsf user.
 """
 
-from pydsfapi.connections import SubscribeConnection
-from pydsfapi.initmessages.clientinitmessages import SubscriptionMode
+from dsf.connections import SubscribeConnection
+from dsf.initmessages.clientinitmessages import SubscriptionMode
 
 
 def subscribe():

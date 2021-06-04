@@ -8,9 +8,9 @@ Make sure when running this script to have access to the DSF UNIX socket owned b
 
 import time
 
-from pydsfapi.connections import CommandConnection
-from pydsfapi.commands.basecommands import HttpEndpointType
-from pydsfapi.http import HttpEndpointConnection
+from dsf.connections import CommandConnection
+from dsf.commands.basecommands import HttpEndpointType
+from dsf.http import HttpEndpointConnection
 
 
 async def respond_something(http_endpoint_connection: HttpEndpointConnection):
