@@ -1,11 +1,13 @@
-# pydsfapi
-Python interface to access DuetSoftwareFramework.
+# Duet Software Framework Python Bindings
+
+Find out more about [Duet Software Framework](https://github.com/Duet3D/DuetSoftwareFramework).
+
+Find out more about [Duet Software Framework Python Bindings](https://github.com/Duet3D/dsf-python).
+
+Get in touch with the community at [Duet Software Framework Forum](https://forum.duet3d.com/category/31/dsf-development) for bug reports, discussion and any kind of exchange.
 
 ## Installation
 This package contains a `setup.py` so it can be installed with `python3 setup.py install`.
 
 ## Usage
 See included `examples/` folder for various use cases.
-
-## License
-All files of `pydsfapi` are licensed under LGPLv3.
