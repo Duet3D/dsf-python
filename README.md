@@ -1,8 +1,11 @@
-# Duet Software Framework APIs
+# pydsfapi
+Python interface to access DuetSoftwareFramework.
 
-Repository to collect APIs implementations for [Duet Software Framework](https://github.com/Duet3D/DuetSoftwareFramework) (in languages other than DSF which uses C#)
+## Installation
+This package contains a `setup.py` so it can be installed with `python3 setup.py install`.
 
-Licenses will be included in the individual API implementation sub directories
+## Usage
+See included `examples/` folder for various use cases.
 
-As always please use the Duet3d forum to discuss Duet Software Framework, API implmentations etc:
-https://forum.duet3d.com/category/31/dsf-development
+## License
+All files of `pydsfapi` are licensed under LGPLv3.
