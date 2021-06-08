@@ -108,7 +108,7 @@ class HttpEndpointUnixSocket:
         endpoint_type: HttpEndpointType,
         namespace: str,
         path: str,
-        socket_path: str,
+        socket_file: str,
         backlog: int = DEFAULT_BACKLOG,
         debug: bool = False,
     ):
@@ -116,7 +116,7 @@ class HttpEndpointUnixSocket:
         self.endpoint_type = endpoint_type
         self.namespace = namespace
         self.endpoint_path = path
-        self.socket_path = socket_path
+        self.socket_file = socket_file
         self.backlog = backlog
         self.handler = None
         self.debug = debug
@@ -124,7 +124,7 @@ class HttpEndpointUnixSocket:
         self._server = None
 
         try:
-            os.remove(self.socket_path)
+            os.remove(self.socket_file)
         except FileNotFoundError:
             # We don't care if the file was missing
             # TODO: should we care about deletion failed?
@@ -143,7 +143,7 @@ class HttpEndpointUnixSocket:
         self.event_loop.cancel()
         self.executor.shutdown(wait=False)
         try:
-            os.remove(self.socket_path)
+            os.remove(self.socket_file)
         except FileNotFoundError:
             pass
 
@@ -155,7 +155,7 @@ class HttpEndpointUnixSocket:
         try:
             self._loop = asyncio.new_event_loop()
             self._server = asyncio.start_unix_server(
-                self.handle_connection, self.socket_path, backlog=self.backlog
+                self.handle_connection, self.socket_file, backlog=self.backlog
             )
             self._loop.create_task(self._server)
             self._loop.run_forever()

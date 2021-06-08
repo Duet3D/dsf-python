@@ -1,4 +1,8 @@
-SOCKET_DIRECTORY = "/run/dsf"
-SOCKET_FILE = "dcs.sock"
-FULL_SOCKET_PATH = SOCKET_DIRECTORY + "/" + SOCKET_FILE
+# path to unix socket file
+SOCKET_FILE = "/run/dsf/dsf.sock"
+
+# allowed connection per unix server
 DEFAULT_BACKLOG = 4
+
+# DSF protocol version
+PROTOCOL_VERSION = 11
