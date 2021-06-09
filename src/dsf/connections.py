@@ -64,7 +64,7 @@ class BaseConnection:
 
         self.socket = socket.socket(socket.AF_UNIX, socket.SOCK_STREAM)
         self.socket.connect(socket_file)
-        self.socket.settimeout(self.timeout)
+        self.socket.setblocking(True)
         server_init_message = serverinitmessage.ServerInitMessage.from_json(
             json.loads(self.socket.recv(50).decode("utf8"))
         )
