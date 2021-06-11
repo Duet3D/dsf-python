@@ -18,6 +18,8 @@ serverinitmessage holds everything relevant to the first message received from t
     along with this program.  If not, see <https://www.gnu.org/licenses/>.
 """
 
+from .. import PROTOCOL_VERSION
+
 
 class IncompatibleVersionException(Exception):
     """Exception raised when the server and client are incompatible"""
@@ -34,7 +36,7 @@ class ServerInitMessage:
         """Deserialize a dictionary coming from JSON into an instance of this class"""
         return cls(**data)
 
-    PROTOCOL_VERSION = 11
+    PROTOCOL_VERSION = PROTOCOL_VERSION
 
     def __init__(self, version: int, id: int):
         self.version = version

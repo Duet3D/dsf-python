@@ -13,34 +13,32 @@ spec.loader.exec_module(subscribe_object_model)
 
 
 def test_subscribe_object_model(monkeypatch, tmp_path):
-    mock_dcs_socket_path = os.path.join(tmp_path, "dsf.socket")
+    mock_dcs_socket_file = os.path.join(tmp_path, "dsf.socket")
     monkeypatch.setattr(
         "dsf.connections.SubscribeConnection.connect.__defaults__",
-        (mock_dcs_socket_path,),
+        (mock_dcs_socket_file,),
     )
 
     dcs_passed = threading.Event()
 
     def mock_dcs():
         server = socket.socket(socket.AF_UNIX, socket.SOCK_STREAM)
-        server.bind(mock_dcs_socket_path)
+        server.bind(mock_dcs_socket_file)
         server.listen(1)
         conn, _ = server.accept()
-        conn.sendall('{"version": 10, "id": "foobar"}'.encode())
+        conn.sendall('{"version":11, "id":"foobar"}'.encode())
         assert (
             conn.recv(1024)
-            == b'{"mode":"Subscribe","version":10,"SubscriptionMode":"Patch","Filter":"","Filters":null}'
+            == b'{"mode":"Subscribe","version":11,"SubscriptionMode":"Patch","Filter":"","Filters":null}'
         )
         conn.sendall('{"success":true}'.encode())
-        conn.sendall(
-            '{"boards": "fake-data", "job": "fake-data", "state": "fake-data"}'.encode()
-        )
+        conn.sendall('{"boards":"fake-data", "job":"fake-data", "state":"fake-data"}'.encode())
         assert conn.recv(1024) == b'{"command":"Acknowledge"}'
-        conn.sendall('{"boards": "some-other-fake-data"}'.encode())
+        conn.sendall('{"boards":"some-other-fake-data"}'.encode())
         assert conn.recv(1024) == b'{"command":"Acknowledge"}'
-        conn.sendall('{"job": "some-other-fake-data"}'.encode())
+        conn.sendall('{"job":"some-other-fake-data"}'.encode())
         assert conn.recv(1024) == b'{"command":"Acknowledge"}'
-        conn.sendall('{"state": "some-other-fake-data"}'.encode())
+        conn.sendall('{"state":"some-other-fake-data"}'.encode())
         assert conn.recv(1024) == b'{"command":"Acknowledge"}'
         conn.close()
         dcs_passed.set()  # indicate that all asserts passed and the mock_dcs is shutting down

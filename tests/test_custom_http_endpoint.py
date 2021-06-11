@@ -13,21 +13,21 @@ spec.loader.exec_module(custom_http_endpoint)
 
 
 def test_custom_http_endpoint(monkeypatch, tmp_path):
-    mock_dcs_socket_path = os.path.join(tmp_path, "dsf.socket")
+    mock_dcs_socket_file = os.path.join(tmp_path, "dsf.socket")
     monkeypatch.setattr(
         "dsf.connections.CommandConnection.connect.__defaults__",
-        (mock_dcs_socket_path,),
+        (mock_dcs_socket_file,),
     )
 
     dcs_passed = threading.Event()
 
     def mock_dcs():
         server = socket.socket(socket.AF_UNIX, socket.SOCK_STREAM)
-        server.bind(mock_dcs_socket_path)
+        server.bind(mock_dcs_socket_file)
         server.listen(1)
         conn, _ = server.accept()
-        conn.sendall('{"version": 10, "id": "foobar"}'.encode())
-        assert conn.recv(1024) == b'{"mode":"Command","version":10}'
+        conn.sendall('{"version":11, "id":"foobar"}'.encode())
+        assert conn.recv(1024) == b'{"mode":"Command","version":11}'
         conn.sendall('{"success":true}'.encode())
         assert (
             conn.recv(1024) == b"{"
@@ -35,9 +35,7 @@ def test_custom_http_endpoint(monkeypatch, tmp_path):
             b'"Namespace":"custom","Path":"getIt","IsUploadRequest":false'
             b"}"
         )
-        conn.sendall(
-            '{"result":"/var/run/dsf/custom/getIt-GET.sock","success":true}'.encode()
-        )
+        conn.sendall('{"result":"/var/run/dsf/custom/getIt-GET.sock","success":true}'.encode())
         conn.close()
         dcs_passed.set()  # indicate that all asserts passed and the mock_dcs is shutting down
 
