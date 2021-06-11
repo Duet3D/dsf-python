@@ -28,7 +28,8 @@ def test_subscribe_object_model(monkeypatch, tmp_path):
         conn, _ = server.accept()
         conn.sendall('{"version":11, "id":"foobar"}'.encode())
         assert (
-            conn.recv(1024) == b'{"mode":"Subscribe","version":11,"SubscriptionMode":"Patch","Filter":"","Filters":null}'
+            conn.recv(1024)
+            == b'{"mode":"Subscribe","version":11,"SubscriptionMode":"Patch","Filter":"","Filters":null}'
         )
         conn.sendall('{"success":true}'.encode())
         conn.sendall(
