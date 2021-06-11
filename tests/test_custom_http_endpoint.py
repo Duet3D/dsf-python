@@ -35,9 +35,7 @@ def test_custom_http_endpoint(monkeypatch, tmp_path):
             b'"Namespace":"custom","Path":"getIt","IsUploadRequest":false'
             b"}"
         )
-        conn.sendall(
-            '{"result":"/var/run/dsf/custom/getIt-GET.sock","success":true}'.encode()
-        )
+        conn.sendall('{"result":"/var/run/dsf/custom/getIt-GET.sock","success":true}'.encode())
         conn.close()
         dcs_passed.set()  # indicate that all asserts passed and the mock_dcs is shutting down
 

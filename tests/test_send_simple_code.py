@@ -30,9 +30,7 @@ def test_send_simple_code(monkeypatch, tmp_path):
         conn.sendall('{"version":11, "id":"foobar"}'.encode())
         assert conn.recv(1024) == b'{"mode":"Command","version":11}'
         conn.sendall('{"success":true}'.encode())
-        assert (
-            conn.recv(1024) == b'{"command":"SimpleCode","Code":"M115","Channel":"SBC"}'
-        )
+        assert conn.recv(1024) == b'{"command":"SimpleCode","Code":"M115","Channel":"SBC"}'
         conn.sendall('{"result":"fake code executed", "success":true}'.encode())
         conn.close()
         dcs_passed.set()  # indicate that all asserts passed and the mock_dcs is shutting down

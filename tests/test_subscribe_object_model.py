@@ -32,9 +32,7 @@ def test_subscribe_object_model(monkeypatch, tmp_path):
             == b'{"mode":"Subscribe","version":11,"SubscriptionMode":"Patch","Filter":"","Filters":null}'
         )
         conn.sendall('{"success":true}'.encode())
-        conn.sendall(
-            '{"boards":"fake-data", "job":"fake-data", "state":"fake-data"}'.encode()
-        )
+        conn.sendall('{"boards":"fake-data", "job":"fake-data", "state":"fake-data"}'.encode())
         assert conn.recv(1024) == b'{"command":"Acknowledge"}'
         conn.sendall('{"boards":"some-other-fake-data"}'.encode())
         assert conn.recv(1024) == b'{"command":"Acknowledge"}'
