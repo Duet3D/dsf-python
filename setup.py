@@ -5,7 +5,7 @@ import setuptools
 long_description = open("README.md", encoding="utf-8").read()
 
 setuptools.setup(
-    name="dsf",
+    name="dsf-python",
     version="3.3.0",
     description="Python interface to access DuetSoftwareFramework",
     long_description=long_description,
