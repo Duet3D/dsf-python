@@ -14,7 +14,7 @@ setuptools.setup(
     author="Duet3D Ltd.",
     author_email="pkg@duet3d.com",
     classifiers=[
-        "Development Status :: 3 - Production/Stable",
+        "Development Status :: 5 - Production/Stable",
         "Intended Audience :: Developers",
         "Topic :: Software Development :: Libraries",
         "License :: OSI Approved :: GNU Lesser General Public License v3 (LGPLv3)",
