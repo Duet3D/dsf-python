@@ -1,18 +1,16 @@
 #!usr/bin/env python3
 
-from setuptools import setup, find_packages
-import pathlib
+import setuptools
 
-here = pathlib.Path(__file__).parent.resolve()
-long_description = (here / "README.md").read_text(encoding="utf-8")
+long_description = open("README.md", encoding="utf-8").read()
 
-setup(
+setuptools.setup(
     name="dsf",
     version="3.3.0",
     description="Python interface to access DuetSoftwareFramework",
     long_description=long_description,
     long_description_content_type="text/markdown",
-    url="https://github.com/Duet3D/DSF-APIs",
+    url="https://github.com/Duet3D/dsf-python",
     author="Duet3D Ltd.",
     author_email="pkg@duet3d.com",
     classifiers=[
@@ -27,9 +25,9 @@ setup(
         "Programming Language :: Python :: 3.9",
         "Programming Language :: Python :: 3 :: Only",
     ],
-    keywords="Duet3D, DuetSoftwareFramework, DSF",
+    keywords="Duet3D, DuetSoftwareFramework, DSF, dsf-python",
     package_dir={"": "src"},
-    packages=find_packages(where="src"),
+    packages=setuptools.find_packages(where="src"),
     python_requires=">=3.6, <4",
     extras_require={
         "dev": [
@@ -39,7 +37,7 @@ setup(
     },
     project_urls={
         "Duet3D Support": "https://forum.duet3d.com/",
-        "Bug Reports": "https://github.com/Duet3D/DSF-APIs/issues",
-        "Source": "https://github.com/Duet3D/DSF-APIs/",
+        "Bug Reports": "https://github.com/Duet3D/dsf-python/issues",
+        "Source": "https://github.com/Duet3D/dsf-python/",
     },
 )
