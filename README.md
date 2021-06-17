@@ -1,5 +1,7 @@
 # Duet Software Framework Python Bindings
 
+This is also availabe as a [pip package on pypi](https://pypi.org/project/dsf-python/)
+
 Find out more about [Duet Software Framework](https://github.com/Duet3D/DuetSoftwareFramework).
 
 Find out more about [Duet Software Framework Python Bindings](https://github.com/Duet3D/dsf-python).
