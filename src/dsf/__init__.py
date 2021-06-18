@@ -1,5 +1,5 @@
 # path to unix socket file
-SOCKET_FILE = "/run/dsf/dsf.sock"
+SOCKET_FILE = "/run/dsf/dcs.sock"
 
 # allowed connection per unix server
 DEFAULT_BACKLOG = 4
