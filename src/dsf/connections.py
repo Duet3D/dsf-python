@@ -457,10 +457,6 @@ class InterceptConnection(BaseCommandConnection):
         """Wait for a code to be intercepted and read it"""
         return self.receive(code.Code)
 
-    def flush(self):
-        """Wait for all previous codes to finish"""
-        return self.perform_command(basecommands.flush())
-
     def cancel_code(self):
         """Instruct the control server to cancel the last received code (in intercepting mode)"""
         self.send(basecommands.cancel())
