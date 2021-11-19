@@ -354,9 +354,9 @@ class BaseCommandConnection(BaseConnection):
         """
         return self.perform_command(basecommands.set_object_model(path, value))
 
-    def set_plugin_data(self, key: str, value: str, plugin: str):
+    def set_plugin_data(self, plugin: str, key: str, value: str):
         """Set custom plugin data in the object model"""
-        res = self.perform_command(basecommands.set_plugin_data(key, value, plugin))
+        res = self.perform_command(basecommands.set_plugin_data(plugin, key, value))
         return res.result
 
     def set_update_status(self, is_updating: bool):
