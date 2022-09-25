@@ -19,8 +19,28 @@ This module contains all basic commands to be sent to the server.
 """
 from enum import IntEnum, Enum
 from typing import Optional
+from warnings import warn
 
 from .codechannel import CodeChannel
+
+
+DEPRECATED_NAMES = [
+    ("get_machine_model", "get_object_model"),
+    ("sync_machine_model", "sync_object_model"),
+    ("lock_machine_model", "lock_object_model"),
+    ("unlock_machine_model", "unlock_object_model")
+]
+
+
+def __getattr__(name):
+    for old_name, new_name in DEPRECATED_NAMES:
+        if name == old_name:
+            msg = f"{name} is deprecated and is going to be removed in the next release."
+            if len(new_name):
+                msg += f" Please use {new_name} instead."
+            warn(msg, FutureWarning, stacklevel=2)
+            return globals()[f"_deprecated_{name}"]
+    raise AttributeError(f"module {__name__} has no attribute {name}")
 
 
 class HttpEndpointType(str, Enum):
@@ -103,7 +123,7 @@ def ignore():
     return BaseCommand("Ignore")
 
 
-def get_machine_model():
+def _deprecated_get_machine_model():
     return BaseCommand("GetObjectModel")
 
 
@@ -112,7 +132,7 @@ def get_object_model():
     return BaseCommand("GetObjectModel")
 
 
-def sync_machine_model():
+def _deprecated_sync_machine_model():
     return BaseCommand("SyncObjectModel")
 
 
@@ -121,7 +141,7 @@ def sync_object_model():
     return BaseCommand("SyncObjectModel")
 
 
-def lock_machine_model():
+def _deprecated_lock_machine_model():
     return BaseCommand("LockObjectModel")
 
 
@@ -133,7 +153,7 @@ def lock_object_model():
     return BaseCommand("LockObjectModel")
 
 
-def unlock_machine_model():
+def _deprecated_unlock_machine_model():
     return BaseCommand("UnlockObjectModel")
 
 
