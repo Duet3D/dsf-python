@@ -234,6 +234,15 @@ class BaseCommandConnection(BaseConnection):
         """Check the given password (see M551)"""
         return self.perform_command(commands.generic.check_password(password))
 
+    def evaluate_expression(self, expression, channel: codechannel.CodeChannel = codechannel.CodeChannel.SBC):
+        """
+        Evaluate an arbitrary expression
+        :param expression: Expression to evaluate
+        :param channel: Context of the evaluation
+        :returns: Evaluation result
+        """
+        return self.perform_command(commands.generic.evaluate_expression(channel, expression))
+
     def flush(self, channel: codechannel.CodeChannel = codechannel.CodeChannel.SBC):
         """Wait for all pending codes of the given channel to finish"""
         return self.perform_command(commands.generic.flush(channel))
