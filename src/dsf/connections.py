@@ -23,7 +23,8 @@ import socket
 from typing import Optional
 
 from . import DEFAULT_BACKLOG, SOCKET_FILE
-from .commands import responses, basecommands, code, result, codechannel
+from . import commands
+from .commands import code, codechannel, responses, result
 from .commands.basecommands import MessageType, LogLevel
 from .initmessages import serverinitmessage, clientinitmessages
 from .http import HttpEndpointUnixSocket
@@ -57,9 +58,7 @@ class BaseConnection:
         self.id = None
         self.input = ""
 
-    def connect(
-        self, init_message: clientinitmessages.ClientInitMessage, socket_file: str
-    ):
+    def connect(self, init_message: clientinitmessages.ClientInitMessage, socket_file: str):
         """Establishes a connection to the given UNIX socket file"""
 
         self.socket = socket.socket(socket.AF_UNIX, socket.SOCK_STREAM)
@@ -202,13 +201,9 @@ class BaseConnection:
 class BaseCommandConnection(BaseConnection):
     """Base connection class for sending commands to the control server"""
 
-    def flush(self, channel: codechannel.CodeChannel = codechannel.CodeChannel.SBC):
-        """Wait for all pending codes of the given channel to finish"""
-        return self.perform_command(basecommands.flush(channel))
-
     def add_http_endpoint(
         self,
-        endpoint_type: basecommands.HttpEndpointType,
+        endpoint_type: commands.http_endpoints.HttpEndpointType,
         namespace: str,
         path: str,
         is_upload_request: bool = False,
@@ -216,19 +211,15 @@ class BaseCommandConnection(BaseConnection):
     ):
         """Add a new third-party HTTP endpoint in the format /machine/{ns}/{path}"""
         res = self.perform_command(
-            basecommands.add_http_endpoint(
-                endpoint_type, namespace, path, is_upload_request
-            )
+            commands.http_endpoints.add_http_endpoint(endpoint_type, namespace, path, is_upload_request)
         )
         socket_file = res.result
-        return HttpEndpointUnixSocket(
-            endpoint_type, namespace, path, socket_file, backlog, self.debug
-        )
+        return HttpEndpointUnixSocket(endpoint_type, namespace, path, socket_file, backlog, self.debug)
 
     def add_user_session(
         self,
-        access: basecommands.AccessLevel,
-        tpe: basecommands.SessionType,
+        access: commands.user_sessions.AccessLevel,
+        tpe: commands.user_sessions.SessionType,
         origin: str,
         origin_port: int = None,
     ):
@@ -236,19 +227,21 @@ class BaseCommandConnection(BaseConnection):
         if origin_port is None:
             origin_port = os.getpid()
 
-        res = self.perform_command(
-            basecommands.add_user_session(access, tpe, origin, origin_port)
-        )
+        res = self.perform_command(commands.user_sessions.add_user_session(access, tpe, origin, origin_port))
         return int(res.result)
 
     def check_password(self, password: str):
         """Check the given password (see M551)"""
-        return self.perform_command(basecommands.check_password(password))
+        return self.perform_command(commands.generic.check_password(password))
+
+    def flush(self, channel: codechannel.CodeChannel = codechannel.CodeChannel.SBC):
+        """Wait for all pending codes of the given channel to finish"""
+        return self.perform_command(commands.generic.flush(channel))
 
     def get_file_info(self, file_name: str):
         """Parse a G-code file and returns file information about it"""
         res = self.perform_command(
-            basecommands.get_file_info(file_name), ParsedFileInfo
+            commands.files.get_file_info(file_name), ParsedFileInfo
         )
         return res.result
 
@@ -262,7 +255,7 @@ class BaseCommandConnection(BaseConnection):
 
     def get_object_model(self):
         """Retrieve the full object model of the machine."""
-        res = self.perform_command(basecommands.get_object_model(), MachineModel)
+        res = self.perform_command(commands.object_model.get_object_model(), MachineModel)
         return res.result
 
     def get_serialized_machine_model(self):
@@ -275,12 +268,12 @@ class BaseCommandConnection(BaseConnection):
 
     def get_serialized_object_model(self):
         """Optimized method to directly query the machine model UTF-8 JSON"""
-        self.send(basecommands.get_object_model())
+        self.send(commands.object_model.get_object_model())
         return self.receive_json()
 
     def install_plugin(self, plugin_file: str):
         """Install or upgrade a plugin"""
-        res = self.perform_command(basecommands.install_plugin(plugin_file))
+        res = self.perform_command(commands.plugins.install_plugin(plugin_file))
         return res.result
 
     def lock_machine_model(self):
@@ -297,13 +290,13 @@ class BaseCommandConnection(BaseConnection):
         Lock the machine model for read/write access.
         It is MANDATORY to call unlock_object_model when write access has finished
         """
-        return self.perform_command(basecommands.lock_object_model())
+        return self.perform_command(commands.object_model.lock_object_model())
 
     def patch_object_model(self, key: str, patch):
         """
         Apply a full patch to the object model. Use with care!
         """
-        res = self.perform_command(basecommands.patch_object_model(key, patch))
+        res = self.perform_command(commands.object_model.patch_object_model(key, patch))
         return res.result
 
     def perform_code(self, cde: code.Code):
@@ -317,26 +310,24 @@ class BaseCommandConnection(BaseConnection):
         channel: codechannel.CodeChannel = codechannel.CodeChannel.DEFAULT_CHANNEL,
     ):
         """Execute an arbitrary G/M/T-code in text form and return the result as a string"""
-        res = self.perform_command(basecommands.simple_code(cde, channel))
+        res = self.perform_command(commands.generic.simple_code(cde, channel))
         return res.result
 
-    def remove_http_endpoint(
-        self, endpoint_type: basecommands.HttpEndpointType, namespace: str, path: str
-    ):
+    def remove_http_endpoint(self, endpoint_type: commands.http_endpoints.HttpEndpointType, namespace: str, path: str):
         """Remove an existing HTTP endpoint"""
         res = self.perform_command(
-            basecommands.remove_http_endpoint(endpoint_type, namespace, path)
+            commands.http_endpoints.remove_http_endpoint(endpoint_type, namespace, path)
         )
         return res.result
 
     def remove_user_session(self, session_id: int):
         """Remove an existing HTTP endpoint"""
-        res = self.perform_command(basecommands.remove_user_session(session_id))
+        res = self.perform_command(commands.user_sessions.remove_user_session(session_id))
         return res.result
 
     def resolve_path(self, path: str):
         """Resolve a RepRapFirmware-style file path to a real file path"""
-        return self.perform_command(basecommands.resolve_path(path))
+        return self.perform_command(commands.files.resolve_path(path))
 
     def set_machine_model(self, path: str, value: str):
         """
@@ -352,26 +343,26 @@ class BaseCommandConnection(BaseConnection):
         Set a given property to a certain value.
         Make sure to lock the object model before calling this
         """
-        return self.perform_command(basecommands.set_object_model(path, value))
+        return self.perform_command(commands.object_model.set_object_model(path, value))
 
     def set_plugin_data(self, plugin: str, key: str, value: str):
         """Set custom plugin data in the object model"""
-        res = self.perform_command(basecommands.set_plugin_data(plugin, key, value))
+        res = self.perform_command(commands.plugins.set_plugin_data(plugin, key, value))
         return res.result
 
     def set_update_status(self, is_updating: bool):
         """Override the current machin staeus if a software update is in progress"""
-        res = self.perform_command(basecommands.set_update_status(is_updating))
+        res = self.perform_command(commands.generic.set_update_status(is_updating))
         return res.result
 
     def start_plugin(self, plugin: str):
         """Start a plugin"""
-        res = self.perform_command(basecommands.start_plugin(plugin))
+        res = self.perform_command(commands.plugins.start_plugin(plugin))
         return res.result
 
     def stop_plugin(self, plugin: str):
         """Stop a plugin"""
-        res = self.perform_command(basecommands.stop_plugin(plugin))
+        res = self.perform_command(commands.plugins.stop_plugin(plugin))
         return res.result
 
     def sync_machine_model(self):
@@ -384,11 +375,11 @@ class BaseCommandConnection(BaseConnection):
 
     def sync_object_model(self):
         """Wait for the full object model to be updated from RepRapFirmware"""
-        return self.perform_command(basecommands.sync_object_model())
+        return self.perform_command(commands.object_model.sync_object_model())
 
     def uninstall_plugin(self, plugin: str):
         """Uninstall a plugin"""
-        res = self.perform_command(basecommands.uninstall_plugin(plugin))
+        res = self.perform_command(commands.plugins.uninstall_plugin(plugin))
         return res.result
 
     def unlock_machine_model(self):
@@ -401,7 +392,7 @@ class BaseCommandConnection(BaseConnection):
 
     def unlock_object_model(self):
         """Unlock the object model again"""
-        return self.perform_command(basecommands.unlock_object_model())
+        return self.perform_command(commands.object_model.unlock_object_model())
 
     def write_message(
         self,
@@ -412,7 +403,7 @@ class BaseCommandConnection(BaseConnection):
     ):
         """Write an arbitrary message"""
         res = self.perform_command(
-            basecommands.write_message(message_type, message, output_message, log_level)
+            commands.generic.write_message(message_type, message, output_message, log_level)
         )
         return res.result
 
@@ -459,20 +450,18 @@ class InterceptConnection(BaseCommandConnection):
 
     def cancel_code(self):
         """Instruct the control server to cancel the last received code (in intercepting mode)"""
-        self.send(basecommands.cancel())
+        self.send(commands.code_interception.cancel())
 
     def ignore_code(self):
         """Instruct the control server to ignore the last received code (in intercepting mode)"""
-        self.send(basecommands.ignore())
+        self.send(commands.code_interception.ignore())
 
-    def resolve_code(
-        self, rtype: MessageType = MessageType.Success, content: Optional[str] = None
-    ):
+    def resolve_code(self, rtype: MessageType = MessageType.Success, content: Optional[str] = None):
         """
         Instruct the control server to resolve the last received code with the given
         message details (in intercepting mode)
         """
-        self.send(basecommands.resolve_code(rtype, content))
+        self.send(commands.code_interception.resolve_code(rtype, content))
 
 
 class SubscribeConnection(BaseConnection):
@@ -504,7 +493,7 @@ class SubscribeConnection(BaseConnection):
         ConnectionAbortedError has been established.
         """
         machine_model = self.receive(MachineModel)
-        self.send(basecommands.acknowledge())
+        self.send(commands.model_subscription.acknowledge())
         return machine_model
 
     def get_serialized_machine_model(self) -> str:
@@ -513,7 +502,7 @@ class SubscribeConnection(BaseConnection):
         May be used to get machine model patches as well.
         """
         machine_model_json = self.receive_json()
-        self.send(basecommands.acknowledge())
+        self.send(commands.model_subscription.acknowledge())
         return machine_model_json
 
     def get_machine_model_patch(self) -> str:
@@ -524,5 +513,5 @@ class SubscribeConnection(BaseConnection):
         such fragments.
         """
         patch_json = self.receive_json()
-        self.send(basecommands.acknowledge())
+        self.send(commands.model_subscription.acknowledge())
         return patch_json
