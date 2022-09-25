@@ -221,13 +221,18 @@ class BaseCommandConnection(BaseConnection):
         access: commands.user_sessions.AccessLevel,
         tpe: commands.user_sessions.SessionType,
         origin: str,
-        origin_port: int = None,
     ):
-        """Add a new user session"""
-        if origin_port is None:
-            origin_port = os.getpid()
+        """
+        Add a new user session
+        :param access: Access level of this session
+        :param tpe: Type of this session
+        :param origin: Origin of the user session (e.g. IP address or PID)
+        :returns: New session ID
+        """
+        if origin is None:
+            origin = str(os.getpid())
 
-        res = self.perform_command(commands.user_sessions.add_user_session(access, tpe, origin, origin_port))
+        res = self.perform_command(commands.user_sessions.add_user_session(access, tpe, origin))
         return int(res.result)
 
     def check_password(self, password: str):
