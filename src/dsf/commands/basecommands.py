@@ -83,14 +83,23 @@ class BaseCommand:
 
 
 def acknowledge():
+    """
+    Acknowledge a (partial) model update.
+    This command is only permitted in ConnectionMode.Subscribe mode.
+    """
     return BaseCommand("Acknowledge")
 
 
 def cancel():
+    """Cancel a code in Connection.InterceptionMode."""
     return BaseCommand("Cancel")
 
 
 def ignore():
+    """
+    Ignore the code to intercept and allow it to be processed without any modifications.
+    This command is only permitted in ConnectionMode.Intercept mode.
+    """
     return BaseCommand("Ignore")
 
 
@@ -99,6 +108,7 @@ def get_machine_model():
 
 
 def get_object_model():
+    """Query the current object model."""
     return BaseCommand("GetObjectModel")
 
 
@@ -107,6 +117,7 @@ def sync_machine_model():
 
 
 def sync_object_model():
+    """Wait for the machine model to be fully updated from RepRapFirmware."""
     return BaseCommand("SyncObjectModel")
 
 
@@ -115,6 +126,10 @@ def lock_machine_model():
 
 
 def lock_object_model():
+    """
+    Lock the object model for read/write access.
+    This may be used to update the machine model and to change array items.
+    """
     return BaseCommand("LockObjectModel")
 
 
@@ -123,6 +138,10 @@ def unlock_machine_model():
 
 
 def unlock_object_model():
+    """
+    Unlock the machine model after obtaining read/write access.
+    This is mandatory after LockObjectModel has been invoked.
+    """
     return BaseCommand("UnlockObjectModel")
 
 
@@ -132,9 +151,13 @@ def add_http_endpoint(
     """
     Register a new HTTP endpoint via DuetWebServer.
     This will create a new HTTP endpoint under /machine/{Namespace}/{EndpointPath}.
-    Returns a path to the UNIX socket which DuetWebServer will connect to whenever a matching
-    HTTP request is received. A plugin using this command has to open a new UNIX socket with
-    the given path that DuetWebServer can connect to
+    :param endpoint_type: Type of the HTTP request
+    :param namespace: Namespace of the plugin wanting to create a new third-party endpoint
+    :param path: Path to the endpoint to register
+    :param is_upload_request: Whether this is an upload request
+    :returns: a path to the UNIX socket which DuetWebServer will connect
+    to whenever a matching HTTP request is received.
+    A plugin using this command has to open a new UNIX socket with the given path that DuetWebServer can connect to
     """
     if not isinstance(endpoint_type, HttpEndpointType):
         raise TypeError("endpoint_type must be a HttpEndpointType")
@@ -143,7 +166,7 @@ def add_http_endpoint(
     if not isinstance(path, str) or not path:
         raise TypeError("path must be a string")
     if not isinstance(is_upload_request, bool):
-        raise TypeError("is_upload_request must be a bool")
+        raise TypeError("is_upload_request must be a boolean")
     return BaseCommand(
         "AddHttpEndpoint",
         **{
@@ -158,7 +181,10 @@ def add_http_endpoint(
 def remove_http_endpoint(endpoint_type: HttpEndpointType, namespace: str, path: str):
     """
     Remove an existing HTTP endpoint.
-    Returns true if the endpoint could be successfully removed
+    :param endpoint_type: Type of the endpoint
+    :param namespace: Namespace of the endpoint
+    :param path: Path to the endpoint to unregister
+    :returns: true if the endpoint could be successfully removed
     """
     if not isinstance(endpoint_type, HttpEndpointType):
         raise TypeError("endpoint_type must be a HttpEndpointType")
@@ -176,6 +202,8 @@ def check_password(password: str):
     """
     Check if the given password is correct and matches the previously set value from M551.
     If no password was configured before or if it was set to "reprap", this will always return true
+    :param password: Password to check
+    :returns: true if the password matches or is not set
     """
     if not isinstance(password, str) or not password:
         raise TypeError("password must be a string")
@@ -188,6 +216,9 @@ def add_user_session(
     """
     Register a new user session.
     Returns the ID of the new user session
+    :param access: Access level of this session
+    :param tpe: Type of this session
+    :param origin: Origin of this session. For remote sessions, this equals the remote IP address
     """
     if not isinstance(access, AccessLevel):
         raise TypeError("access must be an AccessLevel")
@@ -209,7 +240,10 @@ def add_user_session(
 
 
 def remove_user_session(session_id: int):
-    """Remove an existing user session"""
+    """
+    Remove an existing user session
+    :param session_id: Identifier of the user session to remove
+    """
     if not isinstance(session_id, int):
         raise TypeError("session_id must be an int")
     return BaseCommand("RemoveUserSession", **{"Id": session_id})
@@ -220,6 +254,8 @@ def evaluate_expression(channel: CodeChannel, expression: str):
     Evaluate an arbitrary expression on the given channel in RepRapFirmware.
     Do not use this call to evaluate file-based and network-related fields because the
     DSF and RRF models diverge in this regard.
+    :param channel: Code channel where the expression is evaluated
+    :param expression: Expression to evaluate
     """
     if not isinstance(channel, CodeChannel):
         raise TypeError("channel must be a CodeChannel")
@@ -231,28 +267,48 @@ def evaluate_expression(channel: CodeChannel, expression: str):
 
 
 def flush(channel: CodeChannel):
-    """Create a Flush command"""
+    """
+    Wait for all pending (macro) codes on the given channel to finish.
+    This effectively guarantees that all buffered codes are processed by RRF before this command finishes.
+    :param channel: Code channel to flush
+    :returns: true if the flush request is successful
+    """
     if not isinstance(channel, CodeChannel):
         raise TypeError("channel must be a CodeChannel")
     return BaseCommand("Flush", **{"Channel": channel})
 
 
 def get_file_info(file_name: str):
-    """Create a GetFileInfo command"""
+    """
+    Analyse a G-code file and return an instance of GetFileInfo when ready
+    :param file_name: The filename to extract information from
+    """
     if not isinstance(file_name, str) or not file_name:
         raise TypeError("file_name must be a string")
     return BaseCommand("GetFileInfo", **{"FileName": file_name})
 
 
 def resolve_path(path: str):
-    """Create a ResolvePath command"""
+    """
+    Resolve a RepRapFirmware-style path to an actual file path
+    :param path: Path that is RepRapFirmware-compatible
+    :returns: The resolved path
+    """
     if not isinstance(path, str) or not path:
         raise TypeError("path must be a string")
     return BaseCommand("ResolvePath", **{"Path": path})
 
 
 def simple_code(code: str, channel: CodeChannel):
-    """Create a simple G/M/T code command"""
+    """
+    Perform a simple G/M/T-code
+    Internally the code passed is populated as a full Code instance and on completion
+    its Code.Result is transformed back into a basic string. This is useful for minimal
+    extensions that do not require granular control of the code details. Except for certain cases, it
+    is NOT recommended for usage in InterceptionMode because it renders the internal code buffer useless.
+    :param code: Code to parse and execute
+    :param channel: Destination channel
+    """
     if not isinstance(code, str) or not code:
         raise TypeError("code must be a string")
     if not isinstance(channel, CodeChannel):
@@ -263,6 +319,8 @@ def simple_code(code: str, channel: CodeChannel):
 def patch_object_model(key: str, patch: str):
     """
     Apply a full patch to the object model. May be used only in non-SPI mode
+    :param key: Key to update
+    :param patch: JSON patch to apply
     """
     if not isinstance(key, str) or not key:
         raise TypeError("key must be a string")
@@ -274,7 +332,10 @@ def patch_object_model(key: str, patch: str):
 def set_object_model(property_path: str, value: str):
     """
     Set an atomic property in the object model.
-    Make sure to acquire the read/write lock first! Returns true if the field could be updated
+    Make sure to acquire the read/write lock first!
+    :param property_path: Path to the property in the machine model
+    :param value: String representation of the value to set
+    :returns: true if the field could be updated
     """
     if not isinstance(property_path, str) or not property_path:
         raise TypeError("property_path must be a string")
@@ -287,8 +348,8 @@ def set_object_model(property_path: str, value: str):
 
 def set_update_status(updating: bool):
     """
-    Override the current status as reported by the object model when
-    performing a software update.
+    Override the current status as reported by the object model when performing a software update.
+    :param updating: Whether an update is now in progress
     """
     if not isinstance(updating, bool):
         raise TypeError("updating must be a bool")
@@ -298,6 +359,7 @@ def set_update_status(updating: bool):
 def install_plugin(plugin_file: str):
     """
     Install or upgrade a plugin
+    :param plugin_file: Absolute file path to the plugin ZIP bundle
     """
     if not isinstance(plugin_file, str) or not plugin_file:
         raise TypeError("plugin_file must be a string")
@@ -306,8 +368,12 @@ def install_plugin(plugin_file: str):
 
 def set_plugin_data(plugin: str, key: str, value: str):
     """
-    Set custom plugin data in the object model.
-    May be used to update only the own plugin data unless the plugin has the ManagePlugins permission
+    Update custom plugin data in the object model
+    May be used to update only the own plugin data unless the plugin has the ManagePlugins permission.
+    Note that the corresponding key must already exist in the plugin data!
+    :param plugin: Identifier of the plugin to update (only mandatory if running as root)
+    :param key: Key to set. This key must already exist in the ObjectModel.PluginManifest.Data object!
+    :param value: Custom value to set
     """
     if not isinstance(plugin, str) or not plugin:
         raise TypeError("plugin must be a string")
@@ -323,6 +389,7 @@ def set_plugin_data(plugin: str, key: str, value: str):
 def start_plugin(plugin: str):
     """
     Start a plugin
+    :param plugin: Identifier of the plugin
     """
     if not isinstance(plugin, str) or not plugin:
         raise TypeError("plugin must be a string")
@@ -332,6 +399,7 @@ def start_plugin(plugin: str):
 def stop_plugin(plugin: str):
     """
     Stop a plugin
+    :param plugin: Identifier of the plugin
     """
     if not isinstance(plugin, str) or not plugin:
         raise TypeError("plugin must be a string")
@@ -341,6 +409,7 @@ def stop_plugin(plugin: str):
 def uninstall_plugin(plugin: str):
     """
     Uninstall a plugin
+    :param plugin: Identifier of the plugin
     """
     if not isinstance(plugin, str) or not plugin:
         raise TypeError("plugin must be a string")
@@ -355,6 +424,10 @@ def write_message(
 ):
     """
     Write an arbitrary generic message
+    :param message_type: Type of the message to write
+    :param content: Content of the message to write
+    :param output_message: Output the message on the console and via the object model
+    :param log_level: Log level of this message
     """
     if not isinstance(message_type, MessageType):
         raise TypeError("rtype must be a MessageType")
@@ -376,7 +449,12 @@ def write_message(
 
 
 def resolve_code(rtype: MessageType, content: Optional[str]):
-    """Create a Resolve message"""
+    """
+    Resolve the code to intercept and return the given message details for its completion.
+    This command is only permitted in ConnectionMode.Intercept mode.
+    :param rtype: Type of the resolving message
+    :param content: Content of the resolving message
+    """
     if not isinstance(rtype, MessageType):
         raise TypeError("rtype must be a MessageType")
     if content is not None and not isinstance(content, str):
