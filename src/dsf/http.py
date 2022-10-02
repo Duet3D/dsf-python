@@ -25,9 +25,7 @@ class ReceivedHttpRequest:
         """Deserialize an instance of this class from deserialized JSON dictionary"""
         return cls(**data)
 
-    def __init__(
-        self, sessionId: int, queries: dict, headers: dict, contentType: str, body: str
-    ):
+    def __init__(self, sessionId: int, queries: dict, headers: dict, contentType: str, body: str):
         self.session_id = sessionId
         self.queries = queries
         self.headers = headers
@@ -176,7 +174,5 @@ class HttpEndpointUnixSocket:
             # Note that the event delegate is responsible for disposing the connection!
             await self.handler(http_endpoint_connection)
         else:
-            await http_endpoint_connection.send_response(
-                500, "No event handler registered"
-            )
+            await http_endpoint_connection.send_response(500, "No event handler registered")
             http_endpoint_connection.close()

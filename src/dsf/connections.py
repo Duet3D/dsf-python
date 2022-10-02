@@ -107,9 +107,7 @@ class BaseConnection:
 
     def send(self, msg):
         """Serialize an arbitrary object into JSON and send it to the server plus NL"""
-        json_string = json.dumps(
-            msg, separators=(",", ":"), default=lambda o: o.__dict__
-        )
+        json_string = json.dumps(msg, separators=(",", ":"), default=lambda o: o.__dict__)
         if self.debug:
             print(f"send: {json_string}")
         self.socket.sendall(json_string.encode("utf8"))
@@ -138,7 +136,6 @@ class BaseConnection:
             self.input = json_string[end_index:]
             # Limit to the first full JSON object
             json_string = json_string[:end_index]
-
         else:
             found = False
             while not found:

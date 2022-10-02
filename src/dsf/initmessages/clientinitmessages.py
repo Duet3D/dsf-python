@@ -51,9 +51,7 @@ class InterceptionMode(str, Enum):
     EXECUTED = "Executed"
 
 
-def intercept_init_message(
-    intercept_mode: InterceptionMode, channels, filters, priority_codes: bool
-):
+def intercept_init_message(intercept_mode: InterceptionMode, channels, filters, priority_codes: bool):
     """Enter interception mode"""
     return ClientInitMessage(
         ConnectionMode.INTERCEPT,
@@ -78,9 +76,7 @@ class SubscriptionMode(str, Enum):
     PATCH = "Patch"
 
 
-def subscribe_init_message(
-    subscription_mode: SubscriptionMode, filter_string: str, filter_list
-):
+def subscribe_init_message(subscription_mode: SubscriptionMode, filter_string: str, filter_list):
     """Enter subscription mode"""
     return ClientInitMessage(
         ConnectionMode.SUBSCRIBE,

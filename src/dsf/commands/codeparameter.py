@@ -62,7 +62,7 @@ class DriverId:
         return (self.board << 16) | self.port
 
     def __str__(self):
-        return "{0}.{1}".format(self.board, self.port)
+        return f"{self.board}.{self.port}"
 
     def __eq__(self, o):
         if self is None:
@@ -98,9 +98,7 @@ class CodeParameter(json.JSONEncoder):
         """Create a new simple parameter without parsing the value"""
         return cls(letter, value, isDriverId=isDriverId)
 
-    def __init__(
-        self, letter: str, value, isString: bool = None, isDriverId: bool = None
-    ):
+    def __init__(self, letter: str, value, isString: bool = None, isDriverId: bool = None):
         """
         Creates a new CodeParameter instance and parses value to a native data type
         if applicable
@@ -111,9 +109,7 @@ class CodeParameter(json.JSONEncoder):
             self.letter = letter
             self.string_value = str(value)
             self.__parsed_value = value
-            self.is_expression = self.string_value.startswith(
-                "{}"
-            ) and self.string_value.endswith("}")
+            self.is_expression = self.string_value.startswith("{}") and self.string_value.endswith("}")
             return
 
         self.letter = letter
@@ -143,9 +139,7 @@ class CodeParameter(json.JSONEncoder):
         elif ":" in value:  # It is an array (or a string)
             split = value.split(":")
             try:
-                if (
-                    "." in value
-                ):  # If there is a dot anywhere, attempt to parse it as a float array
+                if "." in value:  # If there is a dot anywhere, attempt to parse it as a float array
                     self.__parsed_value = list(map(float, split))
                 else:  # If there is no dot, it could be an integer array
                     self.__parsed_value = list(map(int, split))
@@ -167,7 +161,7 @@ class CodeParameter(json.JSONEncoder):
         try:
             drivers = [DriverId(as_str=value) for value in self.string_value.split(":")]
         except CodeParserException as e:
-            raise CodeParserException(e + " from {0} parameter".format(self.letter))
+            raise CodeParserException(f"{e} from {self.letter} parameter")
 
         if len(drivers) == 1:
             self.__parsed_value = drivers[0]
@@ -185,14 +179,9 @@ class CodeParameter(json.JSONEncoder):
                 driver = (int(segments[0]) << 16) & 0xFFFF
                 driver |= int(segments[1] & 0xFFFF)
             else:
-                raise CodeParserException(
-                    "Driver value from {0} parameter is invalid".format(self.letter)
-                )
+                raise CodeParserException(f"Driver value from {self.letter} parameter is invalid")
 
-        if len(drivers) == 1:
-            self.__parsed_value = drivers[0]
-        else:
-            self.__parsed_value = drivers
+        self.__parsed_value = drivers[0] if len(drivers) == 1 else drivers
         self.is_driver_id = True
 
     def as_float(self):
@@ -202,11 +191,7 @@ class CodeParameter(json.JSONEncoder):
         if isinstance(self.__parsed_value, int):
             return float(self.__parsed_value)
 
-        raise Exception(
-            "Cannot convert {0} parameter to float (value {1})".format(
-                self.letter, self.string_value
-            )
-        )
+        raise Exception(f"Cannot convert {self.letter} parameter to float (value {self.string_value})")
 
     def as_int(self):
         """Conversion to int"""
@@ -215,11 +200,7 @@ class CodeParameter(json.JSONEncoder):
         if isinstance(self.__parsed_value, DriverId):
             return self.__parsed_value.as_int()
 
-        raise Exception(
-            "Cannot convert {0} parameter to int (value {1})".format(
-                self.letter, self.string_value
-            )
-        )
+        raise Exception(f"Cannot convert {self.letter} parameter to int (value {self.string_value})")
 
     def as_driver_id(self):
         if isinstance(self.__parsed_value, DriverId):
@@ -229,11 +210,7 @@ class CodeParameter(json.JSONEncoder):
                 return DriverId(as_int=self.__parsed_value)
             except:  # noqa
                 pass
-        raise Exception(
-            "Cannot convert {0} parameter to DriverId (value {1})".format(
-                self.letter, self.string_value
-            )
-        )
+        raise Exception(f"Cannot convert {self.letter} parameter to DriverId (value {self.string_value})")
 
     def as_float_array(self):
         """Conversion to float array"""
@@ -246,11 +223,7 @@ class CodeParameter(json.JSONEncoder):
                 return [float(self.__parsed_value)]
         except:  # noqa
             pass
-        raise Exception(
-            "Cannot convert {0} parameter to float array (value {1})".format(
-                self.letter, self.string_value
-            )
-        )
+        raise Exception(f"Cannot convert {self.letter} parameter to float array (value {self.string_value})")
 
     def as_int_array(self):
         """Conversion to int array"""
@@ -265,11 +238,7 @@ class CodeParameter(json.JSONEncoder):
                 return [self.__parsed_value.as_int()]
         except:  # noqa
             pass
-        raise Exception(
-            "Cannot convert {0} parameter to float array (value {1})".format(
-                self.letter, self.string_value
-            )
-        )
+        raise Exception(f"Cannot convert {self.letter} parameter to float array (value {self.string_value})")
 
     def as_driver_id_array(self):
         try:
@@ -284,11 +253,7 @@ class CodeParameter(json.JSONEncoder):
                 return [DriverId(as_int=self.__parsed_value)]
         except:  # noqa
             pass
-        raise Exception(
-            "Cannot convert {0} parameter to DriverId array (value {1})".format(
-                self.letter, self.string_value
-            )
-        )
+        raise Exception(f"Cannot convert {self.letter} parameter to DriverId array (value {self.string_value})")
 
     def as_bool(self):
         """Conversion to bool"""
@@ -301,23 +266,16 @@ class CodeParameter(json.JSONEncoder):
         if self is None:
             return other is None
         if isinstance(other, CodeParameter):
-            return (
-                self.letter == other.letter
-                and self.__parsed_value == other.__parsed_value
-            )
+            return self.letter == other.letter and self.__parsed_value == other.__parsed_value
         return self.__parsed_value == other
 
     def __ne__(self, other):
         return not self == other
 
     def __str__(self):
-        letter = (
-            self.letter
-            if not self.letter == CodeParameter.LETTER_FOR_UNPRECEDENTED_STRING
-            else ""
-        )
+        letter = self.letter if not self.letter == CodeParameter.LETTER_FOR_UNPRECEDENTED_STRING else ""
         if self.is_string and not self.is_expression:
             double_quoted = self.string_value.replace('"', '""')
-            return '{0}"{1}"'.format(letter, double_quoted)
+            return f'{letter}"{double_quoted}"'
 
-        return "{0}{1}".format(letter, self.string_value)
+        return f"{letter}{self.string_value}"
