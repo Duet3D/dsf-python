@@ -28,7 +28,8 @@ from .commands import code, codechannel, responses, result
 from .commands.basecommands import MessageType, LogLevel
 from .initmessages import serverinitmessage, clientinitmessages
 from .http import HttpEndpointUnixSocket
-from .models import MachineModel, ParsedFileInfo
+from .models import MachineModel
+from .object_model.job import GCodeFileInfo
 
 
 class TaskCanceledException(Exception):
@@ -69,9 +70,8 @@ class BaseConnection:
         )
         if not server_init_message.is_compatible():
             raise serverinitmessage.IncompatibleVersionException(
-                "Incompatible API version (need {0}, got {1})".format(
-                    server_init_message.PROTOCOL_VERSION, server_init_message.version
-                )
+                f"Incompatible API version "
+                f"(need {server_init_message.PROTOCOL_VERSION}, got {server_init_message.version})"
             )
         self.id = server_init_message.id
         self.send(init_message)
@@ -79,9 +79,7 @@ class BaseConnection:
         response = self.receive_response()
         if not response.success:
             raise Exception(
-                "Could not set connection type {0} ({1}: {2})".format(
-                    init_message.mode, response.error_type, response.error_message
-                )
+                f"Could not set connection type {init_message.mode} ({response.error_type}: {response.error_message})"
             )
 
     def close(self):
@@ -113,7 +111,7 @@ class BaseConnection:
             msg, separators=(",", ":"), default=lambda o: o.__dict__
         )
         if self.debug:
-            print("send: {0}".format(json_string))
+            print(f"send: {json_string}")
         self.socket.sendall(json_string.encode("utf8"))
 
     def receive(self, cls):
@@ -124,7 +122,7 @@ class BaseConnection:
     def receive_response(self):
         """Receive a base response from the server"""
         json_string = self.receive_json()
-        return json.loads(json_string, object_hook=responses.decode_response)
+        return responses.decode_response(json.loads(json_string))
 
     def receive_json(self) -> str:
         """Receive the JSON response from the server"""
@@ -254,9 +252,7 @@ class BaseCommandConnection(BaseConnection):
 
     def get_file_info(self, file_name: str):
         """Parse a G-code file and returns file information about it"""
-        res = self.perform_command(
-            commands.files.get_file_info(file_name), ParsedFileInfo
-        )
+        res = self.perform_command(commands.files.get_file_info(file_name), GCodeFileInfo)
         return res.result
 
     def get_machine_model(self):
