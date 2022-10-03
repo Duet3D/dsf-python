@@ -125,7 +125,7 @@ class BaseConnection:
     def receive_response(self):
         """Receive a base response from the server"""
         json_string = self.receive_json()
-        return json.loads(json_string, object_hook=responses.decode_response)
+        return responses.decode_response(json.loads(json_string))
 
     def receive_json(self) -> str:
         """Receive the JSON response from the server"""
