@@ -34,7 +34,7 @@ class CodeChannel(str, Enum):
     SBC = "SBC"
     Daemon = "Daemon"
     Aux2 = "Aux2"
-    AutoPause = "AutoPause"
+    Autopause = "Autopause"
     Unknown = "Unknown"
 
     DEFAULT_CHANNEL = SBC
