@@ -1,6 +1,7 @@
 from typing import Optional
 
-from .basecommands import BaseCommand, MessageType
+from .basecommands import BaseCommand
+from ..object_model.messages import MessageType
 
 
 def cancel():

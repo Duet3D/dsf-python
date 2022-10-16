@@ -17,31 +17,9 @@ result contains classes relevant to result messages from the server
     You should have received a copy of the GNU Lesser General Public License
     along with this program.  If not, see <https://www.gnu.org/licenses/>.
 """
-from enum import IntEnum
-from datetime import datetime
 from typing import List
 
-
-class MessageType(IntEnum):
-    """Type of a generic message"""
-
-    Success = 0
-    Warning = 1
-    Error = 2
-
-
-class Message:
-    """Generic container for messages"""
-
-    @classmethod
-    def from_json(cls, data):
-        """Deserialize an instance of this class from JSON deserialized dictionary"""
-        return cls(**data)
-
-    def __init__(self, type: MessageType, time: datetime, content: str):
-        self.type = type
-        self.time = time
-        self.content = content
+from ..object_model.messages import Message
 
 
 class CodeResult:

@@ -24,12 +24,16 @@ from typing import Optional
 
 from . import DEFAULT_BACKLOG, SOCKET_FILE
 from . import commands
-from .commands import code, codechannel, responses, result
-from .commands.basecommands import MessageType, LogLevel
+from .commands import code, responses, result
+from .commands.codechannel import CodeChannel
 from .initmessages import serverinitmessage, clientinitmessages
 from .http import HttpEndpointUnixSocket
 from .models import MachineModel
+from .object_model import ObjectModel
+from .object_model.http_endpoints import HttpEndpointType
 from .object_model.job import GCodeFileInfo
+from .object_model.messages import MessageType
+from .object_model.state.log_level import LogLevel
 
 
 class TaskCanceledException(Exception):
@@ -198,7 +202,7 @@ class BaseCommandConnection(BaseConnection):
 
     def add_http_endpoint(
         self,
-        endpoint_type: commands.http_endpoints.HttpEndpointType,
+        endpoint_type: HttpEndpointType,
         namespace: str,
         path: str,
         is_upload_request: bool = False,
@@ -234,7 +238,7 @@ class BaseCommandConnection(BaseConnection):
         """Check the given password (see M551)"""
         return self.perform_command(commands.generic.check_password(password))
 
-    def evaluate_expression(self, expression, channel: codechannel.CodeChannel = codechannel.CodeChannel.SBC):
+    def evaluate_expression(self, expression, channel: CodeChannel = CodeChannel.SBC):
         """
         Evaluate an arbitrary expression
         :param expression: Expression to evaluate
@@ -243,7 +247,7 @@ class BaseCommandConnection(BaseConnection):
         """
         return self.perform_command(commands.generic.evaluate_expression(channel, expression))
 
-    def flush(self, channel: codechannel.CodeChannel = codechannel.CodeChannel.SBC):
+    def flush(self, channel: CodeChannel = CodeChannel.SBC):
         """Wait for all pending codes of the given channel to finish"""
         return self.perform_command(commands.generic.flush(channel))
 
@@ -262,7 +266,7 @@ class BaseCommandConnection(BaseConnection):
 
     def get_object_model(self):
         """Retrieve the full object model of the machine."""
-        res = self.perform_command(commands.object_model.get_object_model(), MachineModel)
+        res = self.perform_command(commands.object_model.get_object_model(), ObjectModel)
         return res.result
 
     def get_serialized_machine_model(self):
@@ -314,13 +318,13 @@ class BaseCommandConnection(BaseConnection):
     def perform_simple_code(
         self,
         cde: str,
-        channel: codechannel.CodeChannel = codechannel.CodeChannel.DEFAULT_CHANNEL,
+        channel: CodeChannel = CodeChannel.DEFAULT_CHANNEL,
     ):
         """Execute an arbitrary G/M/T-code in text form and return the result as a string"""
         res = self.perform_command(commands.generic.simple_code(cde, channel))
         return res.result
 
-    def remove_http_endpoint(self, endpoint_type: commands.http_endpoints.HttpEndpointType, namespace: str, path: str):
+    def remove_http_endpoint(self, endpoint_type: HttpEndpointType, namespace: str, path: str):
         """Remove an existing HTTP endpoint"""
         res = self.perform_command(
             commands.http_endpoints.remove_http_endpoint(endpoint_type, namespace, path)
@@ -439,7 +443,7 @@ class InterceptConnection(BaseCommandConnection):
         if channels is not None:
             self.channels = channels
         else:
-            self.channels = codechannel.CodeChannel.list()
+            self.channels = CodeChannel.list()
         self.filters = filters
         self.priority_codes = priority_codes
 

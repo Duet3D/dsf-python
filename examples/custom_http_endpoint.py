@@ -9,8 +9,7 @@ Make sure when running this script to have access to the DSF UNIX socket owned b
 import time
 
 from dsf.connections import CommandConnection
-from dsf.commands.basecommands import HttpEndpointType
-from dsf.http import HttpEndpointConnection
+from dsf.http import HttpEndpointConnection, HttpEndpointType
 
 
 async def respond_something(http_endpoint_connection: HttpEndpointConnection):
@@ -22,14 +21,13 @@ async def respond_something(http_endpoint_connection: HttpEndpointConnection):
 def custom_http_endpoint():
     cmd_conn = CommandConnection(debug=True)
     cmd_conn.connect()
-    endpoint = None
 
     # Setup the endpoint
     endpoint = cmd_conn.add_http_endpoint(HttpEndpointType.GET, "custom", "getIt")
     # Register our handler to reply on requests
     endpoint.set_endpoint_handler(respond_something)
 
-    print("Try accessing http://duet3/machine/custom/getIt in your browser...")
+    print("Try accessing http://duet3.local/machine/custom/getIt in your browser...")
 
     return cmd_conn, endpoint
 

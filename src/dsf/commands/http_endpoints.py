@@ -1,19 +1,5 @@
-from enum import Enum
-
 from .basecommands import BaseCommand
-
-
-class HttpEndpointType(str, Enum):
-    """Enumeration of supported HTTP request types"""
-
-    GET = "GET"
-    POST = "POST"
-    PUT = "PUT"
-    PATCH = "PATCH"
-    TRACE = "TRACE"
-    DELETE = "DELETE"
-    OPTIONS = "OPTIONS"
-    WebSocket = "WebSocket"
+from ..object_model.http_endpoints import HttpEndpointType
 
 
 def add_http_endpoint(endpoint_type: HttpEndpointType, namespace: str, path: str, is_upload_request: bool):

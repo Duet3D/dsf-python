@@ -8,8 +8,7 @@ Make sure when running this script to have access to the DSF UNIX socket owned b
 import subprocess
 import traceback
 
-from dsf.connections import InterceptConnection
-from dsf.commands.basecommands import MessageType
+from dsf.connections import InterceptConnection, MessageType
 from dsf.commands.code import CodeType
 from dsf.initmessages.clientinitmessages import InterceptionMode
 

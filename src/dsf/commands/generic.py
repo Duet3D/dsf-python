@@ -1,7 +1,9 @@
 from typing import Optional
 
-from .basecommands import BaseCommand, LogLevel, MessageType
+from .basecommands import BaseCommand
 from .codechannel import CodeChannel
+from ..object_model.state.log_level import LogLevel
+from ..object_model.messages import MessageType
 
 
 def check_password(password: str):

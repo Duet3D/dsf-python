@@ -21,15 +21,14 @@ as well as sent back to the server.
 from enum import Enum, IntEnum
 from typing import List
 
-from dsf.commands.codechannel import CodeChannel
-
 from .basecommands import BaseCommand
+from .codechannel import CodeChannel
 from .codeparameter import CodeParameter
-from .result import Message
+from ..object_model.messages import Message
 
 
 class CodeType(str, Enum):
-    """Type of a generic G/M/T-code. If none is applicable, it is treated as a comment"""
+    """Type of generic G/M/T-code. If none is applicable, it is treated as a comment"""
 
     Comment = "Q"
     GCode = "G"
@@ -97,11 +96,7 @@ class Code(BaseCommand):
     @classmethod
     def from_json(cls, data):
         """Deserialize an instance of this class from JSON deserialized dictionary"""
-        data["result"] = (
-            []
-            if data["result"] is None
-            else list(map(Message.from_json, data["result"]))
-        )
+        data["result"] = [] if data["result"] is None else list(map(Message.from_json, data["result"]))
         data["parameters"] = list(map(CodeParameter.from_json, data["parameters"]))
         if "channel" in data:
             data["channel"] = CodeChannel(data["channel"])
@@ -125,34 +120,34 @@ class Code(BaseCommand):
         str_list = []
         for param in self.parameters:
             if quote and param.is_string:
-                str_list.append('{0}"{1}"'.format(param.letter, param.string_value))
+                str_list.append(f'{param.letter}"{param.string_value}"')
             else:
-                str_list.append("{0}{1}".format(param.letter, param.string_value))
+                str_list.append(f"{param.letter}{param.string_value}")
         return " ".join(str_list)
 
     def __str__(self):
         """Convert the parsed code back to a text-based G/M/T-code"""
         if self.keyword != KeywordType.KeywordNone:
             if self.keywordArgument is not None:
-                return "{0} {1}".format(self.keyword_to_str(), self.keywordArgument)
+                return f"{self.keyword_to_str()} {self.keywordArgument}"
             else:
                 return self.keyword_to_str()
 
         if self.type == CodeType.Comment:
-            return ";{0}".format(self.comment)
+            return f";{self.comment}"
 
         str_list = [self.short_str()]
 
         for param in self.parameters:
-            str_list.append(" {0}".format(param))
+            str_list.append(f" {param}")
 
         if self.comment:
             if len(str_list) > 0:
                 str_list.append(" ")
-            str_list.append(";{0}".format(self.comment))
+            str_list.append(f";{self.comment}")
 
         if len(self.result) > 0:
-            str_list.append(" => {0}".format(self.result))
+            str_list.append(f" => {self.result}")
 
         return "".join(str_list)
 
@@ -164,13 +159,11 @@ class Code(BaseCommand):
         prefix = "G53 " if self.flags & CodeFlags.EnforceAbsolutePosition != 0 else ""
         if self.majorNumber is not None:
             if self.minorNumber is not None:
-                return "{0}{1}{2}.{3}".format(
-                    prefix, self.type, self.majorNumber, self.minorNumber
-                )
+                return f"{prefix}{self.type}{self.majorNumber}.{self.minorNumber}"
 
-            return "{0}{1}{2}".format(prefix, self.type, self.majorNumber)
+            return f"{prefix}{self.type}{self.majorNumber}"
 
-        return "{0}{1}".format(prefix, self.type)
+        return f"{prefix}{self.type}"
 
     def keyword_to_str(self):
         """Convert the keyword to a str"""

@@ -19,60 +19,8 @@ codeparameter contains all classes and methods dealing with deserialized code pa
 """
 import json
 
-
-class CodeParserException(Exception):
-    """Raised if codes could not be parsed properly"""
-
-
-class DriverId:
-    """Class representing a driver identifier"""
-
-    def __init__(
-        self,
-        as_str: str = None,
-        as_int: int = None,
-        board: int = None,
-        port: int = None,
-    ):
-        if board is not None:
-            self.board = board
-        if port is not None:
-            self.port = port
-
-        if as_int is not None:
-            if as_int < 0:
-                raise Exception("DriverId as int must not be negative")
-            self.board = (as_int >> 16) & 0xFFFF
-            self.port = as_int & 0xFFFF
-            return
-
-        if as_str is not None:
-            segments = as_str.split(".")
-            segment_count = len(segments)
-            if segment_count == 1:
-                self.board = 0
-                self.port = int(segments[0])
-            elif segment_count == 2:
-                self.board = int(segments[0]) & 0xFFFF
-                self.port = int(segments[1]) & 0xFFFF
-            else:
-                raise CodeParserException("Failed to parse driver value")
-
-    def as_int(self):
-        return (self.board << 16) | self.port
-
-    def __str__(self):
-        return f"{self.board}.{self.port}"
-
-    def __eq__(self, o):
-        if self is None:
-            return o is None
-        if isinstance(o, DriverId):
-            return self.board == o.board and self.port == o.port
-        return False
-
-    def __ne__(self, o):
-        return not self == o
+from ..exceptions import CodeParserException
+from ..utility.driver_id import DriverId
 
 
 class CodeParameter(json.JSONEncoder):
@@ -122,12 +70,7 @@ class CodeParameter(json.JSONEncoder):
             return
         elif self.is_driver_id:
             drivers = [DriverId(as_str=value) for value in self.string_value.split(":")]
-
-            if len(drivers) == 1:
-                self.__parsed_value = drivers[0]
-            else:
-                self.__parsed_value = drivers
-            return
+            self.__parsed_value = drivers[0] if len(drivers) == 1 else drivers
 
         value = value.strip()
         # Empty parameters are represented as integers with the value 0 (e.g. G92 XY => G92 X0 Y0)

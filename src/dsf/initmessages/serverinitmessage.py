@@ -19,6 +19,7 @@ serverinitmessage holds everything relevant to the first message received from t
 """
 
 from .. import PROTOCOL_VERSION
+from ..utils import preserve_builtin
 
 
 class IncompatibleVersionException(Exception):
@@ -34,13 +35,13 @@ class ServerInitMessage:
     @classmethod
     def from_json(cls, data):
         """Deserialize a dictionary coming from JSON into an instance of this class"""
-        return cls(**data)
+        return cls(**preserve_builtin(data))
 
     PROTOCOL_VERSION = PROTOCOL_VERSION
 
-    def __init__(self, version: int, id: int):
+    def __init__(self, version: int, id_: int):
         self.version = version
-        self.id = id
+        self.id = id_
 
     def is_compatible(self):
         """Check if the message received from the server indicates compatibility with this client"""
