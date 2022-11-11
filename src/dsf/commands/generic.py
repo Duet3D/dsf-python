@@ -45,6 +45,17 @@ def flush(channel: CodeChannel):
     return BaseCommand("Flush", **{"Channel": channel})
 
 
+def invalidate_channel(channel: CodeChannel):
+    """
+    Invalidate all pending codes and files on a given channel (including buffered codes from DSF in RepRapFirmware)
+    :param channel: Code channel to invalidate
+    :returns: true if the invalidate request is successful
+    """
+    if not isinstance(channel, CodeChannel):
+        raise TypeError("channel must be a CodeChannel")
+    return BaseCommand("InvalidateChannel", **{"Channel": channel})
+
+
 def set_update_status(updating: bool):
     """
     Override the current status as reported by the object model when performing a software update.
@@ -55,7 +66,7 @@ def set_update_status(updating: bool):
     return BaseCommand("SetUpdateStatus", **{"Updating": updating})
 
 
-def simple_code(code: str, channel: CodeChannel):
+def simple_code(code: str, channel: CodeChannel = CodeChannel.DEFAULT_CHANNEL, async_exec: bool = False):
     """
     Perform a simple G/M/T-code
     Internally the code passed is populated as a full Code instance and on completion
@@ -64,19 +75,21 @@ def simple_code(code: str, channel: CodeChannel):
     is NOT recommended for usage in InterceptionMode because it renders the internal code buffer useless.
     :param code: Code to parse and execute
     :param channel: Destination channel
+    :param async_exec: Whether this code may be executed asynchronously.
+                       If set, the code reply is output as a generic message
     """
     if not isinstance(code, str) or not code:
         raise TypeError("code must be a string")
     if not isinstance(channel, CodeChannel):
         raise TypeError("channel must be a CodeChannel")
-    return BaseCommand("SimpleCode", **{"Code": code, "Channel": channel})
+    return BaseCommand("SimpleCode", **{"Code": code, "Channel": channel, "ExecuteAsynchronously": async_exec})
 
 
 def write_message(
     message_type: MessageType,
     content: str,
-    output_message: bool,
-    log_level: Optional[LogLevel],
+    output_message: bool = True,
+    log_level: Optional[LogLevel] = None,
 ):
     """
     Write an arbitrary generic message

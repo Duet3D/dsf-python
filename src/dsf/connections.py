@@ -319,9 +319,16 @@ class BaseCommandConnection(BaseConnection):
         self,
         cde: str,
         channel: CodeChannel = CodeChannel.DEFAULT_CHANNEL,
+        async_exec: bool = False
     ):
-        """Execute an arbitrary G/M/T-code in text form and return the result as a string"""
-        res = self.perform_command(commands.generic.simple_code(cde, channel))
+        """Execute an arbitrary G/M/T-code in text form
+        :param cde: Code to parse and execute
+        :param channel: Destination channel
+        :param async_exec: Whether this code may be executed asynchronously.
+                           If set, the code reply is output as a generic message
+        :returns: The result as a string if async_exec is not set (default)
+        """
+        res = self.perform_command(commands.generic.simple_code(cde, channel, async_exec))
         return res.result
 
     def remove_http_endpoint(self, endpoint_type: HttpEndpointType, namespace: str, path: str):
