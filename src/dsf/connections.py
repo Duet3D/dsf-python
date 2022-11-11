@@ -28,7 +28,6 @@ from .commands import code, responses, result
 from .commands.codechannel import CodeChannel
 from .initmessages import serverinitmessage, clientinitmessages
 from .http import HttpEndpointUnixSocket
-from .models import MachineModel
 from .object_model import ObjectModel
 from .object_model.http_endpoints import HttpEndpointType
 from .object_model.job import GCodeFileInfo
@@ -256,26 +255,10 @@ class BaseCommandConnection(BaseConnection):
         res = self.perform_command(commands.files.get_file_info(file_name), GCodeFileInfo)
         return res.result
 
-    def get_machine_model(self):
-        """
-        Retrieve the full object model of the machine.
-
-        Deprecated: use get_object_model instead.
-        """
-        return self.get_object_model()
-
     def get_object_model(self):
         """Retrieve the full object model of the machine."""
         res = self.perform_command(commands.object_model.get_object_model(), ObjectModel)
         return res.result
-
-    def get_serialized_machine_model(self):
-        """
-        Optimized method to directly query the machine model UTF-8 JSON.
-
-        Deprecated: use get_serialized_object_model instead.
-        """
-        return self.get_serialized_object_model()
 
     def get_serialized_object_model(self):
         """Optimized method to directly query the machine model UTF-8 JSON"""
@@ -286,15 +269,6 @@ class BaseCommandConnection(BaseConnection):
         """Install or upgrade a plugin"""
         res = self.perform_command(commands.plugins.install_plugin(plugin_file))
         return res.result
-
-    def lock_machine_model(self):
-        """
-        Lock the machine model for read/write access.
-        It is MANDATORY to call unlock_object_model when write access has finished
-
-        Deprecated: use lock_object_model instead
-        """
-        return self.lock_object_model()
 
     def lock_object_model(self):
         """
@@ -347,15 +321,6 @@ class BaseCommandConnection(BaseConnection):
         """Resolve a RepRapFirmware-style file path to a real file path"""
         return self.perform_command(commands.files.resolve_path(path))
 
-    def set_machine_model(self, path: str, value: str):
-        """
-        Set a given property to a certain value.
-        Make sure to lock the object model before calling this
-
-        Deprecated: use set_object_model instead
-        """
-        return self.set_object_model(path, value)
-
     def set_object_model(self, path: str, value: str):
         """
         Set a given property to a certain value.
@@ -383,14 +348,6 @@ class BaseCommandConnection(BaseConnection):
         res = self.perform_command(commands.plugins.stop_plugin(plugin))
         return res.result
 
-    def sync_machine_model(self):
-        """
-        Wait for the full object model to be updated from RepRapFirmware.
-
-        Deprecated: use sync_object_model instead
-        """
-        return self.sync_object_model()
-
     def sync_object_model(self):
         """Wait for the full object model to be updated from RepRapFirmware"""
         return self.perform_command(commands.object_model.sync_object_model())
@@ -399,14 +356,6 @@ class BaseCommandConnection(BaseConnection):
         """Uninstall a plugin"""
         res = self.perform_command(commands.plugins.uninstall_plugin(plugin))
         return res.result
-
-    def unlock_machine_model(self):
-        """
-        Unlock the object model again.
-
-        Deprecated: use unlock_object_model instead
-        """
-        return self.unlock_object_model()
 
     def unlock_object_model(self):
         """Unlock the object model again"""
@@ -504,28 +453,28 @@ class SubscribeConnection(BaseConnection):
         )
         return super().connect(sim, socket_file)
 
-    def get_machine_model(self) -> MachineModel:
+    def get_object_model(self) -> ObjectModel:
         """
         Retrieves the full object model of the machine
         In subscription mode this is the first command that has to be called once a
         ConnectionAbortedError has been established.
         """
-        machine_model = self.receive(MachineModel)
+        object_model = self.receive(ObjectModel)
         self.send(commands.model_subscription.acknowledge())
-        return machine_model
+        return object_model
 
-    def get_serialized_machine_model(self) -> str:
+    def get_serialized_object_model(self) -> str:
         """
-        Optimized method to query the machine model UTF-8 JSON in any mode.
-        May be used to get machine model patches as well.
+        Optimized method to query the object model UTF-8 JSON in any mode.
+        May be used to get object model patches as well.
         """
-        machine_model_json = self.receive_json()
+        object_model_json = self.receive_json()
         self.send(commands.model_subscription.acknowledge())
-        return machine_model_json
+        return object_model_json
 
-    def get_machine_model_patch(self) -> str:
+    def get_object_model_patch(self) -> str:
         """
-        Receive a (partial) machine model update.
+        Receive a (partial) object model update.
         If the subscription mode is set to SubscriptionMode.PATCH new update patches of
         the object model need to be applied manually. This method is intended to receive
         such fragments.
