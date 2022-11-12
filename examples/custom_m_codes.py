@@ -8,9 +8,9 @@ Make sure when running this script to have access to the DSF UNIX socket owned b
 import subprocess
 import traceback
 
-from dsf.connections import InterceptConnection, MessageType
+from dsf.connections import InterceptConnection, InterceptionMode
 from dsf.commands.code import CodeType
-from dsf.initmessages.clientinitmessages import InterceptionMode
+from dsf.object_model import MessageType
 
 
 def start_intercept():
@@ -27,7 +27,7 @@ def start_intercept():
             if cde.type == CodeType.MCode and cde.majorNumber == 1234:
                 # --------------- BEGIN FLUSH ---------------------
                 # Flushing is only necessary if the action below needs to be in sync with the machine
-                # at this point in the GCode stream. Otherwise it can an should be skipped
+                # at this point in the GCode stream. Otherwise, it can and should be skipped
 
                 # Flush the code's channel to be sure we are being in sync with the machine
                 success = intercept_connection.flush(cde.channel)

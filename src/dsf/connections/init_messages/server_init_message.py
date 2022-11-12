@@ -18,12 +18,8 @@ serverinitmessage holds everything relevant to the first message received from t
     along with this program.  If not, see <https://www.gnu.org/licenses/>.
 """
 
-from .. import PROTOCOL_VERSION
-from ..utils import preserve_builtin
-
-
-class IncompatibleVersionException(Exception):
-    """Exception raised when the server and client are incompatible"""
+from ... import PROTOCOL_VERSION
+from ...utils import preserve_builtin
 
 
 class ServerInitMessage:

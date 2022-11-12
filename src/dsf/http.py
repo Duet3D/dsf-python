@@ -1,8 +1,8 @@
-from enum import Enum
 import asyncio
 import json
 import os
 from concurrent.futures import ThreadPoolExecutor
+from enum import Enum
 
 from . import DEFAULT_BACKLOG
 from .object_model.http_endpoints import HttpEndpointType

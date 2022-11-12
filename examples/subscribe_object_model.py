@@ -6,8 +6,7 @@ Example of a subscribe connection to get the object model
 Make sure when running this script to have access to the DSF UNIX socket owned by the dsf user.
 """
 
-from dsf.connections import SubscribeConnection
-from dsf.initmessages.clientinitmessages import SubscriptionMode
+from dsf.connections import SubscribeConnection, SubscriptionMode
 
 
 def subscribe():

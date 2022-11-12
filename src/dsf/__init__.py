@@ -7,4 +7,4 @@ DEFAULT_BACKLOG = 4
 # DSF protocol version
 PROTOCOL_VERSION = 11
 
-from . import commands, connections, http, initmessages, object_model
+from . import commands, connections, http, object_model

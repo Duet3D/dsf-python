@@ -17,17 +17,8 @@ clientinitmessages holds all messages a client can send to the server to initiat
     You should have received a copy of the GNU Lesser General Public License
     along with this program.  If not, see <https://www.gnu.org/licenses/>.
 """
-from enum import Enum
-from .serverinitmessage import ServerInitMessage
-
-
-class ConnectionMode(str, Enum):
-    """Supported connection types for client connections"""
-
-    UNKNOWN = "Unknown"
-    COMMAND = "Command"
-    INTERCEPT = "Intercept"
-    SUBSCRIBE = "Subscribe"
+from .server_init_message import ServerInitMessage
+from .. import ConnectionMode, InterceptionMode, SubscriptionMode
 
 
 class ClientInitMessage:
@@ -41,14 +32,6 @@ class ClientInitMessage:
         self.version = ServerInitMessage.PROTOCOL_VERSION
         for key, value in kwargs.items():
             self.__dict__[key] = value
-
-
-class InterceptionMode(str, Enum):
-    """Type of the intercepting connection"""
-
-    PRE = "Pre"
-    POST = "Post"
-    EXECUTED = "Executed"
 
 
 def intercept_init_message(intercept_mode: InterceptionMode, channels, filters, priority_codes: bool):
@@ -67,13 +50,6 @@ def intercept_init_message(intercept_mode: InterceptionMode, channels, filters, 
 def command_init_message():
     """Enter command-based connection mode"""
     return ClientInitMessage(ConnectionMode.COMMAND)
-
-
-class SubscriptionMode(str, Enum):
-    """Type of the model subscription"""
-
-    FULL = "Full"
-    PATCH = "Patch"
 
 
 def subscribe_init_message(subscription_mode: SubscriptionMode, filter_string: str, filter_list):
