@@ -18,25 +18,25 @@ class SessionType(str, Enum):
     Telnet = "Telnet"
 
 
-def add_user_session(access: AccessLevel, tpe: SessionType, origin: str):
+def add_user_session(access_level: AccessLevel, session_type: SessionType, origin: str):
     """
     Register a new user session.
     Returns the ID of the new user session
-    :param access: Access level of this session
-    :param tpe: Type of this session
+    :param access_level: Access level of this session
+    :param session_type: Type of this session
     :param origin: Origin of this session. For remote sessions, this equals the remote IP address
     """
-    if not isinstance(access, AccessLevel):
-        raise TypeError("access must be an AccessLevel")
-    if not isinstance(tpe, SessionType):
-        raise TypeError("tpe must be an SessionType")
+    if not isinstance(access_level, AccessLevel):
+        raise TypeError("access_level must be an AccessLevel")
+    if not isinstance(session_type, SessionType):
+        raise TypeError("session_type must be an SessionType")
     if not isinstance(origin, str) or not origin:
         raise TypeError("origin must be a string")
     return BaseCommand(
         "AddUserSession",
         **{
-            "AccessLevel": access,
-            "SessionType": tpe,
+            "AccessLevel": access_level,
+            "SessionType": session_type,
             "Origin": origin,
         },
     )

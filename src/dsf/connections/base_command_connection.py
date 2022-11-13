@@ -32,21 +32,21 @@ class BaseCommandConnection(BaseConnection):
 
     def add_user_session(
         self,
-        access: commands.user_sessions.AccessLevel,
-        tpe: commands.user_sessions.SessionType,
+        access_level: commands.user_sessions.AccessLevel,
+        session_type: commands.user_sessions.SessionType,
         origin: str,
     ):
         """
         Add a new user session
-        :param access: Access level of this session
-        :param tpe: Type of this session
+        :param access_level: Access level of this session
+        :param session_type: Type of this session
         :param origin: Origin of the user session (e.g. IP address or PID)
         :returns: New session ID
         """
         if origin is None:
             origin = str(os.getpid())
 
-        res = self.perform_command(commands.user_sessions.add_user_session(access, tpe, origin))
+        res = self.perform_command(commands.user_sessions.add_user_session(access_level, session_type, origin))
         return int(res.result)
 
     def check_password(self, password: str):
@@ -154,14 +154,31 @@ class BaseCommandConnection(BaseConnection):
         res = self.perform_command(commands.generic.set_update_status(is_updating))
         return res.result
 
-    def start_plugin(self, plugin: str):
-        """Start a plugin"""
-        res = self.perform_command(commands.plugins.start_plugin(plugin))
+    def start_plugin(self, plugin: str, save_state: bool = True):
+        """Start a plugin
+        :param plugin: Identifier of the plugin
+        :param save_state: Defines if the list of executing plugins may be saved
+        """
+        res = self.perform_command(commands.plugins.start_plugin(plugin, save_state))
         return res.result
 
-    def stop_plugin(self, plugin: str):
-        """Stop a plugin"""
-        res = self.perform_command(commands.plugins.stop_plugin(plugin))
+    def start_plugins(self):
+        """Start all the previously started plugins again"""
+        res = self.perform_command(commands.plugins.start_plugins())
+        return res.result
+
+    def stop_plugin(self, plugin: str, save_state: bool = True):
+        """Stop a plugin
+        :param plugin: Identifier of the plugin
+        :param save_state: Defines if the list of executing plugins may be saved
+        """
+        res = self.perform_command(commands.plugins.stop_plugin(plugin, save_state))
+        return res.result
+
+    def stop_plugins(self):
+        """Stop all the plugins and save which plugins were started before.
+        This command is intended for shutdown or update requests"""
+        res = self.perform_command(commands.plugins.stop_plugins())
         return res.result
 
     def sync_object_model(self):

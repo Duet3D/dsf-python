@@ -31,24 +31,37 @@ def set_plugin_data(plugin: str, key: str, value: str):
     )
 
 
-def start_plugin(plugin: str):
+def start_plugin(plugin: str, save_state: bool = True):
     """
     Start a plugin
     :param plugin: Identifier of the plugin
+    :param save_state: Defines if the list of executing plugins may be saved
     """
     if not isinstance(plugin, str) or not plugin:
         raise TypeError("plugin must be a string")
-    return BaseCommand("StartPlugin", **{"Plugin": plugin})
+    return BaseCommand("StartPlugin", **{"Plugin": plugin, "SaveState": save_state})
 
 
-def stop_plugin(plugin: str):
+def start_plugins():
+    """Start all the previously started plugins again"""
+    return BaseCommand("StartPlugins")
+
+
+def stop_plugin(plugin: str, save_state: bool = True):
     """
     Stop a plugin
     :param plugin: Identifier of the plugin
+    :param save_state: Defines if the list of executing plugins may be saved
     """
     if not isinstance(plugin, str) or not plugin:
         raise TypeError("plugin must be a string")
-    return BaseCommand("StopPlugin", **{"Plugin": plugin})
+    return BaseCommand("StopPlugin", **{"Plugin": plugin, "SaveState": save_state})
+
+
+def stop_plugins():
+    """Stop all the plugins and save which plugins were started before.
+    This command is intended for shutdown or update requests"""
+    return BaseCommand("StopPlugins")
 
 
 def uninstall_plugin(plugin: str):
