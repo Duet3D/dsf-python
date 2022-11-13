@@ -86,6 +86,13 @@ class BaseCommandConnection(BaseConnection):
         res = self.perform_command(commands.plugins.install_plugin(plugin_file))
         return res.result
 
+    def install_system_package(self, package_file: str):
+        """Install or upgrade a system package
+        :param package_file: Absolute file path to the package file
+        """
+        res = self.perform_command(commands.packages.install_system_package(package_file))
+        return res.result
+
     def invalidate_channel(self, channel: CodeChannel = CodeChannel.SBC):
         """Invalidate all pending codes and files on a given channel
         (including buffered codes from DSF in RepRapFirmware)
@@ -210,6 +217,13 @@ class BaseCommandConnection(BaseConnection):
     def uninstall_plugin(self, plugin: str):
         """Uninstall a plugin"""
         res = self.perform_command(commands.plugins.uninstall_plugin(plugin))
+        return res.result
+
+    def uninstall_system_package(self, package: str):
+        """Uninstall a system package
+        :param package: Identifier of the package
+        """
+        res = self.perform_command(commands.packages.uninstall_system_package(package))
         return res.result
 
     def unlock_object_model(self):
