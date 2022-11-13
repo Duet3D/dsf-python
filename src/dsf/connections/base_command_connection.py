@@ -9,7 +9,7 @@ from ..object_model import ObjectModel
 from ..object_model.http_endpoints import HttpEndpointType
 from ..object_model.job import GCodeFileInfo
 from ..object_model.messages import MessageType
-from ..object_model.state.log_level import LogLevel
+from ..object_model.state import LogLevel
 
 
 class BaseCommandConnection(BaseConnection):
@@ -66,9 +66,9 @@ class BaseCommandConnection(BaseConnection):
         """Wait for all pending codes of the given channel to finish"""
         return self.perform_command(commands.generic.flush(channel))
 
-    def get_file_info(self, file_name: str):
+    def get_file_info(self, file_name: str, read_thumbnail_content: bool = False):
         """Parse a G-code file and returns file information about it"""
-        res = self.perform_command(commands.files.get_file_info(file_name), GCodeFileInfo)
+        res = self.perform_command(commands.files.get_file_info(file_name, read_thumbnail_content), GCodeFileInfo)
         return res.result
 
     def get_object_model(self):
