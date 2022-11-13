@@ -27,6 +27,20 @@ def patch_object_model(key: str, patch: str):
     return BaseCommand("PatchObjectModel", **{"Key": key, "Patch": patch})
 
 
+def set_network_protocol(protocol: str, enabled: bool):
+    """Flag a given network protocol as enabled or disabled
+    The object model must not be locked from the same connection via lock_object_model when this is called!
+    :param protocol: Protocol to change
+    :param enabled: Whether the protocol is enabled or not
+    :returns: true if the protocol could be flagged
+    """
+    if not isinstance(protocol, str) or not protocol:
+        raise TypeError("protocol must be a string")
+    if not isinstance(enabled, bool):
+        raise TypeError("enabled must be a boolean")
+    return BaseCommand("SetNetworkProtocol", **{"NetworkProtocol": protocol, "Enabled": enabled})
+
+
 def set_object_model(property_path: str, value: str):
     """
     Set an atomic property in the object model.

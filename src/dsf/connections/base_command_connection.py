@@ -150,6 +150,15 @@ class BaseCommandConnection(BaseConnection):
         """Resolve a RepRapFirmware-style file path to a real file path"""
         return self.perform_command(commands.files.resolve_path(path))
 
+    def set_network_protocol(self, protocol: str, enabled: bool):
+        """Set a given property to a certain value.
+        Make sure to lock the object model before calling this
+        :param protocol: Protocol to change
+        :param enabled: Whether the protocol is enabled or not
+        """
+        res = self.perform_command(commands.object_model.set_network_protocol(protocol, enabled))
+        return res.result
+
     def set_object_model(self, path: str, value: str):
         """
         Set a given property to a certain value.
