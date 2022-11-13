@@ -5,6 +5,6 @@ SOCKET_FILE = "/run/dsf/dcs.sock"
 DEFAULT_BACKLOG = 4
 
 # DSF protocol version
-PROTOCOL_VERSION = 11
+PROTOCOL_VERSION = 12
 
 from . import commands, connections, http, object_model
