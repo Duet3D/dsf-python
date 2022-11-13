@@ -1,4 +1,4 @@
-from .basecommands import BaseCommand
+from .base_command import BaseCommand
 
 
 def install_plugin(plugin_file: str):

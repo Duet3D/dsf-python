@@ -21,9 +21,9 @@ as well as sent back to the server.
 from enum import Enum, IntEnum
 from typing import List
 
-from .basecommands import BaseCommand
-from .codechannel import CodeChannel
-from .codeparameter import CodeParameter
+from .base_command import BaseCommand
+from .code_channel import CodeChannel
+from .code_parameter import CodeParameter
 from ..object_model.messages import Message
 
 

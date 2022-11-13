@@ -1,4 +1,4 @@
-from .basecommands import BaseCommand
+from .base_command import BaseCommand
 
 
 def get_object_model():

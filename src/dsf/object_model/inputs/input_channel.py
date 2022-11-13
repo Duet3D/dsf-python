@@ -2,7 +2,7 @@ from .compatibility import Compatibility
 from .distance_unit import DistanceUnit
 from .input_channel_state import InputChannelState
 from ..model_object import ModelObject
-from ...commands.codechannel import CodeChannel
+from ...commands.code_channel import CodeChannel
 
 
 class InputChannel(ModelObject):

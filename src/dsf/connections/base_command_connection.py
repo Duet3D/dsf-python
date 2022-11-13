@@ -3,7 +3,7 @@ import os
 from .base_connection import BaseConnection
 from .. import commands, DEFAULT_BACKLOG
 from ..commands import code, result
-from ..commands.codechannel import CodeChannel
+from ..commands.code_channel import CodeChannel
 from ..http import HttpEndpointUnixSocket
 from ..object_model import ObjectModel
 from ..object_model.http_endpoints import HttpEndpointType

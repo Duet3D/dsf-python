@@ -1,6 +1,6 @@
 from enum import Enum
 
-from .basecommands import BaseCommand
+from .base_command import BaseCommand
 
 
 class AccessLevel(str, Enum):

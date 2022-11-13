@@ -19,7 +19,7 @@ class InterceptConnection(BaseCommandConnection):
     ):
         super().__init__(debug)
         self.interception_mode = interception_mode
-        self.channels = channels if channels is not None else commands.codechannel.CodeChannel.list()
+        self.channels = channels if channels is not None else commands.code_channel.CodeChannel.list()
         self.filters = filters
         self.priority_codes = priority_codes
 

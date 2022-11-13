@@ -1,4 +1,4 @@
-from .basecommands import BaseCommand
+from .base_command import BaseCommand
 
 
 def get_file_info(file_name: str, read_thumbnail_content: bool = False):

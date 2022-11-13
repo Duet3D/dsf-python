@@ -1,6 +1,6 @@
 from typing import Optional
 
-from .basecommands import BaseCommand
+from .base_command import BaseCommand
 from ..object_model.messages import MessageType
 
 

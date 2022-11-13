@@ -1,7 +1,7 @@
 from typing import Optional
 
-from .basecommands import BaseCommand
-from .codechannel import CodeChannel
+from .base_command import BaseCommand
+from .code_channel import CodeChannel
 from ..object_model.state.log_level import LogLevel
 from ..object_model.messages import MessageType
 
