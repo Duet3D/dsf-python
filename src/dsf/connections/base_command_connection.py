@@ -121,6 +121,13 @@ class BaseCommandConnection(BaseConnection):
         res = self.perform_command(commands.generic.simple_code(cde, channel, async_exec))
         return res.result
 
+    def reload_plugin(self, plugin: str):
+        """
+        Reload the manifest of a given plugin. Useful for packaged plugins
+        :param plugin: Identifier of the plugin
+        """
+        return self.perform_command(commands.plugins.reload_plugin(plugin))
+
     def remove_http_endpoint(self, endpoint_type: HttpEndpointType, namespace: str, path: str):
         """Remove an existing HTTP endpoint"""
         res = self.perform_command(

@@ -11,6 +11,16 @@ def install_plugin(plugin_file: str):
     return BaseCommand("InstallPlugin", **{"PluginFile": plugin_file})
 
 
+def reload_plugin(plugin: str):
+    """
+    Reload the manifest of a given plugin. Useful for packaged plugins
+    :param plugin: Identifier of the plugin
+    """
+    if not isinstance(plugin, str) or not plugin:
+        raise TypeError("plugin must be a string")
+    return BaseCommand("ReloadPlugin", **{"Plugin": plugin})
+
+
 def set_plugin_data(plugin: str, key: str, value: str):
     """
     Update custom plugin data in the object model
