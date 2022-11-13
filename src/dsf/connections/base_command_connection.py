@@ -86,6 +86,12 @@ class BaseCommandConnection(BaseConnection):
         res = self.perform_command(commands.plugins.install_plugin(plugin_file))
         return res.result
 
+    def invalidate_channel(self, channel: CodeChannel = CodeChannel.SBC):
+        """Invalidate all pending codes and files on a given channel
+        (including buffered codes from DSF in RepRapFirmware)
+        :param channel: Code channel to invalidate"""
+        return self.perform_command(commands.generic.invalidate_channel(channel))
+
     def lock_object_model(self):
         """
         Lock the machine model for read/write access.
