@@ -5,16 +5,16 @@ class EndstopType(str, Enum):
     """Type of configured endstop"""
 
     # Generic input pin
-    InputPin = "InputPin"
+    InputPin = "inputPin"
 
     # Z-probe acts as an endstop
-    ZProbeAsEndstop = "ZProbeAsEndstop"
+    ZProbeAsEndstop = "zProbeAsEndstop"
 
     # Motor stall detection stops all the drives when triggered
-    MotorStallAny = "MotorStallAny"
+    MotorStallAny = "motorStallAny"
 
     # Motor stall detection stops individual drives when triggered
-    MotorStallIndividual = "MotorStallIndividual"
+    MotorStallIndividual = "motorStallIndividual"
 
     # Unknown
-    Unknown = "Unknown"
+    Unknown = "unknown"

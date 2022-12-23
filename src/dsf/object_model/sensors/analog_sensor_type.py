@@ -5,46 +5,46 @@ class AnalogSensorType(str, Enum):
     """Enumeration of supported analog sensor types"""
 
     # Regular temperature thermistor
-    Thermistor = "Thermistor"
+    Thermistor = "thermistor"
 
     # PT1000 sensor
-    PT1000 = "PT1000"
+    PT1000 = "pt1000"
 
     # RTD MAX31865
-    MAX31865 = "MAX31865"
+    MAX31865 = "rtdmax31865"
 
     # MAX31855 thermocouple
-    MAX31855 = "MAX31855"
+    MAX31855 = "thermocouplemax31855"
 
     # MAX31856 thermocouple
-    MAX31856 = "MAX31856"
+    MAX31856 = "thermocouplemax31856"
 
     # Linear analog sensor
-    LinearAnalaog = "LinearAnalaog"
+    LinearAnalog = "linearanalog"
 
     # DHT11 sensor
-    DHT11 = "DHT11"
+    DHT11 = "dht11"
 
     # DHT21 sensor
-    DHT21 = "DHT21"
+    DHT21 = "dht21"
 
     # DHT22 sensor
-    DHT22 = "DHT22"
+    DHT22 = "dht22"
 
     # DHT humidity sensor
-    DHTHumidity = "DHTHumidity"
+    DHTHumidity = "dhthumidity"
 
     # Current loop sensor
-    CurrentLoop = "CurrentLoop"
+    CurrentLoop = "currentloooppyro"
 
     # MCU temperature
-    McuTemp = "McuTemp"
+    McuTemp = "mcutemp"
 
     # On-board stepper driver sensors
-    Drivers = "Drivers"
+    Drivers = "drivers"
 
     # Stepper driver sensors on the DueX expansion board
-    DriversDuex = "DriversDuex"
+    DriversDuex = "driversduex"
 
     # Unknown temperature sensor
-    Unknown = "Unknown"
+    Unknown = "unknown"

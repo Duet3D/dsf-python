@@ -5,22 +5,22 @@ class FilamentMonitorStatus(str, Enum):
     """Possible filament sensor status"""
 
     # No monitor is present
-    NoMonitor = "NoMonitor"
+    NoMonitor = "noMonitor"
 
     # Filament working normally
-    Ok = "Ok"
+    Ok = "ok"
 
     # No data received from the remote filament sensor
-    NoDataReceived = "NoDataReceived"
+    NoDataReceived = "noDataReceived"
 
     # No filament present
-    NoFilament = "NoFilament"
+    NoFilament = "noFilament"
 
     # Sensor reads less movement than expected
-    TooLittleMovement = "TooLittleMovement"
+    TooLittleMovement = "tooLittleMovement"
 
     # Sensor reads more movment than expected
-    TooMuchMovement = "TooMuchMovement"
+    TooMuchMovement = "tooMuchMovement"
 
     # Sensor encountered an error
-    SensorError = "SensorError"
+    SensorError = "sensorError"
