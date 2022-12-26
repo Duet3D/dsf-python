@@ -179,13 +179,22 @@ class Move(ModelObject):
     def _update_from_json(self, **kwargs) -> 'Move':
         """Override ObjectModel._update_from_json to update properties which doesn't have a setter"""
         super(Move, self)._update_from_json(**kwargs)
-        self._axes = [Axis.from_json(axis) for axis in kwargs.get('axes', [])]
-        self._calibration = MoveCalibration.from_json(kwargs.get('calibration'))
-        self._compensation = MoveCompensation.from_json(kwargs.get('compensation'))
-        self._current_move = CurrentMove.from_json(kwargs.get('currentMove'))
-        self._extruders = [Extruder.from_json(e) for e in kwargs.get('extruders', [])]
-        self._idle = MotorsIdleControl.from_json(kwargs.get('idle'))
-        self._queue = [MoveQueueItem.from_json(item) for item in kwargs.get('queue', [])]
-        self._rotation = MoveRotation.from_json(kwargs.get('rotation'))
-        self._shaping = InputShaping.from_json(kwargs.get('shaping'))
+        if 'axes' in kwargs:
+            self._axes = [Axis.from_json(axis) for axis in kwargs.get('axes', [])]
+        if 'calibration' in kwargs:
+            self._calibration = MoveCalibration.from_json(kwargs.get('calibration'))
+        if 'compensation' in kwargs:
+            self._compensation = MoveCompensation.from_json(kwargs.get('compensation'))
+        if 'currentMove' in kwargs:
+            self._current_move = CurrentMove.from_json(kwargs.get('currentMove'))
+        if 'extruders' in kwargs:
+            self._extruders = [Extruder.from_json(e) for e in kwargs.get('extruders', [])]
+        if 'idle' in kwargs:
+            self._idle = MotorsIdleControl.from_json(kwargs.get('idle'))
+        if 'queue' in kwargs:
+            self._queue = [MoveQueueItem.from_json(item) for item in kwargs.get('queue', [])]
+        if 'rotation' in kwargs:
+            self._rotation = MoveRotation.from_json(kwargs.get('rotation'))
+        if 'shaping' in kwargs:
+            self._shaping = InputShaping.from_json(kwargs.get('shaping'))
         return self

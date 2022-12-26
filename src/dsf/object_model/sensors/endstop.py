@@ -22,7 +22,7 @@ class Endstop(ModelObject):
 
     @property
     def triggered(self) -> bool:
-        """Whether or not the endstop is hit"""
+        """Whether the endstop is hit"""
         return self._triggered
 
     @triggered.setter

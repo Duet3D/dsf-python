@@ -60,5 +60,6 @@ class Network(ModelObject):
     def _update_from_json(self, **kwargs) -> 'Network':
         """Override ObjectModel._update_from_json to update properties which doesn't have a setter"""
         super(Network, self)._update_from_json(**kwargs)
-        self._interfaces = [NetworkInterface.from_json(i) for i in kwargs.get('interfaces', [])]
+        if 'interfaces' in kwargs:
+            self._interfaces = [NetworkInterface.from_json(i) for i in kwargs.get('interfaces')]
         return self

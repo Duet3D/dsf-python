@@ -35,6 +35,8 @@ class MoveCalibration(ModelObject):
     def _update_from_json(self, **kwargs) -> 'MoveCalibration':
         """Override ObjectModel._update_from_json to update properties which doesn't have a setter"""
         super(MoveCalibration, self)._update_from_json(**kwargs)
-        self._final = MoveDeviations.from_json(kwargs.get('final'))
-        self._initial = MoveDeviations.from_json(kwargs.get('initial'))
+        if 'final' in kwargs:
+            self._final = MoveDeviations.from_json(kwargs.get('final'))
+        if 'initial' in kwargs:
+            self._initial = MoveDeviations.from_json(kwargs.get('initial'))
         return self

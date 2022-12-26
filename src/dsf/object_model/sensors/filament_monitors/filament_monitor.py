@@ -12,9 +12,10 @@ class FilamentMonitor(FilamentMonitorBase):
     def _update_from_json(self, **kwargs) -> 'FilamentMonitorBase':
         """Override ObjectModel._update_from_json to return the FilamentMonitor type matching the given type"""
         super(FilamentMonitor, self)._update_from_json(**kwargs)
-        type_ = kwargs.get('type_', FilamentMonitorType.Unknown)
-        new_filament_monitor_type = FilamentMonitorType(type_)
-        if new_filament_monitor_type != self.type:
-            new_filament_monitor_instance = get_filament_monitor(new_filament_monitor_type)
-            return new_filament_monitor_instance.from_json(kwargs)
+        if 'type_' in kwargs:
+            type_ = kwargs.get('type_', FilamentMonitorType.Unknown)
+            new_filament_monitor_type = FilamentMonitorType(type_)
+            if new_filament_monitor_type != self.type:
+                new_filament_monitor_instance = get_filament_monitor(new_filament_monitor_type)
+                return new_filament_monitor_instance.from_json(kwargs)
         return self

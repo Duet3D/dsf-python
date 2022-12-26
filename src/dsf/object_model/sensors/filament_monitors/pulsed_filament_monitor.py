@@ -127,5 +127,6 @@ class PulsedFilamentMonitor(FilamentMonitorBase):
     def _update_from_json(self, **kwargs) -> 'PulsedFilamentMonitor':
         """Override ObjectModel._update_from_json to update properties which doesn't have a setter"""
         super(PulsedFilamentMonitor, self)._update_from_json(**kwargs)
-        self._configured = PulsedFilamentMonitorConfigured.from_json(kwargs.get('configured'))
+        if 'configured' in kwargs:
+            self._configured = PulsedFilamentMonitorConfigured.from_json(kwargs.get('configured'))
         return self

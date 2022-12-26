@@ -121,6 +121,8 @@ class GCodeFileInfo(ModelObject):
     def _update_from_json(self, **kwargs) -> 'GCodeFileInfo':
         """Override ObjectModel._update_from_json to update properties which doesn't have a setter"""
         super(GCodeFileInfo, self)._update_from_json(**kwargs)
-        self._filament = [float(f) for f in kwargs.get('filament', [])]
-        self._thumbnails = [ThumbnailInfo.from_json(t) for t in kwargs.get('thumbnails', [])]
+        if 'filament' in kwargs:
+            self._filament = [float(f) for f in kwargs.get('filament', [])]
+        if 'thumbnails' in kwargs:
+            self._thumbnails = [ThumbnailInfo.from_json(t) for t in kwargs.get('thumbnails', [])]
         return self

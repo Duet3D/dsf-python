@@ -190,9 +190,12 @@ class Job(ModelObject):
     def _update_from_json(self, **kwargs) -> 'Job':
         """Override ObjectModel._update_from_json to update properties which doesn't have a setter"""
         super(Job, self)._update_from_json(**kwargs)
-        file = kwargs.get('file')
-        self._file = GCodeFileInfo.from_json(file) if file is not None else None
-        self._layers = [Layer.from_json(layer_) for layer_ in kwargs.get('layers', [])]
-        times_left = kwargs.get('timesLeft')
-        self._times_left = TimesLeft.from_json(times_left) if times_left is not None else None
+        if 'file' in kwargs:
+            file = kwargs.get('file')
+            self._file = GCodeFileInfo.from_json(file) if file is not None else None
+        if 'layers' in kwargs:
+            self._layers = [Layer.from_json(layer_) for layer_ in kwargs.get('layers', [])]
+        if 'timesLeft' in kwargs:
+            times_left = kwargs.get('timesLeft')
+            self._times_left = TimesLeft.from_json(times_left) if times_left is not None else None
         return self

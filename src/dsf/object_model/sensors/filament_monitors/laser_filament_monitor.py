@@ -149,6 +149,6 @@ class LaserFilamentMonitor(FilamentMonitorBase):
     def _update_from_json(self, **kwargs) -> 'LaserFilamentMonitor':
         """Override ObjectModel._update_from_json to update properties which doesn't have a setter"""
         super(LaserFilamentMonitor, self)._update_from_json(**kwargs)
-        configured = kwargs.get('configured')
-        self._configured = LaserFilamentMonitorConfigured.from_json(configured) if configured else None
+        if 'configured' in kwargs:
+            self._configured = LaserFilamentMonitorConfigured.from_json(kwargs.get('configured'))
         return self

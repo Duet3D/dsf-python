@@ -48,6 +48,8 @@ class BuildObject(ModelObject):
     def _update_from_json(self, **kwargs) -> 'BuildObject':
         """Override ObjectModel._update_from_json to update properties which doesn't have a setter"""
         super(BuildObject, self)._update_from_json(**kwargs)
-        self._x = [float(coord) for coord in kwargs.get('x', [])]
-        self._y = [float(coord) for coord in kwargs.get('y', [])]
+        if 'x' in kwargs:
+            self._x = [float(coord) for coord in kwargs.get('x', [])]
+        if 'y' in kwargs:
+            self._y = [float(coord) for coord in kwargs.get('y', [])]
         return self

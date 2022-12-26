@@ -168,10 +168,13 @@ class Extruder(ModelObject):
     def _update_from_json(self, **kwargs) -> 'Extruder':
         """Override ObjectModel._update_from_json to update properties which doesn't have a setter"""
         super(Extruder, self)._update_from_json(**kwargs)
-        driver = kwargs.get('driver')
-        microstepping = kwargs.get('microstepping')
-        nonlinear = kwargs.get('nonlinear')
-        self._driver = DriverId(**preserve_builtin(driver)) if driver is not None else None
-        self._microstepping = MicroStepping.from_json(microstepping) if microstepping is not None else None
-        self._nonlinear = ExtruderNonlinear.from_json(nonlinear) if nonlinear is not None else None
+        if 'driver' in kwargs:
+            driver = kwargs.get('driver')
+            self._driver = DriverId(**preserve_builtin(driver)) if driver is not None else None
+        if 'microstepping' in kwargs:
+            microstepping = kwargs.get('microstepping')
+            self._microstepping = MicroStepping.from_json(microstepping) if microstepping is not None else None
+        if 'nonlinear' in kwargs:
+            nonlinear = kwargs.get('nonlinear')
+            self._nonlinear = ExtruderNonlinear.from_json(nonlinear) if nonlinear is not None else None
         return self

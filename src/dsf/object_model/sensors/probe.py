@@ -187,8 +187,11 @@ class Probe(ModelObject):
     def _update_from_json(self, **kwargs) -> 'Probe':
         """Override ObjectModel._update_from_json to update properties which doesn't have a setter"""
         super(Probe, self)._update_from_json(**kwargs)
-        self._offsets = [float(item) for item in kwargs.get('offsets', [0, 0])]
-        self._temperature_coefficients = [float(item) for item in kwargs.get('temperatureCoefficients', [2, 2])]
-        value = kwargs.get('value')
-        self._value = int(value) if value is not None else None
+        if 'offsets' in kwargs:
+            self._offsets = [float(item) for item in kwargs.get('offsets')]
+        if 'temperatureCoefficients' in kwargs:
+            self._temperature_coefficients = [float(item) for item in kwargs.get('temperatureCoefficients')]
+        if 'value' in kwargs:
+            value = kwargs.get('value')
+            self._value = int(value) if value is not None else None
         return self

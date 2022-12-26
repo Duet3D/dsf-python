@@ -133,5 +133,6 @@ class RotatingMagnetFilamentMonitor(FilamentMonitorBase):
     def _update_from_json(self, **kwargs) -> 'RotatingMagnetFilamentMonitor':
         """Override ObjectModel._update_from_json to update properties which doesn't have a setter"""
         super(RotatingMagnetFilamentMonitor, self)._update_from_json(**kwargs)
-        self._configured = RotatingMagnetFilamentMonitorConfigured.from_json(kwargs.get('configured'))
+        if 'configured' in kwargs:
+            self._configured = RotatingMagnetFilamentMonitorConfigured.from_json(kwargs.get('configured'))
         return self

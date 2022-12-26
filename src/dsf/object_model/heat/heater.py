@@ -142,6 +142,8 @@ class Heater(ModelObject):
     def _update_from_json(self, **kwargs) -> 'Heater':
         """Override ObjectModel._update_from_json to update properties which doesn't have a setter"""
         super(Heater, self)._update_from_json(**kwargs)
-        self._model = HeaterModel.from_json(kwargs.get('model'))
-        self._monitors = [HeaterMonitor.from_json(monitor) for monitor in kwargs.get('monitors', [])]
+        if 'model' in kwargs:
+            self._model = HeaterModel.from_json(kwargs.get('model'))
+        if 'monitors' in kwargs:
+            self._monitors = [HeaterMonitor.from_json(monitor) for monitor in kwargs.get('monitors', [])]
         return self

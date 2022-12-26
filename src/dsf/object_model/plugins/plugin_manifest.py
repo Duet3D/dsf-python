@@ -11,8 +11,8 @@ class PluginManifest(ModelObject):
     def __init__(self):
         super(PluginManifest, self).__init__()
         self._author = None
-        self._data = None
-        self._dwc_dependencies = None
+        self._data = {}
+        self._dwc_dependencies = []
         self._dwc_version = None
         self._homepage = None
         self._id = None
@@ -21,13 +21,13 @@ class PluginManifest(ModelObject):
         self._rrf_version = None
         self._sbc_dsf_version = None
         self._sbc_executable = None
-        self._sbc_executable_arguments = None
-        self._sbc_extra_executables = None
+        self._sbc_executable_arguments = []
+        self._sbc_extra_executables = []
         self._sbc_output_redirected = None
-        self._sbc_package_dependencies = None
-        self._sbc_permissions = None
-        self._sbc_plugin_dependencies = None
-        self._sbc_python_dependencies = None
+        self._sbc_package_dependencies = []
+        self._sbc_permissions = []
+        self._sbc_plugin_dependencies = []
+        self._sbc_python_dependencies = []
         self._sbc_required = None
         self._tags = []
         self._version = "1.0.0"
@@ -132,7 +132,7 @@ class PluginManifest(ModelObject):
         self._sbc_executable = str(value) if value is not None else None
 
     @property
-    def sbc_executable_arguments(self) -> str:
+    def sbc_executable_arguments(self) -> List[str]:
         """Command-line arguments for the executable"""
         return self._sbc_executable_arguments
 
@@ -160,7 +160,7 @@ class PluginManifest(ModelObject):
         return self._sbc_package_dependencies
         
     @property
-    def sbc_permissions(self) -> SbcPermissions:
+    def sbc_permissions(self) -> List[SbcPermissions]:
         """List of permissions required by the plugin executable running on the SBC"""
         return self._sbc_permissions
     
@@ -218,11 +218,18 @@ class PluginManifest(ModelObject):
     def _update_from_json(self, **kwargs) -> 'PluginManifest':
         """Override ObjectModel._update_from_json to update properties which doesn't have a setter"""
         super(PluginManifest, self)._update_from_json(**kwargs)
-        self._data = kwargs.get('data', {})
-        self._dwc_dependencies = [str(item) for item in kwargs.get('dwcDependencies', [])]
-        self._sbc_extra_executables = [str(item) for item in kwargs.get('sbcExtraExecutables', [])]
-        self._sbc_package_dependencies = [str(item) for item in kwargs.get('sbcPackageDependencies', [])]
-        self._sbc_plugin_dependencies = [str(item) for item in kwargs.get('sbcPluginDependencies', [])]
-        self._sbc_python_dependencies = [str(item) for item in kwargs.get('sbcPythonDependencies', [])]
-        self._tags = [str(item) for item in kwargs.get('tags', [])]
+        if 'data' in kwargs:
+            self._data = kwargs.get('data')
+        if 'dwcDependencies' in kwargs:
+            self._dwc_dependencies = [str(item) for item in kwargs.get('dwcDependencies')]
+        if 'sbcExtraExecutables' in kwargs:
+            self._sbc_extra_executables = [str(item) for item in kwargs.get('sbcExtraExecutables')]
+        if 'sbcPackageDependencies' in kwargs:
+            self._sbc_package_dependencies = [str(item) for item in kwargs.get('sbcPackageDependencies')]
+        if 'sbcPluginDependencies' in kwargs:
+            self._sbc_plugin_dependencies = [str(item) for item in kwargs.get('sbcPluginDependencies')]
+        if 'sbcPythonDependencies' in kwargs:
+            self._sbc_python_dependencies = [str(item) for item in kwargs.get('sbcPythonDependencies')]
+        if 'tags' in kwargs:
+            self._tags = [str(item) for item in kwargs.get('tags')]
         return self

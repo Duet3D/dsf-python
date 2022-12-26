@@ -151,27 +151,47 @@ class ObjectModel(ModelObject):
     def _update_from_json(self, **kwargs) -> 'ObjectModel':
         """Override ObjectModel._update_from_json to update properties which doesn't have a setter"""
         super(ObjectModel, self)._update_from_json(**kwargs)
-        self._boards = [Board.from_json(item) for item in kwargs.get('boards', [])]
-        self._directories = Directories.from_json(kwargs.get('directories'))
-        self._fans = [Fan.from_json(item) for item in kwargs.get('fans', [])]
-        self._globals = kwargs.get('global_', {})
-        self._heat = Heat.from_json(kwargs.get('heat'))
-        self._http_endpoints = [HttpEndpoint.from_json(item) for item in kwargs.get('httpEndpoints', [])]
-        self._inputs = [InputChannel.from_json(item) for item in kwargs.get('inputs', [])]
-        self._job = Job.from_json(kwargs.get('job'))
-        self._limits = Limits.from_json(kwargs.get('limits'))
-        self._messages = [Message(**item) for item in kwargs.get('messages', [])]
-        self._move = Move.from_json(kwargs.get('move'))
-        self._network = Network.from_json(kwargs.get('network'))
-        plugins = kwargs.get('plugins', {})
-        self._plugins = {k: Plugin.from_json(v) for k, v in plugins.items()} if plugins else {}
-        self._scanner = Scanner.from_json(kwargs.get('scanner'))
-        self._sensors = Sensors.from_json(kwargs.get('sensors'))
-        self._spindles = [Spindle.from_json(item) for item in kwargs.get('spindles', [])]
-        self._state = State.from_json(kwargs.get('state'))
-        self._tools = [Tool.from_json(item) for item in kwargs.get('tools', [])]
-        self._user_sessions = [UserSession.from_json(item) for item in kwargs.get('userSessions', [])]
-        self._volumes = [Volume.from_json(item) for item in kwargs.get('volumes', [])]
+        if 'boards' in kwargs:
+            self._boards = [Board.from_json(item) for item in kwargs.get('boards')]
+        if 'directories' in kwargs:
+            self._directories = Directories.from_json(kwargs.get('directories'))
+        if 'fans' in kwargs:
+            self._fans = [Fan.from_json(item) for item in kwargs.get('fans')]
+        if 'global_' in kwargs:
+            self._globals = kwargs.get('global_')
+        if 'heat' in kwargs:
+            self._heat = Heat.from_json(kwargs.get('heat'))
+        if 'httpEndpoints' in kwargs:
+            self._http_endpoints = [HttpEndpoint.from_json(item) for item in kwargs.get('httpEndpoints')]
+        if 'inputs' in kwargs:
+            self._inputs = [InputChannel.from_json(item) for item in kwargs.get('inputs')]
+        if 'job' in kwargs:
+            self._job = Job.from_json(kwargs.get('job'))
+        if 'limits' in kwargs:
+            self._limits = Limits.from_json(kwargs.get('limits'))
+        if 'messages' in kwargs:
+            self._messages = [Message(**item) for item in kwargs.get('messages')]
+        if 'move' in kwargs:
+            self._move = Move.from_json(kwargs.get('move'))
+        if 'network' in kwargs:
+            self._network = Network.from_json(kwargs.get('network'))
+        if 'plugins' in kwargs:
+            plugins = kwargs.get('plugins')
+            self._plugins = {k: Plugin.from_json(v) for k, v in plugins.items()} if plugins else {}
+        if 'scanner' in kwargs:
+            self._scanner = Scanner.from_json(kwargs.get('scanner'))
+        if 'sensors' in kwargs:
+            self._sensors = Sensors.from_json(kwargs.get('sensors'))
+        if 'spindles' in kwargs:
+            self._spindles = [Spindle.from_json(item) for item in kwargs.get('spindles')]
+        if 'state' in kwargs:
+            self._state = State.from_json(kwargs.get('state'))
+        if 'tools' in kwargs:
+            self._tools = [Tool.from_json(item) for item in kwargs.get('tools')]
+        if 'userSessions' in kwargs:
+            self._user_sessions = [UserSession.from_json(item) for item in kwargs.get('userSessions')]
+        if 'volumes' in kwargs:
+            self._volumes = [Volume.from_json(item) for item in kwargs.get('volumes')]
         return self
 
     @property

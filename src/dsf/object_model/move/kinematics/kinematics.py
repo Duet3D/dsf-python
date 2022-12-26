@@ -15,5 +15,7 @@ class Kinematics(KinematicsBase):
     def _update_from_json(self, **kwargs) -> 'Kinematics':
         """Override ObjectModel._update_from_json to return the Kinematics type matching the given name"""
         super(Kinematics, self)._update_from_json(**kwargs)
-        kinematic_type = get_kinematics_type(kwargs.get('name'))
-        return kinematic_type.from_json(kwargs)
+        if 'name' in kwargs:
+            kinematic_type = get_kinematics_type(kwargs.get('name'))
+            return kinematic_type.from_json(kwargs)
+        return self

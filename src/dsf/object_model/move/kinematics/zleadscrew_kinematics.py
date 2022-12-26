@@ -17,5 +17,6 @@ class ZLeadscrewKinematics(KinematicsBase):
     def _update_from_json(self, **kwargs) -> 'ZLeadscrewKinematics':
         """Override ObjectModel._update_from_json to update properties which doesn't have a setter"""
         super(ZLeadscrewKinematics, self)._update_from_json(**kwargs)
-        self._tilt_correction = TiltCorrection.from_json(kwargs.get('tiltCorrection'))
+        if 'tiltCorrection' in kwargs:
+            self._tilt_correction = TiltCorrection.from_json(kwargs.get('tiltCorrection'))
         return self

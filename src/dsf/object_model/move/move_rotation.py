@@ -29,5 +29,6 @@ class MoveRotation(ModelObject):
     def _update_from_json(self, **kwargs) -> 'MoveRotation':
         """Override ObjectModel._update_from_json to update properties which doesn't have a setter"""
         super(MoveRotation, self)._update_from_json(**kwargs)
-        self._centre = [float(c) for c in kwargs.get('centre', [])]
+        if 'centre' in kwargs:
+            self._centre = [float(c) for c in kwargs.get('centre', [])]
         return self

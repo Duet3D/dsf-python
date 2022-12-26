@@ -56,5 +56,6 @@ class Build(ModelObject):
     def _update_from_json(self, **kwargs) -> 'Build':
         """Override ObjectModel._update_from_json to update properties which doesn't have a setter"""
         super(Build, self)._update_from_json(**kwargs)
-        self._objects = [int(obj) for obj in kwargs.get('Objects', [])]
+        if 'Objects' in kwargs:
+            self._objects = [int(obj) for obj in kwargs.get('Objects', [])]
         return self

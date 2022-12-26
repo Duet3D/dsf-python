@@ -74,5 +74,6 @@ class DeltaKinematics(ModelObject):
     def _update_from_json(self, **kwargs) -> 'DeltaKinematics':
         """Override ObjectModel._update_from_json to update properties which doesn't have a setter"""
         super(DeltaKinematics, self)._update_from_json(**kwargs)
-        self._towers = [DeltaTower.from_json(item) for item in kwargs.get('towers', [])]
+        if 'towers' in kwargs:
+            self._towers = [DeltaTower.from_json(item) for item in kwargs.get('towers')]
         return self

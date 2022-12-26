@@ -103,6 +103,8 @@ class InputShaping(ModelObject):
     def _update_from_json(self, **kwargs) -> 'InputShaping':
         """Override ObjectModel._update_from_json to update properties which doesn't have a setter"""
         super(InputShaping, self)._update_from_json(**kwargs)
-        self._amplitudes = [float(a) for a in kwargs.get('amplitudes', [])]
-        self._durations = [float(d) for d in kwargs.get('durations', [])]
+        if 'amplitudes' in kwargs:
+            self._amplitudes = [float(a) for a in kwargs.get('amplitudes', [])]
+        if 'durations' in kwargs:
+            self._durations = [float(d) for d in kwargs.get('durations', [])]
         return self

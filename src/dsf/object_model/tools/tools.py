@@ -186,15 +186,25 @@ class Tool(ModelObject):
     def _update_from_json(self, **kwargs) -> 'Tool':
         """Override ObjectModel._update_from_json to update properties which doesn't have a setter"""
         super(Tool, self)._update_from_json(**kwargs)
-        self._active = [float(item) for item in kwargs.get('active', [])]
-        self._axes = [int(item) for item in kwargs.get('axes', [])]
-        self._extruders = [int(item) for item in kwargs.get('extruders', [])]
-        self._fans = [int(item) for item in kwargs.get('fans', [])]
-        self._feed_forward = [int(item) for item in kwargs.get('feedForward', [])]
-        self._heaters = [int(item) for item in kwargs.get('heaters', [])]
-        self._mix = [int(item) for item in kwargs.get('mix', [])]
-        self._offsets = [float(item) for item in kwargs.get('offsets', [])]
-        retraction = kwargs.get('retraction')
-        self._retraction = ToolRetraction.from_json(retraction) if retraction else None
-        self._standby = [float(item) for item in kwargs.get('standby', [])]
+        if 'active' in kwargs:
+            self._active = [float(item) for item in kwargs.get('active')]
+        if 'axes' in kwargs:
+            self._axes = [int(item) for item in kwargs.get('axes')]
+        if 'extruders' in kwargs:
+            self._extruders = [int(item) for item in kwargs.get('extruders')]
+        if 'fans' in kwargs:
+            self._fans = [int(item) for item in kwargs.get('fans')]
+        if 'feedForward' in kwargs:
+            self._feed_forward = [int(item) for item in kwargs.get('feedForward')]
+        if 'heaters' in kwargs:
+            self._heaters = [int(item) for item in kwargs.get('heaters')]
+        if 'mix' in kwargs:
+            self._mix = [int(item) for item in kwargs.get('mix')]
+        if 'offsets' in kwargs:
+            self._offsets = [float(item) for item in kwargs.get('offsets')]
+        if 'retraction' in kwargs:
+            retraction = kwargs.get('retraction')
+            self._retraction = ToolRetraction.from_json(retraction) if retraction else None
+        if 'standby' in kwargs:
+            self._standby = [float(item) for item in kwargs.get('standby')]
         return self

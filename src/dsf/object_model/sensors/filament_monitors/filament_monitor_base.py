@@ -44,5 +44,6 @@ class FilamentMonitorBase(ModelObject):
     def _update_from_json(self, **kwargs) -> 'FilamentMonitorBase':
         """Override ObjectModel._update_from_json to update properties which doesn't have a setter"""
         super(FilamentMonitorBase, self)._update_from_json(**kwargs)
-        self._type = FilamentMonitorType(kwargs.get('type', FilamentMonitorType.Unknown))
+        if 'type' in kwargs:
+            self._type = FilamentMonitorType(kwargs.get('type'))
         return self

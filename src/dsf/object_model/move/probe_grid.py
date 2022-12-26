@@ -50,8 +50,12 @@ class ProbeGrid(ModelObject):
     def _update_from_json(self, **kwargs) -> 'ProbeGrid':
         """Override ObjectModel._update_from_json to update properties which doesn't have a setter"""
         super(ProbeGrid, self)._update_from_json(**kwargs)
-        self._axes = [str(letter) for letter in kwargs.get('axes', ['X', 'Y'])]
-        self._maxs = [float(value) for value in kwargs.get('maxs', [-1, -1])]
-        self._mins = [float(value) for value in kwargs.get('mins', [0, 0])]
-        self._spacings = [float(value) for value in kwargs.get('spacings', [0, 0])]
+        if 'axes' in kwargs:
+            self._axes = [str(letter) for letter in kwargs.get('axes')]
+        if 'maxs' in kwargs:
+            self._maxs = [float(value) for value in kwargs.get('maxs')]
+        if 'mins' in kwargs:
+            self._mins = [float(value) for value in kwargs.get('mins')]
+        if 'spacings' in kwargs:
+            self._spacings = [float(value) for value in kwargs.get('spacings')]
         return self

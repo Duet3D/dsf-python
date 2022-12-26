@@ -47,9 +47,14 @@ class Sensors(ModelObject):
     def _update_from_json(self, **kwargs) -> 'Sensors':
         """Override ObjectModel._update_from_json to update properties which doesn't have a setter"""
         super(Sensors, self)._update_from_json(**kwargs)
-        self._analog = [AnalogSensor.from_json(item) for item in kwargs.get('analog', [])]
-        self._endstops = [Endstop.from_json(item) if item else None for item in kwargs.get('endstops', [])]
-        self._filament_monitors = [FilamentMonitor.from_json(item) for item in kwargs.get('filamentMonitors', [])]
-        self._gp_in = [GpInputPort.from_json(item) for item in kwargs.get('gpIn', [])]
-        self._probes = [Probe.from_json(item) for item in kwargs.get('probes', [])]
+        if 'analog' in kwargs:
+            self._analog = [AnalogSensor.from_json(item) for item in kwargs.get('analog', [])]
+        if 'endstops' in kwargs:
+            self._endstops = [Endstop.from_json(item) if item else None for item in kwargs.get('endstops', [])]
+        if 'filamentMonitors' in kwargs:
+            self._filament_monitors = [FilamentMonitor.from_json(item) for item in kwargs.get('filamentMonitors', [])]
+        if 'gpIn' in kwargs:
+            self._gp_in = [GpInputPort.from_json(item) for item in kwargs.get('gpIn', [])]
+        if 'probes' in kwargs:
+            self._probes = [Probe.from_json(item) for item in kwargs.get('probes', [])]
         return self

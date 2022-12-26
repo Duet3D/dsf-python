@@ -107,5 +107,6 @@ class Fan(ModelObject):
     def _update_from_json(self, **kwargs) -> 'Fan':
         """Override ObjectModel._update_from_json to update properties which doesn't have a setter"""
         super(Fan, self)._update_from_json(**kwargs)
-        self._thermostatic = FanThermostaticControl.from_json(kwargs.get('thermostatic'))
+        if 'thermostatic' in kwargs:
+            self._thermostatic = FanThermostaticControl.from_json(kwargs.get('thermostatic'))
         return self

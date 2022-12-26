@@ -261,7 +261,10 @@ class Axis(ModelObject):
         Override ObjectModel._update_from_json to update properties which doesn't have a setter
         """
         super(Axis, self)._update_from_json(**kwargs)
-        self._drivers = [DriverId(d) for d in kwargs.get('drivers', [])]
-        self._microstepping = MicroStepping.from_json(kwargs.get('microstepping', []))
-        self._workplace_offsets = [float(offset) for offset in kwargs.get('workplaceOffsets', [])]
+        if 'drivers' in kwargs:
+            self._drivers = [DriverId(d) for d in kwargs.get('drivers', [])]
+        if 'microstepping' in kwargs:
+            self._microstepping = MicroStepping.from_json(kwargs.get('microstepping', []))
+        if 'workplaceOffsets' in kwargs:
+            self._workplace_offsets = [float(offset) for offset in kwargs.get('workplaceOffsets', [])]
         return self

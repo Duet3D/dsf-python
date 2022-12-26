@@ -117,5 +117,6 @@ class HeaterModel(ModelObject):
     def _update_from_json(self, **kwargs) -> 'HeaterModel':
         """Override ObjectModel._update_from_json to update properties which doesn't have a setter"""
         super(HeaterModel, self)._update_from_json(**kwargs)
-        self._pid = HeaterModelPID.from_json(kwargs.get('pID'))
+        if 'pID' in kwargs:
+            self._pid = HeaterModelPID.from_json(kwargs.get('pID'))
         return self

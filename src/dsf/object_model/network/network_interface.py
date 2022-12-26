@@ -167,5 +167,6 @@ class NetworkInterface(ModelObject):
     def _update_from_json(self, **kwargs) -> 'NetworkInterface':
         """Override ObjectModel._update_from_json to update properties which doesn't have a setter"""
         super(NetworkInterface, self)._update_from_json(**kwargs)
-        self._active_protocols = [NetworkProtocol(item) for item in kwargs.get('activeProtocols', [])]
+        if 'activeProtocols' in kwargs:
+            self._active_protocols = [NetworkProtocol(item) for item in kwargs.get('activeProtocols')]
         return self

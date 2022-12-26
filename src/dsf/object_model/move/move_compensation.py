@@ -110,6 +110,8 @@ class MoveCompensation(ModelObject):
     def _update_from_json(self, **kwargs) -> 'MoveCompensation':
         """Override ObjectModel._update_from_json to update properties which doesn't have a setter"""
         super(MoveCompensation, self)._update_from_json(**kwargs)
-        self._probe_grid = ProbeGrid.from_json(kwargs.get('probeGrid'))
-        self._skew = Skew.from_json(kwargs.get('skew'))
+        if 'probeGrid' in kwargs:
+            self._probe_grid = ProbeGrid.from_json(kwargs.get('probeGrid'))
+        if 'skew' in kwargs:
+            self._skew = Skew.from_json(kwargs.get('skew'))
         return self

@@ -35,5 +35,6 @@ class HangprinterKinematics(KinematicsBase):
     def _update_from_json(self, **kwargs) -> 'HangprinterKinematics':
         """Override ObjectModel._update_from_json to update properties which doesn't have a setter"""
         super(HangprinterKinematics, self)._update_from_json(**kwargs)
-        self._anchors = [[int(x) for x in y] for y in kwargs.get('anchors', [])]
+        if 'anchors' in kwargs:
+            self._anchors = [[int(x) for x in y] for y in kwargs.get('anchors')]
         return self

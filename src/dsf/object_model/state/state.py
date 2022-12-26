@@ -304,8 +304,10 @@ class State(ModelObject):
     def _update_from_json(self, **kwargs) -> 'State':
         """Override ObjectModel._update_from_json to update properties which doesn't have a setter"""
         super(State, self)._update_from_json(**kwargs)
-        gp_out = kwargs.get('gpOut', [])
-        self._gp_out = [GpOutputPort.from_json(item) for item in gp_out] if gp_out else []
-        restore_points = kwargs.get('restorePoints', [])
-        self._restore_points = [RestorePoint.from_json(item) for item in restore_points] if restore_points else []
+        if 'gpOut' in kwargs:
+            gp_out = kwargs.get('gpOut')
+            self._gp_out = [GpOutputPort.from_json(item) for item in gp_out] if gp_out else []
+        if 'restorePoints' in kwargs:
+            restore_points = kwargs.get('restorePoints')
+            self._restore_points = [RestorePoint.from_json(item) for item in restore_points] if restore_points else []
         return self

@@ -35,6 +35,7 @@ class KinematicsBase(ModelObject):
     def _update_from_json(self, **kwargs) -> 'ModelObject':
         """Override ObjectModel._update_from_json to update properties which doesn't have a setter"""
         super(KinematicsBase, self)._update_from_json(**kwargs)
-        segmentation = kwargs.get('segmentation')
-        self._segmentation = MoveSegmentation.from_json(segmentation) if segmentation else None
+        if 'segmentation' in kwargs:
+            segmentation = kwargs.get('segmentation')
+            self._segmentation = MoveSegmentation.from_json(segmentation) if segmentation else None
         return self

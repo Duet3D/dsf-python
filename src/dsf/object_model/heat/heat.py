@@ -58,7 +58,10 @@ class Heat(ModelObject):
     def _update_from_json(self, **kwargs) -> 'Heat':
         """Override ObjectModel._update_from_json to update properties which doesn't have a setter"""
         super(Heat, self)._update_from_json(**kwargs)
-        self._bed_heaters = [int(heater) for heater in kwargs.get('bedHeaters', [])]
-        self._chamber_heaters = [int(heater) for heater in kwargs.get('chamberHeaters', [])]
-        self._heaters = [Heater.from_json(heater) for heater in kwargs.get('heaters', [])]
+        if 'bedHeaters' in kwargs:
+            self._bed_heaters = [int(heater) for heater in kwargs.get('bedHeaters', [])]
+        if 'chamberHeaters' in kwargs:
+            self._chamber_heaters = [int(heater) for heater in kwargs.get('chamberHeaters', [])]
+        if 'heaters' in kwargs:
+            self._heaters = [Heater.from_json(heater) for heater in kwargs.get('heaters', [])]
         return self
