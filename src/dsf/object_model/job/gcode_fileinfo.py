@@ -2,6 +2,7 @@ from datetime import datetime
 from typing import List, Union
 
 from .thumbnail_info import ThumbnailInfo
+from ..model_collection import ModelCollection
 from ..model_object import ModelObject
 
 
@@ -20,7 +21,7 @@ class GCodeFileInfo(ModelObject):
         self._print_time = None
         self._simulated_time = None
         self._size = 0
-        self._thumbnails = []
+        self._thumbnails = ModelCollection(ThumbnailInfo)
 
     @property
     def filament(self) -> List[float]:
@@ -117,12 +118,3 @@ class GCodeFileInfo(ModelObject):
     def thumbnails(self) -> List[ThumbnailInfo]:
         """Collection of thumbnails parsed from Gcode"""
         return self._thumbnails
-
-    def _update_from_json(self, **kwargs) -> 'GCodeFileInfo':
-        """Override ObjectModel._update_from_json to update properties which doesn't have a setter"""
-        super(GCodeFileInfo, self)._update_from_json(**kwargs)
-        if 'filament' in kwargs:
-            self._filament = [float(f) for f in kwargs.get('filament', [])]
-        if 'thumbnails' in kwargs:
-            self._thumbnails = [ThumbnailInfo.from_json(t) for t in kwargs.get('thumbnails', [])]
-        return self

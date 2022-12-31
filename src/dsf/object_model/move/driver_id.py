@@ -1,7 +1,14 @@
-from ..exceptions import CodeParserException
+import re
+
+from ..model_object import ModelObject
+from ...exceptions import CodeParserException
 
 
-class DriverId:
+def is_driverId(value):
+    return isinstance(value, DriverId)
+
+
+class DriverId(ModelObject):
     """
     Class representing a driver identifier
     :param board: Board of this driver identifier
@@ -9,6 +16,8 @@ class DriverId:
     """
 
     def __init__(self, as_str: str = None, as_int: int = None, board: int = None, port: int = None):
+        super().__init__()
+
         if board is not None:
             self.board = board
         if port is not None:
@@ -48,3 +57,16 @@ class DriverId:
 
     def __ne__(self, o):
         return not self == o
+
+    def update_from_json(self, data):
+        if isinstance(data, str):
+            matches = re.search(r'(\d+)\.(\d+)', data)
+            if matches:
+                self.board = int(matches.group(1))
+                self.port = int(matches.group(2))
+            else:
+                self.board = None
+                self.port = int(data)
+            return self
+        return None
+

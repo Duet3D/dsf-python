@@ -4,9 +4,8 @@ from .zleadscrew_kinematics import ZLeadscrewKinematics
 
 class CoreKinematics(ZLeadscrewKinematics):
 
-    def __init__(self):
-        super(CoreKinematics, self).__init__()
-        self.name = KinematicsName.cartesian
+    def __init__(self, name: KinematicsName = KinematicsName.cartesian):
+        super(CoreKinematics, self).__init__(name)
         self._forward_matrix = [
             [1, 0, 0],
             [0, 1, 0],
@@ -25,12 +24,3 @@ class CoreKinematics(ZLeadscrewKinematics):
     @property
     def inverse_matrix(self):
         return self._inverse_matrix
-
-    def _update_from_json(self, **kwargs) -> 'CoreKinematics':
-        """Override ObjectModel._update_from_json to update properties which doesn't have a setter"""
-        super(CoreKinematics, self)._update_from_json(**kwargs)
-        if 'forwardMatrix' in kwargs:
-            self._forward_matrix = [[int(x) for x in y] for y in kwargs.get('forwardMatrix')]
-        if 'inverseMatrix' in kwargs:
-            self._inverse_matrix = [[int(x) for x in y] for y in kwargs.get('inverseMatrix')]
-        return self

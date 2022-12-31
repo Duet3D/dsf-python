@@ -1,95 +1,95 @@
-from enum import IntEnum
+from enum import Enum
 
 
-class SbcPermissions(IntEnum):
+class SbcPermissions(Enum):
     """Enumeration of supported plugin permissions"""
 
     # No permissions set (default value)
-    noPermissions = 0
+    noPermissions = "noPermissions"
 
     # Execute generic commands
-    commandExecution = 1
+    commandExecution = "commandExecution"
 
     # Intercept codes but don't interact with them
-    codeInterceptionRead = 2
+    codeInterceptionRead = "codeInterceptionRead"
 
     # Intercept codes in a blocking way with options to resolve or cancel them
-    codeInterceptionReadWrite = 4
+    codeInterceptionReadWrite = "codeInterceptionReadWrite"
 
     # Install, load, unload, and uninstall plugins. Grants FS access to all third-party plugins too
-    managePlugins = 8
+    managePlugins = "managePlugins"
 
     # Service plugin runtime information (for internal purposes only, do not use)
-    servicePlugins = 16
+    servicePlugins = "managePlugins"
 
     # Manage user sessions
-    manageUserSessions = 32
+    manageUserSessions = "manageUserSessions"
 
     # Read from the object model
-    objectModelRead = 64
+    objectModelRead = "objectModelRead"
 
     # Read from and write to the object model
-    objectModelReadWrite = 128
+    objectModelReadWrite = "objectModelReadWrite"
 
     # Create new HTTP endpoints
-    registerHttpEndpoints = 256
+    registerHttpEndpoints = "registerHttpEndpoints"
 
     # Read files in 0:/filaments
-    readFilaments = 512
+    readFilaments = "readFilaments"
 
     # Write files in 0:/filaments
-    writeFilaments = 1024
+    writeFilaments = "writeFilaments"
 
     # Read files in 0:/firmware
-    readFirmware = 2048
+    readFirmware = "readFirmware"
 
     # Write files in 0:/firmware
-    writeFirmware = 4096
+    writeFirmware = "writeFirmware"
 
     # Read files in 0:/gcodes
-    readGCodes = 8192
+    readGCodes = "readGCodes"
 
     # Write files in 0:/gcodes
-    writeGCodes = 16384
+    writeGCodes = "writeGCodes"
 
     # Read files in 0:/macros
-    readMacros = 32768
+    readMacros = "readMacros"
 
     # Write files in 0:/macros
-    writeMacros = 65536
+    writeMacros = "writeMacros"
 
     # Read files in 0:/menu
-    readMenu = 131072
+    readMenu = "readMenu"
 
     # Write files in 0:/menu
-    writeMenu = 262144
+    writeMenu = "writeMenu"
 
     # Read files in 0:/sys
-    readSystem = 524288
+    readSystem = "readSystem"
 
     # Write files in 0:/sys
-    writeSystem = 1048576
+    writeSystem = "writeSystem"
 
     # Read files in 0:/www
-    readWeb = 2097152
+    readWeb = "readWeb"
 
     # Write files in 0:/www
-    writeWeb = 4194304
+    writeWeb = "writeWeb"
 
     # Access files including all subdirecotires of the virtual SD directory as DSF user
-    fileSystemAccess = 8388608
+    fileSystemAccess = "fileSystemAccess"
 
     # Launch new processes
-    launchProcesses = 16777216
+    launchProcesses = "launchProcesses"
 
     # Communicate over the network (stand-alone)
-    networkAccess = 33554432
+    networkAccess = "networkAccess"
 
     # Access /dev/video* devices
-    webcamAccess = 134217728
+    webcamAccess = "webcamAccess"
 
     # Access /dev/gpio*, /dev/i2c*, and /dev/spidev* devices
-    gpioAccess = 268435456
+    gpioAccess = "gpioAccess"
 
     # Launch process as root user (for full device control - potentially dangerous)
-    superUser = 67108864
+    superUser = "superUser"

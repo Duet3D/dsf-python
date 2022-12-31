@@ -3,6 +3,7 @@ from typing import List
 
 from .heater_model import HeaterModel
 from .heater_monitor import HeaterMonitor
+from ..model_collection import ModelCollection
 from ..model_object import ModelObject
 
 
@@ -47,7 +48,7 @@ class Heater(ModelObject):
         # Information about the heater model
         self._model = HeaterModel()
         # Monitors of this heater
-        self._monitors = []
+        self._monitors = ModelCollection(HeaterMonitor)
         # Sensor number of this heater or -1 if not configured
         self._sensor = -1
         # Standby temperature of the heater (in C)
@@ -137,13 +138,9 @@ class Heater(ModelObject):
 
     @state.setter
     def state(self, value: HeaterState):
-        self._state = value
-
-    def _update_from_json(self, **kwargs) -> 'Heater':
-        """Override ObjectModel._update_from_json to update properties which doesn't have a setter"""
-        super(Heater, self)._update_from_json(**kwargs)
-        if 'model' in kwargs:
-            self._model = HeaterModel.from_json(kwargs.get('model'))
-        if 'monitors' in kwargs:
-            self._monitors = [HeaterMonitor.from_json(monitor) for monitor in kwargs.get('monitors', [])]
-        return self
+        if isinstance(value, HeaterState):
+            self._state = value
+        elif isinstance(value, str):
+            self._state = HeaterState(value)
+        else:
+            raise TypeError(f"{__name__}.state must be of type HeaterState. Got {type(value)}: {value}")

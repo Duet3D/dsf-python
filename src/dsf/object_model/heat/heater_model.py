@@ -113,10 +113,3 @@ class HeaterModel(ModelObject):
     @standard_voltage.setter
     def standard_voltage(self, value):
         self._standard_voltage = float(value) if value is not None else None
-
-    def _update_from_json(self, **kwargs) -> 'HeaterModel':
-        """Override ObjectModel._update_from_json to update properties which doesn't have a setter"""
-        super(HeaterModel, self)._update_from_json(**kwargs)
-        if 'pID' in kwargs:
-            self._pid = HeaterModelPID.from_json(kwargs.get('pID'))
-        return self

@@ -44,12 +44,3 @@ class BuildObject(ModelObject):
     def y(self) -> Union[List[float], None]:
         """Y coordinates of the build object (in mm or null if not found)"""
         return self._y
-
-    def _update_from_json(self, **kwargs) -> 'BuildObject':
-        """Override ObjectModel._update_from_json to update properties which doesn't have a setter"""
-        super(BuildObject, self)._update_from_json(**kwargs)
-        if 'x' in kwargs:
-            self._x = [float(coord) for coord in kwargs.get('x', [])]
-        if 'y' in kwargs:
-            self._y = [float(coord) for coord in kwargs.get('y', [])]
-        return self

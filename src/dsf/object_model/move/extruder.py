@@ -1,14 +1,18 @@
 from typing import Union
 
+from .driver_id import DriverId
 from .extruder_non_linear import ExtruderNonlinear
 from .microstepping import MicroStepping
 from ..model_object import ModelObject
-from ...utility.driver_id import DriverId
-from ...utils import preserve_builtin
+from ..utils import wrap_model_property
 
 
 class Extruder(ModelObject):
     """Information about an extruder drive"""
+
+    # Assigned driver
+    driver = wrap_model_property('driver', DriverId)
+
     def __init__(self):
         super().__init__()
         # Acceleration of this extruder (in mm/s^2)
@@ -59,11 +63,6 @@ class Extruder(ModelObject):
     @current.setter
     def current(self, value):
         self._current = int(value) if value is not None else 0
-
-    @property
-    def driver(self) -> Union[DriverId, None]:
-        """Assigned driver"""
-        return self._driver
 
     @property
     def filament(self) -> str:
@@ -164,17 +163,3 @@ class Extruder(ModelObject):
     @steps_per_mm.setter
     def steps_per_mm(self, value):
         self._steps_per_mm = float(value) if value is not None else 420
-
-    def _update_from_json(self, **kwargs) -> 'Extruder':
-        """Override ObjectModel._update_from_json to update properties which doesn't have a setter"""
-        super(Extruder, self)._update_from_json(**kwargs)
-        if 'driver' in kwargs:
-            driver = kwargs.get('driver')
-            self._driver = DriverId(**preserve_builtin(driver)) if driver is not None else None
-        if 'microstepping' in kwargs:
-            microstepping = kwargs.get('microstepping')
-            self._microstepping = MicroStepping.from_json(microstepping) if microstepping is not None else None
-        if 'nonlinear' in kwargs:
-            nonlinear = kwargs.get('nonlinear')
-            self._nonlinear = ExtruderNonlinear.from_json(nonlinear) if nonlinear is not None else None
-        return self

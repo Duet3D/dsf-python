@@ -1,11 +1,12 @@
-from .kinematics_base import KinematicsBase
+from .kinematics import Kinematics
+from .kinematics_name import KinematicsName
 from .tilt_correction import TiltCorrection
 
 
-class ZLeadscrewKinematics(KinematicsBase):
+class ZLeadscrewKinematics(Kinematics):
     """Base kinematics class that provides the ability to level the bed using Z leadscrews"""
-    def __init__(self):
-        super(ZLeadscrewKinematics, self).__init__()
+    def __init__(self, name: KinematicsName):
+        super(ZLeadscrewKinematics, self).__init__(name)
         # Parameters describing the tilt correction
         self._tilt_correction = TiltCorrection()
         
@@ -13,10 +14,3 @@ class ZLeadscrewKinematics(KinematicsBase):
     def tilt_correction(self):
         """Parameters describing the tilt correction"""
         return self._tilt_correction
-
-    def _update_from_json(self, **kwargs) -> 'ZLeadscrewKinematics':
-        """Override ObjectModel._update_from_json to update properties which doesn't have a setter"""
-        super(ZLeadscrewKinematics, self)._update_from_json(**kwargs)
-        if 'tiltCorrection' in kwargs:
-            self._tilt_correction = TiltCorrection.from_json(kwargs.get('tiltCorrection'))
-        return self

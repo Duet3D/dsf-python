@@ -13,10 +13,3 @@ class Driver(ModelObject):
     def settings(self) -> DriverSettings:
         """Configured settings of the driver"""
         return self._settings
-
-    def _update_from_json(self, **kwargs) -> 'Driver':
-        """Override ObjectModel._update_from_json to update properties which doesn't have a setter"""
-        super(Driver, self)._update_from_json(**kwargs)
-        if 'settings' in kwargs:
-            self._settings = DriverSettings.from_json(kwargs.get('settings'))
-        return self

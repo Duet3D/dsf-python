@@ -4,7 +4,7 @@ codeparameter contains all classes and methods dealing with deserialized code pa
 import json
 
 from ..exceptions import CodeParserException
-from ..utility.driver_id import DriverId
+from ..object_model.move.driver_id import DriverId
 
 
 class CodeParameter(json.JSONEncoder):

@@ -1,5 +1,5 @@
 import re
-from typing import List
+from typing import List, Set
 
 from .sbc_permissions import SbcPermissions
 from ..model_object import ModelObject
@@ -25,7 +25,7 @@ class PluginManifest(ModelObject):
         self._sbc_extra_executables = []
         self._sbc_output_redirected = None
         self._sbc_package_dependencies = []
-        self._sbc_permissions = []
+        self._sbc_permissions = set()
         self._sbc_plugin_dependencies = []
         self._sbc_python_dependencies = []
         self._sbc_required = None
@@ -160,13 +160,22 @@ class PluginManifest(ModelObject):
         return self._sbc_package_dependencies
         
     @property
-    def sbc_permissions(self) -> List[SbcPermissions]:
+    def sbc_permissions(self) -> Set[SbcPermissions]:
         """List of permissions required by the plugin executable running on the SBC"""
         return self._sbc_permissions
     
     @sbc_permissions.setter
-    def sbc_permissions(self, value):
-        self._sbc_permissions = value
+    def sbc_permissions(self, values):
+        _permissions = set()
+        for value in values:
+            if isinstance(value, SbcPermissions):
+                _permissions.add(value)
+            elif isinstance(value, str):
+                _permissions.add(SbcPermissions(value))
+            else:
+                raise TypeError(f"{__name__}._sbc_permissions must be of type SbcPermissions."
+                                f"Got {type(value)}: {value}")
+        self._sbc_permissions = _permissions
         
     @property
     def sbc_plugin_dependencies(self) -> List[str]:
@@ -214,22 +223,3 @@ class PluginManifest(ModelObject):
             if actual_idx != required_idx:
                 return False
         return True
-
-    def _update_from_json(self, **kwargs) -> 'PluginManifest':
-        """Override ObjectModel._update_from_json to update properties which doesn't have a setter"""
-        super(PluginManifest, self)._update_from_json(**kwargs)
-        if 'data' in kwargs:
-            self._data = kwargs.get('data')
-        if 'dwcDependencies' in kwargs:
-            self._dwc_dependencies = [str(item) for item in kwargs.get('dwcDependencies')]
-        if 'sbcExtraExecutables' in kwargs:
-            self._sbc_extra_executables = [str(item) for item in kwargs.get('sbcExtraExecutables')]
-        if 'sbcPackageDependencies' in kwargs:
-            self._sbc_package_dependencies = [str(item) for item in kwargs.get('sbcPackageDependencies')]
-        if 'sbcPluginDependencies' in kwargs:
-            self._sbc_plugin_dependencies = [str(item) for item in kwargs.get('sbcPluginDependencies')]
-        if 'sbcPythonDependencies' in kwargs:
-            self._sbc_python_dependencies = [str(item) for item in kwargs.get('sbcPythonDependencies')]
-        if 'tags' in kwargs:
-            self._tags = [str(item) for item in kwargs.get('tags')]
-        return self

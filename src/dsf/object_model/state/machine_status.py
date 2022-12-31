@@ -35,7 +35,7 @@ class MachineStatus(str, Enum):
     processing = "processing"
 
     # The machine is simulating a file job to determine its processing time
-    simulating = "processing"
+    simulating = "simulating"
 
     # The machine is busy doing something (e.g. moving)
     busy = "busy"

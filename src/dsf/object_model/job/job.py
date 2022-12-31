@@ -4,19 +4,27 @@ from .build import Build
 from .gcode_fileinfo import GCodeFileInfo
 from .layer import Layer
 from .times_left import TimesLeft
+from ..model_collection import ModelCollection
 from ..model_object import ModelObject
+from ..utils import wrap_model_property
 
 
 class Job(ModelObject):
     """Information about the current job"""
+
+    # Information about the current build or null if not available
+    build = wrap_model_property('build', Build)
+    # Information about the file being processed
+    file = wrap_model_property('file', GCodeFileInfo)
+
     def __init__(self):
         super().__init__()
         # Information about the current build or null if not available
-        self._build = Build()
+        self._build = None
         # Total active duration of the current job file (in s or null)
         self._duration = None
         # Information about the file being processed
-        self._file = GCodeFileInfo()
+        self._file = None
         # Current position in the file being processed (in bytes or null)
         self._file_position = None
         # Total duration of the last job (in s or null)
@@ -32,7 +40,7 @@ class Job(ModelObject):
         # Number of the current layer or null not available
         self._layer = None
         # Information about the past layers
-        self._layers = []
+        self._layers = ModelCollection(Layer)
         # Time elapsed since the last layer change (in s or null)
         self._layer_time = None
         # Total pause time since the job started
@@ -45,20 +53,6 @@ class Job(ModelObject):
         self._warm_up_duration = None
 
     @property
-    def build(self) -> Build:
-        """Information about the current build or null if not available"""
-        return self._build
-
-    @build.setter
-    def build(self, value):
-        if value is None or isinstance(value, Build):
-            self._build = value
-        elif isinstance(value, dict):  # Update from JSON
-            self._build = Build.from_json(value)
-        else:
-            raise TypeError(f"{__name__}.build must be None or of type Build. Got {type(value)}: {value}")
-
-    @property
     def duration(self) -> Union[int, None]:
         """Total active duration of the current job file (in s or null)"""
         return self._duration
@@ -66,11 +60,6 @@ class Job(ModelObject):
     @duration.setter
     def duration(self, value):
         self._duration = int(value) if value is not None else None
-
-    @property
-    def file(self) -> GCodeFileInfo:
-        """Information about the file being processed"""
-        return self._file
 
     @property
     def file_position(self) -> Union[int, None]:
@@ -149,7 +138,7 @@ class Job(ModelObject):
     @property
     def layer_time(self) -> Union[float, None]:
         """Time elapsed since the last layer change (in s or null)"""
-        return self.layer_time
+        return self._layer_time
 
     @layer_time.setter
     def layer_time(self, value):
@@ -158,7 +147,7 @@ class Job(ModelObject):
     @property
     def pause_duration(self) -> Union[int, None]:
         """Total pause time since the job started"""
-        return self.pause_duration
+        return self._pause_duration
 
     @pause_duration.setter
     def pause_duration(self, value):
@@ -186,16 +175,3 @@ class Job(ModelObject):
     @warm_up_duration.setter
     def warm_up_duration(self, value):
         self._warm_up_duration = int(value) if value is not None else None
-
-    def _update_from_json(self, **kwargs) -> 'Job':
-        """Override ObjectModel._update_from_json to update properties which doesn't have a setter"""
-        super(Job, self)._update_from_json(**kwargs)
-        if 'file' in kwargs:
-            file = kwargs.get('file')
-            self._file = GCodeFileInfo.from_json(file) if file is not None else None
-        if 'layers' in kwargs:
-            self._layers = [Layer.from_json(layer_) for layer_ in kwargs.get('layers', [])]
-        if 'timesLeft' in kwargs:
-            times_left = kwargs.get('timesLeft')
-            self._times_left = TimesLeft.from_json(times_left) if times_left is not None else None
-        return self

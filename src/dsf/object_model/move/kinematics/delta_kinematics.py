@@ -1,13 +1,15 @@
 from typing import List
 
 from .delta_tower import DeltaTower
-from ...model_object import ModelObject
+from .kinematics import Kinematics
+from .kinematics_name import KinematicsName
+from ...model_collection import ModelCollection
 
 
-class DeltaKinematics(ModelObject):
+class DeltaKinematics(Kinematics):
     """Delta kinematics"""
-    def __init__(self):
-        super().__init__()
+    def __init__(self, name: KinematicsName = KinematicsName.delta):
+        super().__init__(name)
         # Delta radius (in mm)
         self._delta_radius = 0
         # Homed height of a delta printer in mm
@@ -15,7 +17,7 @@ class DeltaKinematics(ModelObject):
         # Print radius for Hangprinter and Delta geometries (in mm)
         self._print_radius = 0
         # Delta tower properties
-        self._towers = []
+        self._towers = ModelCollection(DeltaTower, [{}, {}, {}])
         # How much Z needs to be raised for each unit of movement in the +X direction
         self._x_tilt = 0
         # How much Z needs to be raised for each unit of movement in the +Y direction
@@ -70,10 +72,3 @@ class DeltaKinematics(ModelObject):
     @y_tilt.setter
     def y_tilt(self, value):
         self._y_tilt = float(value) if value is not None else 0
-
-    def _update_from_json(self, **kwargs) -> 'DeltaKinematics':
-        """Override ObjectModel._update_from_json to update properties which doesn't have a setter"""
-        super(DeltaKinematics, self)._update_from_json(**kwargs)
-        if 'towers' in kwargs:
-            self._towers = [DeltaTower.from_json(item) for item in kwargs.get('towers')]
-        return self

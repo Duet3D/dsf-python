@@ -5,6 +5,7 @@ from .endstop import Endstop
 from .filament_monitors import FilamentMonitor
 from .gp_input_port import GpInputPort
 from .probe import Probe
+from ..model_collection import ModelCollection
 from ..model_object import ModelObject
 
 
@@ -13,11 +14,11 @@ class Sensors(ModelObject):
 
     def __init__(self):
         super(Sensors, self).__init__()
-        self._analog = []
-        self._endstops = []
-        self._filament_monitors = []
-        self._gp_in = []
-        self._probes = []
+        self._analog = ModelCollection(AnalogSensor)
+        self._endstops = ModelCollection(Endstop)
+        self._filament_monitors = ModelCollection(FilamentMonitor)
+        self._gp_in = ModelCollection(GpInputPort)
+        self._probes = ModelCollection(Probe)
 
     @property
     def analog(self) -> List[AnalogSensor]:
@@ -43,18 +44,3 @@ class Sensors(ModelObject):
     def probes(self) -> List[Probe]:
         """"""
         return self._probes
-
-    def _update_from_json(self, **kwargs) -> 'Sensors':
-        """Override ObjectModel._update_from_json to update properties which doesn't have a setter"""
-        super(Sensors, self)._update_from_json(**kwargs)
-        if 'analog' in kwargs:
-            self._analog = [AnalogSensor.from_json(item) for item in kwargs.get('analog', [])]
-        if 'endstops' in kwargs:
-            self._endstops = [Endstop.from_json(item) if item else None for item in kwargs.get('endstops', [])]
-        if 'filamentMonitors' in kwargs:
-            self._filament_monitors = [FilamentMonitor.from_json(item) for item in kwargs.get('filamentMonitors', [])]
-        if 'gpIn' in kwargs:
-            self._gp_in = [GpInputPort.from_json(item) for item in kwargs.get('gpIn', [])]
-        if 'probes' in kwargs:
-            self._probes = [Probe.from_json(item) for item in kwargs.get('probes', [])]
-        return self

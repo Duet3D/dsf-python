@@ -25,10 +25,3 @@ class MoveRotation(ModelObject):
     def centre(self) -> List[float]:
         """XY coordinates of the centre rotation"""
         return self._centre
-
-    def _update_from_json(self, **kwargs) -> 'MoveRotation':
-        """Override ObjectModel._update_from_json to update properties which doesn't have a setter"""
-        super(MoveRotation, self)._update_from_json(**kwargs)
-        if 'centre' in kwargs:
-            self._centre = [float(c) for c in kwargs.get('centre', [])]
-        return self

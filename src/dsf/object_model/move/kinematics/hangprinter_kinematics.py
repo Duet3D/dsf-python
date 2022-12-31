@@ -1,14 +1,14 @@
 from typing import List
 
-from .kinematics_base import KinematicsBase
+from .kinematics import Kinematics
 from .kinematics_name import KinematicsName
 
 
-class HangprinterKinematics(KinematicsBase):
+class HangprinterKinematics(Kinematics):
     """Information about hangprinter kinematics"""
     def __init__(self):
         super(HangprinterKinematics, self).__init__()
-        self.name = KinematicsName.hangprinter
+        self._name = KinematicsName.hangprinter
         # Anchor configurations for A, B, C, Dz
         self._anchors = [
             [0,     -2000, -100],
@@ -31,10 +31,3 @@ class HangprinterKinematics(KinematicsBase):
     @print_radius.setter
     def print_radius(self, value):
         self._print_radius = float(value) if value is not None else 0
-
-    def _update_from_json(self, **kwargs) -> 'HangprinterKinematics':
-        """Override ObjectModel._update_from_json to update properties which doesn't have a setter"""
-        super(HangprinterKinematics, self)._update_from_json(**kwargs)
-        if 'anchors' in kwargs:
-            self._anchors = [[int(x) for x in y] for y in kwargs.get('anchors')]
-        return self

@@ -1,12 +1,13 @@
-from .kinematics_base import KinematicsBase
+from .kinematics import Kinematics
 from .kinematics_name import KinematicsName
 
 
-class PolarKinematics(KinematicsBase):
+class PolarKinematics(Kinematics):
     """
     Kinematics class for polar kinematics
     """
 
     def __init__(self):
         super(PolarKinematics, self).__init__()
-        self.name = KinematicsName.polar
+        self._name = KinematicsName.polar
+

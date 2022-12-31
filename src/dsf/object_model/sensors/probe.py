@@ -110,8 +110,8 @@ class Probe(ModelObject):
         return self._speeds
     
     @speeds.setter
-    def speeds(self, value):
-        self._speeds = float(value) if value is not None else 0
+    def speeds(self, values):
+        self._speeds = [float(value) if value is not None else 0 for value in values]
         
     @property
     def temperature_coefficient(self) -> float:
@@ -174,8 +174,8 @@ class Probe(ModelObject):
     def type(self, value):
         if value is None or isinstance(value, ProbeType):
             self._type = value
-        elif isinstance(value, str):
-            self._type = ProbeType[value]
+        elif isinstance(value, int):
+            self._type = ProbeType(value)
         else:
             raise TypeError(f"{__name__}.type must be of type ProbeType or None. Got {type(value)}: {value}")
         
@@ -183,15 +183,3 @@ class Probe(ModelObject):
     def value(self) -> int:
         """Current analog values of the probe"""
         return self._value
-
-    def _update_from_json(self, **kwargs) -> 'Probe':
-        """Override ObjectModel._update_from_json to update properties which doesn't have a setter"""
-        super(Probe, self)._update_from_json(**kwargs)
-        if 'offsets' in kwargs:
-            self._offsets = [float(item) for item in kwargs.get('offsets')]
-        if 'temperatureCoefficients' in kwargs:
-            self._temperature_coefficients = [float(item) for item in kwargs.get('temperatureCoefficients')]
-        if 'value' in kwargs:
-            value = kwargs.get('value')
-            self._value = int(value) if value is not None else None
-        return self

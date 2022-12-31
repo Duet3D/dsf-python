@@ -99,12 +99,3 @@ class InputShaping(ModelObject):
             self._type = InputShapingType(value)
         else:
             raise TypeError(f"{__name__}.type must be of type InputShapingType. Got {type(value)}: {value}")
-
-    def _update_from_json(self, **kwargs) -> 'InputShaping':
-        """Override ObjectModel._update_from_json to update properties which doesn't have a setter"""
-        super(InputShaping, self)._update_from_json(**kwargs)
-        if 'amplitudes' in kwargs:
-            self._amplitudes = [float(a) for a in kwargs.get('amplitudes', [])]
-        if 'durations' in kwargs:
-            self._durations = [float(d) for d in kwargs.get('durations', [])]
-        return self

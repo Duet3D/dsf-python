@@ -1,6 +1,7 @@
 from typing import List, Union
 
 from .network_interface import NetworkInterface
+from ..model_collection import ModelCollection
 from ..model_object import ModelObject
 
 
@@ -21,7 +22,7 @@ class Network(ModelObject):
         # Hostname of the machine
         self._hostname = Network.DEFAULT_HOSTNAME
         # List of available network interfaces
-        self._interfaces = []
+        self._interfaces = ModelCollection(NetworkInterface)
         # Name of the machine
         self._name = Network.DEFAULT_NAME
 
@@ -56,10 +57,3 @@ class Network(ModelObject):
     @name.setter
     def name(self, value):
         self._name = str(value) if value is not None else None
-
-    def _update_from_json(self, **kwargs) -> 'Network':
-        """Override ObjectModel._update_from_json to update properties which doesn't have a setter"""
-        super(Network, self)._update_from_json(**kwargs)
-        if 'interfaces' in kwargs:
-            self._interfaces = [NetworkInterface.from_json(i) for i in kwargs.get('interfaces')]
-        return self

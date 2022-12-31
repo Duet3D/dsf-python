@@ -55,12 +55,3 @@ class Layer(ModelObject):
     def temperatures(self) -> List[float]:
         """Last heater temperatures (in C or null if unknown)"""
         return self._temperatures
-
-    def _update_from_json(self, **kwargs) -> 'Layer':
-        """Override ObjectModel._update_from_json to update properties which doesn't have a setter"""
-        super(Layer, self)._update_from_json(**kwargs)
-        if 'filament' in kwargs:
-            self._filament = [float(f) for f in kwargs.get('filament', [])]
-        if 'temperatures' in kwargs:
-            self._temperatures = [float(t) if t is not None else None for t in kwargs.get('temperatures', [])]
-        return self

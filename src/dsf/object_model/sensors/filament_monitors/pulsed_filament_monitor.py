@@ -1,6 +1,7 @@
-from .filament_monitor_base import FilamentMonitorBase
+from .filament_monitor import FilamentMonitor
 from .filament_monitor_type import FilamentMonitorType
 from ...model_object import ModelObject
+from ...utils import wrap_model_property
 
 
 class PulsedFilamentMonitorCalibrated(ModelObject):
@@ -97,36 +98,19 @@ class PulsedFilamentMonitorConfigured(ModelObject):
         self._sample_distance = float(value) if value is not None else 0
 
 
-class PulsedFilamentMonitor(FilamentMonitorBase):
+class PulsedFilamentMonitor(FilamentMonitor):
     """Information about a pulsed filament monitor"""
+
+    # Calibrated properties of this filament monitor
+    calibrated = wrap_model_property('calibrated', PulsedFilamentMonitorCalibrated)
 
     def __init__(self):
         super(PulsedFilamentMonitor, self).__init__()
-        self._calibrated = None
+        self._calibrated = PulsedFilamentMonitorCalibrated()
         self._configured = PulsedFilamentMonitorConfigured()
-        self.type_ = FilamentMonitorType.Pulsed
-
-    @property
-    def calibrated(self) -> PulsedFilamentMonitorCalibrated:
-        """Calibrated properties of this filament monitor"""
-        return self._calibrated
-    
-    @calibrated.setter
-    def calibrated(self, value):
-        if isinstance(value, PulsedFilamentMonitorCalibrated) or value is None:
-            self._calibrated = value
-        else:
-            raise TypeError(f"{__name__}.calibrated must be of type PulsedFilamentMonitorCalibrated. "
-                            f"Got {type(value)}: {value}")
+        self._type = FilamentMonitorType.Pulsed
         
     @property
     def configured(self) -> PulsedFilamentMonitorConfigured:
         """Configured properties of this filament monitor"""
         return self._configured
-
-    def _update_from_json(self, **kwargs) -> 'PulsedFilamentMonitor':
-        """Override ObjectModel._update_from_json to update properties which doesn't have a setter"""
-        super(PulsedFilamentMonitor, self)._update_from_json(**kwargs)
-        if 'configured' in kwargs:
-            self._configured = PulsedFilamentMonitorConfigured.from_json(kwargs.get('configured'))
-        return self

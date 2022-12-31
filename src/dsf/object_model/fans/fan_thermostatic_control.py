@@ -9,9 +9,9 @@ class FanThermostaticControl(ModelObject):
         # List of the heaters to monitor (indices)
         self._heaters = []
         # Upper temperature range required to turn on the fan (in C)
-        self._high_temperature = 0
+        self._high_temperature = None
         # Lower temperature range required to turn on the fan (in C)
-        self._low_temperature = 0
+        self._low_temperature = None
 
     @property
     def heaters(self) -> List[int]:
@@ -35,10 +35,3 @@ class FanThermostaticControl(ModelObject):
     @low_temperature.setter
     def low_temperature(self, value):
         self._low_temperature = float(value) if value is not None else None
-
-    def _update_from_json(self, **kwargs) -> 'FanThermostaticControl':
-        """Override ObjectModel._update_from_json to update properties which doesn't have a setter"""
-        super(FanThermostaticControl, self)._update_from_json(**kwargs)
-        if 'heaters' in kwargs:
-            self._heaters = [int(heater) for heater in kwargs.get('heaters', [])]
-        return self

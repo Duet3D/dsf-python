@@ -51,7 +51,13 @@ class HeaterMonitor(ModelObject):
 
     @action.setter
     def action(self, value: HeaterMonitorAction = HeaterMonitorAction.generateFault):
-        self._action = value
+        if value is None or isinstance(value, HeaterMonitorAction):
+            self._action = value
+        elif isinstance(value, int):
+            self._action = HeaterMonitorAction(value)
+        else:
+            raise TypeError(f"{__name__}.action must be of type HeaterMonitorAction or None."
+                            f"Got {type(value)}: {value}")
 
     @property
     def condition(self):
@@ -60,7 +66,13 @@ class HeaterMonitor(ModelObject):
 
     @condition.setter
     def condition(self, value: HeaterMonitorCondition = HeaterMonitorCondition.disabled):
-        self._condition = value
+        if value is None or isinstance(value, HeaterMonitorCondition):
+            self._condition = value
+        elif isinstance(value, str):
+            self._condition = HeaterMonitorCondition(value)
+        else:
+            raise TypeError(f"{__name__}.condition must be of type HeaterMonitorCondition or None."
+                            f"Got {type(value)}: {value}")
 
     @property
     def limit(self) -> float:

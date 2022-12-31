@@ -2,7 +2,8 @@ import json
 from datetime import datetime
 from typing import Union
 
-from ..utility.driver_id import DriverId
+
+from .utils import is_model_object
 from ..utils import preserve_builtin, camel_to_snake, snake_to_camel
 
 
@@ -29,10 +30,13 @@ class ModelObject:
     def __json_serialize(obj):
         if isinstance(obj, datetime):
             return obj.isoformat()
-        if isinstance(obj, DriverId):
-            return str(obj)
         if isinstance(obj, float):
             return f'{obj:g}'
+        if isinstance(obj, set):
+            # TODO: Find a better workaround in order to get the same JSON output as the one sent by DSF
+            # eg: "superUser" instead of "{<SbcPermissions.superUser: 'superUser'>}"
+            # To test this, read the OM with a plugin that needs SBC permissions such as ExecOnMcode
+            return [str(item) for item in obj]
 
         # Convert snake_case class attributes into CamelCase JSON style
         # also convert back 'globals' to 'global'
@@ -48,12 +52,28 @@ class ModelObject:
         cls_dict = {attr: getattr(self.__class__, attr) for attr in dir(self.__class__)}
         writeable_properties = [attr for attr, value in cls_dict.items()
                                 if isinstance(value, property) and value.fset is not None]
-        for name, value in kwargs.items():
+        instance_attributes = vars(self)
+        for json_key, json_value in kwargs.items():
             # Convert JSON attributes from CamelCase to snake_case to satisfy python PEP8 naming
             # Remove trailing underscore set by preserve_builtin()
-            name_snake = camel_to_snake(name.rstrip('_'))
-            if name_snake in writeable_properties:
-                setattr(self, name_snake, value)
+            json_key_snake = camel_to_snake(json_key.rstrip('_'))
+            # Write public attributes by using their setter property
+            if json_key_snake in writeable_properties:
+                attr = getattr(self, json_key_snake)
+                if is_model_object(attr):
+                    new_value = attr.update_from_json(json_value)
+                    setattr(self, json_key_snake, new_value)
+                else:
+                    setattr(self, json_key_snake, json_value)
+            # Write protected attributes
+            elif f"_{json_key_snake}" in instance_attributes:
+                # Protected (non-writeable) attributes are prefixed by an underscore
+                attr_name = f"_{json_key_snake}"
+                attr = getattr(self, attr_name)
+                if is_model_object(attr):
+                    setattr(self, attr_name, attr.update_from_json(json_value))
+                elif isinstance(attr, list):
+                    setattr(self, attr_name, json_value)
         return self
 
     @classmethod
@@ -64,7 +84,7 @@ class ModelObject:
             data = json.loads(data)
         return cls()._update_from_json(**preserve_builtin(data))
 
-    def update(self, data: Union[dict, str]):
+    def update_from_json(self, data: Union[dict, str]):
         """Update the current instance of this class from JSON deserialized dictionary"""
         if isinstance(data, str):
             data = json.loads(data)

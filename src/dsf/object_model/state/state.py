@@ -8,12 +8,17 @@ from .machine_mode import MachineMode
 from .machine_status import MachineStatus
 from .message_box import MessageBox
 from .restore_point import RestorePoint
-
+from ..model_collection import ModelCollection
 from ..model_object import ModelObject
-
+from ..utils import wrap_model_property
 
 class State(ModelObject):
     """Information about the machine state"""
+
+    # Information about a requested beep or null if none is requested
+    beep = wrap_model_property('beep', BeepRequest)
+    # Details about a requested message box or null if none is requested
+    message_box = wrap_model_property('message_box', MessageBox)
 
     def __init__(self):
         super(State, self).__init__()
@@ -26,10 +31,10 @@ class State(ModelObject):
         self._dsf_version = None
         self._dsf_plugin_support = False
         self._dsf_root_plugin_support = False
-        self._gp_out = []
+        self._gp_out = ModelCollection(GpOutputPort)
         self._laser_pwm = None
         self._log_file = None
-        self._log_level = None
+        self._log_level = LogLevel.Off
         self._message_box = None
         self._machine_mode = MachineMode.FFF
         self._macro_restarted = False
@@ -38,8 +43,8 @@ class State(ModelObject):
         self._plugins_started = False
         self._power_fail_script = ""
         self._previous_tool = -1
-        self._restore_points = None
-        self._status = None
+        self._restore_points = ModelCollection(RestorePoint)
+        self._status = MachineStatus.starting
         self._this_input = None
         self._time = None
         self._up_time = 0
@@ -61,20 +66,6 @@ class State(ModelObject):
     @atx_power_port.setter
     def atx_power_port(self, value):
         self._atx_power_port = str(value) if value is not None else None
-
-    @property
-    def beep(self) -> Union[BeepRequest, None]:
-        """Information about a requested beep or null if none is requested"""
-        return self._beep
-
-    @beep.setter
-    def beep(self, value):
-        if value is None or isinstance(value, BeepRequest):
-            self._beep = value
-        elif isinstance(value, dict):  # Update from JSON
-            self._beep = BeepRequest.from_json(value)
-        else:
-            raise TypeError(f"{__name__}.beep must be of type BeepRequest or None. Got {type(value)}: {value}")
 
     @property
     def current_tool(self) -> int:
@@ -170,20 +161,6 @@ class State(ModelObject):
             self._log_level = LogLevel(value)
         else:
             raise TypeError(f"{__name__}.log_level must be of type LogLevel or None. Got {type(value)}: {value}")
-
-    @property
-    def message_box(self) -> Union[MessageBox, None]:
-        """Details about a requested message box or null if none is requested"""
-        return self._message_box
-
-    @message_box.setter
-    def message_box(self, value):
-        if value is None or isinstance(value, MessageBox):
-            self._message_box = value
-        elif isinstance(value, dict):  # Update from JSON
-            self._message_box = MessageBox.from_json(value)
-        else:
-            raise TypeError(f"{__name__}.message_box must be of type MessageBox or None. Got {type(value)}: {value}")
 
     @property
     def machine_mode(self) -> Union[MachineMode, None]:
@@ -300,14 +277,3 @@ class State(ModelObject):
     @up_time.setter
     def up_time(self, value):
         self._up_time = int(value) if value is not None else 0
-
-    def _update_from_json(self, **kwargs) -> 'State':
-        """Override ObjectModel._update_from_json to update properties which doesn't have a setter"""
-        super(State, self)._update_from_json(**kwargs)
-        if 'gpOut' in kwargs:
-            gp_out = kwargs.get('gpOut')
-            self._gp_out = [GpOutputPort.from_json(item) for item in gp_out] if gp_out else []
-        if 'restorePoints' in kwargs:
-            restore_points = kwargs.get('restorePoints')
-            self._restore_points = [RestorePoint.from_json(item) for item in restore_points] if restore_points else []
-        return self

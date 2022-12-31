@@ -16,16 +16,16 @@ class ProbeType(IntEnum):
     # Alternate analog probe (like the ultrasonic probe)
     AlternateAnalog = 3,
 
-    # ndstop switch (obsolete, should not be used any more)
+    # Endstop switch (obsolete, should not be used anymore)
     EndstopSwitch_Obsolete = 4,
 
     # A switch that is triggered when the probe is activated (filtered)
     Digital = 5,
 
-    # Endstop switch on the E1 endstop pin (obsolete, should not be used any more)
+    # Endstop switch on the E1 endstop pin (obsolete, should not be used anymore)
     E1Switch_Obsolete = 6,
 
-    # Endstop switch on Z endstop pin (obsolete, should not be used any more)
+    # Endstop switch on Z endstop pin (obsolete, should not be used anymore)
     ZSwitch_Obsolete = 7,
 
     # A switch that is triggered when the probe is activated (unfiltered)

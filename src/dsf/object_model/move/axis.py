@@ -1,9 +1,10 @@
 from enum import Enum
 from typing import List, Union
 
+from .driver_id import DriverId
 from .microstepping import MicroStepping
+from ..model_collection import ModelCollection
 from ..model_object import ModelObject
-from ...utility.driver_id import DriverId
 
 
 class AxisLetter(str, Enum):
@@ -46,7 +47,7 @@ class Axis(ModelObject):
         # Motor current (in mA)
         self._current = 0
         # List of the assigned drivers
-        self._drivers = []
+        self._drivers = ModelCollection(DriverId)
         # Whether the axis is homed
         self._homed = False
         # Motor jerk (in mm/min)
@@ -255,16 +256,3 @@ class Axis(ModelObject):
     def workplace_offsets(self) -> List[float]:
         """Offsets of this axis for each workplace (in mm)"""
         return self._workplace_offsets
-
-    def _update_from_json(self, **kwargs) -> 'Axis':
-        """
-        Override ObjectModel._update_from_json to update properties which doesn't have a setter
-        """
-        super(Axis, self)._update_from_json(**kwargs)
-        if 'drivers' in kwargs:
-            self._drivers = [DriverId(d) for d in kwargs.get('drivers', [])]
-        if 'microstepping' in kwargs:
-            self._microstepping = MicroStepping.from_json(kwargs.get('microstepping', []))
-        if 'workplaceOffsets' in kwargs:
-            self._workplace_offsets = [float(offset) for offset in kwargs.get('workplaceOffsets', [])]
-        return self

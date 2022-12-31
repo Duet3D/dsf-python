@@ -163,10 +163,3 @@ class NetworkInterface(ModelObject):
             self._type = NetworkInterfaceType(value)
         else:
             raise TypeError(f"{__name__}.type must be of type NetworkInterfaceType. Got {type(value)}: {value}")
-
-    def _update_from_json(self, **kwargs) -> 'NetworkInterface':
-        """Override ObjectModel._update_from_json to update properties which doesn't have a setter"""
-        super(NetworkInterface, self)._update_from_json(**kwargs)
-        if 'activeProtocols' in kwargs:
-            self._active_protocols = [NetworkProtocol(item) for item in kwargs.get('activeProtocols')]
-        return self

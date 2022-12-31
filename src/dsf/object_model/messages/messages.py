@@ -1,5 +1,8 @@
+import dateutil.parser as dp
 from datetime import datetime
 from enum import IntEnum
+
+from ..model_object import ModelObject
 
 
 class MessageType(IntEnum):
@@ -15,7 +18,7 @@ class MessageType(IntEnum):
     Error = 2
 
 
-class Message:
+class Message(ModelObject):
     """
     Generic container for messages
     :param content: Content of this message
@@ -61,7 +64,7 @@ class Message:
         if isinstance(value, datetime):
             self._time = value
         elif isinstance(value, str):  # Update from JSON
-            self._time = datetime.fromisoformat(value)
+            self._time = dp.isoparse(value)
         else:
             raise TypeError(f"{__name__}.time must be of type datetime. Got {type(value)}: {value}")
 
@@ -72,6 +75,9 @@ class Message:
 
     @type.setter
     def type(self, value):
-        if not isinstance(value, MessageType):
+        if isinstance(value, MessageType):
+            self._type = value
+        elif isinstance(value, int):
+            self._type = MessageType(value)
+        else:
             raise TypeError(f"{__name__}.type must be of type MessageType. Got {type(value)}: {value}")
-        self._type = value

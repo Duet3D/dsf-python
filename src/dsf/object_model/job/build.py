@@ -1,6 +1,7 @@
 from typing import List
 
 from .build_object import BuildObject
+from ..model_collection import ModelCollection
 from ..model_object import ModelObject
 
 
@@ -15,7 +16,7 @@ class Build(ModelObject):
         # Whether M486 numbers are being used
         self._m486_numbers = False
         # List of detected build objects
-        self._objects = []
+        self._objects = ModelCollection(BuildObject)
 
     @property
     def current_object(self) -> int:
@@ -52,10 +53,3 @@ class Build(ModelObject):
     def objects(self) -> List[BuildObject]:
         """List of detected build objects"""
         return self._objects
-
-    def _update_from_json(self, **kwargs) -> 'Build':
-        """Override ObjectModel._update_from_json to update properties which doesn't have a setter"""
-        super(Build, self)._update_from_json(**kwargs)
-        if 'Objects' in kwargs:
-            self._objects = [int(obj) for obj in kwargs.get('Objects', [])]
-        return self

@@ -6,6 +6,7 @@ from .closed_loop import ClosedLoop
 from .direct_display import DirectDisplay
 from .min_max_current import MinMaxCurrent
 from ..model_object import ModelObject
+from ..utils import wrap_model_property
 
 
 class BoardState(str, Enum):
@@ -31,6 +32,19 @@ class BoardState(str, Enum):
 
 class Board(ModelObject):
     """Information about a connected board"""
+
+    # Accelerometer of this board or null if unknown
+    accelerometer = wrap_model_property('accelerometer', Accelerometer)
+    # Closed loop data of this board or null if unknown
+    closed_loop = wrap_model_property('closed_loop', ClosedLoop)
+    # Details about a connected display or null if none is connected
+    direct_display = wrap_model_property('direct_display', DirectDisplay)
+    # Minimum, maximum, and current temperatures of the MCU or null if unknown
+    mcu_temp = wrap_model_property('mcu_temp', MinMaxCurrent)
+    # Minimum, maximum, and current voltages on the 12V rail or null if unknown
+    v_12 = wrap_model_property('v_12', MinMaxCurrent)
+    # Minimum, maximum, and current voltages on the input rail or null if unknown
+    v_in = wrap_model_property('v_in', MinMaxCurrent)
 
     def __init__(self):
         super(Board, self).__init__()
@@ -83,20 +97,6 @@ class Board(ModelObject):
         self._v_in = None
 
     @property
-    def accelerometer(self) -> Union[Accelerometer, None]:
-        """Accelerometer of this board or null if unknown"""
-        return self._accelerometer
-
-    @accelerometer.setter
-    def accelerometer(self, value):
-        if value is None or isinstance(value, Accelerometer):
-            self._accelerometer = value
-        elif isinstance(value, dict):  # Update from JSON
-            self._accelerometer = Accelerometer.from_json(value)
-        else:
-            raise TypeError(f"{__name__}.accelerometer must be of type Accelerometer or None. Got {type(value)}: {value}")
-
-    @property
     def bootloader_file_name(self) -> Union[str, None]:
         """Filename of the bootloader binary or null if unknown"""
         return self._bootloader_file_name
@@ -113,34 +113,6 @@ class Board(ModelObject):
     @can_address.setter
     def can_address(self, value):
         self._can_address = int(value) if value is not None else None
-
-    @property
-    def closed_loop(self) -> Union[ClosedLoop, None]:
-        """Closed loop data of this board or null if unknown"""
-        return self._closed_loop
-
-    @closed_loop.setter
-    def closed_loop(self, value):
-        if value is None or isinstance(value, ClosedLoop):
-            self._closed_loop = value
-        elif isinstance(value, dict):  # Update from JSON
-            self._closed_loop = ClosedLoop.from_json(value)
-        else:
-            raise TypeError(f"{__name__}.closed_loop must be of type ClosedLoop or None. Got {type(value)}: {value}")
-
-    @property
-    def direct_display(self) -> Union[DirectDisplay, None]:
-        """Details about a connected display or null if none is connected"""
-        return self._direct_display
-
-    @direct_display.setter
-    def direct_display(self, value):
-        if value is None or isinstance(value, DirectDisplay):
-            self._direct_display = value
-        elif isinstance(value, dict):  # Update from JSON
-            self._direct_display = DirectDisplay.from_json(value)
-        else:
-            raise TypeError(f"{__name__}.direct_display must be of type DirectDisplay or None. Got {type(value)}: {value}")
 
     @property
     def firmware_date(self) -> str:
@@ -216,20 +188,6 @@ class Board(ModelObject):
         self._max_motors = int(value) if value is not None else 0
 
     @property
-    def mcu_temp(self) -> Union[MinMaxCurrent, None]:
-        """Minimum, maximum, and current temperatures of the MCU or null if unknown"""
-        return self._mcu_temp
-
-    @mcu_temp.setter
-    def mcu_temp(self, value):
-        if value is None or isinstance(value, MinMaxCurrent):
-            self._mcu_temp = value
-        elif isinstance(value, dict):  # Update from JSON
-            self._mcu_temp = MinMaxCurrent.from_json(value)
-        else:
-            raise TypeError(f"{__name__}.mcu_temp must be of type MinMaxCurrent or None. Got {type(value)}: {value}")
-
-    @property
     def name(self) -> str:
         """Full name of the board"""
         return self._name
@@ -288,31 +246,3 @@ class Board(ModelObject):
     @unique_id.setter
     def unique_id(self, value):
         self._unique_id = str(value) if value is not None else None
-
-    @property
-    def v_12(self) -> Union[MinMaxCurrent, None]:
-        """Minimum, maximum, and current voltages on the 12V rail or null if unknown"""
-        return self._v_12
-
-    @v_12.setter
-    def v_12(self, value):
-        if value is None or isinstance(value, MinMaxCurrent):
-            self._v_12 = value
-        elif isinstance(value, dict):  # Update from JSON
-            self._v_12 = MinMaxCurrent.from_json(value)
-        else:
-            raise TypeError(f"{__name__}.v12 must be of type MinMaxCurrent or None. Got {type(value)}: {value}")
-
-    @property
-    def v_in(self) -> Union[MinMaxCurrent, None]:
-        """Minimum, maximum, and current voltages on the input rail or null if unknown"""
-        return self._v_in
-
-    @v_in.setter
-    def v_in(self, value):
-        if value is None or isinstance(value, MinMaxCurrent):
-            self._v_in = value
-        elif isinstance(value, dict):  # Update from JSON
-            self._v_in = MinMaxCurrent.from_json(value)
-        else:
-            raise TypeError(f"{__name__}.vIn must be of type MinMaxCurrent or None. Got {type(value)}: {value}")

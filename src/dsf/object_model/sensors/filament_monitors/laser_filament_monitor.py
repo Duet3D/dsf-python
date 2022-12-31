@@ -1,8 +1,9 @@
 from typing import Union
 
-from .filament_monitor_base import FilamentMonitorBase
+from .filament_monitor import FilamentMonitor
 from .filament_monitor_type import FilamentMonitorType
 from ...model_object import ModelObject
+from ...utils import wrap_model_property
 
 
 class LaserFilamentMonitorCalibrated(ModelObject):
@@ -109,28 +110,18 @@ class LaserFilamentMonitorConfigured(ModelObject):
         self._sample_distance = float(value) if value is not None else 0
 
 
-class LaserFilamentMonitor(FilamentMonitorBase):
+class LaserFilamentMonitor(FilamentMonitor):
     """Information about a laser filament monitor"""
+
+    # Calibrated properties of this filament monitor
+    calibrated = wrap_model_property('calibrated', LaserFilamentMonitorCalibrated)
 
     def __init__(self):
         super(LaserFilamentMonitor, self).__init__()
-        self._calibrated = None
+        self._calibrated = LaserFilamentMonitorCalibrated()
         self._configured = LaserFilamentMonitorConfigured()
         self._filament_present = False
         self._type = FilamentMonitorType.Laser
-
-    @property
-    def calibrated(self) -> LaserFilamentMonitorCalibrated:
-        """Calibrated properties of this filament monitor"""
-        return self._calibrated
-
-    @calibrated.setter
-    def calibrated(self, value):
-        if isinstance(value, LaserFilamentMonitorCalibrated) or value is None:
-            self._calibrated = value
-        else:
-            raise TypeError(f"{__name__}.calibrated must be of type LaserFilamentMonitorCalibrated. "
-                            f"Got {type(value)}: {value}")
 
     @property
     def configured(self) -> LaserFilamentMonitorConfigured:
@@ -145,10 +136,3 @@ class LaserFilamentMonitor(FilamentMonitorBase):
     @filament_present.setter
     def filament_present(self, value):
         self._filament_present = bool(value) if value is not None else None
-
-    def _update_from_json(self, **kwargs) -> 'LaserFilamentMonitor':
-        """Override ObjectModel._update_from_json to update properties which doesn't have a setter"""
-        super(LaserFilamentMonitor, self)._update_from_json(**kwargs)
-        if 'configured' in kwargs:
-            self._configured = LaserFilamentMonitorConfigured.from_json(kwargs.get('configured'))
-        return self

@@ -12,6 +12,7 @@ from .network import Network, NetworkInterface, NetworkInterfaceType, NetworkPro
 from .object_model import ObjectModel
 from .plugins import Plugin, PluginManifest, SbcPermissions
 from .scanner import Scanner, ScannerStatus
+from .sensors import AnalogSensor, AnalogSensorType, Endstop, EndstopType, GpInputPort, Probe, ProbeType, Sensors
 from .spindles import Spindle, SpindleState
 from .state import LogLevel, MachineStatus, MessageBox, MessageBoxMode, State
 from .tools import Tool, ToolState

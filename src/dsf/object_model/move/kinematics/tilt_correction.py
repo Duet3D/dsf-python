@@ -61,14 +61,3 @@ class TiltCorrection(ModelObject):
     def screw_y(self) -> List[float]:
         """Y positions of the leadscrews (in mm)"""
         return self._screw_y
-
-    def _update_from_json(self, **kwargs) -> 'ModelObject':
-        """Override ObjectModel._update_from_json to update properties which doesn't have a setter"""
-        super(TiltCorrection, self)._update_from_json(**kwargs)
-        if 'lastCorrections' in kwargs:
-            self._last_corrections = [float(item) for item in kwargs.get('lastCorrections')]
-        if 'screwX' in kwargs:
-            self._screw_x = [float(item) for item in kwargs.get('screwX')]
-        if 'screwY' in kwargs:
-            self._screw_y = [float(item) for item in kwargs.get('screwY')]
-        return self

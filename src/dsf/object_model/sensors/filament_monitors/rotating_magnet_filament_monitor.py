@@ -1,6 +1,7 @@
-from .filament_monitor_base import FilamentMonitorBase
+from .filament_monitor import FilamentMonitor
 from .filament_monitor_type import FilamentMonitorType
 from ...model_object import ModelObject
+from ...utils import wrap_model_property
 
 
 class RotatingMagnetFilamentMonitorCalibrated(ModelObject):
@@ -107,32 +108,19 @@ class RotatingMagnetFilamentMonitorConfigured(ModelObject):
         self._sample_distance = float(value) if value is not None else 0
 
 
-class RotatingMagnetFilamentMonitor(FilamentMonitorBase):
+class RotatingMagnetFilamentMonitor(FilamentMonitor):
     """Information about a rotating magnet filament monitor"""
+
+    # Calibrated properties of this filament monitor
+    calibrated = wrap_model_property('calibrated', RotatingMagnetFilamentMonitorCalibrated)
 
     def __init__(self):
         super(RotatingMagnetFilamentMonitor, self).__init__()
-        self._calibrated = None
+        self._calibrated = RotatingMagnetFilamentMonitorCalibrated()
         self._configured = RotatingMagnetFilamentMonitorConfigured()
         self._type = FilamentMonitorType.RotatingMagnet
-
-    @property
-    def calibrated(self) -> RotatingMagnetFilamentMonitorCalibrated:
-        """Calibrated properties of this filament monitor"""
-        return self._calibrated
-
-    @calibrated.setter
-    def calibrated(self, value):
-        self._calibrated = value
 
     @property
     def configured(self) -> RotatingMagnetFilamentMonitorConfigured:
         """Configured properties of this filament monitor"""
         return self._configured
-
-    def _update_from_json(self, **kwargs) -> 'RotatingMagnetFilamentMonitor':
-        """Override ObjectModel._update_from_json to update properties which doesn't have a setter"""
-        super(RotatingMagnetFilamentMonitor, self)._update_from_json(**kwargs)
-        if 'configured' in kwargs:
-            self._configured = RotatingMagnetFilamentMonitorConfigured.from_json(kwargs.get('configured'))
-        return self

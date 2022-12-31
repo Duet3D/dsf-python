@@ -1,6 +1,7 @@
 from typing import List
 
 from .heater import Heater
+from ..model_collection import ModelCollection
 from ..model_object import ModelObject
 
 
@@ -18,7 +19,7 @@ class Heat(ModelObject):
         # Minimum required temperature for retraction moves (in C)
         self._cold_retract_temperature = 90
         # List of configured heaters
-        self._heaters = []
+        self._heaters = ModelCollection(Heater)
 
     @property
     def bed_heaters(self) -> List[int]:
@@ -54,14 +55,3 @@ class Heat(ModelObject):
     def heaters(self) -> List[Heater]:
         """List of configured heaters"""
         return self._heaters
-
-    def _update_from_json(self, **kwargs) -> 'Heat':
-        """Override ObjectModel._update_from_json to update properties which doesn't have a setter"""
-        super(Heat, self)._update_from_json(**kwargs)
-        if 'bedHeaters' in kwargs:
-            self._bed_heaters = [int(heater) for heater in kwargs.get('bedHeaters', [])]
-        if 'chamberHeaters' in kwargs:
-            self._chamber_heaters = [int(heater) for heater in kwargs.get('chamberHeaters', [])]
-        if 'heaters' in kwargs:
-            self._heaters = [Heater.from_json(heater) for heater in kwargs.get('heaters', [])]
-        return self

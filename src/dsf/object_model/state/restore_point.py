@@ -90,12 +90,3 @@ class RestorePoint(ModelObject):
     @tool_number.setter
     def tool_number(self, value):
         self._tool_number = int(value) if value is not None else -1
-
-    def _update_from_json(self, **kwargs) -> 'RestorePoint':
-        """Override ObjectModel._update_from_json to update properties which doesn't have a setter"""
-        super(RestorePoint, self)._update_from_json(**kwargs)
-        if 'coords' in kwargs:
-            self._coords = [float(c) for c in kwargs.get('coords')]
-        if 'spindleSpeeds' in kwargs:
-            self._spindle_speeds = [float(speed) for speed in kwargs.get('spindleSpeeds')]
-        return self

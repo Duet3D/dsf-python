@@ -64,7 +64,7 @@ class Model(unittest.TestCase):
 
         patch = str(updated_model)
         print(patch)
-        model_to_update.update(patch)
+        model_to_update.update_from_json(patch)
 
         self.assertEqual("Yum", model_to_update.boards[0].firmware_name)
         self.assertEqual(2, len(model_to_update.heat.bed_heaters))
@@ -112,7 +112,7 @@ class Model(unittest.TestCase):
             json_data = json.load(fp)
         model = ObjectModel.from_json(json_data)
         # model = model.from_json(patch)
-        model.update(patch)
+        model.update_from_json(patch)
         self.assertIsInstance(model.boards[0], Board)
         self.assertIsInstance(model.move.kinematics, DeltaKinematics)
         self.assertEqual(model.move.kinematics.delta_radius, 123)
@@ -125,7 +125,7 @@ class Model(unittest.TestCase):
         self.assertEqual(len(model.globals), 1)
         self.assertEqual(model.globals.get('defaultSpeed'), 6000)
 
-        model = model.from_json(json.loads('{"plugins": null}'))
+        model.update_from_json(json.loads('{"plugins": null}'))
         self.assertEqual(len(model.plugins), 0)
 
     def test_update_from_json_mini5(self):

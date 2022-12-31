@@ -1,5 +1,7 @@
 from typing import List
 
+from .model_collection import ModelCollection
+from .model_dictionary import ModelDictionary
 from .model_object import ModelObject
 from .boards import Board
 from .directories import Directories
@@ -26,26 +28,26 @@ class ObjectModel(ModelObject):
 
     def __init__(self):
         super(ObjectModel, self).__init__()
-        self._boards = []
+        self._boards = ModelCollection(Board)
         self._directories = Directories()
-        self._fans = []
-        self._globals = {}
+        self._fans = ModelCollection(Fan)
+        self._globals = ModelDictionary(False)
         self._heat = Heat()
-        self._http_endpoints = []
-        self._inputs = []
+        self._http_endpoints = ModelCollection(HttpEndpoint)
+        self._inputs = ModelCollection(InputChannel)
         self._job = Job()
         self._limits = Limits()
-        self._messages = []
+        self._messages = ModelCollection(Message)
         self._move = Move()
         self._network = Network()
-        self._plugins = {}
+        self._plugins = ModelDictionary(True, Plugin)
         self._scanner = Scanner()
         self._sensors = Sensors()
-        self._spindles = []
+        self._spindles = ModelCollection(Spindle)
         self._state = State()
-        self._tools = []
-        self._user_sessions = []
-        self._volumes = []
+        self._tools = ModelCollection(Tool)
+        self._user_sessions = ModelCollection(UserSession)
+        self._volumes = ModelCollection(Volume)
 
     @property
     def boards(self) -> List[Board]:
@@ -148,52 +150,6 @@ class ObjectModel(ModelObject):
         See also Tool()"""
         return self._tools
 
-    def _update_from_json(self, **kwargs) -> 'ObjectModel':
-        """Override ObjectModel._update_from_json to update properties which doesn't have a setter"""
-        super(ObjectModel, self)._update_from_json(**kwargs)
-        if 'boards' in kwargs:
-            self._boards = [Board.from_json(item) for item in kwargs.get('boards')]
-        if 'directories' in kwargs:
-            self._directories = Directories.from_json(kwargs.get('directories'))
-        if 'fans' in kwargs:
-            self._fans = [Fan.from_json(item) for item in kwargs.get('fans')]
-        if 'global_' in kwargs:
-            self._globals = kwargs.get('global_')
-        if 'heat' in kwargs:
-            self._heat = Heat.from_json(kwargs.get('heat'))
-        if 'httpEndpoints' in kwargs:
-            self._http_endpoints = [HttpEndpoint.from_json(item) for item in kwargs.get('httpEndpoints')]
-        if 'inputs' in kwargs:
-            self._inputs = [InputChannel.from_json(item) for item in kwargs.get('inputs')]
-        if 'job' in kwargs:
-            self._job = Job.from_json(kwargs.get('job'))
-        if 'limits' in kwargs:
-            self._limits = Limits.from_json(kwargs.get('limits'))
-        if 'messages' in kwargs:
-            self._messages = [Message(**item) for item in kwargs.get('messages')]
-        if 'move' in kwargs:
-            self._move = Move.from_json(kwargs.get('move'))
-        if 'network' in kwargs:
-            self._network = Network.from_json(kwargs.get('network'))
-        if 'plugins' in kwargs:
-            plugins = kwargs.get('plugins')
-            self._plugins = {k: Plugin.from_json(v) for k, v in plugins.items()} if plugins else {}
-        if 'scanner' in kwargs:
-            self._scanner = Scanner.from_json(kwargs.get('scanner'))
-        if 'sensors' in kwargs:
-            self._sensors = Sensors.from_json(kwargs.get('sensors'))
-        if 'spindles' in kwargs:
-            self._spindles = [Spindle.from_json(item) for item in kwargs.get('spindles')]
-        if 'state' in kwargs:
-            self._state = State.from_json(kwargs.get('state'))
-        if 'tools' in kwargs:
-            self._tools = [Tool.from_json(item) for item in kwargs.get('tools')]
-        if 'userSessions' in kwargs:
-            self._user_sessions = [UserSession.from_json(item) for item in kwargs.get('userSessions')]
-        if 'volumes' in kwargs:
-            self._volumes = [Volume.from_json(item) for item in kwargs.get('volumes')]
-        return self
-
     @property
     def user_sessions(self):
         """List of user sessions"""
@@ -204,3 +160,13 @@ class ObjectModel(ModelObject):
         """List of available mass storages
         See also Volume()"""
         return self._volumes
+
+    def _update_from_json(self, **kwargs) -> 'ObjectModel':
+        super(ObjectModel, self)._update_from_json(**kwargs)
+
+        # "global" is a reserved keyword in Python, so it is converted to "globals"
+        if 'global_' in kwargs:
+            self._globals.update_from_json(kwargs.get('global_'))
+        return self
+
+

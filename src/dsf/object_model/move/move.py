@@ -10,6 +10,7 @@ from .move_compensation import MoveCompensation
 from .motors_idle_control import MotorsIdleControl
 from .move_queue_item import MoveQueueItem
 from .move_rotation import MoveRotation
+from ..model_collection import ModelCollection
 from ..model_object import ModelObject
 
 
@@ -18,7 +19,7 @@ class Move(ModelObject):
     def __init__(self):
         super().__init__()
         # List of the configured axes
-        self._axes = []
+        self._axes = ModelCollection(Axis)
         # Information about the automatic calibration
         self._calibration = MoveCalibration()
         # Information about the currently configured compensation options
@@ -26,7 +27,7 @@ class Move(ModelObject):
         # Information about the current move
         self._current_move = CurrentMove()
         # List of configured extruders
-        self._extruders = []
+        self._extruders = ModelCollection(Extruder)
         # Idle current reduction parameters
         self._idle = MotorsIdleControl()
         # Configured kinematics options
@@ -38,7 +39,7 @@ class Move(ModelObject):
         # Maximum acceleration allowed while printing (in mm/s^2)
         self._printing_acceleration = 10000
         # List of move queue items (DDA rings)
-        self._queue = []
+        self._queue = ModelCollection(MoveQueueItem)
         # Parameters for centre rotation
         self._rotation = MoveRotation()
         # Parameters for input shaping
@@ -88,15 +89,6 @@ class Move(ModelObject):
     def kinematics(self) -> Kinematics:
         """Configured kinematics options"""
         return self._kinematics
-
-    @kinematics.setter
-    def kinematics(self, value):
-        if value is None or isinstance(value, Kinematics):
-            self._kinematics = value
-        elif isinstance(value, dict):  # Update from JSON
-            self._kinematics = Kinematics.from_json(value)
-        else:
-            raise TypeError(f"{__name__}.kinematics must be of type Kinematics. Got {type(value)}: {value}")
 
     @property
     def limit_axes(self) -> bool:
@@ -175,26 +167,3 @@ class Move(ModelObject):
     @workplace_number.setter
     def workplace_number(self, value):
         self._workplace_number = int(value) if value is not None else 0
-
-    def _update_from_json(self, **kwargs) -> 'Move':
-        """Override ObjectModel._update_from_json to update properties which doesn't have a setter"""
-        super(Move, self)._update_from_json(**kwargs)
-        if 'axes' in kwargs:
-            self._axes = [Axis.from_json(axis) for axis in kwargs.get('axes', [])]
-        if 'calibration' in kwargs:
-            self._calibration = MoveCalibration.from_json(kwargs.get('calibration'))
-        if 'compensation' in kwargs:
-            self._compensation = MoveCompensation.from_json(kwargs.get('compensation'))
-        if 'currentMove' in kwargs:
-            self._current_move = CurrentMove.from_json(kwargs.get('currentMove'))
-        if 'extruders' in kwargs:
-            self._extruders = [Extruder.from_json(e) for e in kwargs.get('extruders', [])]
-        if 'idle' in kwargs:
-            self._idle = MotorsIdleControl.from_json(kwargs.get('idle'))
-        if 'queue' in kwargs:
-            self._queue = [MoveQueueItem.from_json(item) for item in kwargs.get('queue', [])]
-        if 'rotation' in kwargs:
-            self._rotation = MoveRotation.from_json(kwargs.get('rotation'))
-        if 'shaping' in kwargs:
-            self._shaping = InputShaping.from_json(kwargs.get('shaping'))
-        return self
