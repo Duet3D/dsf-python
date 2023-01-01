@@ -1,5 +1,5 @@
 import re
-from typing import List, Set
+from typing import List
 
 from .sbc_permissions import SbcPermissions
 from ..model_object import ModelObject
@@ -25,7 +25,7 @@ class PluginManifest(ModelObject):
         self._sbc_extra_executables = []
         self._sbc_output_redirected = None
         self._sbc_package_dependencies = []
-        self._sbc_permissions = set()
+        self._sbc_permissions = []  # Use a list instead of a set to keep insertion order (useful for json serialising)
         self._sbc_plugin_dependencies = []
         self._sbc_python_dependencies = []
         self._sbc_required = None
@@ -160,22 +160,22 @@ class PluginManifest(ModelObject):
         return self._sbc_package_dependencies
         
     @property
-    def sbc_permissions(self) -> Set[SbcPermissions]:
+    def sbc_permissions(self) -> List[SbcPermissions]:
         """List of permissions required by the plugin executable running on the SBC"""
         return self._sbc_permissions
     
     @sbc_permissions.setter
     def sbc_permissions(self, values):
-        _permissions = set()
+        permissions = []
         for value in values:
             if isinstance(value, SbcPermissions):
-                _permissions.add(value)
+                permissions.append(value)
             elif isinstance(value, str):
-                _permissions.add(SbcPermissions(value))
+                permissions.append(SbcPermissions(value))
             else:
-                raise TypeError(f"{__name__}._sbc_permissions must be of type SbcPermissions."
-                                f"Got {type(value)}: {value}")
-        self._sbc_permissions = _permissions
+                raise TypeError(f"{__name__}.sbc_permissions must be of type SbcPermissions."
+                                f" Got {type(value)}: {value}")
+        self._sbc_permissions = permissions
         
     @property
     def sbc_plugin_dependencies(self) -> List[str]:

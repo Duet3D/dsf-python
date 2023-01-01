@@ -28,15 +28,14 @@ class ModelObject:
 
     @staticmethod
     def __json_serialize(obj):
+        from .plugins.sbc_permissions import SbcPermissions
+
         if isinstance(obj, datetime):
             return obj.isoformat()
         if isinstance(obj, float):
             return f'{obj:g}'
-        if isinstance(obj, set):
-            # TODO: Find a better workaround in order to get the same JSON output as the one sent by DSF
-            # eg: "superUser" instead of "{<SbcPermissions.superUser: 'superUser'>}"
-            # To test this, read the OM with a plugin that needs SBC permissions such as ExecOnMcode
-            return [str(item) for item in obj]
+        if isinstance(obj, SbcPermissions):
+            return obj.name
 
         # Convert snake_case class attributes into CamelCase JSON style
         # also convert back 'globals' to 'global'

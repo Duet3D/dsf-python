@@ -3,7 +3,7 @@ def is_model_object(o):
     from .model_object import ModelObject
     from .model_collection import ModelCollection
     from .model_dictionary import ModelDictionary
-    # TODO: Make ModelCollection and ModelDictionary to inherit from ModelObject ?
+
     return isinstance(o, ModelObject) or isinstance(o, ModelCollection) or isinstance(o, ModelDictionary)
 
 
