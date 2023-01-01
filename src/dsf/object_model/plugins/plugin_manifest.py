@@ -79,8 +79,17 @@ class PluginManifest(ModelObject):
 
     @id.setter
     def id(self, value):
-        # TODO: raise exception on illegal identifier
-        self._id = str(value) if value is not None else None
+        if not value:
+            raise Exception(f"Invalid plugin identifier: {value}")
+
+        value = str(value)
+        if value.isspace() or len(value) > 32:
+            raise Exception(f"Invalid plugin identifier: {value}")
+        for c in value:
+            if not c.isalnum():
+                raise Exception(f"Illegal plugin identifier: {value}")
+
+        self._id = value
 
     @property
     def license(self) -> str:
@@ -98,8 +107,17 @@ class PluginManifest(ModelObject):
 
     @name.setter
     def name(self, value):
-        # TODO: raise exceptions on illegal name (see PluginManifest.cs)
-        self._name = str(value) if value is not None else None
+        if not value:
+            raise Exception(f"Invalid plugin name: {value}")
+
+        value = str(value)
+        if value.isspace() or len(value) > 64:
+            raise Exception(f"Invalid plugin name: {value}")
+        for c in value:
+            if not c.isalnum() and c != ' ' and c != '-' and c != '_':
+                raise Exception(f"Illegal plugin name: {value}")
+
+        self._name = value
 
     @property
     def rrf_version(self) -> str:
@@ -128,8 +146,11 @@ class PluginManifest(ModelObject):
 
     @sbc_executable.setter
     def sbc_executable(self, value):
-        # TODO: raise exceptions on illegal name (see PluginManifest.cs)
-        self._sbc_executable = str(value) if value is not None else None
+        if value is not None:
+            value = str(value)
+            if '..' in value:
+                raise Exception(f"Executable must not contain relative file paths: {value}")
+        self._sbc_executable = value
 
     @property
     def sbc_executable_arguments(self) -> List[str]:
