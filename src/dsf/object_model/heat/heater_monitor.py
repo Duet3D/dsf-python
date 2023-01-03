@@ -1,4 +1,5 @@
 from enum import Enum, IntEnum
+from typing import Union
 
 from ..model_object import ModelObject
 
@@ -42,7 +43,7 @@ class HeaterMonitor(ModelObject):
         # Condition to meet to perform an action
         self._condition = HeaterMonitorCondition.disabled
         # Limit threshold for this heater monitor
-        self._limit = 2000
+        self._limit = None
 
     @property
     def action(self) -> HeaterMonitorAction:
@@ -80,5 +81,5 @@ class HeaterMonitor(ModelObject):
         return self._limit
 
     @limit.setter
-    def limit(self, value: float = 2000):
-        self._limit = float(value) if value is not None else 2000
+    def limit(self, value: Union[float, None]):
+        self._limit = float(value) if value is not None else None
