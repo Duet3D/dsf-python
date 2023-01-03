@@ -24,7 +24,7 @@ class Probe(ModelObject):
         self._travel_speed = 100
         self._trigger_height = 0.7
         self._type = ProbeType.NoProbe
-        self._value = 0
+        self._value = []
 
     @property
     def calibration_temperature(self) -> float:
@@ -180,6 +180,6 @@ class Probe(ModelObject):
             raise TypeError(f"{__name__}.type must be of type ProbeType or None. Got {type(value)}: {value}")
         
     @property
-    def value(self) -> int:
+    def value(self) -> List[int]:
         """Current analog values of the probe"""
         return self._value
