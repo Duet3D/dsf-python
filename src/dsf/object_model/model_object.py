@@ -29,6 +29,7 @@ class ModelObject:
     @staticmethod
     def __json_serialize(obj):
         from .plugins.sbc_permissions import SbcPermissions
+        from .move import DriverId
 
         if isinstance(obj, datetime):
             return obj.isoformat()
@@ -36,6 +37,8 @@ class ModelObject:
             return f'{obj:g}'
         if isinstance(obj, SbcPermissions):
             return obj.name
+        if isinstance(obj, DriverId):
+            return str(obj)
 
         # Convert snake_case class attributes into CamelCase JSON style
         # also convert back 'globals' to 'global'

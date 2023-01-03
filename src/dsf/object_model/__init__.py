@@ -7,7 +7,7 @@ from .inputs import InputChannel
 from .job import Job
 from .limits import Limits
 from .messages import Message, MessageType
-from .move import Move
+from .move import DriverId, Move
 from .network import Network, NetworkInterface, NetworkInterfaceType, NetworkProtocol, NetworkState
 from .object_model import ObjectModel
 from .plugins import Plugin, PluginManifest, SbcPermissions
