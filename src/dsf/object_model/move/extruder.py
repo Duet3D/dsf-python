@@ -33,7 +33,7 @@ class Extruder(ModelObject):
         self._nonlinear = ExtruderNonlinear()
         # Percentage applied to the motor current (0..100)
         self._percent_current = 100
-        # Percentage applied to the motor current during standstill (0..100 or null if not supported)
+        # Percentage applied to the motor current during standstill (0..100 or None if not supported)
         self._percent_stst_current = None
         # Extruder position (in mm)
         self._position = 0
@@ -53,7 +53,7 @@ class Extruder(ModelObject):
 
     @acceleration.setter
     def acceleration(self, value):
-        self._acceleration = float(value) if value is not None else 500
+        self._acceleration = float(value)
 
     @property
     def current(self) -> int:
@@ -62,7 +62,7 @@ class Extruder(ModelObject):
 
     @current.setter
     def current(self, value):
-        self._current = int(value) if value is not None else 0
+        self._current = int(value)
 
     @property
     def filament(self) -> str:
@@ -80,7 +80,7 @@ class Extruder(ModelObject):
 
     @factor.setter
     def factor(self, value):
-        self._factor = float(value) if value is not None else 1
+        self._factor = float(value)
 
     @property
     def jerk(self) -> float:
@@ -89,7 +89,7 @@ class Extruder(ModelObject):
 
     @jerk.setter
     def jerk(self, value):
-        self._jerk = float(value) if value is not None else 15
+        self._jerk = float(value)
 
     @property
     def microstepping(self) -> MicroStepping:
@@ -108,11 +108,11 @@ class Extruder(ModelObject):
 
     @percent_current.setter
     def percent_current(self, value):
-        self._percent_current = int(value) if value is not None else 100
+        self._percent_current = int(value)
 
     @property
     def percent_stst_current(self) -> Union[int, None]:
-        """Percentage applied to the motor current during standstill (0..100 or null if not supported)"""
+        """Percentage applied to the motor current during standstill (0..100 or None if not supported)"""
         return self._percent_stst_current
 
     @percent_stst_current.setter
@@ -126,7 +126,7 @@ class Extruder(ModelObject):
 
     @position.setter
     def position(self, value):
-        self._position = float(value) if value is not None else 0
+        self._position = float(value)
 
     @property
     def pressure_advance(self) -> float:
@@ -135,7 +135,7 @@ class Extruder(ModelObject):
 
     @pressure_advance.setter
     def pressure_advance(self, value):
-        self._pressure_advance = float(value) if value is not None else 0
+        self._pressure_advance = float(value)
 
     @property
     def raw_position(self) -> float:
@@ -144,7 +144,7 @@ class Extruder(ModelObject):
 
     @raw_position.setter
     def raw_position(self, value):
-        self._raw_position = float(value) if value is not None else 0
+        self._raw_position = float(value)
 
     @property
     def speed(self) -> float:
@@ -153,7 +153,7 @@ class Extruder(ModelObject):
 
     @speed.setter
     def speed(self, value):
-        self._speed = float(value) if value is not None else 100
+        self._speed = float(value)
 
     @property
     def steps_per_mm(self) -> float:
@@ -162,4 +162,4 @@ class Extruder(ModelObject):
 
     @steps_per_mm.setter
     def steps_per_mm(self, value):
-        self._steps_per_mm = float(value) if value is not None else 420
+        self._steps_per_mm = float(value)

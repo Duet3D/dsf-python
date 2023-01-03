@@ -53,7 +53,7 @@ class GCodeFileInfo(ModelObject):
 
     @height.setter
     def height(self, value):
-        self._height = float(value) if value is not None else 0
+        self._height = float(value)
 
     @property
     def last_modified(self) -> Union[datetime, None]:
@@ -76,7 +76,7 @@ class GCodeFileInfo(ModelObject):
 
     @layer_height.setter
     def layer_height(self, value):
-        self._layer_height = float(value) if value is not None else 0
+        self._layer_height = float(value)
 
     @property
     def num_layers(self) -> int:
@@ -85,7 +85,7 @@ class GCodeFileInfo(ModelObject):
 
     @num_layers.setter
     def num_layers(self, value):
-        self._num_layers = int(value) if value is not None else 0
+        self._num_layers = int(value)
 
     @property
     def print_time(self) -> Union[int, None]:

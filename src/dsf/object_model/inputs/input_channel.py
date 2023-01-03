@@ -88,7 +88,7 @@ class InputChannel(ModelObject):
 
     @feed_rate.setter
     def feed_rate(self, value):
-        self._feed_rate = float(value) if value is not None else 50.0
+        self._feed_rate = float(value)
 
     @property
     def in_macro(self) -> bool:
@@ -106,7 +106,7 @@ class InputChannel(ModelObject):
 
     @line_number.setter
     def line_number(self, value):
-        self._line_number = int(value) if value is not None else 0
+        self._line_number = int(value)
 
     @property
     def macro_restartable(self) -> bool:
@@ -138,7 +138,7 @@ class InputChannel(ModelObject):
 
     @stack_depth.setter
     def stack_depth(self, value):
-        self._stack_depth = int(value) if value is not None else 0
+        self._stack_depth = int(value)
 
     @property
     def state(self) -> InputChannelState:

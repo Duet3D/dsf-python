@@ -20,7 +20,7 @@ class Scanner(ModelObject):
     
     @progress.setter
     def progress(self, value):
-        self._progress = float(value) if value is not None else 0
+        self._progress = float(value)
         
     @property
     def status(self) -> ScannerStatus:

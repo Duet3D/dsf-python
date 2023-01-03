@@ -29,7 +29,7 @@ class Spindle(ModelObject):
     
     @active.setter
     def active(self, value):
-        self._active = int(value) if value is not None else 0
+        self._active = int(value)
         
     @property
     def can_reverse(self) -> bool:
@@ -47,7 +47,7 @@ class Spindle(ModelObject):
     
     @current.setter
     def current(self, value):
-        self._current = int(value) if value is not None else 0
+        self._current = int(value)
         
     @property
     def frequency(self) -> int:
@@ -56,7 +56,7 @@ class Spindle(ModelObject):
     
     @frequency.setter
     def frequency(self, value):
-        self._frequency = int(value) if value is not None else 0
+        self._frequency = int(value)
         
     @property
     def max(self) -> int:
@@ -65,7 +65,7 @@ class Spindle(ModelObject):
     
     @max.setter
     def max(self, value):
-        self._max = int(value) if value is not None else 10000
+        self._max = int(value)
         
     @property
     def min(self) -> int:
@@ -74,7 +74,7 @@ class Spindle(ModelObject):
     
     @min.setter
     def min(self, value):
-        self._min = int(value) if value is not None else 60
+        self._min = int(value)
         
     @property
     def state(self) -> SpindleState:

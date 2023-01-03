@@ -85,7 +85,7 @@ class Tool(ModelObject):
     
     @filament_extruder.setter
     def filament_extruder(self, value):
-        self._filament_extruder = int(value) if value is not None else -1
+        self._filament_extruder = int(value)
         
     @property
     def heaters(self) -> List[int]:
@@ -113,7 +113,7 @@ class Tool(ModelObject):
     
     @name.setter
     def name(self, value):
-        self._name = str(value) if value is not None else ""
+        self._name = str(value)
         
     @property
     def number(self) -> int:
@@ -122,7 +122,7 @@ class Tool(ModelObject):
     
     @number.setter
     def number(self, value):
-        self._number = int(value) if value is not None else -1
+        self._number = int(value)
         
     @property
     def offsets(self) -> List[float]:
@@ -137,7 +137,7 @@ class Tool(ModelObject):
     
     @offsets_probed.setter
     def offsets_probed(self, value):
-        self._offsets_probed = int(value) if value is not None else 0
+        self._offsets_probed = int(value)
         
     @property
     def retraction(self) -> ToolRetraction:
@@ -151,7 +151,7 @@ class Tool(ModelObject):
     
     @spindle.setter
     def spindle(self, value):
-        self._spindle = int(value) if value is not None else -1
+        self._spindle = int(value)
         
     @property
     def spindle_rpm(self) -> int:
@@ -160,7 +160,7 @@ class Tool(ModelObject):
     
     @spindle_rpm.setter
     def spindle_rpm(self, value):
-        self._spindle_rpm = int(value) if value is not None else 0
+        self._spindle_rpm = int(value)
         
     @property
     def standby(self) -> List[float]:

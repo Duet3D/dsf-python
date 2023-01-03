@@ -30,4 +30,4 @@ class HangprinterKinematics(Kinematics):
     
     @print_radius.setter
     def print_radius(self, value):
-        self._print_radius = float(value) if value is not None else 0
+        self._print_radius = float(value)

@@ -42,7 +42,7 @@ class MessageBox(ModelObject):
     
     @axis_controls.setter
     def axis_controls(self, value):
-        self._axis_controls = int(value) if value is not None else 0
+        self._axis_controls = int(value)
         
     @property
     def message(self) -> str:
@@ -79,7 +79,7 @@ class MessageBox(ModelObject):
     
     @seq.setter
     def seq(self, value):
-        self._seq = int(value) if value is not None else -1
+        self._seq = int(value)
         
     @property
     def timeout(self) -> int:
@@ -88,7 +88,7 @@ class MessageBox(ModelObject):
     
     @timeout.setter
     def timeout(self, value):
-        self._timeout = int(value) if value is not None else 0
+        self._timeout = int(value)
         
     @property
     def title(self) -> str:

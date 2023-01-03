@@ -15,7 +15,7 @@ class BeepRequest(ModelObject):
 
     @duration.setter
     def duration(self, value):
-        self._duration = int(value) if value is not None else 0
+        self._duration = int(value)
 
     @property
     def frequency(self) -> int:
@@ -24,4 +24,4 @@ class BeepRequest(ModelObject):
 
     @frequency.setter
     def frequency(self, value):
-        self._frequency = int(value) if value is not None else 0
+        self._frequency = int(value)

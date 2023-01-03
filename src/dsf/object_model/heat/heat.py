@@ -40,7 +40,7 @@ class Heat(ModelObject):
 
     @cold_extrude_temperature.setter
     def cold_extrude_temperature(self, value: float = 160):
-        self._cold_extrude_temperature = float(value) if value is not None else 160
+        self._cold_extrude_temperature = float(value)
 
     @property
     def cold_retract_temperature(self) -> float:
@@ -49,7 +49,7 @@ class Heat(ModelObject):
 
     @cold_retract_temperature.setter
     def cold_retract_temperature(self, value: float = 90):
-        self._cold_retract_temperature = float(value) if value is not None else 90
+        self._cold_retract_temperature = float(value)
 
     @property
     def heaters(self) -> List[Heater]:

@@ -18,7 +18,7 @@ class ExtruderNonlinear(ModelObject):
 
     @a.setter
     def a(self, value):
-        self._a = float(value) if value is not None else 0
+        self._a = float(value)
 
     @property
     def b(self) -> float:
@@ -27,7 +27,7 @@ class ExtruderNonlinear(ModelObject):
 
     @b.setter
     def b(self, value):
-        self._b = float(value) if value is not None else 0
+        self._b = float(value)
 
     @property
     def upper_limit(self) -> float:
@@ -36,4 +36,4 @@ class ExtruderNonlinear(ModelObject):
 
     @upper_limit.setter
     def upper_limit(self, value):
-        self._upper_limit = float(value) if value is not None else 0.2
+        self._upper_limit = float(value)

@@ -52,7 +52,7 @@ class HttpEndpoint(ModelObject):
 
     @namespace.setter
     def namespace(self, value):
-        self._namespace = str(value) if value is not None else ""
+        self._namespace = str(value)
 
     @property
     def path(self) -> str:
@@ -61,7 +61,7 @@ class HttpEndpoint(ModelObject):
 
     @path.setter
     def path(self, value):
-        self._path = str(value) if value is not None else ""
+        self._path = str(value)
 
     @property
     def unix_socket(self) -> str:
@@ -70,4 +70,4 @@ class HttpEndpoint(ModelObject):
 
     @unix_socket.setter
     def unix_socket(self, value):
-        self._unix_socket = str(value) if value is not None else ""
+        self._unix_socket = str(value)

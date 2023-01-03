@@ -17,7 +17,7 @@ class MoveQueueItem(ModelObject):
 
     @grace_period.setter
     def grace_period(self, value):
-        self._grace_period = float(value) if value is not None else 0
+        self._grace_period = float(value)
 
     @property
     def length(self) -> int:
@@ -26,4 +26,4 @@ class MoveQueueItem(ModelObject):
 
     @length.setter
     def length(self, value):
-        self._length = int(value) if value is not None else 0
+        self._length = int(value)

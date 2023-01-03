@@ -40,7 +40,7 @@ class ProbeGrid(ModelObject):
 
     @radius.setter
     def radius(self, value):
-        self._radius = float(value) if value is not None else 0
+        self._radius = float(value)
 
     @property
     def spacings(self) -> List[float]:

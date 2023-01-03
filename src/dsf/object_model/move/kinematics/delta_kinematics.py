@@ -30,7 +30,7 @@ class DeltaKinematics(Kinematics):
     
     @delta_radius.setter
     def delta_radius(self, value):
-        self._delta_radius = float(value) if value is not None else 0
+        self._delta_radius = float(value)
     
     @property
     def homed_height(self) -> float:
@@ -39,7 +39,7 @@ class DeltaKinematics(Kinematics):
     
     @homed_height.setter
     def homed_height(self, value):
-        self._homed_height = float(value) if value is not None else 0
+        self._homed_height = float(value)
     
     @property
     def print_radius(self) -> float:
@@ -48,7 +48,7 @@ class DeltaKinematics(Kinematics):
     
     @print_radius.setter
     def print_radius(self, value):
-        self._print_radius = float(value) if value is not None else 0
+        self._print_radius = float(value)
 
     @property
     def towers(self) -> List[DeltaTower]:
@@ -62,7 +62,7 @@ class DeltaKinematics(Kinematics):
     
     @x_tilt.setter
     def x_tilt(self, value):
-        self._x_tilt = float(value) if value is not None else 0
+        self._x_tilt = float(value)
     
     @property
     def y_tilt(self) -> float:
@@ -71,4 +71,4 @@ class DeltaKinematics(Kinematics):
     
     @y_tilt.setter
     def y_tilt(self, value):
-        self._y_tilt = float(value) if value is not None else 0
+        self._y_tilt = float(value)

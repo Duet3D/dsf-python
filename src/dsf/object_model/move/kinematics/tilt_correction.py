@@ -27,7 +27,7 @@ class TiltCorrection(ModelObject):
     
     @correction_factor.setter
     def correction_factor(self, value):
-        self._correction_factor = float(value) if value is not None else 0
+        self._correction_factor = float(value)
         
     @property
     def last_corrections(self) -> List[float]:
@@ -41,7 +41,7 @@ class TiltCorrection(ModelObject):
 
     @max_correction.setter
     def max_correction(self, value):
-        self._max_correction = float(value) if value is not None else 0
+        self._max_correction = float(value)
 
     @property
     def screw_pitch(self) -> float:
@@ -50,7 +50,7 @@ class TiltCorrection(ModelObject):
 
     @screw_pitch.setter
     def screw_pitch(self, value):
-        self._screw_pitch = float(value) if value is not None else 0
+        self._screw_pitch = float(value)
         
     @property
     def screw_x(self) -> List[float]:

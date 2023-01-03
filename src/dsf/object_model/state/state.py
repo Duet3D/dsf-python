@@ -74,7 +74,7 @@ class State(ModelObject):
 
     @current_tool.setter
     def current_tool(self, value):
-        self._current_tool = int(value) if value is not None else -1
+        self._current_tool = int(value)
 
     @property
     def deferred_power_down(self) -> Union[bool, None]:
@@ -93,7 +93,7 @@ class State(ModelObject):
 
     @display_message.setter
     def display_message(self, value):
-        self._display_message = str(value) if value is not None else ""
+        self._display_message = str(value)
 
     @property
     def dsf_version(self) -> Union[str, None]:
@@ -103,7 +103,7 @@ class State(ModelObject):
 
     @dsf_version.setter
     def dsf_version(self, value):
-        self._dsf_version = str(value) if value is not None else ""
+        self._dsf_version = str(value)
 
     @property
     def dsf_plugin_support(self) -> bool:
@@ -192,7 +192,7 @@ class State(ModelObject):
 
     @ms_up_time.setter
     def ms_up_time(self, value):
-        self._ms_up_time = int(value) if value is not None else 0
+        self._ms_up_time = int(value)
 
     @property
     def next_tool(self) -> int:
@@ -201,7 +201,7 @@ class State(ModelObject):
 
     @next_tool.setter
     def next_tool(self, value):
-        self._next_tool = int(value) if value is not None else -1
+        self._next_tool = int(value)
 
     @property
     def plugins_started(self) -> bool:
@@ -228,7 +228,7 @@ class State(ModelObject):
 
     @previous_tool.setter
     def previous_tool(self, value):
-        self._previous_tool = int(value) if value is not None else -1
+        self._previous_tool = int(value)
 
     @property
     def restore_points(self) -> List[RestorePoint]:
@@ -276,4 +276,4 @@ class State(ModelObject):
 
     @up_time.setter
     def up_time(self, value):
-        self._up_time = int(value) if value is not None else 0
+        self._up_time = int(value)

@@ -63,7 +63,7 @@ class Heater(ModelObject):
 
     @active.setter
     def active(self, value: float):
-        self._active = float(value) if value is not None else 0
+        self._active = float(value)
 
     @property
     def avg_pwm(self) -> float:
@@ -72,7 +72,7 @@ class Heater(ModelObject):
 
     @avg_pwm.setter
     def avg_pwm(self, value: float):
-        self._avg_pwm = float(value) if value is not None else 0
+        self._avg_pwm = float(value)
 
     @property
     def current(self) -> float:
@@ -81,7 +81,7 @@ class Heater(ModelObject):
 
     @current.setter
     def current(self, value: float):
-        self._current = float(value) if value is not None else -273.15
+        self._current = float(value)
 
     @property
     def max(self) -> float:
@@ -91,7 +91,7 @@ class Heater(ModelObject):
 
     @max.setter
     def max(self, value: float):
-        self._max = float(value) if value is not None else 285
+        self._max = float(value)
 
     @property
     def min(self) -> float:
@@ -101,7 +101,7 @@ class Heater(ModelObject):
 
     @min.setter
     def min(self, value: float):
-        self._min = float(value) if value is not None else -10
+        self._min = float(value)
 
     @property
     def model(self) -> HeaterModel:
@@ -120,7 +120,7 @@ class Heater(ModelObject):
 
     @sensor.setter
     def sensor(self, value: int):
-        self._sensor = int(value) if value is not None else -1
+        self._sensor = int(value)
 
     @property
     def standby(self) -> float:
@@ -129,7 +129,7 @@ class Heater(ModelObject):
 
     @standby.setter
     def standby(self, value: float):
-        self._standby = float(value) if value is not None else 0
+        self._standby = float(value)
 
     @property
     def state(self) -> HeaterState:

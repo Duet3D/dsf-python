@@ -24,7 +24,7 @@ class HeaterModelPID(ModelObject):
 
     @d.setter
     def d(self, value):
-        self._d = float(value) if value is not None else 0
+        self._d = float(value)
 
     @property
     def i(self) -> float:
@@ -33,7 +33,7 @@ class HeaterModelPID(ModelObject):
 
     @i.setter
     def i(self, value):
-        self._i = float(value) if value is not None else 0
+        self._i = float(value)
 
     @property
     def overridden(self) -> bool:
@@ -51,7 +51,7 @@ class HeaterModelPID(ModelObject):
 
     @p.setter
     def p(self, value):
-        self._p = float(value) if value is not None else 0
+        self._p = float(value)
 
     @property
     def used(self) -> bool:

@@ -35,4 +35,4 @@ class Plugin(PluginManifest):
 
     @pid.setter
     def pid(self, value):
-        self._pid = int(value) if value is not None else -1
+        self._pid = int(value)

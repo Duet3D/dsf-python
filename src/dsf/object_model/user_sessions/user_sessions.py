@@ -36,7 +36,7 @@ class UserSession(ModelObject):
     
     @id.setter
     def id(self, value):
-        self._id = int(value) if value is not None else 0
+        self._id = int(value)
         
     @property
     def origin(self) -> Union[str, None]:
@@ -55,7 +55,7 @@ class UserSession(ModelObject):
     
     @origin_id.setter
     def origin_id(self, value):
-        self._origin_id = int(value) if value is not None else -1
+        self._origin_id = int(value)
         
     @property
     def session_type(self) -> SessionType:

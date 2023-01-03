@@ -25,7 +25,7 @@ class CurrentMove(ModelObject):
 
     @acceleration.setter
     def acceleration(self, value):
-        self._acceleration = float(value) if value is not None else 0
+        self._acceleration = float(value)
 
     @property
     def deceleration(self) -> float:
