@@ -24,7 +24,7 @@ class LaserFilamentMonitorCalibrated(ModelObject):
 
     @calibration_factor.setter
     def calibration_factor(self, value):
-        self._calibration_factor = float(value) if value is not None else 0
+        self._calibration_factor = float(value)
 
     @property
     def percent_max(self) -> float:
@@ -33,7 +33,7 @@ class LaserFilamentMonitorCalibrated(ModelObject):
 
     @percent_max.setter
     def percent_max(self, value):
-        self._percent_max = float(value) if value is not None else 0
+        self._percent_max = float(value)
 
     @property
     def percent_min(self) -> float:
@@ -42,7 +42,7 @@ class LaserFilamentMonitorCalibrated(ModelObject):
 
     @percent_min.setter
     def percent_min(self, value):
-        self._percent_min = float(value) if value is not None else 0
+        self._percent_min = float(value)
 
     @property
     def sensivity(self) -> float:
@@ -51,7 +51,7 @@ class LaserFilamentMonitorCalibrated(ModelObject):
 
     @sensivity.setter
     def sensivity(self, value):
-        self._sensivity = float(value) if value is not None else 0
+        self._sensivity = float(value)
 
     @property
     def total_distance(self) -> float:
@@ -60,7 +60,7 @@ class LaserFilamentMonitorCalibrated(ModelObject):
 
     @total_distance.setter
     def total_distance(self, value):
-        self._total_distance = float(value) if value is not None else 0
+        self._total_distance = float(value)
 
 
 class LaserFilamentMonitorConfigured(ModelObject):
@@ -89,7 +89,7 @@ class LaserFilamentMonitorConfigured(ModelObject):
 
     @percent_max.setter
     def percent_max(self, value):
-        self._percent_max = float(value) if value is not None else 0
+        self._percent_max = float(value)
 
     @property
     def percent_min(self) -> float:
@@ -98,7 +98,7 @@ class LaserFilamentMonitorConfigured(ModelObject):
 
     @percent_min.setter
     def percent_min(self, value):
-        self._percent_min = float(value) if value is not None else 0
+        self._percent_min = float(value)
 
     @property
     def sample_distance(self) -> float:
@@ -107,7 +107,7 @@ class LaserFilamentMonitorConfigured(ModelObject):
 
     @sample_distance.setter
     def sample_distance(self, value):
-        self._sample_distance = float(value) if value is not None else 0
+        self._sample_distance = float(value)
 
 
 class LaserFilamentMonitor(FilamentMonitor):

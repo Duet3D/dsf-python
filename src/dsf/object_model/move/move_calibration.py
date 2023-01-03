@@ -30,4 +30,4 @@ class MoveCalibration(ModelObject):
 
     @num_factors.setter
     def num_factors(self, value):
-        self._num_factors = int(value) if value is not None else 0
+        self._num_factors = int(value)

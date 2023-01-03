@@ -19,7 +19,7 @@ class DirectDisplay(ModelObject):
 
     @pulses_per_click.setter
     def pulses_per_click(self, value: int):
-        self._pulses_per_click = int(value) if value is not None else 0
+        self._pulses_per_click = int(value)
 
     @property
     def spi_freq(self) -> int:
@@ -28,7 +28,7 @@ class DirectDisplay(ModelObject):
 
     @spi_freq.setter
     def spi_freq(self, value: int):
-        self._spi_freq = int(value) if value is not None else 0
+        self._spi_freq = int(value)
 
     @property
     def type_name(self) -> str:

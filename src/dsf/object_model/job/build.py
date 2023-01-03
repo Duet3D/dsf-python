@@ -29,7 +29,7 @@ class Build(ModelObject):
 
     @current_object.setter
     def current_object(self, value):
-        self._current_object = int(value) if value is not None else -1
+        self._current_object = int(value)
 
     @property
     def m486_names(self) -> bool:

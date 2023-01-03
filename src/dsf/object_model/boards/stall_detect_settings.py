@@ -23,7 +23,7 @@ class StallDetectSettings(ModelObject):
 
     @threshold.setter
     def threshold(self, value):
-        self._threshold = int(value) if value is not None else 0
+        self._threshold = int(value)
 
     @property
     def filtered(self) -> bool:
@@ -41,7 +41,7 @@ class StallDetectSettings(ModelObject):
 
     @min_steps.setter
     def min_steps(self, value):
-        self._min_steps = int(value) if value is not None else 0
+        self._min_steps = int(value)
 
     @property
     def coolstep(self) -> int:
@@ -50,7 +50,7 @@ class StallDetectSettings(ModelObject):
 
     @coolstep.setter
     def coolstep(self, value):
-        self._coolstep = int(value) if value is not None else 0
+        self._coolstep = int(value)
 
     @property
     def action(self) -> int:
@@ -59,4 +59,4 @@ class StallDetectSettings(ModelObject):
 
     @action.setter
     def action(self, value):
-        self._action = int(value) if value is not None else 0
+        self._action = int(value)

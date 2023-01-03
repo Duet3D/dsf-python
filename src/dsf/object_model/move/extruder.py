@@ -55,7 +55,7 @@ class Extruder(ModelObject):
 
     @acceleration.setter
     def acceleration(self, value):
-        self._acceleration = float(value) if value is not None else 500
+        self._acceleration = float(value)
 
     @property
     def current(self) -> int:
@@ -64,7 +64,7 @@ class Extruder(ModelObject):
 
     @current.setter
     def current(self, value):
-        self._current = int(value) if value is not None else 0
+        self._current = int(value)
 
     @property
     def factor(self) -> float:
@@ -73,7 +73,7 @@ class Extruder(ModelObject):
 
     @factor.setter
     def factor(self, value):
-        self._factor = float(value) if value is not None else 1
+        self._factor = float(value)
 
     @property
     def filament(self) -> str:
@@ -100,7 +100,7 @@ class Extruder(ModelObject):
 
     @jerk.setter
     def jerk(self, value):
-        self._jerk = float(value) if value is not None else 15
+        self._jerk = float(value)
 
     @property
     def microstepping(self) -> MicroStepping:
@@ -119,7 +119,7 @@ class Extruder(ModelObject):
 
     @percent_current.setter
     def percent_current(self, value):
-        self._percent_current = int(value) if value is not None else 100
+        self._percent_current = int(value)
 
     @property
     def percent_stst_current(self) -> Union[int, None]:
@@ -137,7 +137,7 @@ class Extruder(ModelObject):
 
     @position.setter
     def position(self, value):
-        self._position = float(value) if value is not None else 0
+        self._position = float(value)
 
     @property
     def pressure_advance(self) -> float:
@@ -146,7 +146,7 @@ class Extruder(ModelObject):
 
     @pressure_advance.setter
     def pressure_advance(self, value):
-        self._pressure_advance = float(value) if value is not None else 0
+        self._pressure_advance = float(value)
 
     @property
     def raw_position(self) -> float:
@@ -155,7 +155,7 @@ class Extruder(ModelObject):
 
     @raw_position.setter
     def raw_position(self, value):
-        self._raw_position = float(value) if value is not None else 0
+        self._raw_position = float(value)
 
     @property
     def speed(self) -> float:
@@ -164,7 +164,7 @@ class Extruder(ModelObject):
 
     @speed.setter
     def speed(self, value):
-        self._speed = float(value) if value is not None else 100
+        self._speed = float(value)
 
     @property
     def steps_per_mm(self) -> float:
@@ -173,4 +173,4 @@ class Extruder(ModelObject):
 
     @steps_per_mm.setter
     def steps_per_mm(self, value):
-        self._steps_per_mm = float(value) if value is not None else 420
+        self._steps_per_mm = float(value)

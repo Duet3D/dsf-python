@@ -31,7 +31,7 @@ class Skew(ModelObject):
 
     @tan_XY.setter
     def tan_XY(self, value):
-        self._tan_XY = float(value) if value is not None else 0
+        self._tan_XY = float(value)
 
     @property
     def tan_XZ(self) -> float:
@@ -40,7 +40,7 @@ class Skew(ModelObject):
 
     @tan_XZ.setter
     def tan_XZ(self, value):
-        self._tan_XZ = float(value) if value is not None else 0
+        self._tan_XZ = float(value)
 
     @property
     def tan_YZ(self) -> float:
@@ -49,4 +49,4 @@ class Skew(ModelObject):
 
     @tan_YZ.setter
     def tan_YZ(self, value):
-        self._tan_YZ = float(value) if value is not None else 0
+        self._tan_YZ = float(value)

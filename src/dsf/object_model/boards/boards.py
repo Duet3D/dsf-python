@@ -123,7 +123,7 @@ class Board(ModelObject):
 
     @firmware_date.setter
     def firmware_date(self, value):
-        self._firmware_date = str(value) if value is not None else ""
+        self._firmware_date = str(value)
 
     @property
     def firmware_file_name(self) -> str:
@@ -132,7 +132,7 @@ class Board(ModelObject):
 
     @firmware_file_name.setter
     def firmware_file_name(self, value):
-        self._firmware_file_name = str(value) if value is not None else ""
+        self._firmware_file_name = str(value)
 
     @property
     def firmware_name(self) -> str:
@@ -141,7 +141,7 @@ class Board(ModelObject):
 
     @firmware_name.setter
     def firmware_name(self, value):
-        self._firmware_name = str(value) if value is not None else ""
+        self._firmware_name = str(value)
 
     @property
     def firmware_version(self) -> str:
@@ -150,7 +150,7 @@ class Board(ModelObject):
 
     @firmware_version.setter
     def firmware_version(self, value):
-        self._firmware_version = str(value) if value is not None else ""
+        self._firmware_version = str(value)
 
     @property
     def iap_file_name_SBC(self) -> Union[str, None]:
@@ -178,7 +178,7 @@ class Board(ModelObject):
 
     @max_heaters.setter
     def max_heaters(self, value):
-        self._max_heaters = int(value) if value is not None else 0
+        self._max_heaters = int(value)
 
     @property
     def max_motors(self) -> int:
@@ -187,7 +187,7 @@ class Board(ModelObject):
 
     @max_motors.setter
     def max_motors(self, value):
-        self._max_motors = int(value) if value is not None else 0
+        self._max_motors = int(value)
 
     @property
     def name(self) -> str:
@@ -196,7 +196,7 @@ class Board(ModelObject):
 
     @name.setter
     def name(self, value):
-        self._name = str(value) if value is not None else ""
+        self._name = str(value)
 
     @property
     def short_name(self) -> str:
@@ -205,7 +205,7 @@ class Board(ModelObject):
 
     @short_name.setter
     def short_name(self, value):
-        self._short_name = str(value) if value is not None else ""
+        self._short_name = str(value)
 
     @property
     def state(self) -> BoardState:

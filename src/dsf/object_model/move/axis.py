@@ -54,7 +54,7 @@ class Axis(ModelObject):
         self._jerk = 0
         # Letter of this axis
         self._letter = AxisLetter.none
-        # Current machine position (in mm) or null if unknown/unset
+        # Current machine position (in mm) or None if unknown/unset
         self._machine_position = None
         # Maximum travel of this axis (in mm)
         self._max = 200
@@ -68,13 +68,13 @@ class Axis(ModelObject):
         self._min_probed = False
         # Percentage applied to the motor current (0..100)
         self._percent_current = 100
-        # Percentage applied to the motor current during standstill (0..100 or null if not supported)
+        # Percentage applied to the motor current during standstill (0..100 or None if not supported)
         self._percent_stst_current = None
         # Maximum speed (in mm/min)
         self._speed = 100
         # Number of microsteps per mm
         self._steps_per_mm = 80
-        # Current user position (in mm) or null if unknown
+        # Current user position (in mm) or None if unknown
         self._user_position = None
         # Whether the axis is visible
         self._visible = True
@@ -88,7 +88,7 @@ class Axis(ModelObject):
 
     @acceleration.setter
     def acceleration(self, value):
-        self._acceleration = float(value) if value is not None else 0
+        self._acceleration = float(value)
 
     @property
     def babystep(self) -> float:
@@ -97,7 +97,7 @@ class Axis(ModelObject):
 
     @babystep.setter
     def babystep(self, value):
-        self._babystep = float(value) if value is not None else 0
+        self._babystep = float(value)
 
     @property
     def current(self) -> int:
@@ -106,7 +106,7 @@ class Axis(ModelObject):
 
     @current.setter
     def current(self, value):
-        self._current = int(value) if value is not None else 0
+        self._current = int(value)
 
     @property
     def drivers(self) -> List[DriverId]:
@@ -129,7 +129,7 @@ class Axis(ModelObject):
 
     @jerk.setter
     def jerk(self, value):
-        self._jerk = float(value) if value is not None else 0
+        self._jerk = float(value)
 
     @property
     def letter(self) -> AxisLetter:
@@ -147,7 +147,7 @@ class Axis(ModelObject):
 
     @property
     def machine_position(self) -> Union[float, None]:
-        """Current machine position (in mm) or null if unknown/unset
+        """Current machine position (in mm) or None if unknown/unset
         This value reflects the machine position of the move being performed
         or of the last one if the machine is not moving"""
         return self._machine_position
@@ -163,7 +163,7 @@ class Axis(ModelObject):
 
     @max.setter
     def max(self, value):
-        self._max = float(value) if value is not None else 200
+        self._max = float(value)
 
     @property
     def max_probed(self) -> bool:
@@ -186,7 +186,7 @@ class Axis(ModelObject):
 
     @min.setter
     def min(self, value):
-        self._min = float(value) if value is not None else 0
+        self._min = float(value)
 
     @property
     def min_probed(self) -> bool:
@@ -204,11 +204,11 @@ class Axis(ModelObject):
 
     @percent_current.setter
     def percent_current(self, value):
-        self._percent_current = int(value) if value is not None else 100
+        self._percent_current = int(value)
 
     @property
     def percent_stst_current(self) -> Union[int, None]:
-        """Percentage applied to the motor current during standstill (0..100 or null if not supported)"""
+        """Percentage applied to the motor current during standstill (0..100 or None if not supported)"""
         return self._percent_stst_current
 
     @percent_stst_current.setter
@@ -222,7 +222,7 @@ class Axis(ModelObject):
 
     @speed.setter
     def speed(self, value):
-        self._speed = float(value) if value is not None else 100
+        self._speed = float(value)
 
     @property
     def steps_per_mm(self) -> float:
@@ -231,11 +231,11 @@ class Axis(ModelObject):
 
     @steps_per_mm.setter
     def steps_per_mm(self, value):
-        self._steps_per_mm = float(value) if value is not None else 80
+        self._steps_per_mm = float(value)
 
     @property
     def user_position(self) -> Union[float, None]:
-        """Current user position (in mm) or null if unknown
+        """Current user position (in mm) or None if unknown
         This value reflects the target position of the last move fed into the look-ahead buffer"""
         return self._user_position
 
@@ -250,7 +250,7 @@ class Axis(ModelObject):
 
     @visible.setter
     def visible(self, value):
-        self._visible = bool(value) if value is not None else True
+        self._visible = bool(value)
 
     @property
     def workplace_offsets(self) -> List[float]:

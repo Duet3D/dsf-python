@@ -15,7 +15,7 @@ class MoveSegmentation(ModelObject):
     
     @segments_per_sec.setter
     def segments_per_sec(self, value):
-        self._segments_per_sec = int(value) if value is not None else 0
+        self._segments_per_sec = int(value)
         
     @property
     def min_segment_length(self) -> float:
@@ -24,4 +24,4 @@ class MoveSegmentation(ModelObject):
     
     @min_segment_length.setter
     def min_segment_length(self, value):
-        self._min_segment_length = float(value) if value is not None else 0
+        self._min_segment_length = float(value)

@@ -33,7 +33,7 @@ class Fan(ModelObject):
 
     @actual_value.setter
     def actual_value(self, value):
-        self._actual_value = float(value) if value is not None else -1
+        self._actual_value = float(value)
 
     @property
     def blip(self) -> float:
@@ -43,7 +43,7 @@ class Fan(ModelObject):
 
     @blip.setter
     def blip(self, value):
-        self._blip = float(value) if value is not None else 0
+        self._blip = float(value)
 
     @property
     def frequency(self) -> float:
@@ -52,7 +52,7 @@ class Fan(ModelObject):
 
     @frequency.setter
     def frequency(self, value):
-        self._frequency = float(value) if value is not None else 0
+        self._frequency = float(value)
 
     @property
     def max(self) -> float:
@@ -61,7 +61,7 @@ class Fan(ModelObject):
 
     @max.setter
     def max(self, value):
-        self._max = float(value) if value is not None else 0
+        self._max = float(value)
 
     @property
     def min(self) -> float:
@@ -70,7 +70,7 @@ class Fan(ModelObject):
 
     @min.setter
     def min(self, value):
-        self._min = float(value) if value is not None else 0
+        self._min = float(value)
 
     @property
     def name(self) -> str:
@@ -88,7 +88,7 @@ class Fan(ModelObject):
 
     @requested_value.setter
     def requested_value(self, value):
-        self._requested_value = float(value) if value is not None else 0
+        self._requested_value = float(value)
 
     @property
     def rpm(self) -> int:
@@ -97,7 +97,7 @@ class Fan(ModelObject):
 
     @rpm.setter
     def rpm(self, value):
-        self._rpm = int(value) if value is not None else -1
+        self._rpm = int(value)
 
     @property
     def thermostatic(self) -> FanThermostaticControl:

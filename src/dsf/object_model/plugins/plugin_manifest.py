@@ -39,7 +39,7 @@ class PluginManifest(ModelObject):
 
     @author.setter
     def author(self, value):
-        self._author = str(value) if value is not None else ""
+        self._author = str(value)
 
     @property
     def data(self):
@@ -98,7 +98,7 @@ class PluginManifest(ModelObject):
 
     @license.setter
     def license(self, value):
-        self._license = str(value) if value is not None else "LGPL-3.0-or-later"
+        self._license = str(value)
 
     @property
     def name(self) -> str:
@@ -229,7 +229,7 @@ class PluginManifest(ModelObject):
 
     @version.setter
     def version(self, value):
-        self._version = str(value) if value is not None else "1.0.0"
+        self._version = str(value)
 
     @staticmethod
     def check_version(actual: str, required: str):

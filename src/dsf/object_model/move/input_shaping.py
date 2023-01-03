@@ -61,7 +61,7 @@ class InputShaping(ModelObject):
 
     @damping.setter
     def damping(self, value):
-        self._damping = float(value) if value is not None else 0.1
+        self._damping = float(value)
 
     @property
     def durations(self) -> List[float]:
@@ -75,7 +75,7 @@ class InputShaping(ModelObject):
 
     @frequency.setter
     def frequency(self, value):
-        self._frequency = float(value) if value is not None else 40
+        self._frequency = float(value)
 
     @property
     def min_acceleration(self) -> float:
@@ -84,7 +84,7 @@ class InputShaping(ModelObject):
 
     @min_acceleration.setter
     def min_acceleration(self, value):
-        self._min_acceleration = float(value) if value is not None else 10
+        self._min_acceleration = float(value)
 
     @property
     def type(self) -> InputShapingType:

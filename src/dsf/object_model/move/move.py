@@ -115,7 +115,7 @@ class Move(ModelObject):
 
     @printing_acceleration.setter
     def printing_acceleration(self, value):
-        self._printing_acceleration = float(value) if value is not None else 10000
+        self._printing_acceleration = float(value)
 
     @property
     def queue(self) -> List[MoveQueueItem]:
@@ -139,7 +139,7 @@ class Move(ModelObject):
 
     @speed_factor.setter
     def speed_factor(self, value):
-        self._speed_factor = float(value) if value is not None else 1
+        self._speed_factor = float(value)
 
     @property
     def travel_acceleration(self) -> float:
@@ -148,7 +148,7 @@ class Move(ModelObject):
 
     @travel_acceleration.setter
     def travel_acceleration(self, value):
-        self._travel_acceleration = float(value) if value is not None else 0
+        self._travel_acceleration = float(value)
 
     @property
     def virtual_e_pos(self) -> float:
@@ -157,7 +157,7 @@ class Move(ModelObject):
 
     @virtual_e_pos.setter
     def virtual_e_pos(self, value):
-        self._virtual_e_pos = float(value) if value is not None else 0
+        self._virtual_e_pos = float(value)
 
     @property
     def workplace_number(self) -> int:
@@ -166,4 +166,4 @@ class Move(ModelObject):
 
     @workplace_number.setter
     def workplace_number(self, value):
-        self._workplace_number = int(value) if value is not None else 0
+        self._workplace_number = int(value)

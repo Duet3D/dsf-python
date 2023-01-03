@@ -26,7 +26,7 @@ class Layer(ModelObject):
 
     @duration.setter
     def duration(self, value):
-        self._duration = float(value) if value is not None else 0
+        self._duration = float(value)
 
     @property
     def filament(self) -> List[float]:
@@ -40,7 +40,7 @@ class Layer(ModelObject):
 
     @fraction_printed.setter
     def fraction_printed(self, value):
-        self._fraction_printed = float(value) if value is not None else 0
+        self._fraction_printed = float(value)
 
     @property
     def height(self) -> int:
@@ -49,7 +49,7 @@ class Layer(ModelObject):
 
     @height.setter
     def height(self, value):
-        self._height = int(value) if value is not None else 0
+        self._height = int(value)
 
     @property
     def temperatures(self) -> List[float]:

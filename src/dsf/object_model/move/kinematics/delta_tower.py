@@ -23,7 +23,7 @@ class DeltaTower(ModelObject):
     
     @angle_correction.setter
     def angle_correction(self, value):
-        self._angle_correction = float(value) if value is not None else 0
+        self._angle_correction = float(value)
         
     @property
     def diagonal(self) -> float:
@@ -32,7 +32,7 @@ class DeltaTower(ModelObject):
     
     @diagonal.setter
     def diagonal(self, value):
-        self._diagonal = float(value) if value is not None else 0
+        self._diagonal = float(value)
         
     @property
     def endstop_adjustment(self) -> float:
@@ -41,7 +41,7 @@ class DeltaTower(ModelObject):
     
     @endstop_adjustment.setter
     def endstop_adjustment(self, value):
-        self._endstop_adjustment = float(value) if value is not None else 0
+        self._endstop_adjustment = float(value)
         
     @property
     def x_pos(self) -> float:
@@ -50,7 +50,7 @@ class DeltaTower(ModelObject):
     
     @x_pos.setter
     def x_pos(self, value):
-        self._x_pos = float(value) if value is not None else 0
+        self._x_pos = float(value)
         
     @property
     def y_pos(self) -> float:
@@ -59,4 +59,4 @@ class DeltaTower(ModelObject):
     
     @y_pos.setter
     def y_pos(self, value):
-        self._y_pos = float(value) if value is not None else 0
+        self._y_pos = float(value)

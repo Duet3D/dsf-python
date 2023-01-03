@@ -19,7 +19,7 @@ class MoveRotation(ModelObject):
 
     @angle.setter
     def angle(self, value):
-        self._angle = float(value) if value is not None else 0
+        self._angle = float(value)
 
     @property
     def centre(self) -> List[float]:

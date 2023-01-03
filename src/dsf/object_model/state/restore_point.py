@@ -39,7 +39,7 @@ class RestorePoint(ModelObject):
     
     @extruder_pos.setter
     def extruder_pos(self, value):
-        self._extruder_pos = float(value) if value is not None else 0
+        self._extruder_pos = float(value)
         
     @property
     def fan_pwm(self) -> float:
@@ -48,7 +48,7 @@ class RestorePoint(ModelObject):
     
     @fan_pwm.setter
     def fan_pwm(self, value):
-        self._fan_pwm = float(value) if value is not None else 0
+        self._fan_pwm = float(value)
         
     @property
     def feed_rate(self) -> float:
@@ -57,7 +57,7 @@ class RestorePoint(ModelObject):
     
     @feed_rate.setter
     def feed_rate(self, value):
-        self._feed_rate = float(value) if value is not None else 0
+        self._feed_rate = float(value)
         
     @property
     def io_bits(self) -> Union[int, None]:
@@ -89,4 +89,4 @@ class RestorePoint(ModelObject):
     
     @tool_number.setter
     def tool_number(self, value):
-        self._tool_number = int(value) if value is not None else -1
+        self._tool_number = int(value)
