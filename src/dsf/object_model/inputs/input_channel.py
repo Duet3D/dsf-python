@@ -20,6 +20,8 @@ class InputChannel(ModelObject):
         self._drives_relative = True
         # Current feedrate in mm/s
         self._feed_rate = 50.0
+        # Indicates if inverse time mode (G73) is active
+        self._inverse_time_mode = False
         # Whether a macro file is being processed
         self._in_macro = False
         # Indicates if the current macro file can be restarted after a pause
@@ -102,6 +104,15 @@ class InputChannel(ModelObject):
     @in_macro.setter
     def in_macro(self, value):
         self._in_macro = bool(value)
+
+    @property
+    def inverse_time_mode(self) -> bool:
+        """Indicates if inverse time mode (G73) is active"""
+        return self._inverse_time_mode
+
+    @inverse_time_mode.setter
+    def inverse_time_mode(self, value):
+        self._inverse_time_mode = bool(value)
 
     @property
     def line_number(self) -> int:
