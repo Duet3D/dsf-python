@@ -118,7 +118,7 @@ class LaserFilamentMonitor(FilamentMonitor):
 
     def __init__(self):
         super(LaserFilamentMonitor, self).__init__()
-        self._calibrated = LaserFilamentMonitorCalibrated()
+        self._calibrated = None
         self._configured = LaserFilamentMonitorConfigured()
         self._filament_present = False
         self._type = FilamentMonitorType.Laser

@@ -106,7 +106,7 @@ class PulsedFilamentMonitor(FilamentMonitor):
 
     def __init__(self):
         super(PulsedFilamentMonitor, self).__init__()
-        self._calibrated = PulsedFilamentMonitorCalibrated()
+        self._calibrated = None
         self._configured = PulsedFilamentMonitorConfigured()
         self._type = FilamentMonitorType.Pulsed
         
