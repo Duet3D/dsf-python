@@ -12,36 +12,38 @@ from ..utils import wrap_model_property
 class Job(ModelObject):
     """Information about the current job"""
 
-    # Information about the current build or null if not available
+    # Information about the current build or None if not available
     build = wrap_model_property('build', Build)
     # Information about the file being processed
     file = wrap_model_property('file', GCodeFileInfo)
 
     def __init__(self):
         super().__init__()
-        # Information about the current build or null if not available
+        # Information about the current build or None if not available
         self._build = None
-        # Total active duration of the current job file (in s or null)
+        # Total active duration of the current job file (in s or None)
         self._duration = None
         # Information about the file being processed
         self._file = None
-        # Current position in the file being processed (in bytes or null)
+        # Current position in the file being processed (in bytes or None)
         self._file_position = None
-        # Total duration of the last job (in s or null)
+        # Total duration of the last job (in s or None)
         self._last_duration = None
         # Indicates if the last file was aborted (unexpected cancellation)
         self._last_file_aborted = False
         # Indicates if the last file was cancelled (user cancelled)
         self._last_file_cancelled = False
-        # Name of the last file processed or null if none
+        # Name of the last file processed or None
         self._last_file_name = None
         # Indicates if the last file processed was simulated
         self._last_file_simulated = False
-        # Number of the current layer or null not available
+        # Warm-up duration of the last print or None if not available (in s)
+        self._last_warm_up_duration = None
+        # Number of the current layer or None if not available
         self._layer = None
         # Information about the past layers
         self._layers = ModelCollection(Layer)
-        # Time elapsed since the last layer change (in s or null)
+        # Time elapsed since the last layer change (in s or None)
         self._layer_time = None
         # Total pause time since the job started
         self._pause_duration = None
@@ -49,12 +51,12 @@ class Job(ModelObject):
         self._raw_extrusion = None
         # Estimated times left
         self._times_left = TimesLeft()
-        # Time needed to heat up the heaters (in s or null)
+        # Time needed to heat up the heaters (in s or None)
         self._warm_up_duration = None
 
     @property
     def duration(self) -> Union[int, None]:
-        """Total active duration of the current job file (in s or null)"""
+        """Total active duration of the current job file (in s or None)"""
         return self._duration
 
     @duration.setter
@@ -63,7 +65,7 @@ class Job(ModelObject):
 
     @property
     def file_position(self) -> Union[int, None]:
-        """Current position in the file being processed (in bytes or null)"""
+        """Current position in the file being processed (in bytes or None)"""
         return self._file_position
 
     @file_position.setter
@@ -72,7 +74,7 @@ class Job(ModelObject):
 
     @property
     def last_duration(self) -> Union[int, None]:
-        """Total duration of the last job (in s or null)"""
+        """Total duration of the last job (in s or None)"""
         return self._last_duration
 
     @last_duration.setter
@@ -99,7 +101,7 @@ class Job(ModelObject):
 
     @property
     def last_file_name(self) -> Union[str, None]:
-        """Name of the last file processed or null if none"""
+        """Name of the last file processed or None"""
         return self._last_file_name
 
     @last_file_name.setter
@@ -117,8 +119,17 @@ class Job(ModelObject):
         self._last_file_simulated = bool(value)
 
     @property
+    def last_warm_up_duration(self) -> Union[int, None]:
+        """Warm-up duration of the last print or None if not available (in s)"""
+        return self._last_warm_up_duration
+
+    @last_warm_up_duration.setter
+    def last_warm_up_duration(self, value):
+        self._last_warm_up_duration = int(value) if value is not None else None
+
+    @property
     def layer(self) -> Union[int, None]:
-        """Number of the current layer or null not available"""
+        """Number of the current layer or None if not available"""
         return self._layer
 
     @layer.setter
@@ -137,7 +148,7 @@ class Job(ModelObject):
 
     @property
     def layer_time(self) -> Union[float, None]:
-        """Time elapsed since the last layer change (in s or null)"""
+        """Time elapsed since the last layer change (in s or None)"""
         return self._layer_time
 
     @layer_time.setter
@@ -169,7 +180,7 @@ class Job(ModelObject):
 
     @property
     def warm_up_duration(self) -> Union[int, None]:
-        """Time needed to heat up the heaters (in s or null)"""
+        """Time needed to heat up the heaters (in s or None)"""
         return self._warm_up_duration
 
     @warm_up_duration.setter

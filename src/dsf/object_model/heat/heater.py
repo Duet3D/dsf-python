@@ -42,6 +42,12 @@ class Heater(ModelObject):
         # Maximum temperature allowed for this heater (in C)
         # This is only temporary and should be replaced by a representation of the heater protection as in RRF
         self._max = 285
+        # Maximum number of consecutive temperature reading failures before a heater fault is raised
+        self._max_bad_readings = 3
+        # Time for which a temperature anomaly must persist on this heater before raising a heater fault (in s)
+        self._max_heating_fault_time = 5
+        # Permitted temperature excursion from the setpoint for this heater (in K)
+        self._max_temp_excursion = 15
         # Minimum temperature allowed for this heater (in C)
         # This is only temporary and should be replaced by a representation of the heater protection as in RRF
         self._min = -10
@@ -63,7 +69,7 @@ class Heater(ModelObject):
 
     @active.setter
     def active(self, value: float):
-        self._active = float(value) if value is not None else 0
+        self._active = float(value)
 
     @property
     def avg_pwm(self) -> float:
@@ -72,7 +78,7 @@ class Heater(ModelObject):
 
     @avg_pwm.setter
     def avg_pwm(self, value: float):
-        self._avg_pwm = float(value) if value is not None else 0
+        self._avg_pwm = float(value)
 
     @property
     def current(self) -> float:
@@ -81,7 +87,7 @@ class Heater(ModelObject):
 
     @current.setter
     def current(self, value: float):
-        self._current = float(value) if value is not None else -273.15
+        self._current = float(value)
 
     @property
     def max(self) -> float:
@@ -91,7 +97,34 @@ class Heater(ModelObject):
 
     @max.setter
     def max(self, value: float):
-        self._max = float(value) if value is not None else 285
+        self._max = float(value)
+
+    @property
+    def max_bad_readings(self) -> int:
+        """Maximum number of consecutive temperature reading failures before a heater fault is raised"""
+        return self._max_bad_readings
+
+    @max_bad_readings.setter
+    def max_bad_readings(self, value: int):
+        self._max_bad_readings = int(value)
+
+    @property
+    def max_heating_fault_time(self) -> float:
+        """Time for which a temperature anomaly must persist on this heater before raising a heater fault (in s)"""
+        return self._max_heating_fault_time
+
+    @max_heating_fault_time.setter
+    def max_heating_fault_time(self, value: float):
+        self._max_heating_fault_time = float(value)
+
+    @property
+    def max_temp_excursion(self) -> float:
+        """Permitted temperature excursion from the setpoint for this heater (in K)"""
+        return self._max_temp_excursion
+
+    @max_temp_excursion.setter
+    def max_temp_excursion(self, value: float):
+        self._max_temp_excursion = float(value)
 
     @property
     def min(self) -> float:
@@ -101,7 +134,7 @@ class Heater(ModelObject):
 
     @min.setter
     def min(self, value: float):
-        self._min = float(value) if value is not None else -10
+        self._min = float(value)
 
     @property
     def model(self) -> HeaterModel:
@@ -120,7 +153,7 @@ class Heater(ModelObject):
 
     @sensor.setter
     def sensor(self, value: int):
-        self._sensor = int(value) if value is not None else -1
+        self._sensor = int(value)
 
     @property
     def standby(self) -> float:
@@ -129,7 +162,7 @@ class Heater(ModelObject):
 
     @standby.setter
     def standby(self, value: float):
-        self._standby = float(value) if value is not None else 0
+        self._standby = float(value)
 
     @property
     def state(self) -> HeaterState:

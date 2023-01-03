@@ -1,6 +1,7 @@
 from typing import Union
 
 from .analog_sensor_type import AnalogSensorType
+from .temperature_error import TemperatureError
 from ..model_object import ModelObject
 
 
@@ -11,6 +12,7 @@ class AnalogSensor(ModelObject):
         super(AnalogSensor, self).__init__()
         self._last_reading = None
         self._name = None
+        self._state = TemperatureError.ok
         self._type = AnalogSensorType.Unknown
 
     @property
@@ -30,6 +32,18 @@ class AnalogSensor(ModelObject):
     @name.setter
     def name(self, value):
         self._name = str(value) if value is not None else None
+
+    @property
+    def state(self) -> TemperatureError:
+        """State of this sensor"""
+        return self._state
+
+    @state.setter
+    def state(self, value):
+        if isinstance(value, TemperatureError):
+            self._state = value
+        else:
+            self._state = TemperatureError(value)
         
     @property
     def type(self) -> AnalogSensorType:

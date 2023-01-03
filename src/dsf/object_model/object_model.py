@@ -15,7 +15,6 @@ from .messages import Message
 from .move import Move
 from .network import Network
 from .plugins import Plugin
-from .scanner import Scanner
 from .sensors import Sensors
 from .spindles import Spindle
 from .state import State
@@ -41,7 +40,6 @@ class ObjectModel(ModelObject):
         self._move = Move()
         self._network = Network()
         self._plugins = ModelDictionary(True, Plugin)
-        self._scanner = Scanner()
         self._sensors = Sensors()
         self._spindles = ModelCollection(Spindle)
         self._state = State()
@@ -122,11 +120,6 @@ class ObjectModel(ModelObject):
         Values in this dictionary cannot become null. If a change to null is reported, the corresponding key is deleted.
         Do not rely on the setter of this property; it will be removed from a future version."""
         return self._plugins
-
-    @property
-    def scanner(self) -> Scanner:
-        """Information about the 3D scanner subsystem"""
-        return self._scanner
 
     @property
     def sensors(self):

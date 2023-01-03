@@ -24,8 +24,12 @@ class InputChannel(ModelObject):
         self._in_macro = False
         # Indicates if the current macro file can be restarted after a pause
         self._macro_restartable = False
+        # Active motion system index
+        self._motion_system = 0
         # Name of this channel
         self._name = CodeChannel.Unknown
+        # Index of the selected plane
+        self._selected_plane = 0
         # Depth of the stack
         self._stack_depth = 0
         # State of this input channel
@@ -88,7 +92,7 @@ class InputChannel(ModelObject):
 
     @feed_rate.setter
     def feed_rate(self, value):
-        self._feed_rate = float(value) if value is not None else 50.0
+        self._feed_rate = float(value)
 
     @property
     def in_macro(self) -> bool:
@@ -106,7 +110,7 @@ class InputChannel(ModelObject):
 
     @line_number.setter
     def line_number(self, value):
-        self._line_number = int(value) if value is not None else 0
+        self._line_number = int(value)
 
     @property
     def macro_restartable(self) -> bool:
@@ -116,6 +120,15 @@ class InputChannel(ModelObject):
     @macro_restartable.setter
     def macro_restartable(self, value):
         self._macro_restartable = bool(value)
+
+    @property
+    def motion_system(self) -> int:
+        """Active motion system index"""
+        return self._motion_system
+
+    @motion_system.setter
+    def motion_system(self, value):
+        self._motion_system = int(value)
 
     @property
     def name(self) -> CodeChannel:
@@ -132,13 +145,22 @@ class InputChannel(ModelObject):
             raise TypeError(f"{__name__}.name must be of type CodeChannel. Got {type(value)}: {value}")
 
     @property
+    def selected_plane(self) -> int:
+        """Index of the selected plane"""
+        return self._selected_plane
+
+    @selected_plane.setter
+    def selected_plane(self, value):
+        self._selected_plane = int(value)
+
+    @property
     def stack_depth(self) -> int:
         """Depth of the stack"""
         return self._stack_depth
 
     @stack_depth.setter
     def stack_depth(self, value):
-        self._stack_depth = int(value) if value is not None else 0
+        self._stack_depth = int(value)
 
     @property
     def state(self) -> InputChannelState:

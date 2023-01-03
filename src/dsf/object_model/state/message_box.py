@@ -1,4 +1,5 @@
 from enum import IntEnum
+from typing import List, Union
 from ..model_object import ModelObject
 
 
@@ -17,15 +18,37 @@ class MessageBoxMode(IntEnum):
     # Display a message box with an Ok button that sends M292 P0 or a cancel button that sends M292 P1 when clicked
     OkCancel = 3
 
+    # Multiple choices, blocking
+    MultipleChoice = 4
+
+    # Integer value required, blocking
+    IntInput = 5
+
+    # Floating-point value required, blocking
+    FloatInput = 6
+
+    # String value required, blocking
+    StringInput = 7
+
 
 class MessageBox(ModelObject):
     """Information about the message box to show"""
     def __init__(self):
         super(MessageBox, self).__init__()
         # Bitmap of the axis movement controls to show (indices)
-        self._axis_controls = 0
+        self._axis_controls = None
+        # Indicates if a cancel button is supposed to be shown
+        self._cancel_button = False
+        # List of possible choices (only for mode 4)
+        self._choices = []
+        # Default value (only for modes >= 4)
+        self._default = None
+        # Maximum input value (only for modes >= 5)
+        self._max = None
         # Content of the message box
         self._message = ""
+        # Minimum input value (only for modes >= 5)
+        self._min = None
         # Mode of the message box to display
         self._mode = MessageBoxMode.OkOnly
         # Sequence number of the message box
@@ -34,15 +57,51 @@ class MessageBox(ModelObject):
         self._timeout = 0
         # Title of the message box
         self._title = ""
-        
+
     @property
     def axis_controls(self) -> int:
         """Bitmap of the axis movement controls to show (indices)"""
         return self._axis_controls
-    
+
     @axis_controls.setter
     def axis_controls(self, value):
-        self._axis_controls = int(value) if value is not None else 0
+        self._axis_controls = int(value) if value is not None else None
+
+    @property
+    def cancel_button(self) -> int:
+        """Indicates if a cancel button is supposed to be shown"""
+        return self._cancel_button
+
+    @cancel_button.setter
+    def cancel_button(self, value):
+        self._cancel_button = bool(value)
+
+    @property
+    def choices(self) -> Union[List[str], None]:
+        """List of possible choices (only for mode 4)"""
+        return self._choices
+
+    @choices.setter
+    def choices(self, value):
+        self._choices = [str(v) for v in value] if value is not None else None
+
+    @property
+    def default(self):
+        """Default value (only for modes >= 4)"""
+        return self._default
+
+    @default.setter
+    def default(self, value):
+        self._default = value
+
+    @property
+    def max(self) -> float:
+        """Maximum input value (only for modes >= 5)"""
+        return self._max
+
+    @max.setter
+    def max(self, value):
+        self._max = float(value) if value is not None else None
         
     @property
     def message(self) -> str:
@@ -52,6 +111,15 @@ class MessageBox(ModelObject):
     @message.setter
     def message(self, value):
         self._message = str(value)
+
+    @property
+    def min(self) -> float:
+        """Minimum input value (only for modes >= 5)"""
+        return self._min
+
+    @min.setter
+    def min(self, value):
+        self._min = float(value) if value is not None else None
         
     @property
     def mode(self) -> MessageBoxMode:

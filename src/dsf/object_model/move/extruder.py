@@ -21,10 +21,12 @@ class Extruder(ModelObject):
         self._current = 0
         # Assigned driver
         self._driver = None
-        # Name of the currently loaded filament
-        self._filament = ""
         # Extrusion factor to use (0..1 or greater)
         self._factor = 1
+        # Name of the currently loaded filament
+        self._filament = ""
+        # Diameter of the corresponding filament (in mm)
+        self._filament_diameter = 1.75
         # Motor jerk (in mm/s)
         self._jerk = 15
         # Microstepping configuration
@@ -65,6 +67,15 @@ class Extruder(ModelObject):
         self._current = int(value) if value is not None else 0
 
     @property
+    def factor(self) -> float:
+        """Extrusion factor to use (0..1 or greater)"""
+        return self._factor
+
+    @factor.setter
+    def factor(self, value):
+        self._factor = float(value) if value is not None else 1
+
+    @property
     def filament(self) -> str:
         """Name of the currently loaded filament"""
         return self._filament
@@ -74,13 +85,13 @@ class Extruder(ModelObject):
         self._filament = str(value)
 
     @property
-    def factor(self) -> float:
-        """Extrusion factor to use (0..1 or greater)"""
-        return self._factor
+    def filament_diameter(self) -> float:
+        """Diameter of the corresponding filament (in mm)"""
+        return self._filament_diameter
 
-    @factor.setter
-    def factor(self, value):
-        self._factor = float(value) if value is not None else 1
+    @filament_diameter.setter
+    def filament_diameter(self, value):
+        self._filament_diameter = float(value)
 
     @property
     def jerk(self) -> float:

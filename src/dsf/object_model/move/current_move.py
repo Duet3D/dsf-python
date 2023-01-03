@@ -11,6 +11,8 @@ class CurrentMove(ModelObject):
         self._acceleration = 0
         # Deceleration of the current move (in mm/s^2)
         self._deceleration = 0
+        # Current extrusion rate (in mm/s)
+        self._extrusion_rate = 0
         # Laser PWM of the current move (0..1) or null if not applicable
         self._laser_pwm = None
         # Requested speed of the current move (in mm/s)
@@ -25,7 +27,7 @@ class CurrentMove(ModelObject):
 
     @acceleration.setter
     def acceleration(self, value):
-        self._acceleration = float(value) if value is not None else 0
+        self._acceleration = float(value)
 
     @property
     def deceleration(self) -> float:
@@ -35,6 +37,15 @@ class CurrentMove(ModelObject):
     @deceleration.setter
     def deceleration(self, value):
         self._deceleration = float(value)
+
+    @property
+    def extrusion_rate(self) -> float:
+        """Current extrusion rate (in mm/s)"""
+        return self._extrusion_rate
+
+    @extrusion_rate.setter
+    def extrusion_rate(self, value):
+        self._extrusion_rate = float(value)
 
     @property
     def laser_pwm(self) -> Union[float, None]:
