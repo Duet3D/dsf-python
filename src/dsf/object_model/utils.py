@@ -1,5 +1,5 @@
 
-def is_model_object(o):
+def is_model_object(o) -> bool:
     from .model_object import ModelObject
     from .model_collection import ModelCollection
     from .model_dictionary import ModelDictionary
@@ -7,7 +7,7 @@ def is_model_object(o):
     return isinstance(o, ModelObject) or isinstance(o, ModelCollection) or isinstance(o, ModelDictionary)
 
 
-def wrap_model_property(name, model_type):
+def wrap_model_property(name: str, model_type):
     """
     Wrap a nullable model object property so that type checks can be performed during update
     :param name: Property of the derived class

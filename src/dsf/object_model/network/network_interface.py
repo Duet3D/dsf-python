@@ -1,4 +1,4 @@
-from typing import List, Union
+from __future__ import annotations
 
 from .network_interface_type import NetworkInterfaceType
 from .network_protocol import NetworkProtocol
@@ -19,17 +19,17 @@ class NetworkInterface(ModelObject):
         self._configured_IP = ""
         # Configured IPv4 DNS server fo the network adapter
         self._dns_server = ""
-        # Version of the network interface or null if unknown.
+        # Version of the network interface or None if unknown.
         self._firmware_version = ""
         # IPv4 gateway of the network adapter
         self._gateway = ""
         # Physical address of the network adapter
         self._mac = ""
-        # Number of reconnect attempts or null if unknown
+        # Number of reconnect attempts or None if unknown
         self._num_reconnects = None
-        # Signal of the Wi-Fi adapter (only Wi-Fi, in dBm, or null if unknown)
+        # Signal of the Wi-Fi adapter (only Wi-Fi, in dBm, or None if unknown)
         self._signal = None
-        # Speed of the network interface (in MBit, null if unknown, 0 if not connected)
+        # Speed of the network interface (in MBit, None if unknown, 0 if not connected)
         self._speed = None
         # Network state
         self._state = None
@@ -39,113 +39,113 @@ class NetworkInterface(ModelObject):
         self._type = NetworkInterfaceType.wifi
 
     @property
-    def active_protocols(self) -> List[NetworkProtocol]:
+    def active_protocols(self) -> list[NetworkProtocol]:
         """List of active protocols"""
         return self._active_protocols
 
     @property
-    def actual_IP(self) -> Union[str, None]:
+    def actual_IP(self) -> str | None:
         """Actual IPv4 address of the network adapter"""
         return self._actual_IP
     
     @actual_IP.setter
-    def actual_IP(self, value):
+    def actual_IP(self, value: str | None = None):
         self._actual_IP = str(value) if value is not None else None
         
     @property
-    def configured_IP(self) -> Union[str, None]:
+    def configured_IP(self) -> str | None:
         """Configured IPv4 address of the network adapter"""
         return self._configured_IP
     
     @configured_IP.setter
-    def configured_IP(self, value):
+    def configured_IP(self, value: str | None = None):
         self._configured_IP = str(value) if value is not None else None
         
     @property
-    def dns_server(self) -> Union[str, None]:
+    def dns_server(self) -> str | None:
         """Configured IPv4 DNS server fo the network adapter"""
         return self._dns_server
     
     @dns_server.setter
-    def dns_server(self, value):
+    def dns_server(self, value: str | None = None):
         self._dns_server = str(value) if value is not None else None
         
     @property
-    def firmware_version(self) -> Union[str, None]:
-        """Version of the network interface or null if unknown.
-        This is primarily intended for the ESP8266-based network interfaces as used on the Duet WiFi"""
+    def firmware_version(self) -> str | None:
+        """Version of the network interface or None if unknown."""
         return self._firmware_version
     
     @firmware_version.setter
-    def firmware_version(self, value):
+    def firmware_version(self, value: str | None = None):
         self._firmware_version = str(value) if value is not None else None
         
     @property
-    def gateway(self) -> Union[str, None]:
+    def gateway(self) -> str | None:
         """IPv4 gateway of the network adapter"""
         return self._gateway
     
     @gateway.setter
-    def gateway(self, value):
+    def gateway(self, value: str | None = None):
         self._gateway = str(value) if value is not None else None
     
     @property
-    def mac(self) -> Union[str, None]:
+    def mac(self) -> str | None:
         """Physical address of the network adapter"""
         return self._mac
     
     @mac.setter
-    def mac(self, value):
+    def mac(self, value: str | None = None):
         self._mac = str(value) if value is not None else None
         
     @property
-    def num_reconnects(self) -> Union[int, None]:
-        """Number of reconnect attempts or null if unknown"""
+    def num_reconnects(self) -> int | None:
+        """Number of reconnect attempts or None if unknown"""
         return self._num_reconnects
     
     @num_reconnects.setter
-    def num_reconnects(self, value):
+    def num_reconnects(self, value: int | None = None):
         self._num_reconnects = int(value) if value is not None else None
         
     @property
-    def signal(self) -> Union[int, None]:
-        """Signal of the Wi-Fi adapter (only Wi-Fi, in dBm, or null if unknown)"""
+    def signal(self) -> int | None:
+        """Signal of the Wi-Fi adapter (only Wi-Fi, in dBm, or None if unknown)"""
         return self._signal
     
     @signal.setter
-    def signal(self, value):
+    def signal(self, value: int | None = None):
         self._signal = int(value) if value is not None else None
         
     @property
-    def speed(self) -> Union[int, None]:
-        """Speed of the network interface (in MBit, null if unknown, 0 if not connected)"""
+    def speed(self) -> int | None:
+        """Speed of the network interface (in MBit, None if unknown, 0 if not connected)"""
         return self._speed
     
     @speed.setter
-    def speed(self, value):
+    def speed(self, value: int | None = None):
         self._speed = int(value) if value is not None else None
     
     @property
-    def state(self) -> Union[NetworkState, None]:
+    def state(self) -> NetworkState | None:
         """Network state"""
         return self._state
     
     @state.setter
-    def state(self, value):
+    def state(self, value: NetworkState | None = None):
         if value is None or isinstance(value, NetworkState):
             self._state = value
         elif isinstance(value, str):
             self._state = NetworkState(value)
         else:
-            raise TypeError(f"{__name__}.state must be of type NetworkState. Got {type(value)}: {value}")
+            raise TypeError(f"{__name__}.state must be of type NetworkState or None."
+                            f" Got {type(value)}: {value}")
         
     @property
-    def subnet(self) -> Union[str, None]:
+    def subnet(self) -> str | None:
         """Subnet of the network adapter"""
         return self._subnet
     
     @subnet.setter
-    def subnet(self, value):
+    def subnet(self, value: str | None = None):
         self._subnet = str(value) if value is not None else None
         
     @property
@@ -154,12 +154,11 @@ class NetworkInterface(ModelObject):
         return self._type
     
     @type.setter
-    def type(self, value):
-        if value is None or value == "":
-            self._type = NetworkInterfaceType.wifi
-        elif isinstance(value, NetworkInterfaceType):
+    def type(self, value: NetworkInterfaceType = NetworkInterfaceType.wifi):
+        if isinstance(value, NetworkInterfaceType):
             self._type = value
         elif isinstance(value, str):
             self._type = NetworkInterfaceType(value)
         else:
-            raise TypeError(f"{__name__}.type must be of type NetworkInterfaceType. Got {type(value)}: {value}")
+            raise TypeError(f"{__name__}.type must be of type NetworkInterfaceType."
+                            f" Got {type(value)}: {value}")

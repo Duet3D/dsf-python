@@ -1,4 +1,4 @@
-from typing import List
+from __future__ import annotations
 
 from .kinematics import Kinematics
 from .kinematics_name import KinematicsName
@@ -19,7 +19,7 @@ class HangprinterKinematics(Kinematics):
         self._print_radius = 1500
 
     @property
-    def anchors(self) -> List[List[float]]:
+    def anchors(self) -> list[list[float]]:
         """Anchor configurations for A, B, C, Dz"""
         return self._anchors
     
@@ -29,5 +29,5 @@ class HangprinterKinematics(Kinematics):
         return self._print_radius
     
     @print_radius.setter
-    def print_radius(self, value):
+    def print_radius(self, value: float):
         self._print_radius = float(value)

@@ -1,5 +1,5 @@
+from __future__ import annotations
 from enum import Enum
-from typing import List, Union
 
 from .driver_id import DriverId
 from .microstepping import MicroStepping
@@ -87,7 +87,7 @@ class Axis(ModelObject):
         return self._acceleration
 
     @acceleration.setter
-    def acceleration(self, value):
+    def acceleration(self, value: float):
         self._acceleration = float(value)
 
     @property
@@ -96,7 +96,7 @@ class Axis(ModelObject):
         return self._babystep
 
     @babystep.setter
-    def babystep(self, value):
+    def babystep(self, value: float):
         self._babystep = float(value)
 
     @property
@@ -105,11 +105,11 @@ class Axis(ModelObject):
         return self._current
 
     @current.setter
-    def current(self, value):
+    def current(self, value: int):
         self._current = int(value)
 
     @property
-    def drivers(self) -> List[DriverId]:
+    def drivers(self) -> list[DriverId]:
         """List of the assigned drivers"""
         return self._drivers
 
@@ -119,7 +119,7 @@ class Axis(ModelObject):
         return self._homed
 
     @homed.setter
-    def homed(self, value):
+    def homed(self, value: bool):
         self._homed = bool(value)
 
     @property
@@ -128,7 +128,7 @@ class Axis(ModelObject):
         return self._jerk
 
     @jerk.setter
-    def jerk(self, value):
+    def jerk(self, value: float):
         self._jerk = float(value)
 
     @property
@@ -137,23 +137,24 @@ class Axis(ModelObject):
         return self._letter
 
     @letter.setter
-    def letter(self, value):
+    def letter(self, value: AxisLetter):
         if isinstance(value, AxisLetter):
             self._letter = value
         elif isinstance(value, str):
             self._letter = AxisLetter(value)
         else:
-            raise TypeError(f"{__name__}.letter must be of type AxisLetter. Got {type(value)}: {value}")
+            raise TypeError(f"{__name__}.letter must be of type AxisLetter."
+                            f" Got {type(value)}: {value}")
 
     @property
-    def machine_position(self) -> Union[float, None]:
+    def machine_position(self) -> float | None:
         """Current machine position (in mm) or None if unknown/unset
         This value reflects the machine position of the move being performed
         or of the last one if the machine is not moving"""
         return self._machine_position
 
     @machine_position.setter
-    def machine_position(self, value):
+    def machine_position(self, value: float | None = None):
         self._machine_position = float(value) if value is not None else None
 
     @property
@@ -162,7 +163,7 @@ class Axis(ModelObject):
         return self._max
 
     @max.setter
-    def max(self, value):
+    def max(self, value: float):
         self._max = float(value)
 
     @property
@@ -171,7 +172,7 @@ class Axis(ModelObject):
         return self._max_probed
 
     @max_probed.setter
-    def max_probed(self, value):
+    def max_probed(self, value: bool):
         self._max_probed = bool(value)
 
     @property
@@ -185,7 +186,7 @@ class Axis(ModelObject):
         return self._min
 
     @min.setter
-    def min(self, value):
+    def min(self, value: float):
         self._min = float(value)
 
     @property
@@ -194,7 +195,7 @@ class Axis(ModelObject):
         return self._min_probed
 
     @min_probed.setter
-    def min_probed(self, value):
+    def min_probed(self, value: bool):
         self._min_probed = bool(value)
 
     @property
@@ -203,16 +204,16 @@ class Axis(ModelObject):
         return self._percent_current
 
     @percent_current.setter
-    def percent_current(self, value):
+    def percent_current(self, value: int):
         self._percent_current = int(value)
 
     @property
-    def percent_stst_current(self) -> Union[int, None]:
+    def percent_stst_current(self) -> int | None:
         """Percentage applied to the motor current during standstill (0..100 or None if not supported)"""
         return self._percent_stst_current
 
     @percent_stst_current.setter
-    def percent_stst_current(self, value):
+    def percent_stst_current(self, value: int | None = None):
         self._percent_stst_current = int(value) if value is not None else None
 
     @property
@@ -221,7 +222,7 @@ class Axis(ModelObject):
         return self._speed
 
     @speed.setter
-    def speed(self, value):
+    def speed(self, value: float):
         self._speed = float(value)
 
     @property
@@ -230,17 +231,17 @@ class Axis(ModelObject):
         return self._steps_per_mm
 
     @steps_per_mm.setter
-    def steps_per_mm(self, value):
+    def steps_per_mm(self, value: float):
         self._steps_per_mm = float(value)
 
     @property
-    def user_position(self) -> Union[float, None]:
+    def user_position(self) -> float | None:
         """Current user position (in mm) or None if unknown
         This value reflects the target position of the last move fed into the look-ahead buffer"""
         return self._user_position
 
     @user_position.setter
-    def user_position(self, value):
+    def user_position(self, value: float | None = None):
         self._user_position = float(value) if value is not None else None
 
     @property
@@ -249,10 +250,10 @@ class Axis(ModelObject):
         return self._visible
 
     @visible.setter
-    def visible(self, value):
+    def visible(self, value: bool):
         self._visible = bool(value)
 
     @property
-    def workplace_offsets(self) -> List[float]:
+    def workplace_offsets(self) -> list[float]:
         """Offsets of this axis for each workplace (in mm)"""
         return self._workplace_offsets

@@ -1,3 +1,5 @@
+from __future__ import annotations
+
 from .utils import is_model_object
 
 
@@ -7,7 +9,7 @@ class ModelDictionary(dict):
     Useful for updating model object items from JSON data (patches)
     """
 
-    def __init__(self, null_deletes_keys, item_constructor=None, value=None):
+    def __init__(self, null_deletes_keys: bool, item_constructor=None, value=None):
         """
         :param null_deletes_keys: Whether setting null to items effectively deletes them
         :param item_constructor: Item constructor type to use for type-checking
@@ -46,7 +48,7 @@ class ModelDictionary(dict):
 
         return super().__setitem__(key, value)
 
-    def update_from_json(self, json_element):
+    def update_from_json(self, json_element: dict[any]):
         if json_element is None:
             super().clear()
         else:

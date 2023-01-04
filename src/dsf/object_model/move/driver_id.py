@@ -1,10 +1,11 @@
+from __future__ import annotations
 import re
 
 from ..model_object import ModelObject
 from ...exceptions import CodeParserException
 
 
-def is_driverId(value):
+def is_driverId(value: any):
     return isinstance(value, DriverId)
 
 
@@ -58,7 +59,7 @@ class DriverId(ModelObject):
     def __ne__(self, o):
         return not self == o
 
-    def update_from_json(self, data):
+    def update_from_json(self, data: dict[any]) -> DriverId | None:
         if isinstance(data, str):
             matches = re.search(r'(\d+)\.(\d+)', data)
             if matches:

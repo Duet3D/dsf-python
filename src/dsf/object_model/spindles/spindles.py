@@ -28,7 +28,7 @@ class Spindle(ModelObject):
         return self._active
     
     @active.setter
-    def active(self, value):
+    def active(self, value: int):
         self._active = int(value)
         
     @property
@@ -37,7 +37,7 @@ class Spindle(ModelObject):
         return self._can_reverse
     
     @can_reverse.setter
-    def can_reverse(self, value):
+    def can_reverse(self, value: bool):
         self._can_reverse = bool(value)
         
     @property
@@ -46,7 +46,7 @@ class Spindle(ModelObject):
         return self._current
     
     @current.setter
-    def current(self, value):
+    def current(self, value: int):
         self._current = int(value)
         
     @property
@@ -55,7 +55,7 @@ class Spindle(ModelObject):
         return self._frequency
     
     @frequency.setter
-    def frequency(self, value):
+    def frequency(self, value: int):
         self._frequency = int(value)
         
     @property
@@ -64,7 +64,7 @@ class Spindle(ModelObject):
         return self._max
     
     @max.setter
-    def max(self, value):
+    def max(self, value: int):
         self._max = int(value)
         
     @property
@@ -73,7 +73,7 @@ class Spindle(ModelObject):
         return self._min
     
     @min.setter
-    def min(self, value):
+    def min(self, value: int):
         self._min = int(value)
         
     @property
@@ -82,12 +82,11 @@ class Spindle(ModelObject):
         return self._state
     
     @state.setter
-    def state(self, value):
-        if value is None or value == "":
-            self._state = SpindleState.unconfigured
+    def state(self, value: SpindleState = SpindleState.unconfigured):
+        if isinstance(value, SpindleState):
+            self._state = value
         elif isinstance(value, str):
             self._state = SpindleState(value)
-        elif isinstance(value, SpindleState):
-            self._state = value
         else:
-            raise TypeError(f"{__name__}.state must be of type SpindleState. Got {type(value)}: {value}")
+            raise TypeError(f"{__name__}.state must be of type SpindleState."
+                            f" Got {type(value)}: {value}")

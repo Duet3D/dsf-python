@@ -17,7 +17,7 @@ result contains classes relevant to result messages from the server
     You should have received a copy of the GNU Lesser General Public License
     along with this program.  If not, see <https://www.gnu.org/licenses/>.
 """
-from typing import List
+from __future__ import annotations
 
 from ..object_model.messages import Message
 
@@ -36,5 +36,5 @@ class CodeResult:
             return cls([])
         return cls(list(map(Message.from_json, data)))
 
-    def __init__(self, messages: List[Message]):
+    def __init__(self, messages: list[Message]):
         self.messages = messages

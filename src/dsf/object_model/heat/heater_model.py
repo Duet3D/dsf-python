@@ -1,3 +1,5 @@
+from __future__ import annotations
+
 from ..model_object import ModelObject
 from .heater_model_pid import HeaterModelPID
 
@@ -106,7 +108,7 @@ class HeaterModel(ModelObject):
         return self._pid
 
     @property
-    def standard_voltage(self) -> float:
+    def standard_voltage(self) -> float | None:
         """Standard voltage or null if unknown"""
         return self._standard_voltage
 

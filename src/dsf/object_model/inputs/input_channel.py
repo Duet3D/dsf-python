@@ -41,7 +41,7 @@ class InputChannel(ModelObject):
         return self._axes_relative
 
     @axes_relative.setter
-    def axes_relative(self, value):
+    def axes_relative(self, value: bool):
         self._axes_relative = bool(value)
 
     @property
@@ -50,13 +50,14 @@ class InputChannel(ModelObject):
         return self._compatibility
 
     @compatibility.setter
-    def compatibility(self, value):
+    def compatibility(self, value: Compatibility):
         if isinstance(value, Compatibility):
             self._compatibility = value
         elif isinstance(value, str):
             self._compatibility = Compatibility(value)
         else:
-            raise TypeError(f"{__name__}.compatibility must be of type Compatibility. Got {type(value)}: {value}")
+            raise TypeError(f"{__name__}.compatibility must be of type Compatibility."
+                            f" Got {type(value)}: {value}")
 
     @property
     def distance_unit(self) -> DistanceUnit:
@@ -64,13 +65,14 @@ class InputChannel(ModelObject):
         return self._distance_unit
 
     @distance_unit.setter
-    def distance_unit(self, value):
+    def distance_unit(self, value: DistanceUnit):
         if isinstance(value, DistanceUnit):
             self._distance_unit = value
         elif isinstance(value, str):
             self._distance_unit = DistanceUnit(value)
         else:
-            raise TypeError(f"{__name__}.distance_unit must be of type DistanceUnit. Got {type(value)}: {value}")
+            raise TypeError(f"{__name__}.distance_unit must be of type DistanceUnit."
+                            f" Got {type(value)}: {value}")
 
     @property
     def drives_relative(self) -> bool:
@@ -78,7 +80,7 @@ class InputChannel(ModelObject):
         return self._drives_relative
 
     @drives_relative.setter
-    def drives_relative(self, value):
+    def drives_relative(self, value: bool):
         self._drives_relative = bool(value)
 
     @property
@@ -87,7 +89,7 @@ class InputChannel(ModelObject):
         return self._feed_rate
 
     @feed_rate.setter
-    def feed_rate(self, value):
+    def feed_rate(self, value: float):
         self._feed_rate = float(value)
 
     @property
@@ -96,7 +98,7 @@ class InputChannel(ModelObject):
         return self._in_macro
 
     @in_macro.setter
-    def in_macro(self, value):
+    def in_macro(self, value: bool):
         self._in_macro = bool(value)
 
     @property
@@ -105,7 +107,7 @@ class InputChannel(ModelObject):
         return self._line_number
 
     @line_number.setter
-    def line_number(self, value):
+    def line_number(self, value: int):
         self._line_number = int(value)
 
     @property
@@ -114,7 +116,7 @@ class InputChannel(ModelObject):
         return self._macro_restartable
 
     @macro_restartable.setter
-    def macro_restartable(self, value):
+    def macro_restartable(self, value: bool):
         self._macro_restartable = bool(value)
 
     @property
@@ -123,13 +125,14 @@ class InputChannel(ModelObject):
         return self._name
 
     @name.setter
-    def name(self, value):
+    def name(self, value: CodeChannel):
         if isinstance(value, CodeChannel):
             self._name = value
         elif isinstance(value, str):
             self._name = CodeChannel(value)
         else:
-            raise TypeError(f"{__name__}.name must be of type CodeChannel. Got {type(value)}: {value}")
+            raise TypeError(f"{__name__}.name must be of type CodeChannel. "
+                            f"Got {type(value)}: {value}")
 
     @property
     def stack_depth(self) -> int:
@@ -137,7 +140,7 @@ class InputChannel(ModelObject):
         return self._stack_depth
 
     @stack_depth.setter
-    def stack_depth(self, value):
+    def stack_depth(self, value: int):
         self._stack_depth = int(value)
 
     @property
@@ -146,13 +149,14 @@ class InputChannel(ModelObject):
         return self._state
 
     @state.setter
-    def state(self, value):
+    def state(self, value: InputChannelState):
         if isinstance(value, InputChannelState):
             self._state = value
         elif isinstance(value, str):
             self._state = InputChannelState(value)
         else:
-            raise TypeError(f"{__name__}.state must be of type InputChannelState. Got {type(value)}: {value}")
+            raise TypeError(f"{__name__}.state must be of type InputChannelState. "
+                            f"Got {type(value)}: {value}")
 
     @property
     def volumetric(self) -> bool:
@@ -160,5 +164,5 @@ class InputChannel(ModelObject):
         return self._volumetric
 
     @volumetric.setter
-    def volumetric(self, value):
+    def volumetric(self, value: bool):
         self._volumetric = bool(value)

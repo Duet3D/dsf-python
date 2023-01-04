@@ -1,5 +1,5 @@
+from __future__ import annotations
 from enum import Enum
-from typing import List
 
 from .heater_model import HeaterModel
 from .heater_monitor import HeaterMonitor
@@ -109,7 +109,7 @@ class Heater(ModelObject):
         return self._model
 
     @property
-    def monitors(self) -> List[HeaterMonitor]:
+    def monitors(self) -> list[HeaterMonitor]:
         """Monitors of this heater"""
         return self._monitors
 

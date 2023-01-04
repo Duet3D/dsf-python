@@ -1,5 +1,5 @@
+from __future__ import annotations
 from enum import Enum
-from typing import List
 
 from ..model_object import ModelObject
 
@@ -50,7 +50,7 @@ class InputShaping(ModelObject):
         self._type = InputShapingType.none
 
     @property
-    def amplitudes(self) -> List[float]:
+    def amplitudes(self) -> list[float]:
         """Amplitudes of the input shaper"""
         return self._amplitudes
 
@@ -60,11 +60,11 @@ class InputShaping(ModelObject):
         return self._damping
 
     @damping.setter
-    def damping(self, value):
+    def damping(self, value: float):
         self._damping = float(value)
 
     @property
-    def durations(self) -> List[float]:
+    def durations(self) -> list[float]:
         """Input shaper durations (in s)"""
         return self._durations
 
@@ -74,7 +74,7 @@ class InputShaping(ModelObject):
         return self._frequency
 
     @frequency.setter
-    def frequency(self, value):
+    def frequency(self, value: float):
         self._frequency = float(value)
 
     @property
@@ -83,7 +83,7 @@ class InputShaping(ModelObject):
         return self._min_acceleration
 
     @min_acceleration.setter
-    def min_acceleration(self, value):
+    def min_acceleration(self, value: float):
         self._min_acceleration = float(value)
 
     @property
@@ -92,10 +92,11 @@ class InputShaping(ModelObject):
         return self._type
 
     @type.setter
-    def type(self, value):
+    def type(self, value: InputShapingType):
         if isinstance(value, InputShapingType):
             self._type = value
         elif isinstance(value, str):
             self._type = InputShapingType(value)
         else:
-            raise TypeError(f"{__name__}.type must be of type InputShapingType. Got {type(value)}: {value}")
+            raise TypeError(f"{__name__}.type must be of type InputShapingType."
+                            f" Got {type(value)}: {value}")

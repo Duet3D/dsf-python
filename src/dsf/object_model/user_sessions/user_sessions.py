@@ -1,4 +1,4 @@
-from typing import Union
+from __future__ import annotations
 
 from .access_level import AccessLevel
 from .session_type import SessionType
@@ -26,8 +26,14 @@ class UserSession(ModelObject):
         return self._access_level
     
     @access_level.setter
-    def access_level(self, value):
-        self._access_level = value
+    def access_level(self, value: AccessLevel):
+        if isinstance(value, AccessLevel):
+            self._access_level = value
+        elif isinstance(value, str):
+            self._access_level = AccessLevel(value)
+        else:
+            raise TypeError(f"{__name__}.access_level must be of type AccessLevel."
+                            f" Got {type(value)}: {value}")
         
     @property
     def id(self) -> int:
@@ -35,16 +41,16 @@ class UserSession(ModelObject):
         return self._id
     
     @id.setter
-    def id(self, value):
+    def id(self, value: int):
         self._id = int(value)
         
     @property
-    def origin(self) -> Union[str, None]:
+    def origin(self) -> str | None:
         """Origin of this session. For remote sessions, this equals the remote IP address"""
         return self._origin
     
     @origin.setter
-    def origin(self, value):
+    def origin(self, value: str | None = None):
         self._origin = str(value) if value is not None else None
         
     @property
@@ -54,7 +60,7 @@ class UserSession(ModelObject):
         return self._origin_id
     
     @origin_id.setter
-    def origin_id(self, value):
+    def origin_id(self, value: int):
         self._origin_id = int(value)
         
     @property
@@ -63,12 +69,11 @@ class UserSession(ModelObject):
         return self._session_type
     
     @session_type.setter
-    def session_type(self, value):
-        if value is None or value == "":
-            self._session_type = SessionType.local
-        elif isinstance(value, SessionType):
+    def session_type(self, value: SessionType):
+        if isinstance(value, SessionType):
             self._session_type = value
         elif isinstance(value, str):
             self._session_type = SessionType(value)
         else:
-            raise TypeError(f"{__name__}.session_type must be of type SessionType. Got {type(value)}: {value}")
+            raise TypeError(f"{__name__}.session_type must be of type SessionType."
+                            f" Got {type(value)}: {value}")

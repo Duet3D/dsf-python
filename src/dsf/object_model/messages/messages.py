@@ -1,3 +1,4 @@
+from __future__ import annotations
 import dateutil.parser as dp
 from datetime import datetime
 from enum import IntEnum
@@ -27,7 +28,7 @@ class Message(ModelObject):
     """
 
     @classmethod
-    def from_json(cls, data):
+    def from_json(cls, data: dict[any]) -> 'Message':
         """Deserialize an instance of this class from JSON deserialized dictionary"""
         return cls(**data)
 
@@ -51,7 +52,7 @@ class Message(ModelObject):
         return self._content
 
     @content.setter
-    def content(self, value):
+    def content(self, value: str):
         self._content = str(value)
 
     @property
@@ -60,13 +61,14 @@ class Message(ModelObject):
         return self._time
 
     @time.setter
-    def time(self, value):
+    def time(self, value: datetime):
         if isinstance(value, datetime):
             self._time = value
         elif isinstance(value, str):  # Update from JSON
             self._time = dp.isoparse(value)
         else:
-            raise TypeError(f"{__name__}.time must be of type datetime. Got {type(value)}: {value}")
+            raise TypeError(f"{__name__}.time must be of type datetime."
+                            f" Got {type(value)}: {value}")
 
     @property
     def type(self) -> MessageType:
@@ -74,10 +76,11 @@ class Message(ModelObject):
         return self._type
 
     @type.setter
-    def type(self, value):
+    def type(self, value: MessageType):
         if isinstance(value, MessageType):
             self._type = value
         elif isinstance(value, int):
             self._type = MessageType(value)
         else:
-            raise TypeError(f"{__name__}.type must be of type MessageType. Got {type(value)}: {value}")
+            raise TypeError(f"{__name__}.type must be of type MessageType."
+                            f" Got {type(value)}: {value}")

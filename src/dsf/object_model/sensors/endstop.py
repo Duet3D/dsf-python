@@ -1,3 +1,5 @@
+from __future__ import annotations
+
 from .endstop_type import EndstopType
 from ..model_object import ModelObject
 
@@ -7,9 +9,9 @@ class Endstop(ModelObject):
 
     def __init__(self):
         super(Endstop, self).__init__()
-        self._high_end = None
-        self._triggered = None
-        self._type = None
+        self._high_end = False
+        self._triggered = False
+        self._type = EndstopType.Unknown
 
     @property
     def high_end(self) -> bool:
@@ -17,7 +19,7 @@ class Endstop(ModelObject):
         return self._high_end
 
     @high_end.setter
-    def high_end(self, value):
+    def high_end(self, value: bool):
         self._high_end = bool(value)
 
     @property
@@ -26,7 +28,7 @@ class Endstop(ModelObject):
         return self._triggered
 
     @triggered.setter
-    def triggered(self, value):
+    def triggered(self, value: bool):
         self._triggered = bool(value)
 
     @property
@@ -35,10 +37,11 @@ class Endstop(ModelObject):
         return self._type
 
     @type.setter
-    def type(self, value):
-        if value is None or isinstance(value, EndstopType):
+    def type(self, value: EndstopType):
+        if isinstance(value, EndstopType):
             self._type = value
         elif isinstance(value, str):
             self._type = EndstopType(value)
         else:
-            raise TypeError(f"{__name__}.type must be of type EndstopType or None. Got {type(value)}: {value}")
+            raise TypeError(f"{__name__}.type must be of type EndstopType."
+                            f" Got {type(value)}: {value}")

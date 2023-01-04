@@ -29,5 +29,5 @@ class MoveCalibration(ModelObject):
         return self._num_factors
 
     @num_factors.setter
-    def num_factors(self, value):
+    def num_factors(self, value: int):
         self._num_factors = int(value)

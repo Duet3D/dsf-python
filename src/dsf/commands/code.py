@@ -18,8 +18,8 @@ as well as sent back to the server.
     You should have received a copy of the GNU Lesser General Public License
     along with this program.  If not, see <https://www.gnu.org/licenses/>.
 """
+from __future__ import annotations
 from enum import Enum, IntEnum
-from typing import List
 
 from .base_command import BaseCommand
 from .code_channel import CodeChannel
@@ -90,8 +90,8 @@ class CodeFlags(IntEnum):
 class Code(BaseCommand):
     """A parsed representation of a generic G/M/T-code"""
 
-    parameters: List
-    result: List
+    parameters: list
+    result: list
 
     @classmethod
     def from_json(cls, data):

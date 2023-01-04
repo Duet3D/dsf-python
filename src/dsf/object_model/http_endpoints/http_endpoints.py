@@ -26,13 +26,14 @@ class HttpEndpoint(ModelObject):
         return self._endpoint_type
 
     @endpoint_type.setter
-    def endpoint_type(self, value):
+    def endpoint_type(self, value: HttpEndpointType):
         if isinstance(value, HttpEndpointType):
             self._endpoint_type = value
         elif isinstance(value, str):
             self._endpoint_type = HttpEndpointType(value)
         else:
-            raise TypeError(f"{__name__}.endpoint_type must be of type HttpEndpointType. Got {type(value)}: {value}")
+            raise TypeError(f"{__name__}.endpoint_type must be of type HttpEndpointType."
+                            f" Got {type(value)}: {value}")
 
     @property
     def is_upload_request(self) -> bool:
@@ -42,7 +43,7 @@ class HttpEndpoint(ModelObject):
         return self._is_upload_request
 
     @is_upload_request.setter
-    def is_upload_request(self, value):
+    def is_upload_request(self, value: bool):
         self._is_upload_request = bool(value)
 
     @property
@@ -51,7 +52,7 @@ class HttpEndpoint(ModelObject):
         return self._namespace
 
     @namespace.setter
-    def namespace(self, value):
+    def namespace(self, value: str):
         self._namespace = str(value)
 
     @property
@@ -60,7 +61,7 @@ class HttpEndpoint(ModelObject):
         return self._path
 
     @path.setter
-    def path(self, value):
+    def path(self, value: str):
         self._path = str(value)
 
     @property
@@ -69,5 +70,5 @@ class HttpEndpoint(ModelObject):
         return self._unix_socket
 
     @unix_socket.setter
-    def unix_socket(self, value):
+    def unix_socket(self, value: str):
         self._unix_socket = str(value)

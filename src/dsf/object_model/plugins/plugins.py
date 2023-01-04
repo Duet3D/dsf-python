@@ -1,4 +1,4 @@
-from typing import List
+from __future__ import annotations
 
 from .plugin_manifest import PluginManifest
 
@@ -14,17 +14,17 @@ class Plugin(PluginManifest):
         self._pid = -1
 
     @property
-    def dsf_files(self) -> List[str]:
+    def dsf_files(self) -> list[str]:
         """List of files for the DSF plugin"""
         return self._dsf_files
 
     @property
-    def dwc_files(self) -> List[str]:
+    def dwc_files(self) -> list[str]:
         """List of files for the DWC plugin"""
         return self._dwc_files
 
     @property
-    def sd_files(self) -> List[str]:
+    def sd_files(self) -> list[str]:
         """List of files to be installed to the (virtual) SD excluding web files"""
         return self._sd_files
 
@@ -34,5 +34,5 @@ class Plugin(PluginManifest):
         return self._pid
 
     @pid.setter
-    def pid(self, value):
+    def pid(self, value: int):
         self._pid = int(value)

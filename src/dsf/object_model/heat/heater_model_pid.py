@@ -23,7 +23,7 @@ class HeaterModelPID(ModelObject):
         return self._d
 
     @d.setter
-    def d(self, value):
+    def d(self, value: float):
         self._d = float(value)
 
     @property
@@ -32,7 +32,7 @@ class HeaterModelPID(ModelObject):
         return self._i
 
     @i.setter
-    def i(self, value):
+    def i(self, value: float):
         self._i = float(value)
 
     @property
@@ -41,7 +41,7 @@ class HeaterModelPID(ModelObject):
         return self._overridden
 
     @overridden.setter
-    def overridden(self, value):
+    def overridden(self, value: bool):
         self._overridden = bool(value)
 
     @property
@@ -50,7 +50,7 @@ class HeaterModelPID(ModelObject):
         return self._p
 
     @p.setter
-    def p(self, value):
+    def p(self, value: float):
         self._p = float(value)
 
     @property
@@ -59,5 +59,5 @@ class HeaterModelPID(ModelObject):
         return self._used
 
     @used.setter
-    def used(self, value):
+    def used(self, value: bool):
         self._used = bool(value)

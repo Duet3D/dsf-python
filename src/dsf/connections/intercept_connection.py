@@ -1,4 +1,4 @@
-from typing import Optional
+from __future__ import annotations
 
 from .base_command_connection import BaseCommandConnection
 from .init_messages import client_init_messages
@@ -43,7 +43,7 @@ class InterceptConnection(BaseCommandConnection):
         """Instruct the control server to ignore the last received code (in intercepting mode)"""
         self.send(commands.code_interception.ignore())
 
-    def resolve_code(self, rtype: MessageType = MessageType.Success, content: Optional[str] = None):
+    def resolve_code(self, rtype: MessageType = MessageType.Success, content: str | None = None):
         """
         Instruct the control server to resolve the last received code with the given
         message details (in intercepting mode)

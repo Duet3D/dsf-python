@@ -1,4 +1,4 @@
-from typing import List
+from __future__ import annotations
 
 from ...model_object import ModelObject
 
@@ -26,11 +26,11 @@ class TiltCorrection(ModelObject):
         return self._correction_factor
     
     @correction_factor.setter
-    def correction_factor(self, value):
+    def correction_factor(self, value: float):
         self._correction_factor = float(value)
         
     @property
-    def last_corrections(self) -> List[float]:
+    def last_corrections(self) -> list[float]:
         """Last corrections (in mm)"""
         return self._last_corrections
 
@@ -40,7 +40,7 @@ class TiltCorrection(ModelObject):
         return self._max_correction
 
     @max_correction.setter
-    def max_correction(self, value):
+    def max_correction(self, value: float):
         self._max_correction = float(value)
 
     @property
@@ -49,15 +49,15 @@ class TiltCorrection(ModelObject):
         return self._screw_pitch
 
     @screw_pitch.setter
-    def screw_pitch(self, value):
+    def screw_pitch(self, value: float):
         self._screw_pitch = float(value)
         
     @property
-    def screw_x(self) -> List[float]:
+    def screw_x(self) -> list[float]:
         """X positions of the leadscrews (in mm)"""
         return self._screw_x
     
     @property
-    def screw_y(self) -> List[float]:
+    def screw_y(self) -> list[float]:
         """Y positions of the leadscrews (in mm)"""
         return self._screw_y

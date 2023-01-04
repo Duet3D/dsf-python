@@ -1,6 +1,6 @@
+from __future__ import annotations
 import json
 from datetime import datetime
-from typing import Union
 
 
 from .utils import is_model_object
@@ -79,14 +79,14 @@ class ModelObject:
         return self
 
     @classmethod
-    def from_json(cls, data: Union[dict, str]) -> 'ModelObject':
+    def from_json(cls, data: dict[any] | str) -> 'ModelObject':
         """Deserialize a new instance of this class from JSON deserialized dictionary"""
         # Deserialize a string object into a JSON (dict) object
         if isinstance(data, str):
             data = json.loads(data)
         return cls()._update_from_json(**preserve_builtin(data))
 
-    def update_from_json(self, data: Union[dict, str]):
+    def update_from_json(self, data: dict[any] | str):
         """Update the current instance of this class from JSON deserialized dictionary"""
         if isinstance(data, str):
             data = json.loads(data)

@@ -1,4 +1,4 @@
-from typing import List
+from __future__ import annotations
 
 from ..model_object import ModelObject
 
@@ -19,17 +19,17 @@ class ProbeGrid(ModelObject):
         self._spacings = [0, 0]
 
     @property
-    def axes(self) -> List[str]:
+    def axes(self) -> list[str]:
         """Axis letters of this heightmap"""
         return self._axes
 
     @property
-    def maxs(self) -> List[float]:
+    def maxs(self) -> list[float]:
         """End coordinates of the heightmap"""
         return self._maxs
 
     @property
-    def mins(self) -> List[float]:
+    def mins(self) -> list[float]:
         """Start coordinates of the heightmap"""
         return self._mins
 
@@ -39,10 +39,10 @@ class ProbeGrid(ModelObject):
         return self._radius
 
     @radius.setter
-    def radius(self, value):
+    def radius(self, value: float):
         self._radius = float(value)
 
     @property
-    def spacings(self) -> List[float]:
+    def spacings(self) -> list[float]:
         """Spacings between the coordinates"""
         return self._spacings

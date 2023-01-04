@@ -1,4 +1,4 @@
-from typing import List
+from __future__ import annotations
 
 from .axis import Axis
 from .current_move import CurrentMove
@@ -54,7 +54,7 @@ class Move(ModelObject):
         self._workplace_number = 0
 
     @property
-    def axes(self) -> List[Axis]:
+    def axes(self) -> list[Axis]:
         """List of the configured axes
         See Axis()"""
         return self._axes
@@ -75,7 +75,7 @@ class Move(ModelObject):
         return self._current_move
 
     @property
-    def extruders(self) -> List[Extruder]:
+    def extruders(self) -> list[Extruder]:
         """List of configured extruders
         See Extruder()"""
         return self._extruders
@@ -96,7 +96,7 @@ class Move(ModelObject):
         return self._limit_axes
 
     @limit_axes.setter
-    def limit_axes(self, value):
+    def limit_axes(self, value: bool):
         self._limit_axes = bool(value)
 
     @property
@@ -105,7 +105,7 @@ class Move(ModelObject):
         return self._no_moves_before_homing
 
     @no_moves_before_homing.setter
-    def no_moves_before_homing(self, value):
+    def no_moves_before_homing(self, value: bool):
         self._no_moves_before_homing = bool(value)
 
     @property
@@ -114,11 +114,11 @@ class Move(ModelObject):
         return self._printing_acceleration
 
     @printing_acceleration.setter
-    def printing_acceleration(self, value):
+    def printing_acceleration(self, value: float):
         self._printing_acceleration = float(value)
 
     @property
-    def queue(self) -> List[MoveQueueItem]:
+    def queue(self) -> list[MoveQueueItem]:
         """List of move queue items (DDA rings)"""
         return self._queue
 
@@ -138,7 +138,7 @@ class Move(ModelObject):
         return self._speed_factor
 
     @speed_factor.setter
-    def speed_factor(self, value):
+    def speed_factor(self, value: float):
         self._speed_factor = float(value)
 
     @property
@@ -147,7 +147,7 @@ class Move(ModelObject):
         return self._travel_acceleration
 
     @travel_acceleration.setter
-    def travel_acceleration(self, value):
+    def travel_acceleration(self, value: float):
         self._travel_acceleration = float(value)
 
     @property
@@ -156,7 +156,7 @@ class Move(ModelObject):
         return self._virtual_e_pos
 
     @virtual_e_pos.setter
-    def virtual_e_pos(self, value):
+    def virtual_e_pos(self, value: float):
         self._virtual_e_pos = float(value)
 
     @property
@@ -165,5 +165,5 @@ class Move(ModelObject):
         return self._workplace_number
 
     @workplace_number.setter
-    def workplace_number(self, value):
+    def workplace_number(self, value: int):
         self._workplace_number = int(value)

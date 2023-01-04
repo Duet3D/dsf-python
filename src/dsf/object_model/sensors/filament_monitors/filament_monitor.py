@@ -18,11 +18,11 @@ class FilamentMonitor(ModelObject):
         return self._enabled
 
     @enabled.setter
-    def enabled(self, value):
+    def enabled(self, value: bool):
         self._enabled = bool(value)
 
     @staticmethod
-    def get_filament_monitor(type_: FilamentMonitorType):
+    def get_filament_monitor(type_: FilamentMonitorType) -> 'FilamentMonitor':
         from .laser_filament_monitor import LaserFilamentMonitor
         from .pulsed_filament_monitor import PulsedFilamentMonitor
         from .rotating_magnet_filament_monitor import RotatingMagnetFilamentMonitor
@@ -30,7 +30,8 @@ class FilamentMonitor(ModelObject):
         if isinstance(type_, str):
             type_ = FilamentMonitorType(type_)
         elif not isinstance(type_, FilamentMonitorType):
-            raise TypeError(f"type must be of type FilamentMonitorType. Got {type(type_)}: {type_}")
+            raise TypeError(f"type must be of type FilamentMonitorType."
+                            f" Got {type(type_)}: {type_}")
 
         if type_ == FilamentMonitorType.Laser:
             return LaserFilamentMonitor()
@@ -47,22 +48,21 @@ class FilamentMonitor(ModelObject):
         return self._status
 
     @status.setter
-    def status(self, value):
-        if value is None:
-            self._status = FilamentMonitorStatus.NoDataReceived
-        elif isinstance(value, FilamentMonitorStatus):
+    def status(self, value: FilamentMonitorStatus = FilamentMonitorStatus.NoDataReceived):
+        if isinstance(value, FilamentMonitorStatus):
             self._status = value
         elif isinstance(value, str):
             self._status = FilamentMonitorStatus(value)
         else:
-            raise TypeError(f"{__name__}.status must be of type FilamentMonitorStatus. Got {type(value)}: {value}")
+            raise TypeError(f"{__name__}.status must be of type FilamentMonitorStatus."
+                            f" Got {type(value)}: {value}")
 
     @property
     def type(self) -> FilamentMonitorType:
         """Type of this filament monitor"""
         return self._type
 
-    def _update_from_json(self, **kwargs):
+    def _update_from_json(self, **kwargs) -> 'FilamentMonitor':
         """Override ObjectModel._update_from_json to return the FilamentMonitorType type matching the given type"""
         if 'type_' in kwargs and self.type != FilamentMonitorType(kwargs.get('type_')):
             required_type = self.get_filament_monitor(kwargs.get('type_'))

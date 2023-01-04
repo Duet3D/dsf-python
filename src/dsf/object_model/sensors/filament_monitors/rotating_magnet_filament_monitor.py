@@ -20,7 +20,7 @@ class RotatingMagnetFilamentMonitorCalibrated(ModelObject):
         return self._mm_per_pulse
 
     @mm_per_pulse.setter
-    def mm_per_pulse(self, value):
+    def mm_per_pulse(self, value: float):
         self._mm_per_pulse = float(value)
 
     @property
@@ -29,7 +29,7 @@ class RotatingMagnetFilamentMonitorCalibrated(ModelObject):
         return self._percent_max
 
     @percent_max.setter
-    def percent_max(self, value):
+    def percent_max(self, value: float):
         self._percent_max = float(value)
 
     @property
@@ -38,7 +38,7 @@ class RotatingMagnetFilamentMonitorCalibrated(ModelObject):
         return self._percent_min
 
     @percent_min.setter
-    def percent_min(self, value):
+    def percent_min(self, value: float):
         self._percent_min = float(value)
 
     @property
@@ -47,7 +47,7 @@ class RotatingMagnetFilamentMonitorCalibrated(ModelObject):
         return self._total_distance
 
     @total_distance.setter
-    def total_distance(self, value):
+    def total_distance(self, value: float):
         self._total_distance = float(value)
 
 
@@ -68,7 +68,7 @@ class RotatingMagnetFilamentMonitorConfigured(ModelObject):
         return self._all_moves
     
     @all_moves.setter
-    def all_moves(self, value):
+    def all_moves(self, value: bool):
         self._all_moves = bool(value)
         
     @property
@@ -77,7 +77,7 @@ class RotatingMagnetFilamentMonitorConfigured(ModelObject):
         return self._mm_per_rev
     
     @mm_per_rev.setter
-    def mm_per_rev(self, value):
+    def mm_per_rev(self, value: float):
         self._mm_per_rev = float(value)
         
     @property
@@ -86,7 +86,7 @@ class RotatingMagnetFilamentMonitorConfigured(ModelObject):
         return self._percent_max
     
     @percent_max.setter
-    def percent_max(self, value):
+    def percent_max(self, value: float):
         self._percent_max = float(value)
         
     @property
@@ -95,7 +95,7 @@ class RotatingMagnetFilamentMonitorConfigured(ModelObject):
         return self._percent_min
     
     @percent_min.setter
-    def percent_min(self, value):
+    def percent_min(self, value: float):
         self._percent_min = float(value)
         
     @property
@@ -104,7 +104,7 @@ class RotatingMagnetFilamentMonitorConfigured(ModelObject):
         return self._sample_distance
     
     @sample_distance.setter
-    def sample_distance(self, value):
+    def sample_distance(self, value: float):
         self._sample_distance = float(value)
 
 

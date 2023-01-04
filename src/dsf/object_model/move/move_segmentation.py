@@ -14,7 +14,7 @@ class MoveSegmentation(ModelObject):
         return self._segments_per_sec
     
     @segments_per_sec.setter
-    def segments_per_sec(self, value):
+    def segments_per_sec(self, value: int):
         self._segments_per_sec = int(value)
         
     @property
@@ -23,5 +23,5 @@ class MoveSegmentation(ModelObject):
         return self._min_segment_length
     
     @min_segment_length.setter
-    def min_segment_length(self, value):
+    def min_segment_length(self, value: float):
         self._min_segment_length = float(value)

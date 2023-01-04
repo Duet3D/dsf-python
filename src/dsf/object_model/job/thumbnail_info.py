@@ -1,5 +1,5 @@
+from __future__ import annotations
 from enum import Enum
-from typing import Union
 
 from ..model_object import ModelObject
 
@@ -35,14 +35,14 @@ class ThumbnailInfo(ModelObject):
         self._width = 0
 
     @property
-    def data(self) -> Union[str, None]:
+    def data(self) -> str | None:
         """Base64-encoded thumbnail or null if invalid or not requested
         This property is not provided by RepRapFirmware fileinfo results,
         and it may be null if no thumbnail content is requested"""
         return self._data
 
     @data.setter
-    def data(self, value):
+    def data(self, value: str | None = None):
         self._data = str(value) if value is not None else None
 
     @property
@@ -51,13 +51,14 @@ class ThumbnailInfo(ModelObject):
         return self._format
 
     @format.setter
-    def format(self, value):
+    def format(self, value: ThumbnailInfoFormat):
         if isinstance(value, ThumbnailInfoFormat):
             self._format = value
         elif isinstance(value, str):
             self._format = ThumbnailInfoFormat(value)
         else:
-            raise TypeError(f"{__name__}.format must be of type ThumbnailInfoFormat. Got {type(value)}: {value}")
+            raise TypeError(f"{__name__}.format must be of type ThumbnailInfoFormat."
+                            f" Got {type(value)}: {value}")
 
     @property
     def height(self) -> int:
@@ -65,7 +66,7 @@ class ThumbnailInfo(ModelObject):
         return self._height
 
     @height.setter
-    def height(self, value):
+    def height(self, value: int):
         self._height = int(value)
 
     @property
@@ -74,7 +75,7 @@ class ThumbnailInfo(ModelObject):
         return self._offset
 
     @offset.setter
-    def offset(self, value):
+    def offset(self, value: int):
         self._offset = int(value)
 
     @property
@@ -83,7 +84,7 @@ class ThumbnailInfo(ModelObject):
         return self._size
 
     @size.setter
-    def size(self, value):
+    def size(self, value: int):
         self._size = int(value)
 
     @property
@@ -92,5 +93,5 @@ class ThumbnailInfo(ModelObject):
         return self._width
 
     @width.setter
-    def width(self, value):
+    def width(self, value: int):
         self._width = int(value)

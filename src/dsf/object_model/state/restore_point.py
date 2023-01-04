@@ -1,4 +1,4 @@
-from typing import List, Union
+from __future__ import annotations
 
 from ..model_object import ModelObject
 
@@ -28,7 +28,7 @@ class RestorePoint(ModelObject):
         self._tool_number = -1
         
     @property
-    def coords(self) -> List[float]:
+    def coords(self) -> list[float]:
         """Axis coordinates of the restore point (in mm)"""
         return self._coords
     
@@ -38,7 +38,7 @@ class RestorePoint(ModelObject):
         return self._extruder_pos
     
     @extruder_pos.setter
-    def extruder_pos(self, value):
+    def extruder_pos(self, value: float):
         self._extruder_pos = float(value)
         
     @property
@@ -47,7 +47,7 @@ class RestorePoint(ModelObject):
         return self._fan_pwm
     
     @fan_pwm.setter
-    def fan_pwm(self, value):
+    def fan_pwm(self, value: float):
         self._fan_pwm = float(value)
         
     @property
@@ -56,29 +56,29 @@ class RestorePoint(ModelObject):
         return self._feed_rate
     
     @feed_rate.setter
-    def feed_rate(self, value):
+    def feed_rate(self, value: float):
         self._feed_rate = float(value)
         
     @property
-    def io_bits(self) -> Union[int, None]:
+    def io_bits(self) -> int | None:
         """The output port bits setting for this move or null if not applicable"""
         return self._io_bits
     
     @io_bits.setter
-    def io_bits(self, value):
+    def io_bits(self, value: int | None = None):
         self._io_bits = int(value) if value is not None else None
         
     @property
-    def laser_pwm(self) -> Union[float, None]:
+    def laser_pwm(self) -> float | None:
         """Laser PWM value (0..1) or null if not applicable"""
         return self._laser_pwm
     
     @laser_pwm.setter
-    def laser_pwm(self, value):
+    def laser_pwm(self, value: float | None = None):
         self._laser_pwm = float(value) if value is not None else None
         
     @property
-    def spindle_speeds(self) -> List[float]:
+    def spindle_speeds(self) -> list[float]:
         """The spindle RPMs that were set, negative if anticlockwise direction"""
         return self._spindle_speeds
     
@@ -88,5 +88,5 @@ class RestorePoint(ModelObject):
         return self._tool_number
     
     @tool_number.setter
-    def tool_number(self, value):
+    def tool_number(self, value: int):
         self._tool_number = int(value)
