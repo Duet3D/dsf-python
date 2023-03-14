@@ -12,6 +12,25 @@ from dsf.connections import InterceptConnection, InterceptionMode
 from dsf.commands.code import CodeType
 from dsf.object_model import MessageType
 
+# needed to resolve meta variables
+from dsf.connections import CommandConnection
+from dsf.commands.generic import evaluate_expression
+
+
+# function to ask RRF to resolve a meta variable
+def getMetaVar( meta_var, channel):
+    command_connection = CommandConnection(debug=True)
+    command_connection.connect()
+
+    try:
+        res = command_connection.perform_command(evaluate_expression( channel, meta_var ))
+        result = res.result
+        print(f"Evaluated expression: {result}")
+    finally:
+        command_connection.close()
+
+    return result
+
 
 def start_intercept():
     filters = ["M1234", "M5678", "M7722"]
@@ -50,10 +69,25 @@ def start_intercept():
                 # Exit this example
                 return
             elif cde.type == CodeType.MCode and cde.majorNumber == 7722:
+                if ( cde.parameter("S") == None ):
+                    minutes = "1"
+                else:
+                    minutes = cde.parameter("S").string_value
+
+                # check if minutes starts with a { if so it is a meta variable from a macro
+                if ( minutes.startswith('{') ):
+                    # resolve the meta variable
+                    minutes = getMetaVar( minutes, cde.channel )
+
+                # add a + to the beginning of minutes
+                min_plus = "+" + str(minutes)
+
                 # We are going to shut down the SBC in one minute
-                subprocess.run(["sudo", "shutdown", "+1"])
+                subprocess.run(["sudo", "shutdown", min_plus])
+
                 # Resolve it with a custom response message text
-                intercept_connection.resolve_code(MessageType.Warn, "Shutting down SBC in 1min...")
+                warn_msg = "Shutting down SBC in " + str(minutes) + "min..."
+                intercept_connection.resolve_code(MessageType.Warning, warn_msg)
             else:
                 # We did not handle it so we ignore it and it will be continued to be processed
                 intercept_connection.ignore_code()
