@@ -53,7 +53,7 @@ def start_intercept():
                 # We are going to shut down the SBC in one minute
                 subprocess.run(["sudo", "shutdown", "+1"])
                 # Resolve it with a custom response message text
-                intercept_connection.resolve_code(MessageType.Warn, "Shutting down SBC in 1min...")
+                intercept_connection.resolve_code(MessageType.Warning, "Shutting down SBC in 1min...")
             else:
                 # We did not handle it so we ignore it and it will be continued to be processed
                 intercept_connection.ignore_code()
