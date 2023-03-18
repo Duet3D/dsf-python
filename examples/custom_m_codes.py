@@ -18,7 +18,7 @@ from dsf.commands.generic import evaluate_expression
 
 
 # function to ask RRF to resolve a meta variable
-def getMetaVar( meta_var, channel):
+def eval_expr( meta_var, channel):
     command_connection = CommandConnection(debug=True)
     command_connection.connect()
 
@@ -69,15 +69,17 @@ def start_intercept():
                 # Exit this example
                 return
             elif cde.type == CodeType.MCode and cde.majorNumber == 7722:
-                if ( cde.parameter("S") == None ):
+                if cde.parameter("S") is None :
+                    # if there isnt an S parameter set minutes to 1
                     minutes = "1"
-                else:
+                elif cde.parameter("S").is_expression :
+                    # if there is an S parameter and it is an expression 
+                    # resolve the expression and set minutes equal to it
+                    minutes = eval_expr( cde.parameter("S").string_value, cde.channel )
+                else :
+                    # if there is an S parameter and it isnt an expression
+                    # set minutes to it
                     minutes = cde.parameter("S").string_value
-
-                # check if minutes starts with a { if so it is a meta variable from a macro
-                if ( minutes.startswith('{') ):
-                    # resolve the meta variable
-                    minutes = getMetaVar( minutes, cde.channel )
 
                 # add a + to the beginning of minutes
                 min_plus = "+" + str(minutes)
