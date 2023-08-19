@@ -112,8 +112,6 @@ class BaseConnection:
                     except Exception as e:
                         raise e
                     # either 0 or end of data
-                    if len(part) == 0:
-                        raise TimeoutError
                     if len(part) < BUFF_SIZE:
                         break
 
