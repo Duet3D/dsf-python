@@ -3,6 +3,7 @@ from typing import List
 from .axis import Axis
 from .current_move import CurrentMove
 from .extruder import Extruder
+from .keepout_zone import KeepoutZone
 from .kinematics import Kinematics
 from .input_shaping import InputShaping
 from .move_calibration import MoveCalibration
@@ -20,6 +21,8 @@ class Move(ModelObject):
         super().__init__()
         # List of the configured axes
         self._axes = ModelCollection(Axis)
+        # Backlash distance multiplier
+        self._backlash_factor = 10
         # Information about the automatic calibration
         self._calibration = MoveCalibration()
         # Information about the currently configured compensation options
@@ -30,6 +33,8 @@ class Move(ModelObject):
         self._extruders = ModelCollection(Extruder)
         # Idle current reduction parameters
         self._idle = MotorsIdleControl()
+        # List of configured keep-out zones
+        self._keepout = ModelCollection(KeepoutZone)
         # Configured kinematics options
         self._kinematics = Kinematics()
         # Limit axis positions by their minima and maxima
@@ -60,6 +65,15 @@ class Move(ModelObject):
         return self._axes
 
     @property
+    def backlash_factor(self) -> int:
+        """Backlash distance multiplier"""
+        return self._backlash_factor
+
+    @backlash_factor.setter
+    def backlash_factor(self, value):
+        self._backlash_factor = int(value)
+
+    @property
     def calibration(self) -> MoveCalibration:
         """Information about the automatic calibration"""
         return self._calibration
@@ -84,6 +98,11 @@ class Move(ModelObject):
     def idle(self) -> MotorsIdleControl:
         """Idle current reduction parameters"""
         return self._idle
+
+    @property
+    def keepout(self) -> List[KeepoutZone]:
+        """List of configured keep-out zones"""
+        return self._keepout
 
     @property
     def kinematics(self) -> Kinematics:

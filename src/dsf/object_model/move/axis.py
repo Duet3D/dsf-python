@@ -26,12 +26,6 @@ class AxisLetter(str, Enum):
     d = 'd'
     e = 'e'
     f = 'f'
-    g = 'g'
-    h = 'h'
-    i = 'i'
-    j = 'j'
-    k = 'k'
-    l = 'l'
     none = ''
 
 
@@ -44,6 +38,8 @@ class Axis(ModelObject):
         self._acceleration = 0
         # Babystep amount (in mm)
         self._babystep = 0
+        # Configured backlash of this axis (in mm)
+        self._backlash = 0
         # Motor current (in mA)
         self._current = 0
         # List of the assigned drivers
@@ -51,7 +47,7 @@ class Axis(ModelObject):
         # Whether the axis is homed
         self._homed = False
         # Motor jerk (in mm/min)
-        self._jerk = 0
+        self._jerk = 15
         # Letter of this axis
         self._letter = AxisLetter.none
         # Current machine position (in mm) or None if unknown/unset
@@ -70,6 +66,8 @@ class Axis(ModelObject):
         self._percent_current = 100
         # Percentage applied to the motor current during standstill (0..100 or None if not supported)
         self._percent_stst_current = None
+        # Reduced accelerations used by Z probing and stall homing moves (in mm/s^2)
+        self._reduced_acceleration = 0
         # Maximum speed (in mm/min)
         self._speed = 100
         # Number of microsteps per mm
@@ -98,6 +96,15 @@ class Axis(ModelObject):
     @babystep.setter
     def babystep(self, value):
         self._babystep = float(value)
+
+    @property
+    def backlash(self) -> float:
+        """Configured backlash of this axis (in mm)"""
+        return self._backlash
+
+    @backlash.setter
+    def backlash(self, value):
+        self._backlash = float(value)
 
     @property
     def current(self) -> int:
@@ -214,6 +221,15 @@ class Axis(ModelObject):
     @percent_stst_current.setter
     def percent_stst_current(self, value):
         self._percent_stst_current = int(value) if value is not None else None
+
+    @property
+    def reduced_acceleration(self) -> float:
+        """Reduced accelerations used by Z probing and stall homing moves (in mm/s^2)"""
+        return self._reduced_acceleration
+
+    @reduced_acceleration.setter
+    def reduced_acceleration(self, value):
+        self._reduced_acceleration = float(value)
 
     @property
     def speed(self) -> float:

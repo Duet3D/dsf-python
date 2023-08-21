@@ -20,10 +20,10 @@ class InputChannel(ModelObject):
         self._drives_relative = True
         # Current feedrate in mm/s
         self._feed_rate = 50.0
-        # Indicates if inverse time mode (G73) is active
-        self._inverse_time_mode = False
         # Whether a macro file is being processed
         self._in_macro = False
+        # Indicates if inverse time mode (G73) is active
+        self._inverse_time_mode = False
         # Indicates if the current macro file can be restarted after a pause
         self._macro_restartable = False
         # Active motion system index
