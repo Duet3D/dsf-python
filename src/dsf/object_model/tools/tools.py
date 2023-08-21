@@ -74,7 +74,7 @@ class Tool(ModelObject):
         return self._fans
     
     @property
-    def feed_forward(self) -> List[int]:
+    def feed_forward(self) -> List[float]:
         """Feedforward coefficients to apply to the mapped heaters during extrusions"""
         return self._feed_forward
     
