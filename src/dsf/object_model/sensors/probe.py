@@ -12,7 +12,7 @@ class Probe(ModelObject):
         self._calibration_temperature = 0
         self._deployed_by_user = False
         self._disables_heaters = False
-        self._dive_height = 0
+        self._dive_height = 5
         self._last_stop_height = 0
         self._max_probe_count = 1
         self._offsets = [0, 0]
