@@ -34,6 +34,15 @@ class AnalogSensorType(str, Enum):
     # DHT humidity sensor
     DHTHumidity = "dhthumidity"
 
+    # BME280 sensor
+    BME280 = "bme280"
+
+    # BME280 pressure sensor
+    BME280Pressure = "bme280-pressure"
+
+    # BME280 humidity sensor
+    BME280Humidity = "bme280-humidity"
+
     # Current loop sensor
     CurrentLoop = "currentloooppyro"
 

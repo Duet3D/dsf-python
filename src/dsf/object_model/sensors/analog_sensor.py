@@ -52,7 +52,9 @@ class AnalogSensor(ModelObject):
     
     @type.setter
     def type(self, value):
-        if value is None or isinstance(value, AnalogSensorType):
+        if value is None:
+            self._type = AnalogSensorType.Unknown
+        elif isinstance(value, AnalogSensorType):
             self._type = value
         elif isinstance(value, str):
             self._type = AnalogSensorType(value)
