@@ -8,9 +8,11 @@ from .machine_mode import MachineMode
 from .machine_status import MachineStatus
 from .message_box import MessageBox
 from .restore_point import RestorePoint
+from .startup_error import StartupError
 from ..model_collection import ModelCollection
 from ..model_object import ModelObject
 from ..utils import wrap_model_property
+
 
 class State(ModelObject):
     """Information about the machine state"""
@@ -19,6 +21,8 @@ class State(ModelObject):
     beep = wrap_model_property('beep', BeepRequest)
     # Details about a requested message box or null if none is requested
     message_box = wrap_model_property('message_box', MessageBox)
+    # First error on start-up or null if there was none
+    startup_error = wrap_model_property('startup_error', StartupError)
 
     def __init__(self):
         super(State, self).__init__()
@@ -44,6 +48,7 @@ class State(ModelObject):
         self._power_fail_script = ""
         self._previous_tool = -1
         self._restore_points = ModelCollection(RestorePoint)
+        self._startup_error = None
         self._status = MachineStatus.starting
         self._this_input = None
         self._time = None
