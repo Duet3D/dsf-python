@@ -32,9 +32,6 @@ class State(ModelObject):
         self._current_tool = -1
         self._deferred_power_down = None
         self._display_message = ""
-        self._dsf_version = None
-        self._dsf_plugin_support = False
-        self._dsf_root_plugin_support = False
         self._gp_out = ModelCollection(GpOutputPort)
         self._laser_pwm = None
         self._log_file = None
@@ -99,36 +96,6 @@ class State(ModelObject):
     @display_message.setter
     def display_message(self, value):
         self._display_message = str(value)
-
-    @property
-    def dsf_version(self) -> Union[str, None]:
-        """Version of the Duet Software Framework package
-        Obsolete: This field will be removed in favour of a new dsf main key in v3.5"""
-        return self._dsf_version
-
-    @dsf_version.setter
-    def dsf_version(self, value):
-        self._dsf_version = str(value)
-
-    @property
-    def dsf_plugin_support(self) -> bool:
-        """Indicates if DSF allows the installation and usage of third-party plugins
-        Obsolete: This field will be removed in favour of a new dsf main key in v3.5"""
-        return self._dsf_plugin_support
-
-    @dsf_plugin_support.setter
-    def dsf_plugin_support(self, value):
-        self._dsf_plugin_support = bool(value)
-
-    @property
-    def dsf_root_plugin_support(self) -> bool:
-        """Indicates if DSF allows the installation and usage of third-party root plugins (potentially dangerous)
-        Obsolete: This field will be removed in favour of a new dsf main key in v3.5"""
-        return self._dsf_root_plugin_support
-
-    @dsf_root_plugin_support.setter
-    def dsf_root_plugin_support(self, value):
-        self._dsf_root_plugin_support = bool(value)
 
     @property
     def gp_out(self) -> List[GpOutputPort]:

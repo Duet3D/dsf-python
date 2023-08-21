@@ -28,7 +28,7 @@ class Model(unittest.TestCase):
         self.assertEqual(model.boards[0].v_in.max, 19.4)
 
     def test_http_endpoints(self):
-        from src.dsf.object_model.http_endpoints.http_endpoint_type import HttpEndpointType
+        from src.dsf.object_model import HttpEndpointType
         model = ObjectModel()
 
         json_patch = '{"httpEndpoints":[{"endpointType":"GET","namespace":"ExecOnMcode","path":"getCmdList","isUploadRequest":false,"unixSocket":"/run/dsf/ExecOnMcode/getCmdList-GET.sock"}]}'

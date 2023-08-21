@@ -1,5 +1,5 @@
 from .http_endpoint_type import HttpEndpointType
-from ..model_object import ModelObject
+from ...model_object import ModelObject
 
 
 class HttpEndpoint(ModelObject):
