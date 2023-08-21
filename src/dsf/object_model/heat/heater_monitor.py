@@ -39,19 +39,19 @@ class HeaterMonitor(ModelObject):
     def __init__(self):
         super().__init__()
         # Action to perform when the trigger condition is met
-        self._action = HeaterMonitorAction.generateFault
+        self._action = None
         # Condition to meet to perform an action
         self._condition = HeaterMonitorCondition.disabled
         # Limit threshold for this heater monitor
         self._limit = None
 
     @property
-    def action(self) -> HeaterMonitorAction:
+    def action(self) -> Union[HeaterMonitorAction, None]:
         """Action to perform when the trigger condition is met"""
         return self._action
 
     @action.setter
-    def action(self, value: HeaterMonitorAction = HeaterMonitorAction.generateFault):
+    def action(self, value: Union[HeaterMonitorAction, None] = None):
         if value is None or isinstance(value, HeaterMonitorAction):
             self._action = value
         elif isinstance(value, int):
