@@ -21,7 +21,7 @@ class Probe(ModelObject):
         self._temperature_coefficients = [0, 0]
         self._threshold = 500
         self._tolerance = 0.03
-        self._travel_speed = 100
+        self._travel_speed = 6000
         self._trigger_height = 0.7
         self._type = ProbeType.NoProbe
         self._value = []
@@ -148,7 +148,7 @@ class Probe(ModelObject):
         
     @property
     def travel_speed(self) -> float:
-        """Travel speed when probing multiple points (in mm/s)"""
+        """Travel speed when probing multiple points (in mm/min)"""
         return self._travel_speed
     
     @travel_speed.setter
