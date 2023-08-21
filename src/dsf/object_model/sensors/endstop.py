@@ -1,3 +1,5 @@
+from typing import Union
+
 from .endstop_type import EndstopType
 from ..model_object import ModelObject
 
@@ -8,6 +10,7 @@ class Endstop(ModelObject):
     def __init__(self):
         super(Endstop, self).__init__()
         self._high_end = None
+        self._probe = None
         self._triggered = None
         self._type = None
 
@@ -19,6 +22,15 @@ class Endstop(ModelObject):
     @high_end.setter
     def high_end(self, value):
         self._high_end = bool(value)
+
+    @property
+    def probe(self) -> Union[int, None]:
+        """Number of the referenced probe if type is ZProbeAsEndstop, else None"""
+        return self._probe
+
+    @probe.setter
+    def probe(self, value):
+        self._probe = int(value) if value is not None else None
 
     @property
     def triggered(self) -> bool:
