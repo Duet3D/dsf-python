@@ -2,7 +2,7 @@ from typing import Union
 
 from .access_level import AccessLevel
 from .session_type import SessionType
-from ..model_object import ModelObject
+from ....model_object import ModelObject
 
 
 class UserSession(ModelObject):

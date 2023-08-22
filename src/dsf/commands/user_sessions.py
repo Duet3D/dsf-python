@@ -1,21 +1,5 @@
-from enum import Enum
-
 from .base_command import BaseCommand
-
-
-class AccessLevel(str, Enum):
-    """Defines what a user is allowed to do"""
-
-    ReadOnly = "ReadOnly"
-    ReadWrite = "ReadWrite"
-
-
-class SessionType(str, Enum):
-    """Types of user sessions"""
-
-    Local = "Local"
-    HTTP = "HTTP"
-    Telnet = "Telnet"
+from ..object_model import AccessLevel, SessionType
 
 
 def add_user_session(access_level: AccessLevel, session_type: SessionType, origin: str):

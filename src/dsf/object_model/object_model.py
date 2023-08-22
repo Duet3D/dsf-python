@@ -20,7 +20,6 @@ from .sensors import Sensors
 from .spindles import Spindle
 from .state import State
 from .tools import Tool
-from .user_sessions import UserSession
 from .volumes import Volume
 
 from .utils import wrap_model_property
@@ -52,7 +51,6 @@ class ObjectModel(ModelObject):
         self._spindles = ModelCollection(Spindle)
         self._state = State()
         self._tools = ModelCollection(Tool)
-        self._user_sessions = ModelCollection(UserSession)
         self._volumes = ModelCollection(Volume)
 
     @property
@@ -74,7 +72,7 @@ class ObjectModel(ModelObject):
         return self._fans
 
     @property
-    def globals(self):
+    def globals(self) -> dict:
         """Dictionary of global variables vs JSON values
         When DSF attempts to reconnect to RRF, this may be set to null to clear the contents
         NB: RRF uses 'global' as name but as it is a reserved keyword in Python, 'globals' is used here."""
@@ -131,7 +129,7 @@ class ObjectModel(ModelObject):
         return self._plugins
 
     @property
-    def sensors(self):
+    def sensors(self) -> Sensors:
         """Information about connected sensors including Z-probes and endstops"""
         return self._sensors
 
@@ -153,12 +151,7 @@ class ObjectModel(ModelObject):
         return self._tools
 
     @property
-    def user_sessions(self):
-        """List of user sessions"""
-        return self._user_sessions
-
-    @property
-    def volumes(self):
+    def volumes(self) -> List[Volume]:
         """List of available mass storages
         See also Volume()"""
         return self._volumes
@@ -170,5 +163,3 @@ class ObjectModel(ModelObject):
         if 'global_' in kwargs:
             self._globals.update_from_json(kwargs.get('global_'))
         return self
-
-

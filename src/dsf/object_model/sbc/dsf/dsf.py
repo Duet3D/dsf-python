@@ -1,6 +1,7 @@
 from typing import List
 
 from .http_endpoint import HttpEndpoint
+from .user_sessions import UserSession
 from ...model_collection import ModelCollection
 from ...model_object import ModelObject
 
@@ -13,6 +14,7 @@ class DSF(ModelObject):
         self._http_endpoints = ModelCollection(HttpEndpoint)
         self._plugin_support = False
         self._root_plugin_support = False
+        self._user_sessions = ModelCollection(UserSession)
         self._version = ""
 
     @property
@@ -38,6 +40,11 @@ class DSF(ModelObject):
     @root_plugin_support.setter
     def root_plugin_support(self, value):
         self._root_plugin_support = bool(value)
+
+    @property
+    def user_sessions(self) -> List[UserSession]:
+        """List of user sessions"""
+        return self._user_sessions
 
     @property
     def version(self) -> str:
