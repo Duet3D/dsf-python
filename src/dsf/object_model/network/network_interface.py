@@ -13,17 +13,17 @@ class NetworkInterface(ModelObject):
         super().__init__()
         # List of active protocols
         self._active_protocols = []
-        # Actual IPv4 address of the network adapter
+        # Actual IPv4 address of the network adapter or null if unknown
         self._actual_IP = ""
-        # Configured IPv4 address of the network adapter
+        # Configured IPv4 address of the network adapter or null if unknown
         self._configured_IP = ""
-        # Configured IPv4 DNS server fo the network adapter
+        # Configured IPv4 DNS server fo the network adapter or null if unknown
         self._dns_server = ""
         # Version of the network interface or null if unknown.
         self._firmware_version = ""
-        # IPv4 gateway of the network adapter
+        # IPv4 gateway of the network adapter or null if unknown
         self._gateway = ""
-        # Physical address of the network adapter
+        # Physical address of the network adapter or null if unknown
         self._mac = ""
         # Number of reconnect attempts or null if unknown
         self._num_reconnects = None
@@ -31,9 +31,11 @@ class NetworkInterface(ModelObject):
         self._signal = None
         # Speed of the network interface (in MBit, null if unknown, 0 if not connected)
         self._speed = None
-        # Network state
+        # SSID of the Wi-Fi network or null if not applicable
+        self._ssid = None
+        # State of this network interface or null if unknown
         self._state = None
-        # Subnet of the network adapter
+        # Subnet of the network adapter or null if unknown
         self._subnet = None
         # Type of this network interface
         self._type = NetworkInterfaceType.wifi
@@ -45,7 +47,7 @@ class NetworkInterface(ModelObject):
 
     @property
     def actual_IP(self) -> Union[str, None]:
-        """Actual IPv4 address of the network adapter"""
+        """Actual IPv4 address of the network adapter or null if unknown"""
         return self._actual_IP
     
     @actual_IP.setter
@@ -54,7 +56,7 @@ class NetworkInterface(ModelObject):
         
     @property
     def configured_IP(self) -> Union[str, None]:
-        """Configured IPv4 address of the network adapter"""
+        """Configured IPv4 address of the network adapter or null if unknown"""
         return self._configured_IP
     
     @configured_IP.setter
@@ -63,7 +65,7 @@ class NetworkInterface(ModelObject):
         
     @property
     def dns_server(self) -> Union[str, None]:
-        """Configured IPv4 DNS server fo the network adapter"""
+        """Configured IPv4 DNS server fo the network adapter or null if unknown"""
         return self._dns_server
     
     @dns_server.setter
@@ -82,7 +84,7 @@ class NetworkInterface(ModelObject):
         
     @property
     def gateway(self) -> Union[str, None]:
-        """IPv4 gateway of the network adapter"""
+        """IPv4 gateway of the network adapter or null if unknown"""
         return self._gateway
     
     @gateway.setter
@@ -91,7 +93,7 @@ class NetworkInterface(ModelObject):
     
     @property
     def mac(self) -> Union[str, None]:
-        """Physical address of the network adapter"""
+        """Physical address of the network adapter or null if unknown"""
         return self._mac
     
     @mac.setter
@@ -115,19 +117,28 @@ class NetworkInterface(ModelObject):
     @signal.setter
     def signal(self, value):
         self._signal = int(value) if value is not None else None
-        
+
     @property
     def speed(self) -> Union[int, None]:
         """Speed of the network interface (in MBit, null if unknown, 0 if not connected)"""
         return self._speed
-    
+
     @speed.setter
     def speed(self, value):
         self._speed = int(value) if value is not None else None
+
+    @property
+    def ssid(self) -> Union[str, None]:
+        """SSID of the Wi-Fi network or null if not applicable"""
+        return self._ssid
+
+    @ssid.setter
+    def ssid(self, value):
+        self._ssid = str(value) if value is not None else None
     
     @property
     def state(self) -> Union[NetworkState, None]:
-        """Network state"""
+        """State of this network interface or null if unknown"""
         return self._state
     
     @state.setter
@@ -141,7 +152,7 @@ class NetworkInterface(ModelObject):
         
     @property
     def subnet(self) -> Union[str, None]:
-        """Subnet of the network adapter"""
+        """Subnet of the network adapter or null if unknown"""
         return self._subnet
     
     @subnet.setter
