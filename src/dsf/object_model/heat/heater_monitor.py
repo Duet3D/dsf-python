@@ -44,6 +44,8 @@ class HeaterMonitor(ModelObject):
         self._condition = HeaterMonitorCondition.disabled
         # Limit threshold for this heater monitor
         self._limit = None
+        # Sensor number to monitor
+        self._sensor = -1
 
     @property
     def action(self) -> Union[HeaterMonitorAction, None]:
@@ -83,3 +85,12 @@ class HeaterMonitor(ModelObject):
     @limit.setter
     def limit(self, value: Union[float, None]):
         self._limit = float(value) if value is not None else None
+
+    @property
+    def sensor(self) -> int:
+        """Sensor number to monitor"""
+        return self._sensor
+
+    @sensor.setter
+    def sensor(self, value: int):
+        self._sensor = int(value)
