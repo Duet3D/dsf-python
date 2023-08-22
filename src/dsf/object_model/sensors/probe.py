@@ -1,4 +1,4 @@
-from typing import List
+from typing import List, Union
 
 from .probe_type import ProbeType
 from ..model_object import ModelObject
@@ -9,10 +9,13 @@ class Probe(ModelObject):
 
     def __init__(self):
         super(Probe, self).__init__()
+        self._calib_a = None
+        self._calib_b = None
         self._calibration_temperature = 0
         self._deployed_by_user = False
         self._disables_heaters = False
         self._dive_height = 5
+        self._is_calibrated = None
         self._last_stop_height = 0
         self._max_probe_count = 1
         self._offsets = [0, 0]
@@ -27,10 +30,28 @@ class Probe(ModelObject):
         self._value = []
 
     @property
+    def calib_a(self) -> Union[float, None]:
+        """Linear coefficient for scanning probes"""
+        return self._calib_a
+
+    @calib_a.setter
+    def calib_a(self, value):
+        self._calib_a = float(value) if value is not None else None
+
+    @property
+    def calib_b(self) -> Union[float, None]:
+        """Quadratic coefficient for scanning probes"""
+        return self._calib_b
+
+    @calib_b.setter
+    def calib_b(self, value):
+        self._calib_b = float(value) if value is not None else None
+
+    @property
     def calibration_temperature(self) -> float:
         """Calibration temperature (in C)"""
         return self._calibration_temperature
-    
+
     @calibration_temperature.setter
     def calibration_temperature(self, value):
         self._calibration_temperature = float(value)
@@ -61,6 +82,15 @@ class Probe(ModelObject):
     @dive_height.setter
     def dive_height(self, value):
         self._dive_height = float(value)
+
+    @property
+    def is_calibrated(self) -> Union[bool, None]:
+        """Indicates if the scanning probe is calibrated"""
+        return self._is_calibrated
+
+    @is_calibrated.setter
+    def is_calibrated(self, value):
+        self._is_calibrated = bool(value) if value is not None else None
         
     @property
     def last_stop_height(self) -> float:

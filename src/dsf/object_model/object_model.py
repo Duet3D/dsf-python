@@ -9,6 +9,7 @@ from .fans import Fan
 from .heat import Heat
 from .inputs import InputChannel
 from .job import Job
+from .led_strips import LedStrip
 from .limits import Limits
 from .messages import Message
 from .move import Move
@@ -40,6 +41,7 @@ class ObjectModel(ModelObject):
         self._heat = Heat()
         self._inputs = ModelCollection(InputChannel)
         self._job = Job()
+        self._led_strips = ModelCollection(LedStrip)
         self._limits = Limits()
         self._messages = ModelCollection(Message)
         self._move = Move()
@@ -92,6 +94,11 @@ class ObjectModel(ModelObject):
     def job(self) -> Job:
         """Information about the current job"""
         return self._job
+
+    @property
+    def led_strips(self) -> List[LedStrip]:
+        """List of configured LED strips"""
+        return self._led_strips
 
     @property
     def limits(self) -> Limits:

@@ -36,8 +36,12 @@ class Limits(ModelObject):
         self._heaters = None
         # Maximum number of heaters per tool or null if unknown
         self._heaters_per_tool = None
+        # Maximum number of configured LED strips or null if unknown
+        self._led_strips = None
         # Maximum number of monitors per heater or null if unknown
         self._monitors_per_heater = None
+        # Maximum number of output ports per heater or null if unknown
+        self._ports_per_heater = None
         # Maximum number of restore points or null if unknown
         self._restore_points = None
         # Maximum number of sensors or null if unknown
@@ -186,6 +190,15 @@ class Limits(ModelObject):
         self._heaters_per_tool = int(value) if value is not None else None
 
     @property
+    def led_strips(self) -> Union[int, None]:
+        """Maximum number of configured LED strips or null if unknown"""
+        return self._led_strips
+
+    @led_strips.setter
+    def led_strips(self, value):
+        self._led_strips = int(value) if value is not None else None
+
+    @property
     def monitors_per_heater(self) -> Union[int, None]:
         """Maximum number of monitors per heater or null if unknown"""
         return self._monitors_per_heater
@@ -193,6 +206,15 @@ class Limits(ModelObject):
     @monitors_per_heater.setter
     def monitors_per_heater(self, value):
         self._monitors_per_heater = int(value) if value is not None else None
+
+    @property
+    def ports_per_heater(self) -> Union[int, None]:
+        """Maximum number of output ports per heater or null if unknown"""
+        return self._ports_per_heater
+
+    @ports_per_heater.setter
+    def ports_per_heater(self, value):
+        self._ports_per_heater = int(value) if value is not None else None
 
     @property
     def restore_points(self) -> Union[int, None]:
