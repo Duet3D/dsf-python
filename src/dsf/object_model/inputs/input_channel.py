@@ -10,6 +10,10 @@ class InputChannel(ModelObject):
     
     def __init__(self):
         super().__init__()
+        # True if the input is in active mode i.e. executing commands for its assigned motion system,
+        # false if it is assigned to a motion system other than the current one
+        # This will always be true except for the File and File2 inputs
+        self._active = False
         # Whether relative positioning is being used
         self._axes_relative = False
         # Emulation used on this channel
@@ -40,6 +44,17 @@ class InputChannel(ModelObject):
         self._line_number = 0
         # Whether volumetric extrusion is being used
         self._volumetric = False
+
+    @property
+    def active(self) -> bool:
+        """True if the input is in active mode i.e. executing commands for its assigned motion system,
+        False if it is assigned to a motion system other than the current one.
+        This will always be true except for the File and File2 inputs"""
+        return self._active
+
+    @active.setter
+    def active(self, value):
+        self._active = bool(value)
 
     @property
     def axes_relative(self) -> bool:
