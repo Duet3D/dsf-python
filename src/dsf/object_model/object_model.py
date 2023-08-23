@@ -1,4 +1,4 @@
-from typing import List, Union
+from typing import List
 
 from .model_collection import ModelCollection
 from .model_dictionary import ModelDictionary
@@ -7,7 +7,7 @@ from .boards import Board
 from .directories import Directories
 from .fans import Fan
 from .heat import Heat
-from .inputs import InputChannel
+from .inputs import Inputs
 from .job import Job
 from .led_strips import LedStrip
 from .limits import Limits
@@ -38,7 +38,7 @@ class ObjectModel(ModelObject):
         self._fans = ModelCollection(Fan)
         self._globals = ModelDictionary(False)
         self._heat = Heat()
-        self._inputs = ModelCollection(InputChannel)
+        self._inputs = Inputs()
         self._job = Job()
         self._led_strips = ModelCollection(LedStrip)
         self._limits = Limits()
@@ -84,7 +84,7 @@ class ObjectModel(ModelObject):
         return self._heat
 
     @property
-    def inputs(self) -> List[InputChannel]:
+    def inputs(self) -> Inputs:
         """Information about every available G/M/T-code channel"""
         return self._inputs
 
