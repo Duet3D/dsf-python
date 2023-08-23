@@ -47,6 +47,7 @@ class State(ModelObject):
         self._restore_points = ModelCollection(RestorePoint)
         self._startup_error = None
         self._status = MachineStatus.starting
+        self._this_active = True
         self._this_input = None
         self._time = None
         self._up_time = 0
@@ -220,6 +221,15 @@ class State(ModelObject):
             self._status = MachineStatus(value)
         else:
             raise TypeError(f"{__name__}.status must be of type MachineStatus or None. Got {type(value)}: {value}")
+
+    @property
+    def this_active(self) -> bool:
+        """Shorthand for inputs[state.thisInput].active"""
+        return self._this_active
+
+    @this_active.setter
+    def this_active(self, value):
+        self._this_active = bool(value)
 
     @property
     def this_input(self) -> Union[int, None]:
