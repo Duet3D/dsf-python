@@ -22,8 +22,6 @@ class RestorePoint(ModelObject):
         self._io_bits = None
         # Laser PWM value (0..1) or null if not applicable
         self._laser_pwm = None
-        # The spindle RPMs that were set, negative if anticlockwise direction
-        self._spindle_speeds = []
         # The tool number that was active
         self._tool_number = -1
         
@@ -76,11 +74,6 @@ class RestorePoint(ModelObject):
     @laser_pwm.setter
     def laser_pwm(self, value: float | None = None):
         self._laser_pwm = float(value) if value is not None else None
-        
-    @property
-    def spindle_speeds(self) -> list[float]:
-        """The spindle RPMs that were set, negative if anticlockwise direction"""
-        return self._spindle_speeds
     
     @property
     def tool_number(self) -> int:
