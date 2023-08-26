@@ -8,7 +8,22 @@ from ..object_model.messages import MessageType
 
 
 class InterceptConnection(BaseCommandConnection):
-    """Connection class for intercepting G/M/T-codes from the control server"""
+    """
+    Connection class for intercepting G/M/T-codes from the control server
+
+    Constructor arguments:
+    :param interception_mode: Mode of the interceptor
+    :param channels: List of input channels where codes may be intercepted.
+    If the list is empty, all available channels are used
+    :param filters: List of G/M/T-codes to filter or Q0 for comments.
+    This may only specify the code type and major/minor number (e.g. G1)
+    :param auto_flush: Automatically flush the code channel before notifying the client
+    in case a code filter is specified.
+    This option makes extra Flush calls in the interceptor implementation obsolete.
+    It is highly recommended to enable this in order to avoid potential deadlocks when dealing with macros!
+    :param priority_codes: Defines if priority codes may be intercepted (e.g. M122 or M999)
+    :param debug: Whether debugging output is turned on for this connection
+    """
 
     def __init__(
         self,
