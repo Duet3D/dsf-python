@@ -5,7 +5,15 @@ from ..object_model import ObjectModel
 
 
 class SubscribeConnection(BaseConnection):
-    """Connection class for subscribing to model updates"""
+    """
+    Connection class for subscribing to model updates
+
+    Constructor arguments:
+    :param subscription_mode: Mode of the subscription
+    :param filter_str: Delimited filter expression. Obsolete: Use filter_list instead.
+    :param filter_list: Filter expressions
+    :param debug: Whether debugging output is turned on for this connection
+    """
 
     def __init__(
         self,
