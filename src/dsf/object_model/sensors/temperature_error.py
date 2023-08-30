@@ -1,5 +1,6 @@
 from enum import Enum
 
+
 class TemperatureError(str, Enum):
     """Result codes returned by temperature sensor drivers"""
 

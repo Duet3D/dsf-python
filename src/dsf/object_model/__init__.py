@@ -4,6 +4,7 @@ from .fans import Fan
 from .heat import Heat, Heater, HeaterState
 from .inputs import InputChannel
 from .job import Job
+from .led_strips import LedStrip, LedStripType
 from .limits import Limits
 from .messages import Message, MessageType
 from .move import DriverId, Move
