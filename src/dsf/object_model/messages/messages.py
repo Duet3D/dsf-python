@@ -23,19 +23,20 @@ class Message(ModelObject):
     Generic container for messages
     :param content: Content of this message
     :param time: Time at which the message was generated
-    :param type_: Type of this message
+    :param msg_type: Type of this message
     """
 
     @classmethod
     def from_json(cls, data):
         """Deserialize an instance of this class from JSON deserialized dictionary"""
+        data['msg_type'] = data.pop('type')  # Replace 'type' to not shadow the built-in keyword name
         return cls(**data)
 
-    def __init__(self, type_: MessageType = MessageType.Success, content: str = "", time: datetime = datetime.now()):
+    def __init__(self, msg_type: MessageType = MessageType.Success, content: str = "", time: datetime = datetime.now()):
         super().__init__()
         self._content = content
         self._time = time
-        self._type = type_
+        self._type = msg_type
 
     def __repr__(self):
         if self.type == MessageType.Error:
