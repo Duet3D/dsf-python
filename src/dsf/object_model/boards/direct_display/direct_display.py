@@ -1,5 +1,3 @@
-from typing import Union
-
 from .direct_display_encoder import DirectDisplayEncoder
 from .direct_display_screen import DirectDisplayScreen
 
