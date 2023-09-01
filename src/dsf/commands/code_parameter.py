@@ -1,6 +1,7 @@
 """
 codeparameter contains all classes and methods dealing with deserialized code parameters.
 """
+from __future__ import annotations
 import json
 
 from ..exceptions import CodeParserException

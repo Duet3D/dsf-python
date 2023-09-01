@@ -1,117 +1,85 @@
-"""
-Module code contains relevant classes and enums being received
-as well as sent back to the server.
-
-    Python interface to DuetSoftwareFramework
-    Copyright (C) 2020 Duet3D
-
-    This program is free software: you can redistribute it and/or modify
-    it under the terms of the GNU Lesser General Public License as published by
-    the Free Software Foundation, either version 3 of the License, or
-    (at your option) any later version.
-
-    This program is distributed in the hope that it will be useful,
-    but WITHOUT ANY WARRANTY; without even the implied warranty of
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    GNU Lesser General Public License for more details.
-
-    You should have received a copy of the GNU Lesser General Public License
-    along with this program.  If not, see <https://www.gnu.org/licenses/>.
-"""
 from __future__ import annotations
-from enum import Enum, IntEnum
+from typing import List, Optional
 
 from .base_command import BaseCommand
 from .code_channel import CodeChannel
+from .code_flags import CodeFlags
 from .code_parameter import CodeParameter
+from .code_type import CodeType
+from .condition_type import KeywordType
 from ..object_model.messages import Message
-
-
-class CodeType(str, Enum):
-    """Type of generic G/M/T-code. If none is applicable, it is treated as a comment"""
-
-    # Whole line comment
-    Comment = "Q"
-
-    # Meta G-code keyword (not sent as a code to RRF)
-    # Codes of this type are not sent to RRF in binary representation
-    Keyword = "K"
-
-    # G-code
-    GCode = "G"
-
-    # M-code
-    MCode = "M"
-
-    # T-code
-    TCode = "T"
-
-
-class KeywordType(IntEnum):
-    """Enumeration of conditional G-code keywords"""
-
-    KeywordNone = 0
-    If = 1
-    ElseIf = 2
-    Else = 3
-    While = 4
-    Break = 5
-    Return = 6  # Deprecated: Was never supported in RRF
-    Abort = 7
-    Var = 8
-    Set = 9
-    Echo = 10
-    Continue = 11
-    Global = 12
-
-
-keyword_type_names = {
-    KeywordType.Abort: "abort",
-    KeywordType.Break: "break",
-    KeywordType.Echo: "echo",
-    KeywordType.Else: "else",
-    KeywordType.ElseIf: "elif",
-    KeywordType.If: "if",
-    KeywordType.Return: "return",
-    KeywordType.Set: "set",
-    KeywordType.Var: "var",
-    KeywordType.While: "while",
-    KeywordType.Continue: "continue",
-}
-
-
-class CodeFlags(IntEnum):
-    """Code bits to classify G/M/T-codes"""
-
-    CodeFlagsNone = 0
-    Asynchronous = 1
-    IsPreProcessed = 2
-    IsPostProcessed = 4
-    IsFromMacro = 8
-    IsNestedMacro = 16
-    IsFromConfig = 32
-    IsFromConfigOverride = 64
-    EnforceAbsolutePosition = 128
-    IsPrioritized = 256
-    Unbuffered = 512
-    IsFromFirmware = 1024
-    IsLastCode = 2048
 
 
 class Code(BaseCommand):
     """A parsed representation of a generic G/M/T-code"""
 
-    parameters: list
-    result: list
-
     @classmethod
     def from_json(cls, data):
         """Deserialize an instance of this class from JSON deserialized dictionary"""
-        data["result"] = [] if data["result"] is None else list(map(Message.from_json, data["result"]))
+        data["result"] = None if data["result"] is None else list(map(Message.from_json, data["result"]))
         data["parameters"] = list(map(CodeParameter.from_json, data["parameters"]))
         if "channel" in data:
             data["channel"] = CodeChannel(data["channel"])
         return cls(**data)
+
+    def __init__(self, **kwargs):
+        # The connection ID this code was received from. If this is 0, the code originates from an internal DCS task
+        # Usually there is no need to populate this property.
+        # It is internally overwritten by the control server on receipt
+        self.sourceConnection = 0
+
+        # Result of this code. This property is only set when the code has finished its execution.
+        # It remains None if the code has been cancelled
+        self.result: Optional[List[Message]] = None
+
+        # Type of the code
+        self.type = CodeType.CodeNone
+
+        # Code channel to send this code to
+        self.channel = CodeChannel.DEFAULT_CHANNEL
+
+        # Line number of this code
+        self.lineNumber = None
+
+        # Number of whitespaces prefixing the command content
+        self.indent = 0
+
+        # Type of conditional G-code (if any)
+        self.keyword = KeywordType.KeywordNone
+
+        # Argument of the conditional G-code (if any)
+        self.keywordArgument = None
+
+        # Major code number (e.g. 28 in G28)
+        self.majorNumber = None
+
+        # Minor code number (e.g. 3 in G54.3)
+        self.minorNumber = None
+
+        # Flags of this code
+        self.flags = CodeFlags.CodeFlagsNone
+
+        # Comment of the G/M/T-code. May be null if no comment is present
+        # The parser combines different comment segments and concatenates them as a single value.
+        # So for example a code like 'G28 (Do homing) ; via G28'
+        # causes the Comment field to be filled with 'Do homing via G28'
+        self.comment = None
+
+        # File position of this code in bytes (optional)
+        self.filePosition = None
+
+        # Length of the original code in bytes (optional)
+        self.length = None
+
+        # List of parsed code parameters
+        self.parameters: List[CodeParameter] = []
+
+        super().__init__(**kwargs)
+
+    @property
+    def is_from_file_channel(self) -> bool:
+        """Check if this code is from a file channel"""
+        return self.channel is CodeChannel.File or self.channel is CodeChannel.File2
 
     def parameter(self, letter: str, default=None):
         """Retrieve the parameter whose letter equals c or generate a default parameter"""
@@ -157,7 +125,7 @@ class Code(BaseCommand):
                 str_list.append(" ")
             str_list.append(f";{self.comment}")
 
-        if len(self.result) > 0:
+        if self.result and len(self.result) > 0:
             str_list.append(f" => {self.result}")
 
         return "".join(str_list)
@@ -177,5 +145,17 @@ class Code(BaseCommand):
         return f"{prefix}{self.type}"
 
     def keyword_to_str(self):
-        """Convert the keyword to a str"""
-        return keyword_type_names.get(self.keyword)
+        """Convert the keyword to a string"""
+        return {
+            KeywordType.If: "if",
+            KeywordType.ElseIf: "elif",
+            KeywordType.Else: "else",
+            KeywordType.While: "while",
+            KeywordType.Break: "break",
+            KeywordType.Continue: "continue",
+            KeywordType.Abort: "abort",
+            KeywordType.Var: "var",
+            KeywordType.Set: "set",
+            KeywordType.Echo: "echo",
+            KeywordType.Global: "global",
+        }.get(self.keyword)
