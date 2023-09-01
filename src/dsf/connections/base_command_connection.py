@@ -2,12 +2,12 @@ import os
 
 from .base_connection import BaseConnection
 from .. import commands, DEFAULT_BACKLOG
-from ..commands import code, result
+from ..commands import code
 from ..commands.code_channel import CodeChannel
 from ..http import HttpEndpointUnixSocket
 from ..object_model import HttpEndpointType, ObjectModel
 from ..object_model.job import GCodeFileInfo
-from ..object_model.messages import MessageType
+from ..object_model.messages import Message, MessageType
 from ..object_model.state import LogLevel
 
 
@@ -114,7 +114,7 @@ class BaseCommandConnection(BaseConnection):
 
     def perform_code(self, cde: code.Code):
         """Execute an arbitrary pre-parsed code"""
-        res = self.perform_command(cde, result.CodeResult)
+        res = self.perform_command(cde, Message)
         return res.result
 
     def perform_simple_code(
