@@ -27,7 +27,7 @@ class SubscribeConnection(BaseConnection):
         self.filter_str = filter_str
         self.filter_list = filter_list
 
-    def connect(self, socket_file: str = SOCKET_FILE):  # type: ignore
+    def connect(self, socket_file: str = SOCKET_FILE, **kwargs):
         """Establishes a connection to the given UNIX socket file"""
         sim = client_init_messages.subscribe_init_message(
             self.subscription_mode, self.filter_str, self.filter_list
