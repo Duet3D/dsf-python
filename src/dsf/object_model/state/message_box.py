@@ -41,8 +41,8 @@ class MessageBox(ModelObject):
         return self._axis_controls
     
     @axis_controls.setter
-    def axis_controls(self, value):
-        self._axis_controls = int(value) if value is not None else 0
+    def axis_controls(self, value: int):
+        self._axis_controls = int(value)
         
     @property
     def message(self) -> str:
@@ -50,7 +50,7 @@ class MessageBox(ModelObject):
         return self._message
     
     @message.setter
-    def message(self, value):
+    def message(self, value: str):
         self._message = str(value)
         
     @property
@@ -59,17 +59,16 @@ class MessageBox(ModelObject):
         return self._mode
     
     @mode.setter
-    def mode(self, value):
-        if value is None:
-            self._mode = MessageBoxMode.OkOnly
-        elif isinstance(value, MessageBoxMode):
+    def mode(self, value: MessageBoxMode):
+        if isinstance(value, MessageBoxMode):
             self._mode = value
         elif isinstance(value, int):
             self._mode = MessageBoxMode(value)
         elif isinstance(value, str):
             self._mode = MessageBoxMode[value]
         else:
-            raise TypeError(f"{__name__}.mode must be of type MessageBoxMode. Got {type(value)}: {value}")
+            raise TypeError(f"{__name__}.mode must be of type MessageBoxMode."
+                            f" Got {type(value)}: {value}")
         
     @property
     def seq(self) -> int:
@@ -78,8 +77,8 @@ class MessageBox(ModelObject):
         return self._seq
     
     @seq.setter
-    def seq(self, value):
-        self._seq = int(value) if value is not None else -1
+    def seq(self, value: int):
+        self._seq = int(value)
         
     @property
     def timeout(self) -> int:
@@ -87,8 +86,8 @@ class MessageBox(ModelObject):
         return self._timeout
     
     @timeout.setter
-    def timeout(self, value):
-        self._timeout = int(value) if value is not None else 0
+    def timeout(self, value: int):
+        self._timeout = int(value)
         
     @property
     def title(self) -> str:
@@ -96,5 +95,5 @@ class MessageBox(ModelObject):
         return self._title
     
     @title.setter
-    def title(self, value):
+    def title(self, value: str):
         self._title = str(value)

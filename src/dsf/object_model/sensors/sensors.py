@@ -1,4 +1,4 @@
-from typing import List
+from __future__ import annotations
 
 from .analog_sensor import AnalogSensor
 from .endstop import Endstop
@@ -21,26 +21,26 @@ class Sensors(ModelObject):
         self._probes = ModelCollection(Probe)
 
     @property
-    def analog(self) -> List[AnalogSensor]:
+    def analog(self) -> list[AnalogSensor]:
         """List of analog sensors"""
         return self._analog
 
     @property
-    def endstops(self) -> List[Endstop]:
+    def endstops(self) -> list[Endstop]:
         """List of configured endstops"""
         return self._endstops
 
     @property
-    def filament_monitors(self) -> List[FilamentMonitor]:
+    def filament_monitors(self) -> list[FilamentMonitor]:
         """List of configured filament monitors"""
         return self._filament_monitors
 
     @property
-    def gp_in(self) -> List[GpInputPort]:
+    def gp_in(self) -> list[GpInputPort]:
         """List of general-purpose input ports"""
         return self._gp_in
 
     @property
-    def probes(self) -> List[Probe]:
+    def probes(self) -> list[Probe]:
         """"""
         return self._probes

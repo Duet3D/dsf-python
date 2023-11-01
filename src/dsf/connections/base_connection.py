@@ -1,6 +1,6 @@
+from __future__ import annotations
 import json
 import socket
-from typing import Optional
 
 from .exceptions import IncompatibleVersionException, InternalServerException, TaskCanceledException
 from .init_messages import client_init_messages, server_init_message
@@ -16,7 +16,7 @@ class BaseConnection:
     def __init__(self, debug: bool = False, timeout: int = 3):
         self.debug = debug
         self.timeout = timeout
-        self.socket: Optional[socket.socket] = None
+        self.socket: socket.socket | None = None
         self.id = None
         self.input = ""
 
@@ -112,8 +112,6 @@ class BaseConnection:
                     except Exception as e:
                         raise e
                     # either 0 or end of data
-                    if len(part) == 0:
-                        raise TimeoutError
                     if len(part) < BUFF_SIZE:
                         break
 

@@ -1,4 +1,4 @@
-from typing import List
+from __future__ import annotations
 
 from .build_object import BuildObject
 from ..model_collection import ModelCollection
@@ -28,8 +28,8 @@ class Build(ModelObject):
         return self._current_object
 
     @current_object.setter
-    def current_object(self, value):
-        self._current_object = int(value) if value is not None else -1
+    def current_object(self, value: int):
+        self._current_object = int(value)
 
     @property
     def m486_names(self) -> bool:
@@ -37,7 +37,7 @@ class Build(ModelObject):
         return self._m486_names
 
     @m486_names.setter
-    def m486_names(self, value):
+    def m486_names(self, value: bool):
         self._m486_names = bool(value)
 
     @property
@@ -46,10 +46,10 @@ class Build(ModelObject):
         return self._m486_numbers
 
     @m486_numbers.setter
-    def m486_numbers(self, value):
+    def m486_numbers(self, value: bool):
         self._m486_numbers = bool(value)
 
     @property
-    def objects(self) -> List[BuildObject]:
+    def objects(self) -> list[BuildObject]:
         """List of detected build objects"""
         return self._objects

@@ -1,5 +1,6 @@
 from .axis import Axis, AxisLetter
 from .current_move import CurrentMove
+from .driver_id import DriverId
 from .extruder import Extruder
 from .extruder_non_linear import ExtruderNonlinear
 from .input_shaping import InputShaping, InputShapingType

@@ -14,5 +14,5 @@ class GpInputPort(ModelObject):
         return self._value
 
     @value.setter
-    def value(self, value):
-        self._value = float(value) if value is not None else 0
+    def value(self, value: float):
+        self._value = float(value)

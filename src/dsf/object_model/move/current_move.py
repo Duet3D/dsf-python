@@ -1,4 +1,4 @@
-from typing import Union
+from __future__ import annotations
 
 from ..model_object import ModelObject
 
@@ -24,8 +24,8 @@ class CurrentMove(ModelObject):
         return self._acceleration
 
     @acceleration.setter
-    def acceleration(self, value):
-        self._acceleration = float(value) if value is not None else 0
+    def acceleration(self, value: float):
+        self._acceleration = float(value)
 
     @property
     def deceleration(self) -> float:
@@ -33,16 +33,16 @@ class CurrentMove(ModelObject):
         return self._deceleration
 
     @deceleration.setter
-    def deceleration(self, value):
+    def deceleration(self, value: float):
         self._deceleration = float(value)
 
     @property
-    def laser_pwm(self) -> Union[float, None]:
+    def laser_pwm(self) -> float | None:
         """Laser PWM of the current move (0..1) or null if not applicable"""
         return self._laser_pwm
 
     @laser_pwm.setter
-    def laser_pwm(self, value):
+    def laser_pwm(self, value: float | None = None):
         self._laser_pwm = float(value) if value is not None else None
 
     @property
@@ -51,7 +51,7 @@ class CurrentMove(ModelObject):
         return self._requested_speed
 
     @requested_speed.setter
-    def requested_speed(self, value):
+    def requested_speed(self, value: float):
         self._requested_speed = float(value)
 
     @property
@@ -60,5 +60,5 @@ class CurrentMove(ModelObject):
         return self._top_speed
 
     @top_speed.setter
-    def top_speed(self, value):
+    def top_speed(self, value: float):
         self._top_speed = float(value)

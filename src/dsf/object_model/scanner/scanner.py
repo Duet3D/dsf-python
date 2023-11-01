@@ -19,8 +19,8 @@ class Scanner(ModelObject):
         return self._progress
     
     @progress.setter
-    def progress(self, value):
-        self._progress = float(value) if value is not None else 0
+    def progress(self, value: float):
+        self._progress = float(value)
         
     @property
     def status(self) -> ScannerStatus:
@@ -29,12 +29,11 @@ class Scanner(ModelObject):
         return self._status
     
     @status.setter
-    def status(self, value):
-        if value is None or value == "":
-            self._status = ScannerStatus.disconnected
-        elif isinstance(value, str):
+    def status(self, value: ScannerStatus = ScannerStatus.disconnected):
+        if isinstance(value, str):
             self._status = ScannerStatus(value)
         elif isinstance(value, ScannerStatus):
             self._status = value
         else:
-            raise TypeError(f"{__name__}.status must be of type ScannerStatus. Got {type(value)}: {value}")
+            raise TypeError(f"{__name__}.status must be of type ScannerStatus."
+                            f" Got {type(value)}: {value}")

@@ -16,8 +16,8 @@ class MoveDeviations(ModelObject):
         return self._deviation
 
     @deviation.setter
-    def deviation(self, value):
-        self._deviation = float(value) if value is not None else 0
+    def deviation(self, value: float):
+        self._deviation = float(value)
 
     @property
     def mean(self) -> float:
@@ -25,5 +25,5 @@ class MoveDeviations(ModelObject):
         return self._mean
 
     @mean.setter
-    def mean(self, value):
-        self._mean = float(value) if value is not None else 0
+    def mean(self, value: float):
+        self._mean = float(value)

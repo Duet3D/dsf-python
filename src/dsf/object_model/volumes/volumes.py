@@ -1,4 +1,4 @@
-from typing import Union
+from __future__ import annotations
 
 from ..model_object import ModelObject
 
@@ -26,21 +26,21 @@ class Volume(ModelObject):
         self._speed = None
         
     @property
-    def capacity(self) -> Union[int, None]:
+    def capacity(self) -> int | None:
         """Total capacity of the storage device (in bytes or null)"""
         return self._capacity
     
     @capacity.setter
-    def capacity(self, value):
+    def capacity(self, value: int | None = None):
         self._capacity = int(value) if value is not None else None
         
     @property
-    def free_space(self) -> Union[int, None]:
+    def free_space(self) -> int | None:
         """How much space is still available on this device (in bytes or null)"""
         return self._free_space
     
     @free_space.setter
-    def free_space(self, value):
+    def free_space(self, value: int | None = None):
         self._free_space = int(value) if value is not None else None
         
     @property
@@ -49,50 +49,50 @@ class Volume(ModelObject):
         return self._mounted
     
     @mounted.setter
-    def mounted(self, value):
+    def mounted(self, value: bool):
         self._mounted = bool(value)
     
     @property
-    def name(self) -> Union[str, None]:
+    def name(self) -> str | None:
         """Name of this volume"""
         return self._name
     
     @name.setter
-    def name(self, value):
+    def name(self, value: str | None = None):
         self._name = str(value) if value is not None else None
     
     @property
-    def open_files(self) -> Union[int, None]:
+    def open_files(self) -> int | None:
         """Number of currently open files or null if unknown"""
         return self._open_files
     
     @open_files.setter
-    def open_files(self, value):
+    def open_files(self, value: int | None = None):
         self._open_files = int(value) if value is not None else None
         
     @property
-    def partition_size(self) -> Union[int, None]:
+    def partition_size(self) -> int | None:
         """Total size of this volume (in bytes or null)"""
         return self._partition_size
     
     @partition_size.setter
-    def partition_size(self, value):
+    def partition_size(self, value: int | None = None):
         self._partition_size = int(value) if value is not None else None
         
     @property
-    def path(self) -> Union[str, None]:
+    def path(self) -> str | None:
         """Logical path of the storage device"""
         return self._path
     
     @path.setter
-    def path(self, value):
+    def path(self, value: str | None = None):
         self._path = str(value) if value is not None else None
         
     @property
-    def speed(self) -> Union[int, None]:
+    def speed(self) -> int | None:
         """Speed of the storage device (in bytes/s or null if unknown)"""
         return self._speed
     
     @speed.setter
-    def speed(self, value):
+    def speed(self, value: int | None = None):
         self._speed = int(value) if value is not None else None

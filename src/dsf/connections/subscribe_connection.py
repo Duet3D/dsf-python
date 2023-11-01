@@ -5,7 +5,15 @@ from ..object_model import ObjectModel
 
 
 class SubscribeConnection(BaseConnection):
-    """Connection class for subscribing to model updates"""
+    """
+    Connection class for subscribing to model updates
+
+    Constructor arguments:
+    :param subscription_mode: Mode of the subscription
+    :param filter_str: Delimited filter expression. Obsolete: Use filter_list instead.
+    :param filter_list: Filter expressions
+    :param debug: Whether debugging output is turned on for this connection
+    """
 
     def __init__(
         self,
@@ -19,7 +27,7 @@ class SubscribeConnection(BaseConnection):
         self.filter_str = filter_str
         self.filter_list = filter_list
 
-    def connect(self, socket_file: str = SOCKET_FILE):  # type: ignore
+    def connect(self, socket_file: str = SOCKET_FILE, **kwargs):
         """Establishes a connection to the given UNIX socket file"""
         sim = client_init_messages.subscribe_init_message(
             self.subscription_mode, self.filter_str, self.filter_list

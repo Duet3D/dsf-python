@@ -29,7 +29,7 @@ class Directories(ModelObject):
         return self._filaments
 
     @filaments.setter
-    def filaments(self, value):
+    def filaments(self, value: str):
         self._filaments = str(value)
 
     @property
@@ -38,7 +38,7 @@ class Directories(ModelObject):
         return self._firmware
 
     @firmware.setter
-    def firmware(self, value):
+    def firmware(self, value: str):
         self._firmware = str(value)
 
     @property
@@ -47,7 +47,7 @@ class Directories(ModelObject):
         return self._g_codes
 
     @g_codes.setter
-    def g_codes(self, value):
+    def g_codes(self, value: str):
         self._g_codes = str(value)
 
     @property
@@ -56,7 +56,7 @@ class Directories(ModelObject):
         return self._macros
 
     @macros.setter
-    def macros(self, value):
+    def macros(self, value: str):
         self._macros = str(value)
 
     @property
@@ -66,7 +66,7 @@ class Directories(ModelObject):
         return self._menu
 
     @menu.setter
-    def menu(self, value):
+    def menu(self, value: str):
         self._menu = str(value)
 
     @property
@@ -75,7 +75,7 @@ class Directories(ModelObject):
         return self._scans
 
     @scans.setter
-    def scans(self, value):
+    def scans(self, value: str):
         self._scans = str(value)
 
     @property
@@ -84,7 +84,7 @@ class Directories(ModelObject):
         return self._system
 
     @system.setter
-    def system(self, value):
+    def system(self, value: str):
         self._system = str(value)
 
     @property
@@ -93,5 +93,5 @@ class Directories(ModelObject):
         return self._web
 
     @web.setter
-    def web(self, value):
+    def web(self, value: str):
         self._web = str(value)

@@ -1,6 +1,7 @@
 """
 codeparameter contains all classes and methods dealing with deserialized code parameters.
 """
+from __future__ import annotations
 import json
 
 from ..exceptions import CodeParserException
@@ -41,7 +42,7 @@ class CodeParameter(json.JSONEncoder):
             self.letter = letter
             self.string_value = str(value)
             self.__parsed_value = value
-            self.is_expression = self.string_value.startswith("{}") and self.string_value.endswith("}")
+            self.is_expression = self.string_value.startswith("{") and self.string_value.endswith("}")
             return
 
         self.letter = letter
@@ -60,7 +61,7 @@ class CodeParameter(json.JSONEncoder):
         # Empty parameters are represented as integers with the value 0 (e.g. G92 XY => G92 X0 Y0)
         if not value:
             self.__parsed_value = 0
-        elif value.startswith("{}") and value.endswith("}"):  # It is an expression
+        elif value.startswith("{") and value.endswith("}"):  # It is an expression
             self.is_expression = True
             self.__parsed_value = value
         elif ":" in value:  # It is an array (or a string)

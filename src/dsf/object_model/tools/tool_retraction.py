@@ -15,7 +15,7 @@ class ToolRetraction(ModelObject):
         # Unretract speed (in mm/s)
         self._unretract_speed = 0
         # Amount of Z lift after doing a retraction (in mm)
-        self._zhop = 0
+        self._z_hop = 0
         
     @property
     def extra_restart(self) -> float:
@@ -23,8 +23,8 @@ class ToolRetraction(ModelObject):
         return self._extra_restart
     
     @extra_restart.setter
-    def extra_restart(self, value):
-        self._extra_restart = float(value) if value is not None else 0
+    def extra_restart(self, value: float):
+        self._extra_restart = float(value)
         
     @property
     def length(self) -> float:
@@ -32,8 +32,8 @@ class ToolRetraction(ModelObject):
         return self._length
     
     @length.setter
-    def length(self, value):
-        self._length = float(value) if value is not None else 0
+    def length(self, value: float):
+        self._length = float(value)
         
     @property
     def speed(self) -> float:
@@ -41,8 +41,8 @@ class ToolRetraction(ModelObject):
         return self._speed
     
     @speed.setter
-    def speed(self, value):
-        self._speed = float(value) if value is not None else 0
+    def speed(self, value: float):
+        self._speed = float(value)
         
     @property
     def unretract_speed(self) -> float:
@@ -50,14 +50,14 @@ class ToolRetraction(ModelObject):
         return self._unretract_speed
     
     @unretract_speed.setter
-    def unretract_speed(self, value):
-        self._unretract_speed = float(value) if value is not None else 0
+    def unretract_speed(self, value: float):
+        self._unretract_speed = float(value)
         
     @property
-    def zhop(self) -> float:
+    def z_hop(self) -> float:
         """Amount of Z lift after doing a retraction (in mm)"""
-        return self._zhop
+        return self._z_hop
     
-    @zhop.setter
-    def zhop(self, value):
-        self._zhop = float(value) if value is not None else 0
+    @z_hop.setter
+    def z_hop(self, value: float):
+        self._z_hop = float(value)

@@ -1,4 +1,4 @@
-from typing import Optional
+from __future__ import annotations
 
 from .base_command import BaseCommand
 from ..object_model.messages import MessageType
@@ -17,7 +17,7 @@ def ignore():
     return BaseCommand("Ignore")
 
 
-def resolve_code(rtype: MessageType, content: Optional[str]):
+def resolve_code(rtype: MessageType, content: str | None = None):
     """
     Resolve the code to intercept and return the given message details for its completion.
     This command is only permitted in ConnectionMode.Intercept mode.

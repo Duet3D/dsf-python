@@ -16,7 +16,7 @@ class MicroStepping(ModelObject):
         return self._interpolated
 
     @interpolated.setter
-    def interpolated(self, value):
+    def interpolated(self, value: bool):
         self._interpolated = bool(value)
 
     @property
@@ -25,5 +25,5 @@ class MicroStepping(ModelObject):
         return self._value
 
     @value.setter
-    def value(self, value):
-        self._value = int(value) if value is not None else 16
+    def value(self, value: int):
+        self._value = int(value)

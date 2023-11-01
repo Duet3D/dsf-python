@@ -1,3 +1,5 @@
+from __future__ import annotations
+
 from .utils import is_model_object
 
 
@@ -19,7 +21,7 @@ class ModelCollection(list):
         if value is not None:
             self[:] = value
 
-    def update_from_json(self, json_element):
+    def update_from_json(self, json_element: dict[any]):
         """
         Update this instance from the given data
         :param json_element: JSON data to upgrade this instance from

@@ -1,4 +1,4 @@
-from typing import Union
+from __future__ import annotations
 
 from .kinematics_name import KinematicsName
 from ..move_segmentation import MoveSegmentation
@@ -57,12 +57,12 @@ class Kinematics(ModelObject):
         return self._name
 
     @property
-    def segmentation(self) -> Union[MoveSegmentation, None]:
+    def segmentation(self) -> MoveSegmentation | None:
         """Segmentation parameters or null if not configured"""
         return self._segmentation
 
     @segmentation.setter
-    def segmentation(self, value):
+    def segmentation(self, value: MoveSegmentation | None = None):
         if value is None or isinstance(value, MoveSegmentation):
             self._segmentation = value
         elif isinstance(value, dict):  # Update from JSON
@@ -74,7 +74,7 @@ class Kinematics(ModelObject):
             raise TypeError(f"{__name__}.segmentation must be None or of type MoveSegmentation."
                             f"Got {type(value)}: {value}")
 
-    def _update_from_json(self, **kwargs):
+    def _update_from_json(self, **kwargs) -> Kinematics:
         """Override ObjectModel._update_from_json to return the Kinematics type matching the given name"""
         if 'name' in kwargs and self.name != KinematicsName(kwargs.get('name')):
             kinematic_type = self.get_kinematics_type(kwargs.get('name'))

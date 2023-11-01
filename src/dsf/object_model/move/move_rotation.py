@@ -1,4 +1,4 @@
-from typing import List
+from __future__ import annotations
 
 from ..model_object import ModelObject
 
@@ -18,10 +18,10 @@ class MoveRotation(ModelObject):
         return self._angle
 
     @angle.setter
-    def angle(self, value):
-        self._angle = float(value) if value is not None else 0
+    def angle(self, value: float):
+        self._angle = float(value)
 
     @property
-    def centre(self) -> List[float]:
+    def centre(self) -> list[float]:
         """XY coordinates of the centre rotation"""
         return self._centre

@@ -1,5 +1,5 @@
+from __future__ import annotations
 from enum import Enum
-from typing import Union
 
 from .move_calibration import MoveDeviations
 from .probe_grid import ProbeGrid
@@ -44,21 +44,21 @@ class MoveCompensation(ModelObject):
         self._type = MoveCompensationType.none
 
     @property
-    def fade_height(self) -> Union[float, None]:
+    def fade_height(self) -> float | None:
         """Effective height before the bed compensation is turned off (in mm) or null if not configured"""
         return self._fade_height
 
     @fade_height.setter
-    def fade_height(self, value):
+    def fade_height(self, value: float | None = None):
         self._fade_height = float(value) if value is not None else None
 
     @property
-    def file(self) -> Union[str, None]:
+    def file(self) -> str | None:
         """Full path to the currently used height map file or null if none is in use"""
         return self._file
 
     @file.setter
-    def file(self, value):
+    def file(self, value: str | None = None):
         self._file = str(value) if value is not None else None
 
     @property
@@ -77,12 +77,11 @@ class MoveCompensation(ModelObject):
         return self._type
 
     @type.setter
-    def type(self, value):
-        if value is None or value == "":
-            self._type = MoveCompensationType.none
-        elif isinstance(value, MoveCompensationType):
+    def type(self, value: MoveCompensationType = MoveCompensationType.none):
+        if isinstance(value, MoveCompensationType):
             self._type = value
         elif isinstance(value, str):
             self._type = MoveCompensationType(value)
         else:
-            raise TypeError(f"{__name__}.type must be of type MoveCompensationType. Got {type(value)}: {value}")
+            raise TypeError(f"{__name__}.type must be of type MoveCompensationType."
+                            f" Got {type(value)}: {value}")

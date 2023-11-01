@@ -17,7 +17,7 @@ class Accelerometer(ModelObject):
 
     @points.setter
     def points(self, value: int):
-        self._points = int(value) if value is not None else 0
+        self._points = int(value)
 
     @property
     def runs(self) -> int:
@@ -26,4 +26,4 @@ class Accelerometer(ModelObject):
 
     @runs.setter
     def runs(self, value: int):
-        self._runs = int(value) if value is not None else 0
+        self._runs = int(value)

@@ -20,7 +20,7 @@ class MinMaxCurrent(ModelObject):
 
     @current.setter
     def current(self, value: float):
-        self._current = float(value) if value is not None else 0
+        self._current = float(value)
 
     @property
     def min(self) -> float:
@@ -29,7 +29,7 @@ class MinMaxCurrent(ModelObject):
 
     @min.setter
     def min(self, value: float):
-        self._min = float(value) if value is not None else 0
+        self._min = float(value)
 
     @property
     def max(self) -> float:
@@ -38,4 +38,4 @@ class MinMaxCurrent(ModelObject):
 
     @max.setter
     def max(self, value: float):
-        self._max = float(value) if value is not None else 0
+        self._max = float(value)

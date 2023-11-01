@@ -21,7 +21,7 @@ class Skew(ModelObject):
         return self._compensate_XY
 
     @compensate_XY.setter
-    def compensate_XY(self, value):
+    def compensate_XY(self, value: bool):
         self._compensate_XY = bool(value)
 
     @property
@@ -30,8 +30,8 @@ class Skew(ModelObject):
         return self._tan_XY
 
     @tan_XY.setter
-    def tan_XY(self, value):
-        self._tan_XY = float(value) if value is not None else 0
+    def tan_XY(self, value: float):
+        self._tan_XY = float(value)
 
     @property
     def tan_XZ(self) -> float:
@@ -39,8 +39,8 @@ class Skew(ModelObject):
         return self._tan_XZ
 
     @tan_XZ.setter
-    def tan_XZ(self, value):
-        self._tan_XZ = float(value) if value is not None else 0
+    def tan_XZ(self, value: float):
+        self._tan_XZ = float(value)
 
     @property
     def tan_YZ(self) -> float:
@@ -48,5 +48,5 @@ class Skew(ModelObject):
         return self._tan_YZ
 
     @tan_YZ.setter
-    def tan_YZ(self, value):
-        self._tan_YZ = float(value) if value is not None else 0
+    def tan_YZ(self, value: float):
+        self._tan_YZ = float(value)

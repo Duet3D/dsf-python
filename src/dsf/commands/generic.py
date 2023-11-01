@@ -1,4 +1,4 @@
-from typing import Optional
+from __future__ import annotations
 
 from .base_command import BaseCommand
 from .code_channel import CodeChannel
@@ -89,7 +89,7 @@ def write_message(
     message_type: MessageType,
     content: str,
     output_message: bool = True,
-    log_level: Optional[LogLevel] = None,
+    log_level: LogLevel | None = None,
 ):
     """
     Write an arbitrary generic message

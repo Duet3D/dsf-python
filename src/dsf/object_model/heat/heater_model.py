@@ -1,3 +1,5 @@
+from __future__ import annotations
+
 from ..model_object import ModelObject
 from .heater_model_pid import HeaterModelPID
 
@@ -25,7 +27,7 @@ class HeaterModel(ModelObject):
         self._max_pwm = 1
         # Details about the PID controller
         self._pid = HeaterModelPID()
-        # Standard voltage or null if unknown
+        # Standard voltage or None if unknown
         self._standard_voltage = None
 
     @property
@@ -34,8 +36,8 @@ class HeaterModel(ModelObject):
         return self._cooling_exp
 
     @cooling_exp.setter
-    def cooling_exp(self, value):
-        self._cooling_exp = float(value) if value is not None else 1.35
+    def cooling_exp(self, value: float):
+        self._cooling_exp = float(value)
 
     @property
     def cooling_rate(self) -> float:
@@ -43,8 +45,8 @@ class HeaterModel(ModelObject):
         return self._cooling_rate
 
     @cooling_rate.setter
-    def cooling_rate(self, value):
-        self._cooling_rate = float(value) if value is not None else 0.56
+    def cooling_rate(self, value: float):
+        self._cooling_rate = float(value)
 
     @property
     def dead_time(self) -> float:
@@ -52,8 +54,8 @@ class HeaterModel(ModelObject):
         return self._dead_time
 
     @dead_time.setter
-    def dead_time(self, value):
-        self._dead_time = float(value) if value is not None else 5.5
+    def dead_time(self, value: float):
+        self._dead_time = float(value)
 
     @property
     def enabled(self) -> bool:
@@ -61,7 +63,7 @@ class HeaterModel(ModelObject):
         return self._enabled
 
     @enabled.setter
-    def enabled(self, value):
+    def enabled(self, value: bool):
         self._enabled = bool(value)
 
     @property
@@ -70,8 +72,8 @@ class HeaterModel(ModelObject):
         return self._fan_cooling_rate
 
     @fan_cooling_rate.setter
-    def fan_cooling_rate(self, value):
-        self._fan_cooling_rate = float(value) if value is not None else 0.56
+    def fan_cooling_rate(self, value: float):
+        self._fan_cooling_rate = float(value)
 
     @property
     def heating_rate(self) -> float:
@@ -79,8 +81,8 @@ class HeaterModel(ModelObject):
         return self._heating_rate
 
     @heating_rate.setter
-    def heating_rate(self, value):
-        self._heating_rate = float(value) if value is not None else 2.43
+    def heating_rate(self, value: float):
+        self._heating_rate = float(value)
 
     @property
     def inverted(self) -> bool:
@@ -88,7 +90,7 @@ class HeaterModel(ModelObject):
         return self._inverted
 
     @inverted.setter
-    def inverted(self, value):
+    def inverted(self, value: bool):
         self._inverted = bool(value)
 
     @property
@@ -97,8 +99,8 @@ class HeaterModel(ModelObject):
         return self._max_pwm
 
     @max_pwm.setter
-    def max_pwm(self, value):
-        self._max_pwm = float(value) if value is not None else 1
+    def max_pwm(self, value: float):
+        self._max_pwm = float(value)
 
     @property
     def pid(self) -> HeaterModelPID:
@@ -106,7 +108,7 @@ class HeaterModel(ModelObject):
         return self._pid
 
     @property
-    def standard_voltage(self) -> float:
+    def standard_voltage(self) -> float | None:
         """Standard voltage or null if unknown"""
         return self._standard_voltage
 

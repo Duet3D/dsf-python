@@ -1,4 +1,4 @@
-from typing import List
+from __future__ import annotations
 
 from .delta_tower import DeltaTower
 from .kinematics import Kinematics
@@ -29,8 +29,8 @@ class DeltaKinematics(Kinematics):
         return self._delta_radius
     
     @delta_radius.setter
-    def delta_radius(self, value):
-        self._delta_radius = float(value) if value is not None else 0
+    def delta_radius(self, value: float):
+        self._delta_radius = float(value)
     
     @property
     def homed_height(self) -> float:
@@ -38,8 +38,8 @@ class DeltaKinematics(Kinematics):
         return self._homed_height
     
     @homed_height.setter
-    def homed_height(self, value):
-        self._homed_height = float(value) if value is not None else 0
+    def homed_height(self, value: float):
+        self._homed_height = float(value)
     
     @property
     def print_radius(self) -> float:
@@ -47,11 +47,11 @@ class DeltaKinematics(Kinematics):
         return self._print_radius
     
     @print_radius.setter
-    def print_radius(self, value):
-        self._print_radius = float(value) if value is not None else 0
+    def print_radius(self, value: float):
+        self._print_radius = float(value)
 
     @property
-    def towers(self) -> List[DeltaTower]:
+    def towers(self) -> list[DeltaTower]:
         """Delta tower properties"""
         return self._towers
     
@@ -61,8 +61,8 @@ class DeltaKinematics(Kinematics):
         return self._x_tilt
     
     @x_tilt.setter
-    def x_tilt(self, value):
-        self._x_tilt = float(value) if value is not None else 0
+    def x_tilt(self, value: float):
+        self._x_tilt = float(value)
     
     @property
     def y_tilt(self) -> float:
@@ -70,5 +70,5 @@ class DeltaKinematics(Kinematics):
         return self._y_tilt
     
     @y_tilt.setter
-    def y_tilt(self, value):
-        self._y_tilt = float(value) if value is not None else 0
+    def y_tilt(self, value: float):
+        self._y_tilt = float(value)

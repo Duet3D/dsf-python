@@ -20,8 +20,8 @@ class PulsedFilamentMonitorCalibrated(ModelObject):
         return self._mm_per_pulse
 
     @mm_per_pulse.setter
-    def mm_per_pulse(self, value):
-        self._mm_per_pulse = float(value) if value is not None else 0
+    def mm_per_pulse(self, value: float):
+        self._mm_per_pulse = float(value)
 
     @property
     def percent_max(self) -> float:
@@ -29,8 +29,8 @@ class PulsedFilamentMonitorCalibrated(ModelObject):
         return self._percent_max
 
     @percent_max.setter
-    def percent_max(self, value):
-        self._percent_max = float(value) if value is not None else 0
+    def percent_max(self, value: float):
+        self._percent_max = float(value)
 
     @property
     def percent_min(self) -> float:
@@ -38,8 +38,8 @@ class PulsedFilamentMonitorCalibrated(ModelObject):
         return self._percent_min
 
     @percent_min.setter
-    def percent_min(self, value):
-        self._percent_min = float(value) if value is not None else 0
+    def percent_min(self, value: float):
+        self._percent_min = float(value)
 
     @property
     def total_distance(self) -> float:
@@ -47,8 +47,8 @@ class PulsedFilamentMonitorCalibrated(ModelObject):
         return self._total_distance
 
     @total_distance.setter
-    def total_distance(self, value):
-        self._total_distance = float(value) if value is not None else 0
+    def total_distance(self, value: float):
+        self._total_distance = float(value)
 
 
 class PulsedFilamentMonitorConfigured(ModelObject):
@@ -67,8 +67,8 @@ class PulsedFilamentMonitorConfigured(ModelObject):
         return self._mm_per_pulse
     
     @mm_per_pulse.setter
-    def mm_per_pulse(self, value):
-        self._mm_per_pulse = float(value) if value is not None else 0
+    def mm_per_pulse(self, value: float):
+        self._mm_per_pulse = float(value)
         
     @property
     def percent_max(self) -> float:
@@ -76,8 +76,8 @@ class PulsedFilamentMonitorConfigured(ModelObject):
         return self._percent_max
     
     @percent_max.setter
-    def percent_max(self, value):
-        self._percent_max = float(value) if value is not None else 0
+    def percent_max(self, value: float):
+        self._percent_max = float(value)
         
     @property
     def percent_min(self) -> float:
@@ -85,8 +85,8 @@ class PulsedFilamentMonitorConfigured(ModelObject):
         return self._percent_min
     
     @percent_min.setter
-    def percent_min(self, value):
-        self._percent_min = float(value) if value is not None else 0
+    def percent_min(self, value: float):
+        self._percent_min = float(value)
         
     @property
     def sample_distance(self) -> float:
@@ -94,8 +94,8 @@ class PulsedFilamentMonitorConfigured(ModelObject):
         return self._sample_distance
     
     @sample_distance.setter
-    def sample_distance(self, value):
-        self._sample_distance = float(value) if value is not None else 0
+    def sample_distance(self, value: float):
+        self._sample_distance = float(value)
 
 
 class PulsedFilamentMonitor(FilamentMonitor):
@@ -106,7 +106,7 @@ class PulsedFilamentMonitor(FilamentMonitor):
 
     def __init__(self):
         super(PulsedFilamentMonitor, self).__init__()
-        self._calibrated = PulsedFilamentMonitorCalibrated()
+        self._calibrated = None
         self._configured = PulsedFilamentMonitorConfigured()
         self._type = FilamentMonitorType.Pulsed
         

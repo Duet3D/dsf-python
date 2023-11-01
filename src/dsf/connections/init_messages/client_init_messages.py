@@ -19,6 +19,7 @@ clientinitmessages holds all messages a client can send to the server to initiat
 """
 from .server_init_message import ServerInitMessage
 from .. import ConnectionMode, InterceptionMode, SubscriptionMode
+from ...commands.code_channel import CodeChannel
 
 
 class ClientInitMessage:
@@ -34,15 +35,41 @@ class ClientInitMessage:
             self.__dict__[key] = value
 
 
-def intercept_init_message(intercept_mode: InterceptionMode, channels, filters, priority_codes: bool):
-    """Enter interception mode"""
+def intercept_init_message(
+        intercept_mode: InterceptionMode,
+        channels: list[CodeChannel],
+        filters: list[str],
+        priority_codes: bool,
+        auto_flush: bool = True):
+    """
+    Enter interception mode
+    Whenever a code is received, the connection must respond with one of
+    - `Cancel` to cancel the code
+    - `Ignore` to pass through the code without modifications
+    - `Resolve` to resolve the current code and to return a message
+    In addition the interceptor may issue custom commands once a code has been received
+
+    :param intercept_mode: Defines in what mode commands are supposed to be intercepted
+    :param channels: List of channel where codes may be intercepted.
+    If the list is empty, all available channels are used
+    :param filters: List of G/M/T-codes to filter or Q for comments
+    This may only specify the code type and major/minor number (e.g. G1 or M105).
+    Alternatively keyword types may be specified (e.g. if or elif).
+    Asterisks are supported, too (e.g. T*)
+    :param priority_codes: Defines if either regular or priority codes are supposed to be intercepted
+    :param auto_flush: Automatically flush the code channel before notifying the client in case a code filter
+    is specified.
+    This option makes extra Flush calls in the interceptor implementation obsolete.
+    It is highly recommended to enable this in order to avoid potential deadlocks when dealing with macros!
+    """
     return ClientInitMessage(
         ConnectionMode.INTERCEPT,
         **{
             "InterceptionMode": intercept_mode,
             "Channels": channels,
+            "AutoFlush": auto_flush,
             "Filters": filters,
-            "PriorityCodes": priority_codes,
+            "PriortyCodes": priority_codes,
         },
     )
 

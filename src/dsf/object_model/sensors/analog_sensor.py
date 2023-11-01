@@ -1,4 +1,4 @@
-from typing import Union
+from __future__ import annotations
 
 from .analog_sensor_type import AnalogSensorType
 from ..model_object import ModelObject
@@ -14,21 +14,21 @@ class AnalogSensor(ModelObject):
         self._type = AnalogSensorType.Unknown
 
     @property
-    def last_reading(self) -> Union[float, None]:
+    def last_reading(self) -> float | None:
         """Last sensor reading (in C) or null if invalid"""
         return self._last_reading
     
     @last_reading.setter
-    def last_reading(self, value):
+    def last_reading(self, value: float | None = None):
         self._last_reading = float(value) if value is not None else None
         
     @property
-    def name(self) -> Union[str, None]:
+    def name(self) -> str | None:
         """Name of this sensor or null if not configured"""
         return self._name
     
     @name.setter
-    def name(self, value):
+    def name(self, value: str | None = None):
         self._name = str(value) if value is not None else None
         
     @property
@@ -37,10 +37,11 @@ class AnalogSensor(ModelObject):
         return self._type
     
     @type.setter
-    def type(self, value):
-        if value is None or isinstance(value, AnalogSensorType):
+    def type(self, value: AnalogSensorType = AnalogSensorType.Unknown):
+        if isinstance(value, AnalogSensorType):
             self._type = value
         elif isinstance(value, str):
             self._type = AnalogSensorType(value)
         else:
-            raise TypeError(f"{__name__}.type must be of type AnalogSensorType or None. Got {type(value)}: {value}")
+            raise TypeError(f"{__name__}.type must be of type AnalogSensorType."
+                            f" Got {type(value)}: {value}")

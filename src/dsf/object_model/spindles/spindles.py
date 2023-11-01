@@ -28,8 +28,8 @@ class Spindle(ModelObject):
         return self._active
     
     @active.setter
-    def active(self, value):
-        self._active = int(value) if value is not None else 0
+    def active(self, value: int):
+        self._active = int(value)
         
     @property
     def can_reverse(self) -> bool:
@@ -37,7 +37,7 @@ class Spindle(ModelObject):
         return self._can_reverse
     
     @can_reverse.setter
-    def can_reverse(self, value):
+    def can_reverse(self, value: bool):
         self._can_reverse = bool(value)
         
     @property
@@ -46,8 +46,8 @@ class Spindle(ModelObject):
         return self._current
     
     @current.setter
-    def current(self, value):
-        self._current = int(value) if value is not None else 0
+    def current(self, value: int):
+        self._current = int(value)
         
     @property
     def frequency(self) -> int:
@@ -55,8 +55,8 @@ class Spindle(ModelObject):
         return self._frequency
     
     @frequency.setter
-    def frequency(self, value):
-        self._frequency = int(value) if value is not None else 0
+    def frequency(self, value: int):
+        self._frequency = int(value)
         
     @property
     def max(self) -> int:
@@ -64,8 +64,8 @@ class Spindle(ModelObject):
         return self._max
     
     @max.setter
-    def max(self, value):
-        self._max = int(value) if value is not None else 10000
+    def max(self, value: int):
+        self._max = int(value)
         
     @property
     def min(self) -> int:
@@ -73,8 +73,8 @@ class Spindle(ModelObject):
         return self._min
     
     @min.setter
-    def min(self, value):
-        self._min = int(value) if value is not None else 60
+    def min(self, value: int):
+        self._min = int(value)
         
     @property
     def state(self) -> SpindleState:
@@ -82,12 +82,11 @@ class Spindle(ModelObject):
         return self._state
     
     @state.setter
-    def state(self, value):
-        if value is None or value == "":
-            self._state = SpindleState.unconfigured
+    def state(self, value: SpindleState = SpindleState.unconfigured):
+        if isinstance(value, SpindleState):
+            self._state = value
         elif isinstance(value, str):
             self._state = SpindleState(value)
-        elif isinstance(value, SpindleState):
-            self._state = value
         else:
-            raise TypeError(f"{__name__}.state must be of type SpindleState. Got {type(value)}: {value}")
+            raise TypeError(f"{__name__}.state must be of type SpindleState."
+                            f" Got {type(value)}: {value}")

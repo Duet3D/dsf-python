@@ -1,4 +1,4 @@
-from typing import Union
+from __future__ import annotations
 
 from ..model_object import ModelObject
 
@@ -16,28 +16,28 @@ class TimesLeft(ModelObject):
         self._slicer = None
 
     @property
-    def filament(self) -> Union[int, None]:
+    def filament(self) -> int | None:
         """Time left based on filament consumption (in s or null)"""
         return self._filament
 
     @filament.setter
-    def filament(self, value):
+    def filament(self, value: int | None = None):
         self._filament = int(value) if value is not None else None
 
     @property
-    def file(self) -> Union[int, None]:
+    def file(self) -> int | None:
         """Time left based on file progress (in s or null)"""
         return self._file
 
     @file.setter
-    def file(self, value):
+    def file(self, value: int | None = None):
         self._file = int(value) if value is not None else None
 
     @property
-    def slicer(self) -> Union[int, None]:
+    def slicer(self) -> int | None:
         """Time left based on the slicer reports (see M73, in s or null)"""
         return self._slicer
 
     @slicer.setter
-    def slicer(self, value):
+    def slicer(self, value: int | None = None):
         self._slicer = int(value) if value is not None else None

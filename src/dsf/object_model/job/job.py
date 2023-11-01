@@ -1,4 +1,4 @@
-from typing import List, Union
+from __future__ import annotations
 
 from .build import Build
 from .gcode_fileinfo import GCodeFileInfo
@@ -53,30 +53,30 @@ class Job(ModelObject):
         self._warm_up_duration = None
 
     @property
-    def duration(self) -> Union[int, None]:
+    def duration(self) -> int | None:
         """Total active duration of the current job file (in s or null)"""
         return self._duration
 
     @duration.setter
-    def duration(self, value):
+    def duration(self, value: int | None = None):
         self._duration = int(value) if value is not None else None
 
     @property
-    def file_position(self) -> Union[int, None]:
+    def file_position(self) -> int | None:
         """Current position in the file being processed (in bytes or null)"""
         return self._file_position
 
     @file_position.setter
-    def file_position(self, value):
+    def file_position(self, value: int | None = None):
         self._file_position = int(value) if value is not None else None
 
     @property
-    def last_duration(self) -> Union[int, None]:
+    def last_duration(self) -> int | None:
         """Total duration of the last job (in s or null)"""
         return self._last_duration
 
     @last_duration.setter
-    def last_duration(self, value):
+    def last_duration(self, value: int | None = None):
         self._last_duration = int(value) if value is not None else None
 
     @property
@@ -85,7 +85,7 @@ class Job(ModelObject):
         return self._last_file_aborted
 
     @last_file_aborted.setter
-    def last_file_aborted(self, value):
+    def last_file_aborted(self, value: bool):
         self._last_file_aborted = bool(value)
 
     @property
@@ -94,16 +94,16 @@ class Job(ModelObject):
         return self._last_file_cancelled
 
     @last_file_cancelled.setter
-    def last_file_cancelled(self, value):
+    def last_file_cancelled(self, value: bool):
         self._last_file_cancelled = bool(value)
 
     @property
-    def last_file_name(self) -> Union[str, None]:
+    def last_file_name(self) -> str | None:
         """Name of the last file processed or null if none"""
         return self._last_file_name
 
     @last_file_name.setter
-    def last_file_name(self, value):
+    def last_file_name(self, value: str | None = None):
         self._last_file_name = str(value) if value is not None else None
 
     @property
@@ -113,53 +113,49 @@ class Job(ModelObject):
         return self._last_file_simulated
 
     @last_file_simulated.setter
-    def last_file_simulated(self, value):
+    def last_file_simulated(self, value: bool):
         self._last_file_simulated = bool(value)
 
     @property
-    def layer(self) -> Union[int, None]:
+    def layer(self) -> int | None:
         """Number of the current layer or null not available"""
         return self._layer
 
     @layer.setter
-    def layer(self, value):
+    def layer(self, value: int | None = None):
         self._layer = int(value) if value is not None else None
 
     @property
-    def layers(self) -> List[Layer]:
+    def layers(self) -> list[Layer]:
         """Information about the past layers
-        In previous API versions this was a ModelGrowingCollection{T} but it has been changed to ModelCollection{T} to
-        allow past layers to be modified again when needed.
-        Note that previous plugins subscribing to this property will not receive any more updates about this property
-        to avoid memory leaks.
         See also Layer"""
         return self._layers
 
     @property
-    def layer_time(self) -> Union[float, None]:
+    def layer_time(self) -> float | None:
         """Time elapsed since the last layer change (in s or null)"""
         return self._layer_time
 
     @layer_time.setter
-    def layer_time(self, value):
+    def layer_time(self, value: float | None = None):
         self._layer_time = float(value) if value is not None else None
 
     @property
-    def pause_duration(self) -> Union[int, None]:
+    def pause_duration(self) -> int | None:
         """Total pause time since the job started"""
         return self._pause_duration
 
     @pause_duration.setter
-    def pause_duration(self, value):
+    def pause_duration(self, value: int | None = None):
         self._pause_duration = int(value) if value is not None else None
 
     @property
-    def raw_extrusion(self) -> Union[float, None]:
+    def raw_extrusion(self) -> float | None:
         """Total extrusion amount without extrusion factors applied (in mm)"""
         return self._raw_extrusion
 
     @raw_extrusion.setter
-    def raw_extrusion(self, value):
+    def raw_extrusion(self, value: float | None = None):
         self._raw_extrusion = float(value) if value is not None else None
 
     @property
@@ -168,10 +164,10 @@ class Job(ModelObject):
         return self._times_left
 
     @property
-    def warm_up_duration(self) -> Union[int, None]:
+    def warm_up_duration(self) -> int | None:
         """Time needed to heat up the heaters (in s or null)"""
         return self._warm_up_duration
 
     @warm_up_duration.setter
-    def warm_up_duration(self, value):
+    def warm_up_duration(self, value: int | None = None):
         self._warm_up_duration = int(value) if value is not None else None

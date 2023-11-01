@@ -1,4 +1,4 @@
-from typing import List
+from __future__ import annotations
 
 from ..model_object import ModelObject
 
@@ -25,11 +25,11 @@ class Layer(ModelObject):
         return self._duration
 
     @duration.setter
-    def duration(self, value):
-        self._duration = float(value) if value is not None else 0
+    def duration(self, value: float):
+        self._duration = float(value)
 
     @property
-    def filament(self) -> List[float]:
+    def filament(self) -> list[float]:
         """Actual amount of filament extruded during this layer (in mm)"""
         return self._filament
 
@@ -39,8 +39,8 @@ class Layer(ModelObject):
         return self._fraction_printed
 
     @fraction_printed.setter
-    def fraction_printed(self, value):
-        self._fraction_printed = float(value) if value is not None else 0
+    def fraction_printed(self, value: float):
+        self._fraction_printed = float(value)
 
     @property
     def height(self) -> int:
@@ -48,10 +48,10 @@ class Layer(ModelObject):
         return self._height
 
     @height.setter
-    def height(self, value):
-        self._height = int(value) if value is not None else 0
+    def height(self, value: int):
+        self._height = int(value)
 
     @property
-    def temperatures(self) -> List[float]:
+    def temperatures(self) -> list[float]:
         """Last heater temperatures (in C or null if unknown)"""
         return self._temperatures

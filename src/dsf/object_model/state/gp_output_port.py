@@ -14,5 +14,5 @@ class GpOutputPort(ModelObject):
         return self._pwm
 
     @pwm.setter
-    def pwm(self, value):
-        self._pwm = float(value) if value is not None else 0
+    def pwm(self, value: float):
+        self._pwm = float(value)

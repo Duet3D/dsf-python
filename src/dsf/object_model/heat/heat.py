@@ -1,4 +1,4 @@
-from typing import List
+from __future__ import annotations
 
 from .heater import Heater
 from ..model_collection import ModelCollection
@@ -22,13 +22,13 @@ class Heat(ModelObject):
         self._heaters = ModelCollection(Heater)
 
     @property
-    def bed_heaters(self) -> List[int]:
+    def bed_heaters(self) -> list[int]:
         """List of configured bed heaters (indices)
         Items may be -1 if unconfigured"""
         return self._bed_heaters
 
     @property
-    def chamber_heaters(self) -> List[int]:
+    def chamber_heaters(self) -> list[int]:
         """List of configured chamber heaters (indices)
         Items may be -1 if unconfigured"""
         return self._chamber_heaters
@@ -39,8 +39,8 @@ class Heat(ModelObject):
         return self._cold_extrude_temperature
 
     @cold_extrude_temperature.setter
-    def cold_extrude_temperature(self, value: float = 160):
-        self._cold_extrude_temperature = float(value) if value is not None else 160
+    def cold_extrude_temperature(self, value: float):
+        self._cold_extrude_temperature = float(value)
 
     @property
     def cold_retract_temperature(self) -> float:
@@ -48,10 +48,10 @@ class Heat(ModelObject):
         return self._cold_retract_temperature
 
     @cold_retract_temperature.setter
-    def cold_retract_temperature(self, value: float = 90):
-        self._cold_retract_temperature = float(value) if value is not None else 90
+    def cold_retract_temperature(self, value: float):
+        self._cold_retract_temperature = float(value)
 
     @property
-    def heaters(self) -> List[Heater]:
+    def heaters(self) -> list[Heater]:
         """List of configured heaters"""
         return self._heaters

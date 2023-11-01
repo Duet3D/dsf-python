@@ -1,4 +1,4 @@
-from typing import List
+from __future__ import annotations
 
 from .tool_state import ToolState
 from .tool_retraction import ToolRetraction
@@ -48,12 +48,12 @@ class Tool(ModelObject):
         self._state = ToolState.off
         
     @property
-    def active(self) -> List[float]:
+    def active(self) -> list[float]:
         """Active temperatures of the associated heaters (in C)"""
         return self._active
 
     @property
-    def axes(self) -> List[int]:
+    def axes(self) -> list[int]:
         """Associated axes. At present only X and Y can be mapped per tool.
         The order is the same as the visual axes, so by default the layout is
         [
@@ -64,17 +64,17 @@ class Tool(ModelObject):
         return self._axes
 
     @property
-    def extruders(self) -> List[int]:
+    def extruders(self) -> list[int]:
         """Extruder drives of this tool"""
         return self._extruders
 
     @property
-    def fans(self) -> List[int]:
+    def fans(self) -> list[int]:
         """List of associated fans (indices)"""
         return self._fans
     
     @property
-    def feed_forward(self) -> List[int]:
+    def feed_forward(self) -> list[int]:
         """Feedforward coefficients to apply to the mapped heaters during extrusions"""
         return self._feed_forward
     
@@ -84,11 +84,11 @@ class Tool(ModelObject):
         return self._filament_extruder
     
     @filament_extruder.setter
-    def filament_extruder(self, value):
-        self._filament_extruder = int(value) if value is not None else -1
+    def filament_extruder(self, value: int):
+        self._filament_extruder = int(value)
         
     @property
-    def heaters(self) -> List[int]:
+    def heaters(self) -> list[int]:
         """List of associated heaters (indices)"""
         return self._heaters
     
@@ -98,11 +98,11 @@ class Tool(ModelObject):
         return self._is_retracted
     
     @is_retracted.setter
-    def is_retracted(self, value):
+    def is_retracted(self, value: bool):
         self._is_retracted = bool(value)
         
     @property
-    def mix(self) -> List[float]:
+    def mix(self) -> list[float]:
         """Mix ratios of the associated extruder drives"""
         return self._mix
     
@@ -112,8 +112,8 @@ class Tool(ModelObject):
         return self._name
     
     @name.setter
-    def name(self, value):
-        self._name = str(value) if value is not None else ""
+    def name(self, value: str):
+        self._name = str(value)
         
     @property
     def number(self) -> int:
@@ -121,11 +121,11 @@ class Tool(ModelObject):
         return self._number
     
     @number.setter
-    def number(self, value):
-        self._number = int(value) if value is not None else -1
+    def number(self, value: int):
+        self._number = int(value)
         
     @property
-    def offsets(self) -> List[float]:
+    def offsets(self) -> list[float]:
         """Axis offsets (in mm)
         This list is in the same order as Move.Axes"""
         return self._offsets
@@ -136,8 +136,8 @@ class Tool(ModelObject):
         return self._offsets_probed
     
     @offsets_probed.setter
-    def offsets_probed(self, value):
-        self._offsets_probed = int(value) if value is not None else 0
+    def offsets_probed(self, value: int):
+        self._offsets_probed = int(value)
         
     @property
     def retraction(self) -> ToolRetraction:
@@ -150,8 +150,8 @@ class Tool(ModelObject):
         return self._spindle
     
     @spindle.setter
-    def spindle(self, value):
-        self._spindle = int(value) if value is not None else -1
+    def spindle(self, value: int):
+        self._spindle = int(value)
         
     @property
     def spindle_rpm(self) -> int:
@@ -159,11 +159,11 @@ class Tool(ModelObject):
         return self._spindle_rpm
     
     @spindle_rpm.setter
-    def spindle_rpm(self, value):
-        self._spindle_rpm = int(value) if value is not None else 0
+    def spindle_rpm(self, value: int):
+        self._spindle_rpm = int(value)
         
     @property
-    def standby(self) -> List[float]:
+    def standby(self) -> list[float]:
         """Standby temperatures of the associated heaters (in C)"""
         return self._standby
     
@@ -173,12 +173,11 @@ class Tool(ModelObject):
         return self._state
     
     @state.setter
-    def state(self, value):
-        if value is None or value == "":
-            self._state = ToolState.off
-        elif isinstance(value, ToolState):
+    def state(self, value: ToolState):
+        if isinstance(value, ToolState):
             self._state = value
         elif isinstance(value, str):
             self._state = ToolState(value)
         else:
-            raise TypeError(f"{__name__}.state must be of type ToolState. Got {type(value)}: {value}")
+            raise TypeError(f"{__name__}.state must be of type ToolState."
+                            f" Got {type(value)}: {value}")

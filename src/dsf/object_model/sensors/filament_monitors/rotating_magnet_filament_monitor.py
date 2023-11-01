@@ -20,8 +20,8 @@ class RotatingMagnetFilamentMonitorCalibrated(ModelObject):
         return self._mm_per_pulse
 
     @mm_per_pulse.setter
-    def mm_per_pulse(self, value):
-        self._mm_per_pulse = float(value) if value is not None else 0
+    def mm_per_pulse(self, value: float):
+        self._mm_per_pulse = float(value)
 
     @property
     def percent_max(self) -> float:
@@ -29,8 +29,8 @@ class RotatingMagnetFilamentMonitorCalibrated(ModelObject):
         return self._percent_max
 
     @percent_max.setter
-    def percent_max(self, value):
-        self._percent_max = float(value) if value is not None else 0
+    def percent_max(self, value: float):
+        self._percent_max = float(value)
 
     @property
     def percent_min(self) -> float:
@@ -38,8 +38,8 @@ class RotatingMagnetFilamentMonitorCalibrated(ModelObject):
         return self._percent_min
 
     @percent_min.setter
-    def percent_min(self, value):
-        self._percent_min = float(value) if value is not None else 0
+    def percent_min(self, value: float):
+        self._percent_min = float(value)
 
     @property
     def total_distance(self) -> float:
@@ -47,8 +47,8 @@ class RotatingMagnetFilamentMonitorCalibrated(ModelObject):
         return self._total_distance
 
     @total_distance.setter
-    def total_distance(self, value):
-        self._total_distance = float(value) if value is not None else 0
+    def total_distance(self, value: float):
+        self._total_distance = float(value)
 
 
 class RotatingMagnetFilamentMonitorConfigured(ModelObject):
@@ -56,20 +56,20 @@ class RotatingMagnetFilamentMonitorConfigured(ModelObject):
 
     def __init__(self):
         super(RotatingMagnetFilamentMonitorConfigured, self).__init__()
-        self._all_moves = 0
+        self._all_moves = False
         self._mm_per_rev = 0
         self._percent_max = 0
         self._percent_min = 0
         self._sample_distance = 0
 
     @property
-    def all_moves(self) -> float:
+    def all_moves(self) -> bool:
         """Whether all moves and not only printing moves are supposed to be checked"""
         return self._all_moves
     
     @all_moves.setter
-    def all_moves(self, value):
-        self._all_moves = float(value) if value is not None else 0
+    def all_moves(self, value: bool):
+        self._all_moves = bool(value)
         
     @property
     def mm_per_rev(self) -> float:
@@ -77,8 +77,8 @@ class RotatingMagnetFilamentMonitorConfigured(ModelObject):
         return self._mm_per_rev
     
     @mm_per_rev.setter
-    def mm_per_rev(self, value):
-        self._mm_per_rev = float(value) if value is not None else 0
+    def mm_per_rev(self, value: float):
+        self._mm_per_rev = float(value)
         
     @property
     def percent_max(self) -> float:
@@ -86,8 +86,8 @@ class RotatingMagnetFilamentMonitorConfigured(ModelObject):
         return self._percent_max
     
     @percent_max.setter
-    def percent_max(self, value):
-        self._percent_max = float(value) if value is not None else 0
+    def percent_max(self, value: float):
+        self._percent_max = float(value)
         
     @property
     def percent_min(self) -> float:
@@ -95,8 +95,8 @@ class RotatingMagnetFilamentMonitorConfigured(ModelObject):
         return self._percent_min
     
     @percent_min.setter
-    def percent_min(self, value):
-        self._percent_min = float(value) if value is not None else 0
+    def percent_min(self, value: float):
+        self._percent_min = float(value)
         
     @property
     def sample_distance(self) -> float:
@@ -104,8 +104,8 @@ class RotatingMagnetFilamentMonitorConfigured(ModelObject):
         return self._sample_distance
     
     @sample_distance.setter
-    def sample_distance(self, value):
-        self._sample_distance = float(value) if value is not None else 0
+    def sample_distance(self, value: float):
+        self._sample_distance = float(value)
 
 
 class RotatingMagnetFilamentMonitor(FilamentMonitor):
@@ -116,7 +116,7 @@ class RotatingMagnetFilamentMonitor(FilamentMonitor):
 
     def __init__(self):
         super(RotatingMagnetFilamentMonitor, self).__init__()
-        self._calibrated = RotatingMagnetFilamentMonitorCalibrated()
+        self._calibrated = None
         self._configured = RotatingMagnetFilamentMonitorConfigured()
         self._type = FilamentMonitorType.RotatingMagnet
 
