@@ -19,6 +19,7 @@ class PluginManifest(ModelObject):
         self._license = "LGPL-3.0-or-later"
         self._name = None
         self._rrf_version = None
+        self._sbc_auto_restart = False
         self._sbc_dsf_version = None
         self._sbc_executable = None
         self._sbc_executable_arguments = []
@@ -127,6 +128,15 @@ class PluginManifest(ModelObject):
     @rrf_version.setter
     def rrf_version(self, value):
         self._rrf_version = str(value) if value is not None else None
+
+    @property
+    def sbc_auto_restart(self) -> bool:
+        """Automatically restart the SBC process when terminated"""
+        return self._sbc_auto_restart
+
+    @sbc_auto_restart.setter
+    def sbc_auto_restart(self, value):
+        self._sbc_auto_restart = bool(value)
 
     @property
     def sbc_dsf_version(self) -> str:

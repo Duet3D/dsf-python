@@ -39,6 +39,8 @@ class NetworkInterface(ModelObject):
         self._subnet = None
         # Type of this network interface
         self._type = NetworkInterfaceType.wifi
+        # WiFi country code if this is a WiFi adapter and if the country code can be determined
+        self._wifi_country = None
 
     @property
     def active_protocols(self) -> List[NetworkProtocol]:
@@ -174,3 +176,14 @@ class NetworkInterface(ModelObject):
             self._type = NetworkInterfaceType(value)
         else:
             raise TypeError(f"{__name__}.type must be of type NetworkInterfaceType. Got {type(value)}: {value}")
+
+    @property
+    def wifi_country(self) -> Union[str, None]:
+        """WiFi country code if this is a WiFi adapter and if the country code can be determined
+        For this setting to be populated in SBC mode it is required to have the DuetPiManagementPlugin running.
+        This is required due to missing Linux permissions of the control server."""
+        return self._wifi_country
+
+    @wifi_country.setter
+    def wifi_country(self, value):
+        self._wifi_country = None if value is None else str(value)
