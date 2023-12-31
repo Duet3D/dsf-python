@@ -1,6 +1,6 @@
 from typing import Union
 
-from .filament_monitor import FilamentMonitor
+from .Duet3DFilamentMonitor import Duet3DFilamentMonitor
 from .filament_monitor_type import FilamentMonitorType
 from ...model_object import ModelObject
 from ...utils import wrap_model_property
@@ -110,7 +110,7 @@ class LaserFilamentMonitorConfigured(ModelObject):
         self._sample_distance = float(value)
 
 
-class LaserFilamentMonitor(FilamentMonitor):
+class LaserFilamentMonitor(Duet3DFilamentMonitor):
     """Information about a laser filament monitor"""
 
     # Calibrated properties of this filament monitor

@@ -1,4 +1,4 @@
-from .filament_monitor import FilamentMonitor
+from .Duet3DFilamentMonitor import Duet3DFilamentMonitor
 from .filament_monitor_type import FilamentMonitorType
 from ...model_object import ModelObject
 from ...utils import wrap_model_property
@@ -108,7 +108,7 @@ class RotatingMagnetFilamentMonitorConfigured(ModelObject):
         self._sample_distance = float(value)
 
 
-class RotatingMagnetFilamentMonitor(FilamentMonitor):
+class RotatingMagnetFilamentMonitor(Duet3DFilamentMonitor):
     """Information about a rotating magnet filament monitor"""
 
     # Calibrated properties of this filament monitor
