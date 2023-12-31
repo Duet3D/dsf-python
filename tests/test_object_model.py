@@ -48,6 +48,8 @@ class Model(unittest.TestCase):
         model.update_from_json(json_patch)
 
     def test_json_serialization(self):
+        # Hint: To get the object model, execute the command get_object_model() from any connection in debug mode
+        # and take the JSON returned from debug (after "recv:")
         with open('object_model/model_geminiv2.json') as fp:
             json_data = json.load(fp)
         model = ObjectModel.from_json(json_data)
