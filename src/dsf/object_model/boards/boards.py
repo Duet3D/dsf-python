@@ -1,10 +1,12 @@
 from enum import Enum
-from typing import Union
+from typing import List, Union
 
 from .accelerometer import Accelerometer
-from .closed_loop import ClosedLoop
+from .board_closed_loop import BoardClosedLoop
 from .direct_display import DirectDisplay
+from .driver import Driver
 from .min_max_current import MinMaxCurrent
+from ..model_collection import ModelCollection
 from ..model_object import ModelObject
 from ..utils import wrap_model_property
 
@@ -36,7 +38,7 @@ class Board(ModelObject):
     # Accelerometer of this board or None if unknown
     accelerometer = wrap_model_property('accelerometer', Accelerometer)
     # Closed loop data of this board or None if unknown
-    closed_loop = wrap_model_property('closed_loop', ClosedLoop)
+    closed_loop = wrap_model_property('closed_loop', BoardClosedLoop)
     # Details about a connected display or None if none is connected
     direct_display = wrap_model_property('direct_display', DirectDisplay)
     # Minimum, maximum, and current temperatures of the MCU or None if unknown
@@ -59,6 +61,8 @@ class Board(ModelObject):
         self._closed_loop = None
         # Details about a connected display or None if none is connected
         self._direct_display = None
+        # Drivers of this board
+        self._drivers = None
         # Date of the firmware build
         self._firmware_date = ""
         # Filename of the firmware binary
@@ -115,6 +119,15 @@ class Board(ModelObject):
     @can_address.setter
     def can_address(self, value):
         self._can_address = int(value) if value is not None else None
+
+    @property
+    def drivers(self) -> Union[List[Driver], None]:
+        """Drivers of this board"""
+        return self._drivers
+
+    @drivers.setter
+    def drivers(self, value):
+        self._drivers = None if value is None else ModelCollection(Driver, value)
 
     @property
     def firmware_date(self) -> str:
