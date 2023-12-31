@@ -10,10 +10,33 @@ class AnalogSensor(ModelObject):
 
     def __init__(self):
         super(AnalogSensor, self).__init__()
+        self._beta = None
+        self._c = None
         self._last_reading = None
         self._name = None
+        self._port = None
+        self._r_25 = None
+        self._r_ref = None
         self._state = TemperatureError.ok
         self._type = AnalogSensorType.Unknown
+
+    @property
+    def beta(self) -> Union[float, None]:
+        """Beta value of this sensor (if applicable)"""
+        return self._beta
+
+    @beta.setter
+    def beta(self, value):
+        self._beta = float(value) if value is not None else None
+
+    @property
+    def c(self) -> Union[float, None]:
+        """C value of this sensor"""
+        return self._c
+
+    @c.setter
+    def c(self, value):
+        self._c = float(value) if value is not None else None
 
     @property
     def last_reading(self) -> Union[float, None]:
@@ -32,6 +55,33 @@ class AnalogSensor(ModelObject):
     @name.setter
     def name(self, value):
         self._name = str(value) if value is not None else None
+
+    @property
+    def port(self) -> Union[str, None]:
+        """Port of this sensor or None if not applicable"""
+        return self._port
+
+    @port.setter
+    def port(self, value):
+        self._port = str(value) if value is not None else None
+
+    @property
+    def r_25(self) -> Union[float, None]:
+        """Resistance of this sensor at 25C"""
+        return self._r_25
+
+    @r_25.setter
+    def r_25(self, value):
+        self._r_25 = float(value) if value is not None else None
+
+    @property
+    def r_ref(self) -> float:
+        """Series resistance of this sensor channel"""
+        return self._r_ref
+
+    @r_ref.setter
+    def r_ref(self, value):
+        self._r_ref = float(value) if value is not None else None
 
     @property
     def state(self) -> TemperatureError:

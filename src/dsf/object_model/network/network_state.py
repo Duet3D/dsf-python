@@ -30,3 +30,6 @@ class NetworkState(str, Enum):
 
     # Network running
     active = "active"
+
+    # WiFi adapter is idle
+    idle = "idle"

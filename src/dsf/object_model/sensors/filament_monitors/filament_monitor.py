@@ -1,3 +1,4 @@
+from .filament_monitor_enable_type import FilamentMonitorEnableMode
 from .filament_monitor_status import FilamentMonitorStatus
 from .filament_monitor_type import FilamentMonitorType
 from ...model_object import ModelObject
@@ -9,12 +10,31 @@ class FilamentMonitor(ModelObject):
     def __init__(self, type_: FilamentMonitorType = FilamentMonitorType.Unknown):
         super(FilamentMonitor, self).__init__()
         self._enabled = False
+        self._enable_mode = FilamentMonitorEnableMode.Disabled
         self._status = FilamentMonitorStatus.NoDataReceived
         self._type = type_
+        
+    @property
+    def enable_mode(self) -> FilamentMonitorEnableMode:
+        """Enable mode of this filament monitor"""
+        return self._enable_mode
+    
+    @enable_mode.setter
+    def enable_mode(self, value):
+        if value is None:
+            self._enable_mode = FilamentMonitorEnableMode.Disabled
+        elif isinstance(value, FilamentMonitorEnableMode):
+            self._enable_mode = value
+        elif isinstance(value, str):
+            self._enable_mode = FilamentMonitorEnableMode(value)
+        else:
+            raise TypeError(f"{__name__}.enable_mode must be of type FilamentMonitorEnableMode."
+                            f"Got {type(value)}: {value}")
 
     @property
     def enabled(self) -> bool:
-        """Indicates if this filament monitor is enabled"""
+        """Indicates if this filament monitor is enabled
+        Obsolete: Use enable_mode instead"""
         return self._enabled
 
     @enabled.setter

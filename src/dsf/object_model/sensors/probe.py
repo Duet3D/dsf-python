@@ -15,11 +15,13 @@ class Probe(ModelObject):
         self._deployed_by_user = False
         self._disables_heaters = False
         self._dive_height = 5
+        self._dive_heights = [0, 0]
         self._is_calibrated = None
         self._last_stop_height = 0
         self._max_probe_count = 1
         self._offsets = [0, 0]
         self._recovery_time = 0
+        self._scan_coefficients = None
         self._speeds = [2, 2]
         self._temperature_coefficients = [0, 0]
         self._threshold = 500
@@ -76,12 +78,23 @@ class Probe(ModelObject):
         
     @property
     def dive_height(self) -> float:
-        """Dive height (in mm)"""
+        """
+        Dive height (in mm)
+        Obsolete: Use dive_heights[0] instead
+        """
         return self._dive_height
     
     @dive_height.setter
     def dive_height(self, value):
         self._dive_height = float(value)
+
+    @property
+    def dive_heights(self) -> List[float]:
+        """
+        Dive heights of the probe.
+        The first element is the regular dive height, the second element may be used by scanning Z-probes
+        """
+        return self._dive_heights
 
     @property
     def is_calibrated(self) -> Union[bool, None]:
@@ -129,6 +142,15 @@ class Probe(ModelObject):
         """Probe speed (in mm/s)
         Obsolete: Use Speeds[0] instead"""
         return self._speeds[0]
+
+    @property
+    def scan_coefficients(self) -> Union[List[float], None]:
+        """Coefficients for the scanning Z-probe (4 elements, if applicable)"""
+        return self._scan_coefficients
+
+    @scan_coefficients.setter
+    def scan_coefficients(self, value):
+        self._scan_coefficients = None if value is None else [float(v) for v in value]
     
     @speed.setter
     def speed(self, value):
