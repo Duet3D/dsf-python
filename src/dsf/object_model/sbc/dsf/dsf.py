@@ -11,11 +11,21 @@ class DSF(ModelObject):
 
     def __init__(self):
         super().__init__()
+        self._build_date_time = ""
         self._http_endpoints = ModelCollection(HttpEndpoint)
         self._plugin_support = False
         self._root_plugin_support = False
         self._user_sessions = ModelCollection(UserSession)
         self._version = ""
+
+    @property
+    def build_date_time(self) -> str:
+        """Datetime when DSF was built"""
+        return self._build_date_time
+
+    @build_date_time.setter
+    def build_date_time(self, value):
+        self._build_date_time = str(value)
 
     @property
     def http_endpoints(self) -> List[HttpEndpoint]:
