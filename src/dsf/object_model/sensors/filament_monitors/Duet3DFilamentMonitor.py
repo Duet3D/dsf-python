@@ -8,7 +8,7 @@ from .filament_monitor_type import FilamentMonitorType
 class Duet3DFilamentMonitor(FilamentMonitor):
     """Base class for Duet3D filament monitors"""
     def __init__(self, type_: FilamentMonitorType = FilamentMonitorType.Unknown):
-        super(FilamentMonitor, self).__init__(type_)
+        super(Duet3DFilamentMonitor, self).__init__(type_)
         # Average ratio of measured vs. commanded movement
         self._avg_percentage = None
         # Last ratio of measured vs. commanded movement

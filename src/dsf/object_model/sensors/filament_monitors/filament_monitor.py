@@ -25,7 +25,7 @@ class FilamentMonitor(ModelObject):
             self._enable_mode = FilamentMonitorEnableMode.Disabled
         elif isinstance(value, FilamentMonitorEnableMode):
             self._enable_mode = value
-        elif isinstance(value, str):
+        elif isinstance(value, int):
             self._enable_mode = FilamentMonitorEnableMode(value)
         else:
             raise TypeError(f"{__name__}.enable_mode must be of type FilamentMonitorEnableMode."
