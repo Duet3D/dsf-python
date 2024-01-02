@@ -2,6 +2,7 @@ from typing import List, Union
 
 from .probe_type import ProbeType
 from ..model_object import ModelObject
+from ...utils import deprecated
 
 
 class Probe(ModelObject):
@@ -77,10 +78,10 @@ class Probe(ModelObject):
         self._disables_heaters = bool(value)
         
     @property
+    @deprecated(f"Use {__name__}.dive_heights[0] instead")
     def dive_height(self) -> float:
-        """
-        Dive height (in mm)
-        Obsolete: Use dive_heights[0] instead
+        """Dive height (in mm)
+        Deprecated: Use dive_heights[0] instead
         """
         return self._dive_height
     
@@ -90,8 +91,7 @@ class Probe(ModelObject):
 
     @property
     def dive_heights(self) -> List[float]:
-        """
-        Dive heights of the probe.
+        """Dive heights of the probe.
         The first element is the regular dive height, the second element may be used by scanning Z-probes
         """
         return self._dive_heights
@@ -151,10 +151,6 @@ class Probe(ModelObject):
     @scan_coefficients.setter
     def scan_coefficients(self, value):
         self._scan_coefficients = None if value is None else [float(v) for v in value]
-    
-    @speed.setter
-    def speed(self, value):
-        self._speeds[0] = float(value)
         
     @property
     def speeds(self) -> List[float]:
@@ -164,16 +160,6 @@ class Probe(ModelObject):
     @speeds.setter
     def speeds(self, values):
         self._speeds = [float(value) for value in values]
-        
-    @property
-    def temperature_coefficient(self) -> float:
-        """First temperature coefficient
-        Obsolete: Use TemperatureCoefficients instead"""
-        return self._temperature_coefficients[0]
-    
-    @temperature_coefficient.setter
-    def temperature_coefficient(self, value):
-        self._temperature_coefficients[0] = float(value)
         
     @property
     def temperature_coefficients(self) -> List[float]:

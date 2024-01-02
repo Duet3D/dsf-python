@@ -9,6 +9,7 @@ from .min_max_current import MinMaxCurrent
 from ..model_collection import ModelCollection
 from ..model_object import ModelObject
 from ..utils import wrap_model_property
+from ...utils import deprecated
 
 
 class BoardState(str, Enum):
@@ -235,9 +236,10 @@ class Board(ModelObject):
             raise TypeError(f"{__name__}.state must be of type BoardState or None. Got {type(value)}: {value}")
 
     @property
+    @deprecated(f"Use {__name__}.supports_direct_display instead")
     def supports_12864(self) -> bool:
         """Indicates if this board supports external 12864 displays
-        Obsolete: Replaced with SupportsDirectDisplay"""
+        Deprecated: Use supports_direct_display instead"""
         return self._supports_12864
 
     @supports_12864.setter

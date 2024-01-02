@@ -2,6 +2,7 @@ from .filament_monitor_enable_type import FilamentMonitorEnableMode
 from .filament_monitor_status import FilamentMonitorStatus
 from .filament_monitor_type import FilamentMonitorType
 from ...model_object import ModelObject
+from ....utils import deprecated
 
 
 class FilamentMonitor(ModelObject):
@@ -32,9 +33,10 @@ class FilamentMonitor(ModelObject):
                             f"Got {type(value)}: {value}")
 
     @property
+    @deprecated(f"Use {__name__}.enable_mode instead")
     def enabled(self) -> bool:
         """Indicates if this filament monitor is enabled
-        Obsolete: Use enable_mode instead"""
+        Deprecated: Use enable_mode instead"""
         return self._enabled
 
     @enabled.setter

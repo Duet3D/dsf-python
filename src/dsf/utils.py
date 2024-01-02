@@ -1,5 +1,3 @@
-import functools
-import inspect
 import re
 import warnings
 
@@ -26,15 +24,11 @@ def deprecated(instructions: str):
     def decorator(func):
         """This is a decorator which can be used to mark functions as deprecated.
         It will result in a warning being emitted when the function is used."""
-        @functools.wraps(func)
-        def wrapper(*args, **kwargs):
-            frame = inspect.currentframe().f_back
-            warnings.warn_explicit(f"Call to deprecated function {func.__name__}. {instructions}",
-                                   category=DeprecatedWarning,
-                                   filename=inspect.getfile(frame.f_code),
-                                   lineno=frame.f_lineno)
+        def deprecated_func(*args, **kwargs):
+            warnings.warn(f"Call to deprecated function {func.__name__}(). {instructions}",
+                          DeprecatedWarning, stacklevel=2)
             return func(*args, **kwargs)
-        return wrapper
+        return deprecated_func
     return decorator
 
 

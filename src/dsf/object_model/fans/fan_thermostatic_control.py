@@ -1,5 +1,6 @@
 from typing import List, Union
 from ..model_object import ModelObject
+from ...utils import deprecated
 
 
 class FanThermostaticControl(ModelObject):
@@ -16,10 +17,10 @@ class FanThermostaticControl(ModelObject):
         self._sensors = []
 
     @property
+    @deprecated(f"Use {__name__}.sensors instead")
     def heaters(self) -> List[int]:
-        # TODO: set deprecated flag
-        """Deprecated as of v3.5, use sensors instead
-        List of the heaters to monitor (indices)"""
+        """List of the heaters to monitor (indices)
+        Deprecated: Use sensors instead"""
         return self._heaters
 
     @property
