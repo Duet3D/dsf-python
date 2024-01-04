@@ -14,3 +14,10 @@ class InternalServerException(Exception):
 
 class TaskCanceledException(Exception):
     """Exception returned by the server if the task has been cancelled remotely"""
+
+
+class IPCSocketBrokenException(Exception):
+    """Exception raised if the IPC connection has been closed on the remote server"""
+
+    def __init__(self):
+        super().__init__("IPC socket connection broken")

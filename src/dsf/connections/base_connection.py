@@ -2,7 +2,8 @@ from __future__ import annotations
 import json
 import socket
 
-from .exceptions import IncompatibleVersionException, InternalServerException, TaskCanceledException
+from .exceptions import (IncompatibleVersionException, InternalServerException, IPCSocketBrokenException,
+                         TaskCanceledException)
 from .init_messages import client_init_messages, server_init_message
 from ..commands import responses
 
@@ -11,9 +12,13 @@ class BaseConnection:
     """
     Base class for connections that access the control server via the Duet API
     using a UNIX socket
+
+    Constructor arguments:
+    :param debug: Whether to print debug information or not
+    :param timeout: Set a timeout value on blocking socket operations or None to set the socket in non-blocking mode
     """
 
-    def __init__(self, debug: bool = False, timeout: int = 3):
+    def __init__(self, debug: bool = False, timeout: int = None):
         self.debug = debug
         self.timeout = timeout
         self.socket: socket.socket | None = None
@@ -25,7 +30,7 @@ class BaseConnection:
 
         self.socket = socket.socket(socket.AF_UNIX, socket.SOCK_STREAM)
         self.socket.connect(socket_file)
-        self.socket.setblocking(True)
+        self.socket.settimeout(self.timeout)
         server_init_msg = server_init_message.ServerInitMessage.from_json(
             json.loads(self.socket.recv(50).decode("utf8"))
         )
@@ -112,7 +117,9 @@ class BaseConnection:
                     except Exception as e:
                         raise e
                     # either 0 or end of data
-                    if len(part) < BUFF_SIZE:
+                    if part == b"":
+                        raise IPCSocketBrokenException()
+                    elif len(part) < BUFF_SIZE:
                         break
 
                 json_string += data.decode("utf8")
