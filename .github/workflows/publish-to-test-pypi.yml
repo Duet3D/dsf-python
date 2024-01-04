@@ -10,10 +10,6 @@ on:
     types: [published]
   workflow_dispatch:
 
-permissions:
-      contents: read
-      id-token: write  # IMPORTANT: this permission is mandatory for trusted publishing
-
 jobs:
   build:
     name: Build distribution 📦
