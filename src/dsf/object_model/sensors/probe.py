@@ -1,7 +1,8 @@
-from __future__ import annotations
+from typing import List, Union
 
 from .probe_type import ProbeType
 from ..model_object import ModelObject
+from ...utils import deprecated
 
 
 class Probe(ModelObject):
@@ -9,14 +10,19 @@ class Probe(ModelObject):
 
     def __init__(self):
         super(Probe, self).__init__()
+        self._calib_a = None
+        self._calib_b = None
         self._calibration_temperature = 0
         self._deployed_by_user = False
         self._disables_heaters = False
-        self._dive_height = 0
+        self._dive_height = 5
+        self._dive_heights = [0, 0]
+        self._is_calibrated = None
         self._last_stop_height = 0
         self._max_probe_count = 1
         self._offsets = [0, 0]
         self._recovery_time = 0
+        self._scan_coefficients = None
         self._speeds = [2, 2]
         self._temperature_coefficients = [0, 0]
         self._threshold = 500
@@ -27,12 +33,30 @@ class Probe(ModelObject):
         self._value = []
 
     @property
+    def calib_a(self) -> Union[float, None]:
+        """Linear coefficient for scanning probes"""
+        return self._calib_a
+
+    @calib_a.setter
+    def calib_a(self, value):
+        self._calib_a = float(value) if value is not None else None
+
+    @property
+    def calib_b(self) -> Union[float, None]:
+        """Quadratic coefficient for scanning probes"""
+        return self._calib_b
+
+    @calib_b.setter
+    def calib_b(self, value):
+        self._calib_b = float(value) if value is not None else None
+
+    @property
     def calibration_temperature(self) -> float:
         """Calibration temperature (in C)"""
         return self._calibration_temperature
-    
+
     @calibration_temperature.setter
-    def calibration_temperature(self, value: float):
+    def calibration_temperature(self, value):
         self._calibration_temperature = float(value)
         
     @property
@@ -54,13 +78,32 @@ class Probe(ModelObject):
         self._disables_heaters = bool(value)
         
     @property
+    @deprecated(f"Use {__name__}.dive_heights[0] instead")
     def dive_height(self) -> float:
-        """Dive height (in mm)"""
+        """Dive height (in mm)
+        Deprecated: Use dive_heights[0] instead
+        """
         return self._dive_height
     
     @dive_height.setter
-    def dive_height(self, value: float):
+    def dive_height(self, value):
         self._dive_height = float(value)
+
+    @property
+    def dive_heights(self) -> List[float]:
+        """Dive heights of the probe.
+        The first element is the regular dive height, the second element may be used by scanning Z-probes
+        """
+        return self._dive_heights
+
+    @property
+    def is_calibrated(self) -> Union[bool, None]:
+        """Indicates if the scanning probe is calibrated"""
+        return self._is_calibrated
+
+    @is_calibrated.setter
+    def is_calibrated(self, value):
+        self._is_calibrated = bool(value) if value is not None else None
         
     @property
     def last_stop_height(self) -> float:
@@ -68,7 +111,7 @@ class Probe(ModelObject):
         return self._last_stop_height
     
     @last_stop_height.setter
-    def last_stop_height(self, value: float):
+    def last_stop_height(self, value):
         self._last_stop_height = float(value)
         
     @property
@@ -77,7 +120,7 @@ class Probe(ModelObject):
         return self._max_probe_count
     
     @max_probe_count.setter
-    def max_probe_count(self, value: int):
+    def max_probe_count(self, value):
         self._max_probe_count = int(value)
         
     @property
@@ -91,7 +134,7 @@ class Probe(ModelObject):
         return self._recovery_time
     
     @recovery_time.setter
-    def recovery_time(self, value: float):
+    def recovery_time(self, value):
         self._recovery_time = float(value)
         
     @property
@@ -99,10 +142,15 @@ class Probe(ModelObject):
         """Probe speed (in mm/s)
         Obsolete: Use Speeds[0] instead"""
         return self._speeds[0]
-    
-    @speed.setter
-    def speed(self, value: float):
-        self._speeds[0] = float(value)
+
+    @property
+    def scan_coefficients(self) -> Union[List[float], None]:
+        """Coefficients for the scanning Z-probe (4 elements, if applicable)"""
+        return self._scan_coefficients
+
+    @scan_coefficients.setter
+    def scan_coefficients(self, value):
+        self._scan_coefficients = None if value is None else [float(v) for v in value]
         
     @property
     def speeds(self) -> list[float]:
@@ -110,18 +158,8 @@ class Probe(ModelObject):
         return self._speeds
     
     @speeds.setter
-    def speeds(self, values: list[float]):
+    def speeds(self, values):
         self._speeds = [float(value) for value in values]
-        
-    @property
-    def temperature_coefficient(self) -> float:
-        """First temperature coefficient
-        Obsolete: Use TemperatureCoefficients instead"""
-        return self._temperature_coefficients[0]
-    
-    @temperature_coefficient.setter
-    def temperature_coefficient(self, value: float):
-        self._temperature_coefficients[0] = float(value)
         
     @property
     def temperature_coefficients(self) -> list[float]:
@@ -134,7 +172,7 @@ class Probe(ModelObject):
         return self._threshold
     
     @threshold.setter
-    def threshold(self, value: int):
+    def threshold(self, value):
         self._threshold = int(value)
         
     @property
@@ -143,7 +181,7 @@ class Probe(ModelObject):
         return self._tolerance
     
     @tolerance.setter
-    def tolerance(self, value: float):
+    def tolerance(self, value):
         self._tolerance = float(value)
         
     @property
@@ -152,7 +190,7 @@ class Probe(ModelObject):
         return self._travel_speed
     
     @travel_speed.setter
-    def travel_speed(self, value: float):
+    def travel_speed(self, value):
         self._travel_speed = float(value)
 
     @property
@@ -161,7 +199,7 @@ class Probe(ModelObject):
         return self._trigger_height
 
     @trigger_height.setter
-    def trigger_height(self, value: float):
+    def trigger_height(self, value):
         self._trigger_height = float(value)
         
     @property
@@ -181,6 +219,6 @@ class Probe(ModelObject):
                             f" Got {type(value)}: {value}")
         
     @property
-    def value(self) -> list[int]:
+    def value(self) -> List[int]:
         """Current analog values of the probe"""
         return self._value

@@ -13,17 +13,17 @@ class NetworkInterface(ModelObject):
         super().__init__()
         # List of active protocols
         self._active_protocols = []
-        # Actual IPv4 address of the network adapter
+        # Actual IPv4 address of the network adapter or null if unknown
         self._actual_IP = ""
-        # Configured IPv4 address of the network adapter
+        # Configured IPv4 address of the network adapter or null if unknown
         self._configured_IP = ""
-        # Configured IPv4 DNS server fo the network adapter
+        # Configured IPv4 DNS server fo the network adapter or null if unknown
         self._dns_server = ""
         # Version of the network interface or None if unknown.
         self._firmware_version = ""
-        # IPv4 gateway of the network adapter
+        # IPv4 gateway of the network adapter or null if unknown
         self._gateway = ""
-        # Physical address of the network adapter
+        # Physical address of the network adapter or null if unknown
         self._mac = ""
         # Number of reconnect attempts or None if unknown
         self._num_reconnects = None
@@ -31,12 +31,16 @@ class NetworkInterface(ModelObject):
         self._signal = None
         # Speed of the network interface (in MBit, None if unknown, 0 if not connected)
         self._speed = None
-        # Network state
+        # SSID of the Wi-Fi network or null if not applicable
+        self._ssid = None
+        # State of this network interface or null if unknown
         self._state = None
-        # Subnet of the network adapter
+        # Subnet of the network adapter or null if unknown
         self._subnet = None
         # Type of this network interface
         self._type = NetworkInterfaceType.wifi
+        # WiFi country code if this is a WiFi adapter and if the country code can be determined
+        self._wifi_country = None
 
     @property
     def active_protocols(self) -> list[NetworkProtocol]:
@@ -44,8 +48,8 @@ class NetworkInterface(ModelObject):
         return self._active_protocols
 
     @property
-    def actual_IP(self) -> str | None:
-        """Actual IPv4 address of the network adapter"""
+    def actual_IP(self) -> Union[str, None]:
+        """Actual IPv4 address of the network adapter or null if unknown"""
         return self._actual_IP
     
     @actual_IP.setter
@@ -53,8 +57,8 @@ class NetworkInterface(ModelObject):
         self._actual_IP = str(value) if value is not None else None
         
     @property
-    def configured_IP(self) -> str | None:
-        """Configured IPv4 address of the network adapter"""
+    def configured_IP(self) -> Union[str, None]:
+        """Configured IPv4 address of the network adapter or null if unknown"""
         return self._configured_IP
     
     @configured_IP.setter
@@ -62,8 +66,8 @@ class NetworkInterface(ModelObject):
         self._configured_IP = str(value) if value is not None else None
         
     @property
-    def dns_server(self) -> str | None:
-        """Configured IPv4 DNS server fo the network adapter"""
+    def dns_server(self) -> Union[str, None]:
+        """Configured IPv4 DNS server fo the network adapter or null if unknown"""
         return self._dns_server
     
     @dns_server.setter
@@ -80,8 +84,8 @@ class NetworkInterface(ModelObject):
         self._firmware_version = str(value) if value is not None else None
         
     @property
-    def gateway(self) -> str | None:
-        """IPv4 gateway of the network adapter"""
+    def gateway(self) -> Union[str, None]:
+        """IPv4 gateway of the network adapter or null if unknown"""
         return self._gateway
     
     @gateway.setter
@@ -89,8 +93,8 @@ class NetworkInterface(ModelObject):
         self._gateway = str(value) if value is not None else None
     
     @property
-    def mac(self) -> str | None:
-        """Physical address of the network adapter"""
+    def mac(self) -> Union[str, None]:
+        """Physical address of the network adapter or null if unknown"""
         return self._mac
     
     @mac.setter
@@ -114,19 +118,28 @@ class NetworkInterface(ModelObject):
     @signal.setter
     def signal(self, value: int | None = None):
         self._signal = int(value) if value is not None else None
-        
+
     @property
     def speed(self) -> int | None:
         """Speed of the network interface (in MBit, None if unknown, 0 if not connected)"""
         return self._speed
-    
+
     @speed.setter
     def speed(self, value: int | None = None):
         self._speed = int(value) if value is not None else None
+
+    @property
+    def ssid(self) -> Union[str, None]:
+        """SSID of the Wi-Fi network or null if not applicable"""
+        return self._ssid
+
+    @ssid.setter
+    def ssid(self, value):
+        self._ssid = str(value) if value is not None else None
     
     @property
-    def state(self) -> NetworkState | None:
-        """Network state"""
+    def state(self) -> Union[NetworkState, None]:
+        """State of this network interface or null if unknown"""
         return self._state
     
     @state.setter
@@ -140,8 +153,8 @@ class NetworkInterface(ModelObject):
                             f" Got {type(value)}: {value}")
         
     @property
-    def subnet(self) -> str | None:
-        """Subnet of the network adapter"""
+    def subnet(self) -> Union[str, None]:
+        """Subnet of the network adapter or null if unknown"""
         return self._subnet
     
     @subnet.setter
@@ -160,5 +173,15 @@ class NetworkInterface(ModelObject):
         elif isinstance(value, str):
             self._type = NetworkInterfaceType(value)
         else:
-            raise TypeError(f"{__name__}.type must be of type NetworkInterfaceType."
-                            f" Got {type(value)}: {value}")
+            raise TypeError(f"{__name__}.type must be of type NetworkInterfaceType. Got {type(value)}: {value}")
+
+    @property
+    def wifi_country(self) -> Union[str, None]:
+        """WiFi country code if this is a WiFi adapter and if the country code can be determined
+        For this setting to be populated in SBC mode it is required to have the DuetPiManagementPlugin running.
+        This is required due to missing Linux permissions of the control server."""
+        return self._wifi_country
+
+    @wifi_country.setter
+    def wifi_country(self, value):
+        self._wifi_country = None if value is None else str(value)

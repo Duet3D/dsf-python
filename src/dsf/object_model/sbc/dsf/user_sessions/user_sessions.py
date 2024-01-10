@@ -2,7 +2,7 @@ from __future__ import annotations
 
 from .access_level import AccessLevel
 from .session_type import SessionType
-from ..model_object import ModelObject
+from ....model_object import ModelObject
 
 
 class UserSession(ModelObject):
@@ -41,7 +41,7 @@ class UserSession(ModelObject):
         return self._id
     
     @id.setter
-    def id(self, value: int):
+    def id(self, value):
         self._id = int(value)
         
     @property
@@ -60,7 +60,7 @@ class UserSession(ModelObject):
         return self._origin_id
     
     @origin_id.setter
-    def origin_id(self, value: int):
+    def origin_id(self, value):
         self._origin_id = int(value)
         
     @property

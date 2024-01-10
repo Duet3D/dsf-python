@@ -40,6 +40,12 @@ class CodeChannel(str, Enum):
     # Code channel that executes macros on power fail, heater faults and filament out
     Autopause = "Autopause"
 
+    # Code channel for secondary file prints
+    File2 = "File2"
+
+    # Code channel for the code queue that executes a couple of codes in-sync with moves of the primary print file
+    Queue2 = "Queue2"
+
     # Unknown code channel
     Unknown = "Unknown"
 

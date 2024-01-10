@@ -32,7 +32,7 @@ class Fan(ModelObject):
         return self._actual_value
 
     @actual_value.setter
-    def actual_value(self, value: float):
+    def actual_value(self, value):
         self._actual_value = float(value)
 
     @property
@@ -42,7 +42,7 @@ class Fan(ModelObject):
         return self._blip
 
     @blip.setter
-    def blip(self, value: float):
+    def blip(self, value):
         self._blip = float(value)
 
     @property
@@ -51,7 +51,7 @@ class Fan(ModelObject):
         return self._frequency
 
     @frequency.setter
-    def frequency(self, value: float):
+    def frequency(self, value):
         self._frequency = float(value)
 
     @property
@@ -60,7 +60,7 @@ class Fan(ModelObject):
         return self._max
 
     @max.setter
-    def max(self, value: float):
+    def max(self, value):
         self._max = float(value)
 
     @property
@@ -69,7 +69,7 @@ class Fan(ModelObject):
         return self._min
 
     @min.setter
-    def min(self, value: float):
+    def min(self, value):
         self._min = float(value)
 
     @property
@@ -87,7 +87,7 @@ class Fan(ModelObject):
         return self._requested_value
 
     @requested_value.setter
-    def requested_value(self, value: float):
+    def requested_value(self, value):
         self._requested_value = float(value)
 
     @property
@@ -96,7 +96,7 @@ class Fan(ModelObject):
         return self._rpm
 
     @rpm.setter
-    def rpm(self, value: int):
+    def rpm(self, value):
         self._rpm = int(value)
 
     @property

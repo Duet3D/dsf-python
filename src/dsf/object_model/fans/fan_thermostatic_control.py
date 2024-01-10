@@ -1,5 +1,6 @@
 from __future__ import annotations
 from ..model_object import ModelObject
+from ...utils import deprecated
 
 
 class FanThermostaticControl(ModelObject):
@@ -12,10 +13,14 @@ class FanThermostaticControl(ModelObject):
         self._high_temperature = None
         # Lower temperature range required to turn on the fan (in C)
         self._low_temperature = None
+        # List of sensors to monitor (indices)
+        self._sensors = []
 
     @property
-    def heaters(self) -> list[int]:
-        """List of the heaters to monitor (indices)"""
+    @deprecated(f"Use {__name__}.sensors instead")
+    def heaters(self) -> List[int]:
+        """List of the heaters to monitor (indices)
+        Deprecated: Use sensors instead"""
         return self._heaters
 
     @property
@@ -35,3 +40,8 @@ class FanThermostaticControl(ModelObject):
     @low_temperature.setter
     def low_temperature(self, value: float | None = None):
         self._low_temperature = float(value) if value is not None else None
+
+    @property
+    def sensors(self) -> List[int]:
+        """List of sensors to monitor (indices)"""
+        return self._sensors

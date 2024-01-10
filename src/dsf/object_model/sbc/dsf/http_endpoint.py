@@ -1,5 +1,5 @@
 from .http_endpoint_type import HttpEndpointType
-from ..model_object import ModelObject
+from ...model_object import ModelObject
 
 
 class HttpEndpoint(ModelObject):
@@ -52,7 +52,7 @@ class HttpEndpoint(ModelObject):
         return self._namespace
 
     @namespace.setter
-    def namespace(self, value: str):
+    def namespace(self, value):
         self._namespace = str(value)
 
     @property
@@ -61,7 +61,7 @@ class HttpEndpoint(ModelObject):
         return self._path
 
     @path.setter
-    def path(self, value: str):
+    def path(self, value):
         self._path = str(value)
 
     @property
@@ -70,5 +70,5 @@ class HttpEndpoint(ModelObject):
         return self._unix_socket
 
     @unix_socket.setter
-    def unix_socket(self, value: str):
+    def unix_socket(self, value):
         self._unix_socket = str(value)

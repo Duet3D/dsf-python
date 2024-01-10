@@ -16,7 +16,7 @@ class MotorsIdleControl(ModelObject):
         return self._factor
 
     @factor.setter
-    def factor(self, value: float):
+    def factor(self, value):
         self._factor = float(value)
 
     @property
@@ -25,5 +25,5 @@ class MotorsIdleControl(ModelObject):
         return self._timeout
 
     @timeout.setter
-    def timeout(self, value: float):
+    def timeout(self, value):
         self._timeout = float(value)

@@ -3,6 +3,7 @@ from __future__ import annotations
 from .axis import Axis
 from .current_move import CurrentMove
 from .extruder import Extruder
+from .keepout_zone import KeepoutZone
 from .kinematics import Kinematics
 from .input_shaping import InputShaping
 from .move_calibration import MoveCalibration
@@ -20,6 +21,8 @@ class Move(ModelObject):
         super().__init__()
         # List of the configured axes
         self._axes = ModelCollection(Axis)
+        # Backlash distance multiplier
+        self._backlash_factor = 10
         # Information about the automatic calibration
         self._calibration = MoveCalibration()
         # Information about the currently configured compensation options
@@ -30,6 +33,8 @@ class Move(ModelObject):
         self._extruders = ModelCollection(Extruder)
         # Idle current reduction parameters
         self._idle = MotorsIdleControl()
+        # List of configured keep-out zones
+        self._keepout = ModelCollection(KeepoutZone)
         # Configured kinematics options
         self._kinematics = Kinematics()
         # Limit axis positions by their minima and maxima
@@ -60,6 +65,15 @@ class Move(ModelObject):
         return self._axes
 
     @property
+    def backlash_factor(self) -> int:
+        """Backlash distance multiplier"""
+        return self._backlash_factor
+
+    @backlash_factor.setter
+    def backlash_factor(self, value):
+        self._backlash_factor = int(value)
+
+    @property
     def calibration(self) -> MoveCalibration:
         """Information about the automatic calibration"""
         return self._calibration
@@ -84,6 +98,11 @@ class Move(ModelObject):
     def idle(self) -> MotorsIdleControl:
         """Idle current reduction parameters"""
         return self._idle
+
+    @property
+    def keepout(self) -> List[KeepoutZone]:
+        """List of configured keep-out zones"""
+        return self._keepout
 
     @property
     def kinematics(self) -> Kinematics:
@@ -114,7 +133,7 @@ class Move(ModelObject):
         return self._printing_acceleration
 
     @printing_acceleration.setter
-    def printing_acceleration(self, value: float):
+    def printing_acceleration(self, value):
         self._printing_acceleration = float(value)
 
     @property
@@ -138,7 +157,7 @@ class Move(ModelObject):
         return self._speed_factor
 
     @speed_factor.setter
-    def speed_factor(self, value: float):
+    def speed_factor(self, value):
         self._speed_factor = float(value)
 
     @property
@@ -147,7 +166,7 @@ class Move(ModelObject):
         return self._travel_acceleration
 
     @travel_acceleration.setter
-    def travel_acceleration(self, value: float):
+    def travel_acceleration(self, value):
         self._travel_acceleration = float(value)
 
     @property
@@ -156,7 +175,7 @@ class Move(ModelObject):
         return self._virtual_e_pos
 
     @virtual_e_pos.setter
-    def virtual_e_pos(self, value: float):
+    def virtual_e_pos(self, value):
         self._virtual_e_pos = float(value)
 
     @property
@@ -165,5 +184,5 @@ class Move(ModelObject):
         return self._workplace_number
 
     @workplace_number.setter
-    def workplace_number(self, value: int):
+    def workplace_number(self, value):
         self._workplace_number = int(value)

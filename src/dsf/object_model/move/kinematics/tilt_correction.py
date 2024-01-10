@@ -26,7 +26,7 @@ class TiltCorrection(ModelObject):
         return self._correction_factor
     
     @correction_factor.setter
-    def correction_factor(self, value: float):
+    def correction_factor(self, value):
         self._correction_factor = float(value)
         
     @property
@@ -40,7 +40,7 @@ class TiltCorrection(ModelObject):
         return self._max_correction
 
     @max_correction.setter
-    def max_correction(self, value: float):
+    def max_correction(self, value):
         self._max_correction = float(value)
 
     @property
@@ -49,7 +49,7 @@ class TiltCorrection(ModelObject):
         return self._screw_pitch
 
     @screw_pitch.setter
-    def screw_pitch(self, value: float):
+    def screw_pitch(self, value):
         self._screw_pitch = float(value)
         
     @property

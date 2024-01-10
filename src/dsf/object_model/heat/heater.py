@@ -42,6 +42,12 @@ class Heater(ModelObject):
         # Maximum temperature allowed for this heater (in C)
         # This is only temporary and should be replaced by a representation of the heater protection as in RRF
         self._max = 285
+        # Maximum number of consecutive temperature reading failures before a heater fault is raised
+        self._max_bad_readings = 3
+        # Time for which a temperature anomaly must persist on this heater before raising a heater fault (in s)
+        self._max_heating_fault_time = 5
+        # Permitted temperature excursion from the setpoint for this heater (in K)
+        self._max_temp_excursion = 15
         # Minimum temperature allowed for this heater (in C)
         # This is only temporary and should be replaced by a representation of the heater protection as in RRF
         self._min = -10
@@ -92,6 +98,33 @@ class Heater(ModelObject):
     @max.setter
     def max(self, value: float):
         self._max = float(value)
+
+    @property
+    def max_bad_readings(self) -> int:
+        """Maximum number of consecutive temperature reading failures before a heater fault is raised"""
+        return self._max_bad_readings
+
+    @max_bad_readings.setter
+    def max_bad_readings(self, value: int):
+        self._max_bad_readings = int(value)
+
+    @property
+    def max_heating_fault_time(self) -> float:
+        """Time for which a temperature anomaly must persist on this heater before raising a heater fault (in s)"""
+        return self._max_heating_fault_time
+
+    @max_heating_fault_time.setter
+    def max_heating_fault_time(self, value: float):
+        self._max_heating_fault_time = float(value)
+
+    @property
+    def max_temp_excursion(self) -> float:
+        """Permitted temperature excursion from the setpoint for this heater (in K)"""
+        return self._max_temp_excursion
+
+    @max_temp_excursion.setter
+    def max_temp_excursion(self, value: float):
+        self._max_temp_excursion = float(value)
 
     @property
     def min(self) -> float:

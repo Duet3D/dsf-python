@@ -1,4 +1,4 @@
-from __future__ import annotations
+from typing import List, Optional
 
 from .base_command_connection import BaseCommandConnection
 from .init_messages import client_init_messages
@@ -28,8 +28,8 @@ class InterceptConnection(BaseCommandConnection):
     def __init__(
         self,
         interception_mode: client_init_messages.InterceptionMode,
-        channels: list[CodeChannel] = None,
-        filters: list[str] = None,
+        channels: List[CodeChannel] = None,
+        filters: List[str] = None,
         auto_flush: bool = True,
         priority_codes: bool = False,
         debug: bool = False,

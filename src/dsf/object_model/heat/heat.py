@@ -39,7 +39,7 @@ class Heat(ModelObject):
         return self._cold_extrude_temperature
 
     @cold_extrude_temperature.setter
-    def cold_extrude_temperature(self, value: float):
+    def cold_extrude_temperature(self, value: float = 160):
         self._cold_extrude_temperature = float(value)
 
     @property
@@ -48,7 +48,7 @@ class Heat(ModelObject):
         return self._cold_retract_temperature
 
     @cold_retract_temperature.setter
-    def cold_retract_temperature(self, value: float):
+    def cold_retract_temperature(self, value: float = 90):
         self._cold_retract_temperature = float(value)
 
     @property

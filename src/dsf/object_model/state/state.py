@@ -8,6 +8,7 @@ from .machine_mode import MachineMode
 from .machine_status import MachineStatus
 from .message_box import MessageBox
 from .restore_point import RestorePoint
+from .startup_error import StartupError
 from ..model_collection import ModelCollection
 from ..model_object import ModelObject
 from ..utils import wrap_model_property
@@ -20,6 +21,8 @@ class State(ModelObject):
     beep = wrap_model_property('beep', BeepRequest)
     # Details about a requested message box or null if none is requested
     message_box = wrap_model_property('message_box', MessageBox)
+    # First error on start-up or null if there was none
+    startup_error = wrap_model_property('startup_error', StartupError)
 
     def __init__(self):
         super(State, self).__init__()
@@ -29,9 +32,6 @@ class State(ModelObject):
         self._current_tool = -1
         self._deferred_power_down = None
         self._display_message = ""
-        self._dsf_version = None
-        self._dsf_plugin_support = False
-        self._dsf_root_plugin_support = False
         self._gp_out = ModelCollection(GpOutputPort)
         self._laser_pwm = None
         self._log_file = None
@@ -45,7 +45,9 @@ class State(ModelObject):
         self._power_fail_script = ""
         self._previous_tool = -1
         self._restore_points = ModelCollection(RestorePoint)
+        self._startup_error = None
         self._status = MachineStatus.starting
+        self._this_active = True
         self._this_input = None
         self._time = None
         self._up_time = 0
@@ -74,7 +76,7 @@ class State(ModelObject):
         return self._current_tool
 
     @current_tool.setter
-    def current_tool(self, value: int):
+    def current_tool(self, value):
         self._current_tool = int(value)
 
     @property
@@ -93,38 +95,8 @@ class State(ModelObject):
         return self._display_message
 
     @display_message.setter
-    def display_message(self, value: str):
+    def display_message(self, value):
         self._display_message = str(value)
-
-    @property
-    def dsf_version(self) -> str | None:
-        """Version of the Duet Software Framework package
-        Obsolete: This field will be removed in favour of a new dsf main key in v3.5"""
-        return self._dsf_version
-
-    @dsf_version.setter
-    def dsf_version(self, value: str | None = None):
-        self._dsf_version = str(value) if value is not None else None
-
-    @property
-    def dsf_plugin_support(self) -> bool:
-        """Indicates if DSF allows the installation and usage of third-party plugins
-        Obsolete: This field will be removed in favour of a new dsf main key in v3.5"""
-        return self._dsf_plugin_support
-
-    @dsf_plugin_support.setter
-    def dsf_plugin_support(self, value: bool):
-        self._dsf_plugin_support = bool(value)
-
-    @property
-    def dsf_root_plugin_support(self) -> bool:
-        """Indicates if DSF allows the installation and usage of third-party root plugins (potentially dangerous)
-        Obsolete: This field will be removed in favour of a new dsf main key in v3.5"""
-        return self._dsf_root_plugin_support
-
-    @dsf_root_plugin_support.setter
-    def dsf_root_plugin_support(self, value: bool):
-        self._dsf_root_plugin_support = bool(value)
 
     @property
     def gp_out(self) -> list[GpOutputPort]:
@@ -194,7 +166,7 @@ class State(ModelObject):
         return self._ms_up_time
 
     @ms_up_time.setter
-    def ms_up_time(self, value: int):
+    def ms_up_time(self, value):
         self._ms_up_time = int(value)
 
     @property
@@ -203,7 +175,7 @@ class State(ModelObject):
         return self._next_tool
 
     @next_tool.setter
-    def next_tool(self, value: int):
+    def next_tool(self, value):
         self._next_tool = int(value)
 
     @property
@@ -230,7 +202,7 @@ class State(ModelObject):
         return self._previous_tool
 
     @previous_tool.setter
-    def previous_tool(self, value: int):
+    def previous_tool(self, value):
         self._previous_tool = int(value)
 
     @property
@@ -254,7 +226,16 @@ class State(ModelObject):
                             f" Got {type(value)}: {value}")
 
     @property
-    def this_input(self) -> int | None:
+    def this_active(self) -> bool:
+        """Shorthand for inputs[state.thisInput].active"""
+        return self._this_active
+
+    @this_active.setter
+    def this_active(self, value):
+        self._this_active = bool(value)
+
+    @property
+    def this_input(self) -> Union[int, None]:
         """Index of the current G-code input channel (see ObjectModel.Inputs)
         This is primarily intended for macro files to determine on which G-code channel it is running.
         The value of this property is always null in object model queries"""
@@ -279,5 +260,5 @@ class State(ModelObject):
         return self._up_time
 
     @up_time.setter
-    def up_time(self, value: int):
+    def up_time(self, value):
         self._up_time = int(value)

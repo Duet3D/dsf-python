@@ -5,7 +5,7 @@ from concurrent.futures import ThreadPoolExecutor
 from enum import Enum
 
 from . import DEFAULT_BACKLOG
-from .object_model.http_endpoints import HttpEndpointType
+from .object_model import HttpEndpointType
 
 
 class HttpResponseType(str, Enum):

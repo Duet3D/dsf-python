@@ -7,24 +7,29 @@ from .boards import Board
 from .directories import Directories
 from .fans import Fan
 from .heat import Heat
-from .http_endpoints import HttpEndpoint
-from .inputs import InputChannel
+from .inputs import Inputs
 from .job import Job
+from .led_strips import LedStrip
 from .limits import Limits
 from .messages import Message
 from .move import Move
 from .network import Network
 from .plugins import Plugin
-from .scanner import Scanner
+from .sbc import SBC
 from .sensors import Sensors
 from .spindles import Spindle
 from .state import State
 from .tools import Tool
-from .user_sessions import UserSession
 from .volumes import Volume
+
+from .utils import wrap_model_property
 
 
 class ObjectModel(ModelObject):
+
+    # Information about the SBC which Duet Software Framework is running on.
+    # This is None if the system is operating in standalone mode
+    sbc = wrap_model_property('sbc', SBC)
 
     def __init__(self):
         super(ObjectModel, self).__init__()
@@ -33,20 +38,19 @@ class ObjectModel(ModelObject):
         self._fans = ModelCollection(Fan)
         self._globals = ModelDictionary(False)
         self._heat = Heat()
-        self._http_endpoints = ModelCollection(HttpEndpoint)
-        self._inputs = ModelCollection(InputChannel)
+        self._inputs = Inputs()
         self._job = Job()
+        self._led_strips = ModelCollection(LedStrip)
         self._limits = Limits()
         self._messages = ModelCollection(Message)
         self._move = Move()
         self._network = Network()
         self._plugins = ModelDictionary(True, Plugin)
-        self._scanner = Scanner()
+        self._sbc = None
         self._sensors = Sensors()
         self._spindles = ModelCollection(Spindle)
         self._state = State()
         self._tools = ModelCollection(Tool)
-        self._user_sessions = ModelCollection(UserSession)
         self._volumes = ModelCollection(Volume)
 
     @property
@@ -68,7 +72,7 @@ class ObjectModel(ModelObject):
         return self._fans
 
     @property
-    def globals(self):
+    def globals(self) -> dict:
         """Dictionary of global variables vs JSON values
         When DSF attempts to reconnect to RRF, this may be set to null to clear the contents
         NB: RRF uses 'global' as name but as it is a reserved keyword in Python, 'globals' is used here."""
@@ -80,12 +84,7 @@ class ObjectModel(ModelObject):
         return self._heat
 
     @property
-    def http_endpoints(self) -> list[HttpEndpoint]:
-        """List of registered third-party HTTP endpoints"""
-        return self._http_endpoints
-
-    @property
-    def inputs(self) -> list[InputChannel]:
+    def inputs(self) -> Inputs:
         """Information about every available G/M/T-code channel"""
         return self._inputs
 
@@ -93,6 +92,11 @@ class ObjectModel(ModelObject):
     def job(self) -> Job:
         """Information about the current job"""
         return self._job
+
+    @property
+    def led_strips(self) -> List[LedStrip]:
+        """List of configured LED strips"""
+        return self._led_strips
 
     @property
     def limits(self) -> Limits:
@@ -118,18 +122,14 @@ class ObjectModel(ModelObject):
 
     @property
     def plugins(self) -> dict:
-        """Dictionary of SBC plugins where each key is the plugin identifier
-        Values in this dictionary cannot become null. If a change to null is reported, the corresponding key is deleted.
-        Do not rely on the setter of this property; it will be removed from a future version."""
+        """Dictionary of loaded plugins where each key is the plugin identifier
+        This is only populated by DSF in SBC mode, however it may be populated manually as well in standalone mode.
+        Values in this dictionary cannot become None.
+        If a value is changed to None, the corresponding item is deleted"""
         return self._plugins
 
     @property
-    def scanner(self) -> Scanner:
-        """Information about the 3D scanner subsystem"""
-        return self._scanner
-
-    @property
-    def sensors(self):
+    def sensors(self) -> Sensors:
         """Information about connected sensors including Z-probes and endstops"""
         return self._sensors
 
@@ -151,12 +151,7 @@ class ObjectModel(ModelObject):
         return self._tools
 
     @property
-    def user_sessions(self):
-        """List of user sessions"""
-        return self._user_sessions
-
-    @property
-    def volumes(self):
+    def volumes(self) -> List[Volume]:
         """List of available mass storages
         See also Volume()"""
         return self._volumes

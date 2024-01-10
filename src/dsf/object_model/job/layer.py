@@ -25,7 +25,7 @@ class Layer(ModelObject):
         return self._duration
 
     @duration.setter
-    def duration(self, value: float):
+    def duration(self, value):
         self._duration = float(value)
 
     @property
@@ -39,7 +39,7 @@ class Layer(ModelObject):
         return self._fraction_printed
 
     @fraction_printed.setter
-    def fraction_printed(self, value: float):
+    def fraction_printed(self, value):
         self._fraction_printed = float(value)
 
     @property
@@ -48,7 +48,7 @@ class Layer(ModelObject):
         return self._height
 
     @height.setter
-    def height(self, value: int):
+    def height(self, value):
         self._height = int(value)
 
     @property

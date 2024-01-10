@@ -16,8 +16,6 @@ class Directories(ModelObject):
         # Path to the menu directory
         # Intended for 12864 displays but currently unused in DSF. It is only needed for the Duet Maestro > DWC
         self._menu = "0:/menu"
-        # Path to the scans directory
-        self._scans = "0:/scans"
         # Path to the system directory
         self._system = "0:/sys"
         # Path to the web directory
@@ -68,15 +66,6 @@ class Directories(ModelObject):
     @menu.setter
     def menu(self, value: str):
         self._menu = str(value)
-
-    @property
-    def scans(self) -> str:
-        """Path to the scans directory"""
-        return self._scans
-
-    @scans.setter
-    def scans(self, value: str):
-        self._scans = str(value)
 
     @property
     def system(self) -> str:

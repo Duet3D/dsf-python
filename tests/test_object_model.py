@@ -28,18 +28,18 @@ class Model(unittest.TestCase):
         self.assertEqual(model.boards[0].v_in.max, 19.4)
 
     def test_http_endpoints(self):
-        from src.dsf.object_model.http_endpoints.http_endpoint_type import HttpEndpointType
+        from src.dsf.object_model import HttpEndpointType
         model = ObjectModel()
 
-        json_patch = '{"httpEndpoints":[{"endpointType":"GET","namespace":"ExecOnMcode","path":"getCmdList","isUploadRequest":false,"unixSocket":"/run/dsf/ExecOnMcode/getCmdList-GET.sock"}]}'
+        json_patch = '{"sbc":{"dsf":{"httpEndpoints":[{"endpointType":"GET","namespace":"ExecOnMcode","path":"getCmdList","isUploadRequest":false,"unixSocket":"/run/dsf/ExecOnMcode/getCmdList-GET.sock"}]}}}'
         model.update_from_json(json_patch)
-        self.assertEqual(len(model.http_endpoints), 1)
-        self.assertEqual(model.http_endpoints[0].endpoint_type, HttpEndpointType.GET)
+        self.assertEqual(len(model.sbc.dsf.http_endpoints), 1)
+        self.assertEqual(model.sbc.dsf.http_endpoints[0].endpoint_type, HttpEndpointType.GET)
 
-        json_patch = '{"httpEndpoints":[{},{"endpointType":"POST","namespace":"ExecOnMcode","path":"saveCmdList","isUploadRequest":false,"unixSocket":"/run/dsf/ExecOnMcode/saveCmdList-POST.sock"}]}'
+        json_patch = '{"sbc":{"dsf":{"httpEndpoints":[{},{"endpointType":"POST","namespace":"ExecOnMcode","path":"saveCmdList","isUploadRequest":false,"unixSocket":"/run/dsf/ExecOnMcode/saveCmdList-POST.sock"}]}}}'
         model.update_from_json(json_patch)
-        self.assertEqual(len(model.http_endpoints), 2)
-        self.assertEqual(model.http_endpoints[1].endpoint_type, HttpEndpointType.POST)
+        self.assertEqual(len(model.sbc.dsf.http_endpoints), 2)
+        self.assertEqual(model.sbc.dsf.http_endpoints[1].endpoint_type, HttpEndpointType.POST)
 
     def test_job(self):
         model = ObjectModel()
@@ -48,7 +48,9 @@ class Model(unittest.TestCase):
         model.update_from_json(json_patch)
 
     def test_json_serialization(self):
-        with open('object_model/model_duet5mini.json') as fp:
+        # Hint: To get the object model, execute the command get_object_model() from any connection in debug mode
+        # and take the JSON returned from debug (after "recv:")
+        with open('object_model/model_geminiv2.json') as fp:
             json_data = json.load(fp)
         model = ObjectModel.from_json(json_data)
         json_text = json.dumps(json_data, sort_keys=True)
@@ -137,13 +139,17 @@ class Model(unittest.TestCase):
         from src.dsf.object_model import AccessLevel, SessionType
 
         model = ObjectModel()
-        self.assertEqual(len(model.user_sessions), 0)
-
-        json_patch = '{"userSessions":[{"accessLevel":"readWrite","id":2,"origin":"::ffff:192.168.1.200","originId":-1,"sessionType":"http"}]}'
+        json_patch = '{"sbc": {}}'
         model.update_from_json(json_patch)
-        self.assertEqual(len(model.user_sessions), 1)
-        self.assertEqual(model.user_sessions[0].access_level, AccessLevel.readWrite)
-        self.assertEqual(model.user_sessions[0].session_type, SessionType.http)
+
+        self.assertEqual(len(model.sbc.dsf.user_sessions), 0)
+
+        json_patch = '{"sbc":{"dsf":{"userSessions":[{"accessLevel":"readWrite","id":2,"origin":"::ffff:192.168.1.200","originId":-1,"sessionType":"http"}]}}}'
+        model.update_from_json(json_patch)
+        self.assertEqual(len(model.sbc.dsf.user_sessions), 1)
+        self.assertEqual(model.sbc.dsf.user_sessions[0].access_level, AccessLevel.readWrite)
+        self.assertEqual(model.sbc.dsf.user_sessions[0].session_type, SessionType.http)
+
 
 if __name__ == '__main__':
     unittest.main()

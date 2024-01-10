@@ -5,8 +5,7 @@ from .. import commands, DEFAULT_BACKLOG
 from ..commands import code
 from ..commands.code_channel import CodeChannel
 from ..http import HttpEndpointUnixSocket
-from ..object_model import ObjectModel
-from ..object_model.http_endpoints import HttpEndpointType
+from ..object_model import HttpEndpointType, ObjectModel
 from ..object_model.job import GCodeFileInfo
 from ..object_model.messages import Message, MessageType
 from ..object_model.state import LogLevel

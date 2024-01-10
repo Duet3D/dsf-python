@@ -1,10 +1,10 @@
 from ..model_object import ModelObject
 
 
-class ClosedLoop(ModelObject):
+class BoardClosedLoop(ModelObject):
     """This represents information about closed-loop tuning"""
     def __init__(self):
-        super(ClosedLoop, self).__init__()
+        super(BoardClosedLoop, self).__init__()
         # Number of collected data points in the last run or 0 if it failed
         self._points = 0
         # Number of completed sampling runs

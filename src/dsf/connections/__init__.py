@@ -24,8 +24,8 @@ class InterceptionMode(str, Enum):
     # Intercept codes before they are internally processed by the control server
     PRE = "Pre"
 
-    # Intercept codes after the initial processing of the control server but before they are forwarded to
-    # the RepRapFirmware controller
+    # Intercept codes after the initial processing of the control server, but before they are forwarded
+    # to the RepRapFirmware controller
     POST = "Post"
 
     # Receive a notification for executed codes. In this state the final result can be still changed

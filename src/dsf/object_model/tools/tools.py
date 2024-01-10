@@ -74,7 +74,7 @@ class Tool(ModelObject):
         return self._fans
     
     @property
-    def feed_forward(self) -> list[int]:
+    def feed_forward(self) -> List[float]:
         """Feedforward coefficients to apply to the mapped heaters during extrusions"""
         return self._feed_forward
     
@@ -84,7 +84,7 @@ class Tool(ModelObject):
         return self._filament_extruder
     
     @filament_extruder.setter
-    def filament_extruder(self, value: int):
+    def filament_extruder(self, value):
         self._filament_extruder = int(value)
         
     @property
@@ -112,7 +112,7 @@ class Tool(ModelObject):
         return self._name
     
     @name.setter
-    def name(self, value: str):
+    def name(self, value):
         self._name = str(value)
         
     @property
@@ -121,7 +121,7 @@ class Tool(ModelObject):
         return self._number
     
     @number.setter
-    def number(self, value: int):
+    def number(self, value):
         self._number = int(value)
         
     @property
@@ -136,7 +136,7 @@ class Tool(ModelObject):
         return self._offsets_probed
     
     @offsets_probed.setter
-    def offsets_probed(self, value: int):
+    def offsets_probed(self, value):
         self._offsets_probed = int(value)
         
     @property
@@ -150,7 +150,7 @@ class Tool(ModelObject):
         return self._spindle
     
     @spindle.setter
-    def spindle(self, value: int):
+    def spindle(self, value):
         self._spindle = int(value)
         
     @property
@@ -159,7 +159,7 @@ class Tool(ModelObject):
         return self._spindle_rpm
     
     @spindle_rpm.setter
-    def spindle_rpm(self, value: int):
+    def spindle_rpm(self, value):
         self._spindle_rpm = int(value)
         
     @property

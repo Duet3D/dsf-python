@@ -36,7 +36,7 @@ class RestorePoint(ModelObject):
         return self._extruder_pos
     
     @extruder_pos.setter
-    def extruder_pos(self, value: float):
+    def extruder_pos(self, value):
         self._extruder_pos = float(value)
         
     @property
@@ -45,7 +45,7 @@ class RestorePoint(ModelObject):
         return self._fan_pwm
     
     @fan_pwm.setter
-    def fan_pwm(self, value: float):
+    def fan_pwm(self, value):
         self._fan_pwm = float(value)
         
     @property
@@ -54,7 +54,7 @@ class RestorePoint(ModelObject):
         return self._feed_rate
     
     @feed_rate.setter
-    def feed_rate(self, value: float):
+    def feed_rate(self, value):
         self._feed_rate = float(value)
         
     @property
@@ -81,5 +81,5 @@ class RestorePoint(ModelObject):
         return self._tool_number
     
     @tool_number.setter
-    def tool_number(self, value: int):
+    def tool_number(self, value):
         self._tool_number = int(value)

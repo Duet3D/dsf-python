@@ -9,7 +9,8 @@ Make sure when running this script to have access to the DSF UNIX socket owned b
 import time
 
 from dsf.connections import CommandConnection
-from dsf.http import HttpEndpointConnection, HttpEndpointType
+from dsf.http import HttpEndpointConnection
+from dsf.object_model import HttpEndpointType
 
 
 async def respond_something(http_endpoint_connection: HttpEndpointConnection):

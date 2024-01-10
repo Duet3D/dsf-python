@@ -19,6 +19,7 @@ class PluginManifest(ModelObject):
         self._license = "LGPL-3.0-or-later"
         self._name = None
         self._rrf_version = None
+        self._sbc_auto_restart = False
         self._sbc_dsf_version = None
         self._sbc_executable = None
         self._sbc_executable_arguments = None
@@ -38,7 +39,7 @@ class PluginManifest(ModelObject):
         return self._author
 
     @author.setter
-    def author(self, value: str):
+    def author(self, value):
         self._author = str(value)
 
     @property
@@ -97,7 +98,7 @@ class PluginManifest(ModelObject):
         return self._license
 
     @license.setter
-    def license(self, value: str):
+    def license(self, value):
         self._license = str(value)
 
     @property
@@ -129,7 +130,16 @@ class PluginManifest(ModelObject):
         self._rrf_version = str(value) if value is not None else None
 
     @property
-    def sbc_dsf_version(self) -> str | None:
+    def sbc_auto_restart(self) -> bool:
+        """Automatically restart the SBC process when terminated"""
+        return self._sbc_auto_restart
+
+    @sbc_auto_restart.setter
+    def sbc_auto_restart(self, value):
+        self._sbc_auto_restart = bool(value)
+
+    @property
+    def sbc_dsf_version(self) -> str:
         """Required DSF version for the plugin running on the SBC (ignored if there is no SBC executable)"""
         return self._sbc_dsf_version
 
@@ -228,7 +238,7 @@ class PluginManifest(ModelObject):
         return self._version
 
     @version.setter
-    def version(self, value: str):
+    def version(self, value):
         self._version = str(value)
 
     @staticmethod

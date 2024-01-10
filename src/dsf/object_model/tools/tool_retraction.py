@@ -23,7 +23,7 @@ class ToolRetraction(ModelObject):
         return self._extra_restart
     
     @extra_restart.setter
-    def extra_restart(self, value: float):
+    def extra_restart(self, value):
         self._extra_restart = float(value)
         
     @property
@@ -32,7 +32,7 @@ class ToolRetraction(ModelObject):
         return self._length
     
     @length.setter
-    def length(self, value: float):
+    def length(self, value):
         self._length = float(value)
         
     @property
@@ -41,7 +41,7 @@ class ToolRetraction(ModelObject):
         return self._speed
     
     @speed.setter
-    def speed(self, value: float):
+    def speed(self, value):
         self._speed = float(value)
         
     @property
@@ -50,7 +50,7 @@ class ToolRetraction(ModelObject):
         return self._unretract_speed
     
     @unretract_speed.setter
-    def unretract_speed(self, value: float):
+    def unretract_speed(self, value):
         self._unretract_speed = float(value)
         
     @property
@@ -59,5 +59,5 @@ class ToolRetraction(ModelObject):
         return self._z_hop
     
     @z_hop.setter
-    def z_hop(self, value: float):
+    def z_hop(self, value):
         self._z_hop = float(value)

@@ -29,5 +29,5 @@ class HangprinterKinematics(Kinematics):
         return self._print_radius
     
     @print_radius.setter
-    def print_radius(self, value: float):
+    def print_radius(self, value):
         self._print_radius = float(value)

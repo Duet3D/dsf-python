@@ -52,7 +52,7 @@ class GCodeFileInfo(ModelObject):
         return self._height
 
     @height.setter
-    def height(self, value: float):
+    def height(self, value):
         self._height = float(value)
 
     @property
@@ -76,7 +76,7 @@ class GCodeFileInfo(ModelObject):
         return self._layer_height
 
     @layer_height.setter
-    def layer_height(self, value: float):
+    def layer_height(self, value):
         self._layer_height = float(value)
 
     @property
@@ -85,7 +85,7 @@ class GCodeFileInfo(ModelObject):
         return self._num_layers
 
     @num_layers.setter
-    def num_layers(self, value: int):
+    def num_layers(self, value):
         self._num_layers = int(value)
 
     @property

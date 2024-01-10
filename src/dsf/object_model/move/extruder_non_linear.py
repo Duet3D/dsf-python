@@ -17,7 +17,7 @@ class ExtruderNonlinear(ModelObject):
         return self._a
 
     @a.setter
-    def a(self, value: float):
+    def a(self, value):
         self._a = float(value)
 
     @property
@@ -26,7 +26,7 @@ class ExtruderNonlinear(ModelObject):
         return self._b
 
     @b.setter
-    def b(self, value: float):
+    def b(self, value):
         self._b = float(value)
 
     @property
@@ -35,5 +35,5 @@ class ExtruderNonlinear(ModelObject):
         return self._upper_limit
 
     @upper_limit.setter
-    def upper_limit(self, value: float):
+    def upper_limit(self, value):
         self._upper_limit = float(value)

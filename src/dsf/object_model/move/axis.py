@@ -26,12 +26,6 @@ class AxisLetter(str, Enum):
     d = 'd'
     e = 'e'
     f = 'f'
-    g = 'g'
-    h = 'h'
-    i = 'i'
-    j = 'j'
-    k = 'k'
-    l = 'l'
     none = ''
 
 
@@ -44,6 +38,8 @@ class Axis(ModelObject):
         self._acceleration = 0
         # Babystep amount (in mm)
         self._babystep = 0
+        # Configured backlash of this axis (in mm)
+        self._backlash = 0
         # Motor current (in mA)
         self._current = 0
         # List of the assigned drivers
@@ -51,7 +47,7 @@ class Axis(ModelObject):
         # Whether the axis is homed
         self._homed = False
         # Motor jerk (in mm/min)
-        self._jerk = 0
+        self._jerk = 15
         # Letter of this axis
         self._letter = AxisLetter.none
         # Current machine position (in mm) or None if unknown/unset
@@ -70,6 +66,8 @@ class Axis(ModelObject):
         self._percent_current = 100
         # Percentage applied to the motor current during standstill (0..100 or None if not supported)
         self._percent_stst_current = None
+        # Reduced accelerations used by Z probing and stall homing moves (in mm/s^2)
+        self._reduced_acceleration = 0
         # Maximum speed (in mm/min)
         self._speed = 100
         # Number of microsteps per mm
@@ -87,7 +85,7 @@ class Axis(ModelObject):
         return self._acceleration
 
     @acceleration.setter
-    def acceleration(self, value: float):
+    def acceleration(self, value):
         self._acceleration = float(value)
 
     @property
@@ -96,8 +94,17 @@ class Axis(ModelObject):
         return self._babystep
 
     @babystep.setter
-    def babystep(self, value: float):
+    def babystep(self, value):
         self._babystep = float(value)
+
+    @property
+    def backlash(self) -> float:
+        """Configured backlash of this axis (in mm)"""
+        return self._backlash
+
+    @backlash.setter
+    def backlash(self, value):
+        self._backlash = float(value)
 
     @property
     def current(self) -> int:
@@ -105,7 +112,7 @@ class Axis(ModelObject):
         return self._current
 
     @current.setter
-    def current(self, value: int):
+    def current(self, value):
         self._current = int(value)
 
     @property
@@ -128,7 +135,7 @@ class Axis(ModelObject):
         return self._jerk
 
     @jerk.setter
-    def jerk(self, value: float):
+    def jerk(self, value):
         self._jerk = float(value)
 
     @property
@@ -147,7 +154,7 @@ class Axis(ModelObject):
                             f" Got {type(value)}: {value}")
 
     @property
-    def machine_position(self) -> float | None:
+    def machine_position(self) -> Union[float, None]:
         """Current machine position (in mm) or None if unknown/unset
         This value reflects the machine position of the move being performed
         or of the last one if the machine is not moving"""
@@ -163,7 +170,7 @@ class Axis(ModelObject):
         return self._max
 
     @max.setter
-    def max(self, value: float):
+    def max(self, value):
         self._max = float(value)
 
     @property
@@ -186,7 +193,7 @@ class Axis(ModelObject):
         return self._min
 
     @min.setter
-    def min(self, value: float):
+    def min(self, value):
         self._min = float(value)
 
     @property
@@ -204,11 +211,11 @@ class Axis(ModelObject):
         return self._percent_current
 
     @percent_current.setter
-    def percent_current(self, value: int):
+    def percent_current(self, value):
         self._percent_current = int(value)
 
     @property
-    def percent_stst_current(self) -> int | None:
+    def percent_stst_current(self) -> Union[int, None]:
         """Percentage applied to the motor current during standstill (0..100 or None if not supported)"""
         return self._percent_stst_current
 
@@ -217,12 +224,21 @@ class Axis(ModelObject):
         self._percent_stst_current = int(value) if value is not None else None
 
     @property
+    def reduced_acceleration(self) -> float:
+        """Reduced accelerations used by Z probing and stall homing moves (in mm/s^2)"""
+        return self._reduced_acceleration
+
+    @reduced_acceleration.setter
+    def reduced_acceleration(self, value):
+        self._reduced_acceleration = float(value)
+
+    @property
     def speed(self) -> float:
         """Maximum speed (in mm/min)"""
         return self._speed
 
     @speed.setter
-    def speed(self, value: float):
+    def speed(self, value):
         self._speed = float(value)
 
     @property
@@ -231,11 +247,11 @@ class Axis(ModelObject):
         return self._steps_per_mm
 
     @steps_per_mm.setter
-    def steps_per_mm(self, value: float):
+    def steps_per_mm(self, value):
         self._steps_per_mm = float(value)
 
     @property
-    def user_position(self) -> float | None:
+    def user_position(self) -> Union[float, None]:
         """Current user position (in mm) or None if unknown
         This value reflects the target position of the last move fed into the look-ahead buffer"""
         return self._user_position
@@ -250,7 +266,7 @@ class Axis(ModelObject):
         return self._visible
 
     @visible.setter
-    def visible(self, value: bool):
+    def visible(self, value):
         self._visible = bool(value)
 
     @property

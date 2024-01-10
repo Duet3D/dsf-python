@@ -14,7 +14,7 @@ class BeepRequest(ModelObject):
         return self._duration
 
     @duration.setter
-    def duration(self, value: int):
+    def duration(self, value):
         self._duration = int(value)
 
     @property
@@ -23,5 +23,5 @@ class BeepRequest(ModelObject):
         return self._frequency
 
     @frequency.setter
-    def frequency(self, value: int):
+    def frequency(self, value):
         self._frequency = int(value)

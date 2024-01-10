@@ -28,7 +28,7 @@ class Build(ModelObject):
         return self._current_object
 
     @current_object.setter
-    def current_object(self, value: int):
+    def current_object(self, value):
         self._current_object = int(value)
 
     @property

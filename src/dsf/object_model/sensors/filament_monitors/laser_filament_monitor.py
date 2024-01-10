@@ -1,6 +1,6 @@
 from __future__ import annotations
 
-from .filament_monitor import FilamentMonitor
+from .Duet3DFilamentMonitor import Duet3DFilamentMonitor
 from .filament_monitor_type import FilamentMonitorType
 from ...model_object import ModelObject
 from ...utils import wrap_model_property
@@ -23,7 +23,7 @@ class LaserFilamentMonitorCalibrated(ModelObject):
         return self._calibration_factor
 
     @calibration_factor.setter
-    def calibration_factor(self, value: float):
+    def calibration_factor(self, value):
         self._calibration_factor = float(value)
 
     @property
@@ -32,7 +32,7 @@ class LaserFilamentMonitorCalibrated(ModelObject):
         return self._percent_max
 
     @percent_max.setter
-    def percent_max(self, value: float):
+    def percent_max(self, value):
         self._percent_max = float(value)
 
     @property
@@ -41,7 +41,7 @@ class LaserFilamentMonitorCalibrated(ModelObject):
         return self._percent_min
 
     @percent_min.setter
-    def percent_min(self, value: float):
+    def percent_min(self, value):
         self._percent_min = float(value)
 
     @property
@@ -50,7 +50,7 @@ class LaserFilamentMonitorCalibrated(ModelObject):
         return self._sensivity
 
     @sensivity.setter
-    def sensivity(self, value: float):
+    def sensivity(self, value):
         self._sensivity = float(value)
 
     @property
@@ -59,7 +59,7 @@ class LaserFilamentMonitorCalibrated(ModelObject):
         return self._total_distance
 
     @total_distance.setter
-    def total_distance(self, value: float):
+    def total_distance(self, value):
         self._total_distance = float(value)
 
 
@@ -88,7 +88,7 @@ class LaserFilamentMonitorConfigured(ModelObject):
         return self._percent_max
 
     @percent_max.setter
-    def percent_max(self, value: float):
+    def percent_max(self, value):
         self._percent_max = float(value)
 
     @property
@@ -97,7 +97,7 @@ class LaserFilamentMonitorConfigured(ModelObject):
         return self._percent_min
 
     @percent_min.setter
-    def percent_min(self, value: float):
+    def percent_min(self, value):
         self._percent_min = float(value)
 
     @property
@@ -106,11 +106,11 @@ class LaserFilamentMonitorConfigured(ModelObject):
         return self._sample_distance
 
     @sample_distance.setter
-    def sample_distance(self, value: float):
+    def sample_distance(self, value):
         self._sample_distance = float(value)
 
 
-class LaserFilamentMonitor(FilamentMonitor):
+class LaserFilamentMonitor(Duet3DFilamentMonitor):
     """Information about a laser filament monitor"""
 
     # Calibrated properties of this filament monitor

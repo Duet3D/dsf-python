@@ -25,5 +25,5 @@ class MicroStepping(ModelObject):
         return self._value
 
     @value.setter
-    def value(self, value: int):
+    def value(self, value):
         self._value = int(value)

@@ -1,5 +1,6 @@
 from __future__ import annotations
 from enum import Enum, IntEnum
+from typing import Union
 
 from ..model_object import ModelObject
 
@@ -39,19 +40,21 @@ class HeaterMonitor(ModelObject):
     def __init__(self):
         super().__init__()
         # Action to perform when the trigger condition is met
-        self._action = HeaterMonitorAction.generateFault
+        self._action = None
         # Condition to meet to perform an action
         self._condition = HeaterMonitorCondition.disabled
         # Limit threshold for this heater monitor
         self._limit = None
+        # Sensor number to monitor
+        self._sensor = -1
 
     @property
-    def action(self) -> HeaterMonitorAction | None:
+    def action(self) -> Union[HeaterMonitorAction, None]:
         """Action to perform when the trigger condition is met"""
         return self._action
 
     @action.setter
-    def action(self, value: HeaterMonitorAction | None = None):
+    def action(self, value: Union[HeaterMonitorAction, None] = None):
         if value is None or isinstance(value, HeaterMonitorAction):
             self._action = value
         elif isinstance(value, int):
@@ -81,5 +84,14 @@ class HeaterMonitor(ModelObject):
         return self._limit
 
     @limit.setter
-    def limit(self, value: float | None = None):
+    def limit(self, value: Union[float, None]):
         self._limit = float(value) if value is not None else None
+
+    @property
+    def sensor(self) -> int:
+        """Sensor number to monitor"""
+        return self._sensor
+
+    @sensor.setter
+    def sensor(self, value: int):
+        self._sensor = int(value)

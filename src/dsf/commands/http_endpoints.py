@@ -1,5 +1,5 @@
 from .base_command import BaseCommand
-from ..object_model.http_endpoints import HttpEndpointType
+from ..object_model import HttpEndpointType
 
 
 def add_http_endpoint(endpoint_type: HttpEndpointType, namespace: str, path: str, is_upload_request: bool):

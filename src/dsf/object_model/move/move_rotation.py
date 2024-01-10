@@ -18,7 +18,7 @@ class MoveRotation(ModelObject):
         return self._angle
 
     @angle.setter
-    def angle(self, value: float):
+    def angle(self, value):
         self._angle = float(value)
 
     @property

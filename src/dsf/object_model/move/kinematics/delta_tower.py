@@ -22,7 +22,7 @@ class DeltaTower(ModelObject):
         return self._angle_correction
     
     @angle_correction.setter
-    def angle_correction(self, value: float):
+    def angle_correction(self, value):
         self._angle_correction = float(value)
         
     @property
@@ -31,7 +31,7 @@ class DeltaTower(ModelObject):
         return self._diagonal
     
     @diagonal.setter
-    def diagonal(self, value: float):
+    def diagonal(self, value):
         self._diagonal = float(value)
         
     @property
@@ -40,7 +40,7 @@ class DeltaTower(ModelObject):
         return self._endstop_adjustment
     
     @endstop_adjustment.setter
-    def endstop_adjustment(self, value: float):
+    def endstop_adjustment(self, value):
         self._endstop_adjustment = float(value)
         
     @property
@@ -49,7 +49,7 @@ class DeltaTower(ModelObject):
         return self._x_pos
     
     @x_pos.setter
-    def x_pos(self, value: float):
+    def x_pos(self, value):
         self._x_pos = float(value)
         
     @property
@@ -58,5 +58,5 @@ class DeltaTower(ModelObject):
         return self._y_pos
     
     @y_pos.setter
-    def y_pos(self, value: float):
+    def y_pos(self, value):
         self._y_pos = float(value)

@@ -20,7 +20,7 @@ class PulsedFilamentMonitorCalibrated(ModelObject):
         return self._mm_per_pulse
 
     @mm_per_pulse.setter
-    def mm_per_pulse(self, value: float):
+    def mm_per_pulse(self, value):
         self._mm_per_pulse = float(value)
 
     @property
@@ -29,7 +29,7 @@ class PulsedFilamentMonitorCalibrated(ModelObject):
         return self._percent_max
 
     @percent_max.setter
-    def percent_max(self, value: float):
+    def percent_max(self, value):
         self._percent_max = float(value)
 
     @property
@@ -38,7 +38,7 @@ class PulsedFilamentMonitorCalibrated(ModelObject):
         return self._percent_min
 
     @percent_min.setter
-    def percent_min(self, value: float):
+    def percent_min(self, value):
         self._percent_min = float(value)
 
     @property
@@ -47,7 +47,7 @@ class PulsedFilamentMonitorCalibrated(ModelObject):
         return self._total_distance
 
     @total_distance.setter
-    def total_distance(self, value: float):
+    def total_distance(self, value):
         self._total_distance = float(value)
 
 
@@ -67,7 +67,7 @@ class PulsedFilamentMonitorConfigured(ModelObject):
         return self._mm_per_pulse
     
     @mm_per_pulse.setter
-    def mm_per_pulse(self, value: float):
+    def mm_per_pulse(self, value):
         self._mm_per_pulse = float(value)
         
     @property
@@ -76,7 +76,7 @@ class PulsedFilamentMonitorConfigured(ModelObject):
         return self._percent_max
     
     @percent_max.setter
-    def percent_max(self, value: float):
+    def percent_max(self, value):
         self._percent_max = float(value)
         
     @property
@@ -85,7 +85,7 @@ class PulsedFilamentMonitorConfigured(ModelObject):
         return self._percent_min
     
     @percent_min.setter
-    def percent_min(self, value: float):
+    def percent_min(self, value):
         self._percent_min = float(value)
         
     @property
@@ -94,7 +94,7 @@ class PulsedFilamentMonitorConfigured(ModelObject):
         return self._sample_distance
     
     @sample_distance.setter
-    def sample_distance(self, value: float):
+    def sample_distance(self, value):
         self._sample_distance = float(value)
 
 

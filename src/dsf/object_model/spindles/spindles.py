@@ -15,10 +15,16 @@ class Spindle(ModelObject):
         self._current = 0
         # Frequency (in Hz)
         self._frequency = 0
+        #
+        self._idle_pwm = 0
         # Maximum RPM
         self._max = 10000
+        #
+        self._max_pwm = 1
         # Minimum RPM when turned on
         self._min = 60
+        #
+        self._min_pwm = 0
         # Current state
         self._state = SpindleState.unconfigured
         
@@ -57,6 +63,15 @@ class Spindle(ModelObject):
     @frequency.setter
     def frequency(self, value: int):
         self._frequency = int(value)
+
+    @property
+    def idle_pwm(self) -> float:
+        """Idle PWM value (0..1)"""
+        return self._idle_pwm
+
+    @idle_pwm.setter
+    def idle_pwm(self, value: float):
+        self._idle_pwm = float(value)
         
     @property
     def max(self) -> int:
@@ -66,6 +81,15 @@ class Spindle(ModelObject):
     @max.setter
     def max(self, value: int):
         self._max = int(value)
+
+    @property
+    def max_pwm(self) -> float:
+        """Maximum PWM value when turned on (0..1)"""
+        return self._max_pwm
+
+    @max_pwm.setter
+    def max_pwm(self, value: float):
+        self._max_pwm = float(value)
         
     @property
     def min(self) -> int:
@@ -75,6 +99,15 @@ class Spindle(ModelObject):
     @min.setter
     def min(self, value: int):
         self._min = int(value)
+
+    @property
+    def min_pwm(self) -> float:
+        """Minimum PWM value when turned on (0..1)"""
+        return self._min_pwm
+
+    @min_pwm.setter
+    def min_pwm(self, value: float):
+        self._min_pwm = float(value)
         
     @property
     def state(self) -> SpindleState:

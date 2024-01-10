@@ -34,5 +34,5 @@ class Plugin(PluginManifest):
         return self._pid
 
     @pid.setter
-    def pid(self, value: int):
+    def pid(self, value):
         self._pid = int(value)

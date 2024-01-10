@@ -117,9 +117,7 @@ class BaseConnection:
                     except Exception as e:
                         raise e
                     # either 0 or end of data
-                    if part == b"":
-                        raise IPCSocketBrokenException()
-                    elif len(part) < BUFF_SIZE:
+                    if len(part) < BUFF_SIZE:
                         break
 
                 json_string += data.decode("utf8")

@@ -39,7 +39,7 @@ class ProbeGrid(ModelObject):
         return self._radius
 
     @radius.setter
-    def radius(self, value: float):
+    def radius(self, value):
         self._radius = float(value)
 
     @property

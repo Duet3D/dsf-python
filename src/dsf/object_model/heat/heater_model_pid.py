@@ -23,7 +23,7 @@ class HeaterModelPID(ModelObject):
         return self._d
 
     @d.setter
-    def d(self, value: float):
+    def d(self, value):
         self._d = float(value)
 
     @property
@@ -32,7 +32,7 @@ class HeaterModelPID(ModelObject):
         return self._i
 
     @i.setter
-    def i(self, value: float):
+    def i(self, value):
         self._i = float(value)
 
     @property
@@ -50,7 +50,7 @@ class HeaterModelPID(ModelObject):
         return self._p
 
     @p.setter
-    def p(self, value: float):
+    def p(self, value):
         self._p = float(value)
 
     @property

@@ -1,4 +1,3 @@
-from __future__ import annotations
 from typing import List, Optional
 
 from .base_command import BaseCommand
@@ -79,7 +78,7 @@ class Code(BaseCommand):
     @property
     def is_from_file_channel(self) -> bool:
         """Check if this code is from a file channel"""
-        return self.channel is CodeChannel.File
+        return self.channel is CodeChannel.File or self.channel is CodeChannel.File2
 
     def parameter(self, letter: str, default=None):
         """Retrieve the parameter whose letter equals c or generate a default parameter"""

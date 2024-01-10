@@ -66,7 +66,7 @@ class ThumbnailInfo(ModelObject):
         return self._height
 
     @height.setter
-    def height(self, value: int):
+    def height(self, value):
         self._height = int(value)
 
     @property
@@ -75,7 +75,7 @@ class ThumbnailInfo(ModelObject):
         return self._offset
 
     @offset.setter
-    def offset(self, value: int):
+    def offset(self, value):
         self._offset = int(value)
 
     @property
@@ -84,7 +84,7 @@ class ThumbnailInfo(ModelObject):
         return self._size
 
     @size.setter
-    def size(self, value: int):
+    def size(self, value):
         self._size = int(value)
 
     @property
@@ -93,5 +93,5 @@ class ThumbnailInfo(ModelObject):
         return self._width
 
     @width.setter
-    def width(self, value: int):
+    def width(self, value):
         self._width = int(value)
