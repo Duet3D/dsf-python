@@ -17,6 +17,7 @@ clientinitmessages holds all messages a client can send to the server to initiat
     You should have received a copy of the GNU Lesser General Public License
     along with this program.  If not, see <https://www.gnu.org/licenses/>.
 """
+from typing import List
 from .server_init_message import ServerInitMessage
 from .. import ConnectionMode, InterceptionMode, SubscriptionMode
 from ...commands.code_channel import CodeChannel
@@ -37,8 +38,8 @@ class ClientInitMessage:
 
 def intercept_init_message(
         intercept_mode: InterceptionMode,
-        channels: list[CodeChannel],
-        filters: list[str],
+        channels: List[CodeChannel],
+        filters: List[str],
         priority_codes: bool,
         auto_flush: bool = True):
     """
