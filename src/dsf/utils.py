@@ -1,3 +1,4 @@
+import inspect
 import re
 import warnings
 
@@ -25,8 +26,10 @@ def deprecated(instructions: str):
         """This is a decorator which can be used to mark functions as deprecated.
         It will result in a warning being emitted when the function is used."""
         def deprecated_func(*args, **kwargs):
-            warnings.warn(f"Call to deprecated function {func.__name__}(). {instructions}",
-                          DeprecatedWarning, stacklevel=2)
+            # Do not show DeprecatedWarning on ObjectModel update (function called by update_from_json)
+            if inspect.currentframe().f_back.f_code.co_name not in ['_update_from_json', 'update_from_json']:
+                warnings.warn(f"Call to deprecated function {func.__name__}(). {instructions}",
+                              DeprecatedWarning, stacklevel=2)
             return func(*args, **kwargs)
         return deprecated_func
     return decorator
