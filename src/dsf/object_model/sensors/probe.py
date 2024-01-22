@@ -1,4 +1,4 @@
-from typing import List, Union
+from typing import List, Optional
 
 from .probe_type import ProbeType
 from ..model_object import ModelObject
@@ -20,6 +20,7 @@ class Probe(ModelObject):
         self._is_calibrated = None
         self._last_stop_height = 0
         self._max_probe_count = 1
+        self._measured_height = None
         self._offsets = [0, 0]
         self._recovery_time = 0
         self._scan_coefficients = None
@@ -33,7 +34,7 @@ class Probe(ModelObject):
         self._value = []
 
     @property
-    def calib_a(self) -> Union[float, None]:
+    def calib_a(self) -> Optional[float]:
         """Linear coefficient for scanning probes"""
         return self._calib_a
 
@@ -42,7 +43,7 @@ class Probe(ModelObject):
         self._calib_a = float(value) if value is not None else None
 
     @property
-    def calib_b(self) -> Union[float, None]:
+    def calib_b(self) -> Optional[float]:
         """Quadratic coefficient for scanning probes"""
         return self._calib_b
 
@@ -97,7 +98,7 @@ class Probe(ModelObject):
         return self._dive_heights
 
     @property
-    def is_calibrated(self) -> Union[bool, None]:
+    def is_calibrated(self) -> Optional[bool]:
         """Indicates if the scanning probe is calibrated"""
         return self._is_calibrated
 
@@ -124,6 +125,15 @@ class Probe(ModelObject):
         self._max_probe_count = int(value)
         
     @property
+    def measured_height(self) -> Optional[float]:
+        """Measured height (only applicable for scanning probes, in mm or null)"""
+        return self._measured_height
+    
+    @measured_height.setter
+    def measured_height(self, value):
+        self._measured_height = None if value is None else float(value)
+        
+    @property
     def offsets(self) -> List[float]:
         """X+Y offsets (in mm)"""
         return self._offsets
@@ -144,7 +154,7 @@ class Probe(ModelObject):
         return self._speeds[0]
 
     @property
-    def scan_coefficients(self) -> Union[List[float], None]:
+    def scan_coefficients(self) -> Optional[List[float]]:
         """Coefficients for the scanning Z-probe (4 elements, if applicable)"""
         return self._scan_coefficients
 

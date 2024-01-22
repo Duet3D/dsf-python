@@ -1,5 +1,5 @@
 from enum import Enum
-from typing import List, Union
+from typing import List, Optional
 
 from .accelerometer import Accelerometer
 from .board_closed_loop import BoardClosedLoop
@@ -72,6 +72,8 @@ class Board(ModelObject):
         self._firmware_name = ""
         # Version of the firmware build
         self._firmware_version = ""
+        # Amount of free RAM on this board (in bytes or null if unknown)
+        self._free_ram = None
         # Filename of the IAP binary that is used for updates from the SBC or None if unsupported
         self._iap_file_name_SBC = None
         # Filename of the IAP binary that is used for updates from the SD card or None if unsupported
@@ -104,7 +106,7 @@ class Board(ModelObject):
         self._wifi_firmware_file_name = None
 
     @property
-    def bootloader_file_name(self) -> Union[str, None]:
+    def bootloader_file_name(self) -> Optional[str]:
         """Filename of the bootloader binary or None if unknown"""
         return self._bootloader_file_name
 
@@ -113,7 +115,7 @@ class Board(ModelObject):
         self._bootloader_file_name = str(value) if value is not None else None
 
     @property
-    def can_address(self) -> Union[int, None]:
+    def can_address(self) -> Optional[int]:
         """CAN address of this board or None if not applicable"""
         return self._can_address
 
@@ -122,7 +124,7 @@ class Board(ModelObject):
         self._can_address = int(value) if value is not None else None
 
     @property
-    def drivers(self) -> Union[List[Driver], None]:
+    def drivers(self) -> Optional[List[Driver]]:
         """Drivers of this board"""
         return self._drivers
 
@@ -167,7 +169,16 @@ class Board(ModelObject):
         self._firmware_version = str(value)
 
     @property
-    def iap_file_name_SBC(self) -> Union[str, None]:
+    def free_ram(self) -> Optional[int]:
+        """Amount of free RAM on this board (in bytes or null if unknown)"""
+        return self._free_ram
+
+    @free_ram.setter
+    def free_ram(self, value):
+        self._free_ram = None if value is None else int(value)
+
+    @property
+    def iap_file_name_SBC(self) -> Optional[str]:
         """Filename of the IAP binary that is used for updates from the SBC or None if unsupported"""
         return self._iap_file_name_SBC
 
@@ -176,7 +187,7 @@ class Board(ModelObject):
         self._iap_file_name_SBC = str(value) if value is not None else None
 
     @property
-    def iap_file_name_SD(self) -> Union[str, None]:
+    def iap_file_name_SD(self) -> Optional[str]:
         """Filename of the IAP binary that is used for updates from the SD card or None if unsupported
         This is only available for the mainboard (first board item)"""
         return self._iap_file_name_SD
@@ -256,7 +267,7 @@ class Board(ModelObject):
         self._supports_direct_display = bool(value)
 
     @property
-    def unique_id(self) -> Union[str, None]:
+    def unique_id(self) -> Optional[str]:
         """Unique identifier of the board or None if unknown"""
         return self._unique_id
 
