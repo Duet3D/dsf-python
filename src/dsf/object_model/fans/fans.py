@@ -23,6 +23,8 @@ class Fan(ModelObject):
         self._requested_value = 0
         # Current RPM of this fan or -1 if unknown/unset
         self._rpm = -1
+        # Pulses per tacho revolution
+        self._tacho_ppr = 2.0
         # Thermostatic control parameters
         self._thermostatic = FanThermostaticControl()
 
@@ -98,6 +100,15 @@ class Fan(ModelObject):
     @rpm.setter
     def rpm(self, value):
         self._rpm = int(value)
+
+    @property
+    def tacho_ppr(self) -> float:
+        """Pulses per tacho revolution"""
+        return self._tacho_ppr
+
+    @tacho_ppr.setter
+    def tacho_ppr(self, value):
+        self._tacho_ppr = float(value)
 
     @property
     def thermostatic(self) -> FanThermostaticControl:

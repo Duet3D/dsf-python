@@ -20,6 +20,7 @@ class PluginManifest(ModelObject):
         self._name = None
         self._rrf_version = None
         self._sbc_auto_restart = False
+        self._sbc_config_files = []
         self._sbc_dsf_version = None
         self._sbc_executable = None
         self._sbc_executable_arguments = []
@@ -137,6 +138,13 @@ class PluginManifest(ModelObject):
     @sbc_auto_restart.setter
     def sbc_auto_restart(self, value):
         self._sbc_auto_restart = bool(value)
+        
+    @property
+    def sbc_config_files(self) -> List[str]:
+        """List of files in the sys or virtual SD directory that should not be overwritten on upgrade
+        The file may be specified either relative to 0:/sys directory (e.g. motion.conf) or relative to the
+        virtual SD directory (e.g. sys/motion.conf). Drive indices as in 0:/sys/motion.conf are not allowed!"""
+        return self._sbc_config_files
 
     @property
     def sbc_dsf_version(self) -> str:

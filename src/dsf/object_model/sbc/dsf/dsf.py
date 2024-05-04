@@ -13,6 +13,7 @@ class DSF(ModelObject):
         super().__init__()
         self._build_date_time = ""
         self._http_endpoints = ModelCollection(HttpEndpoint)
+        self._is64bit = False
         self._plugin_support = False
         self._root_plugin_support = False
         self._user_sessions = ModelCollection(UserSession)
@@ -26,6 +27,15 @@ class DSF(ModelObject):
     @build_date_time.setter
     def build_date_time(self, value):
         self._build_date_time = str(value)
+
+    @property
+    def is64bit(self) -> bool:
+        """Indicates if the process is 64-bit"""
+        return self._is64bit
+
+    @is64bit.setter
+    def is64bit(self, value):
+        self._is64bit = bool(value)
 
     @property
     def http_endpoints(self) -> List[HttpEndpoint]:

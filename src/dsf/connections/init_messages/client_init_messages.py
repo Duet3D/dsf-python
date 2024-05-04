@@ -41,7 +41,8 @@ def intercept_init_message(
         channels: List[CodeChannel],
         filters: List[str],
         priority_codes: bool,
-        auto_flush: bool = True):
+        auto_flush: bool = True,
+        auto_evaluate_expression: bool = True):
     """
     Enter interception mode
     Whenever a code is received, the connection must respond with one of
@@ -62,6 +63,9 @@ def intercept_init_message(
     is specified.
     This option makes extra Flush calls in the interceptor implementation obsolete.
     It is highly recommended to enable this in order to avoid potential deadlocks when dealing with macros!
+    :param auto_evaluate_expression: Automatically evaluate expression parameters to their final values
+    before sending it over to the client.
+    This requires auto_flush to be True and happens when the remaining codes have been processed.
     """
     return ClientInitMessage(
         ConnectionMode.INTERCEPT,
@@ -69,6 +73,7 @@ def intercept_init_message(
             "InterceptionMode": intercept_mode,
             "Channels": channels,
             "AutoFlush": auto_flush,
+            "AutoEvaluateExpressions": auto_evaluate_expression,
             "Filters": filters,
             "PriorityCodes": priority_codes,
         },

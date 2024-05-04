@@ -21,6 +21,9 @@ class InterceptConnection(BaseCommandConnection):
     in case a code filter is specified.
     This option makes extra Flush calls in the interceptor implementation obsolete.
     It is highly recommended to enable this in order to avoid potential deadlocks when dealing with macros!
+    :param auto_evaluate_expression: Automatically evaluate expression parameters to their final values
+    before sending it over to the client.
+    This requires auto_flush to be True and happens when the remaining codes have been processed.
     :param priority_codes: Defines if priority codes may be intercepted (e.g. M122 or M999)
     :param debug: Whether debugging output is turned on for this connection
     """
@@ -31,6 +34,7 @@ class InterceptConnection(BaseCommandConnection):
         channels: List[CodeChannel] = None,
         filters: List[str] = None,
         auto_flush: bool = True,
+        auto_evaluate_expression: bool = True,
         priority_codes: bool = False,
         debug: bool = False,
     ):
@@ -39,12 +43,18 @@ class InterceptConnection(BaseCommandConnection):
         self.channels = channels if channels is not None else CodeChannel.list()
         self.filters = filters
         self.auto_flush = auto_flush
+        self.auto_evaluate_expression = auto_evaluate_expression
         self.priority_codes = priority_codes
 
     def connect(self, socket_file: str = SOCKET_FILE):  # noqa
         """Establishes a connection to the given UNIX socket file"""
         iim = client_init_messages.intercept_init_message(
-            self.interception_mode, self.channels, self.filters, self.priority_codes, self.auto_flush
+            self.interception_mode,
+            self.channels,
+            self.filters,
+            self.priority_codes,
+            self.auto_flush,
+            self.auto_evaluate_expression
         )
         return super().connect(iim, socket_file)
 

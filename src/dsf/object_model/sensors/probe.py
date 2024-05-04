@@ -164,7 +164,8 @@ class Probe(ModelObject):
         
     @property
     def speeds(self) -> List[float]:
-        """Fast and slow probing speeds (in mm/s)"""
+        """Fast and slow probing speeds (in mm/s)
+        Scanning probes may have three speeds where the last one is the movement speed while probing heightmaps"""
         return self._speeds
     
     @speeds.setter

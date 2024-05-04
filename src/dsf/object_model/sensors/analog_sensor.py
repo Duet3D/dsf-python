@@ -14,9 +14,11 @@ class AnalogSensor(ModelObject):
         self._c = None
         self._last_reading = None
         self._name = None
+        self._offset_adj = 0.0
         self._port = None
         self._r_25 = None
         self._r_ref = None
+        self._slope_adj = 0.0
         self._state = TemperatureError.ok
         self._type = AnalogSensorType.Unknown
 
@@ -55,6 +57,16 @@ class AnalogSensor(ModelObject):
     @name.setter
     def name(self, value):
         self._name = str(value) if value is not None else None
+        
+    @property
+    def offset_adj(self) -> float:
+        """Offset adjustment (in K)
+        See also M308 U"""
+        return self._offset_adj
+    
+    @offset_adj.setter
+    def offset_adj(self, value):
+        self._offset_adj = float(value)
 
     @property
     def port(self) -> Union[str, None]:
@@ -82,6 +94,16 @@ class AnalogSensor(ModelObject):
     @r_ref.setter
     def r_ref(self, value):
         self._r_ref = float(value) if value is not None else None
+
+    @property
+    def slope_adj(self) -> float:
+        """Slope adjustment factor
+        See also M308 V"""
+        return self._slope_adj
+
+    @slope_adj.setter
+    def slope_adj(self, value):
+        self._slope_adj = float(value)
 
     @property
     def state(self) -> TemperatureError:

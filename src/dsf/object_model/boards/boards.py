@@ -5,6 +5,7 @@ from .accelerometer import Accelerometer
 from .board_closed_loop import BoardClosedLoop
 from .direct_display import DirectDisplay
 from .driver import Driver
+from .inductive_sensor import InductiveSensor
 from .min_max_current import MinMaxCurrent
 from ..model_collection import ModelCollection
 from ..model_object import ModelObject
@@ -42,6 +43,8 @@ class Board(ModelObject):
     closed_loop = wrap_model_property('closed_loop', BoardClosedLoop)
     # Details about a connected display or None if none is connected
     direct_display = wrap_model_property('direct_display', DirectDisplay)
+    # Information about an inductive sensor or None if not present
+    inductive_sensor = wrap_model_property('inductive_sensor', InductiveSensor)
     # Minimum, maximum, and current temperatures of the MCU or None if unknown
     mcu_temp = wrap_model_property('mcu_temp', MinMaxCurrent)
     # Minimum, maximum, and current voltages on the 12V rail or None if unknown
@@ -79,6 +82,8 @@ class Board(ModelObject):
         # Filename of the IAP binary that is used for updates from the SD card or None if unsupported
         # This is only available for the mainboard (first board item)
         self._iap_file_name_SD = None
+        # Information about an inductive sensor or None if not present
+        self._inductive_sensor = None
         # Maximum number of heaters this board can control
         self._max_heaters = 0
         # Maximum number of motors this board can drive
