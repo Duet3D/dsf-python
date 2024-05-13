@@ -4,7 +4,7 @@ This is also availabe as a [pip package on pypi](https://pypi.org/project/dsf-py
 
 Find out more about [Duet Software Framework](https://github.com/Duet3D/DuetSoftwareFramework).
 
-Find out more about [Duet Software Framework Python Bindings](https://github.com/Duet3D/dsf-python).
+Examples of the [Duet Software Framework Python Bindings](https://github.com/Duet3D/dsf-python/tree/main/examples).
 
 Get in touch with the community at [Duet Software Framework Forum](https://forum.duet3d.com/category/31/dsf-development) for bug reports, discussion and any kind of exchange.
 
