@@ -46,7 +46,7 @@ class InterceptConnection(BaseCommandConnection):
         self.auto_evaluate_expression = auto_evaluate_expression
         self.priority_codes = priority_codes
 
-    def connect(self, socket_file: str = SOCKET_FILE):  # noqa
+    def connect(self, timeout: int = 0, socket_file: str = SOCKET_FILE):  # noqa
         """Establishes a connection to the given UNIX socket file"""
         iim = client_init_messages.intercept_init_message(
             self.interception_mode,
@@ -56,7 +56,7 @@ class InterceptConnection(BaseCommandConnection):
             self.auto_flush,
             self.auto_evaluate_expression
         )
-        return super().connect(iim, socket_file)
+        return super().connect(iim, socket_file, timeout)
 
     def receive_code(self) -> commands.code.Code:
         """Wait for a code to be intercepted and read it"""
