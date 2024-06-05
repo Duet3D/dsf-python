@@ -79,7 +79,10 @@ class BaseConnection:
     def receive(self, cls):
         """Receive a deserialized object from the server"""
         json_string = self.receive_json()
-        return cls.from_json(json.loads(json_string))
+        try:
+            return cls.from_json(json.loads(json_string))
+        except Exception as e:
+            return None
 
     def receive_response(self):
         """Receive a base response from the server"""
@@ -112,7 +115,7 @@ class BaseConnection:
                         part = self.socket.recv(BUFF_SIZE)
                         data += part
                     except socket.timeout:
-                        pass
+                        return None
                     except Exception as e:
                         raise e
                     # either 0 or end of data
