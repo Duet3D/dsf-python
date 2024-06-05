@@ -20,12 +20,16 @@ class BaseConnection:
         self.id = None
         self.input = ""
 
-    def connect(self, init_message: client_init_messages.ClientInitMessage, socket_file: str):
+    def connect(self, init_message: client_init_messages.ClientInitMessage, socket_file: str, timeout: str = 0):
         """Establishes a connection to the given UNIX socket file"""
 
         self.socket = socket.socket(socket.AF_UNIX, socket.SOCK_STREAM)
         self.socket.connect(socket_file)
-        self.socket.setblocking(True)
+        if timeout == 0:
+            self.socket.setblocking(True)
+        else:
+            self.socket.setblocking(False)
+            self.socket.settimeout(timeout)
         server_init_msg = server_init_message.ServerInitMessage.from_json(
             json.loads(self.socket.recv(50).decode("utf8"))
         )
