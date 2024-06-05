@@ -20,7 +20,7 @@ class BaseConnection:
         self.id = None
         self.input = ""
 
-    def connect(self, init_message: client_init_messages.ClientInitMessage, socket_file: str, timeout: str = 0):
+    def connect(self, init_message: client_init_messages.ClientInitMessage, socket_file: str, timeout: int = 0):
         """Establishes a connection to the given UNIX socket file"""
 
         self.socket = socket.socket(socket.AF_UNIX, socket.SOCK_STREAM)
