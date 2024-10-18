@@ -20,12 +20,16 @@ class BaseConnection:
         self.id = None
         self.input = ""
 
-    def connect(self, init_message: client_init_messages.ClientInitMessage, socket_file: str):
+    def connect(self, init_message: client_init_messages.ClientInitMessage, socket_file: str, timeout: int = 0):
         """Establishes a connection to the given UNIX socket file"""
 
         self.socket = socket.socket(socket.AF_UNIX, socket.SOCK_STREAM)
         self.socket.connect(socket_file)
-        self.socket.setblocking(True)
+        if timeout == 0:
+            self.socket.setblocking(True)
+        else:
+            self.socket.setblocking(False)
+            self.socket.settimeout(timeout)
         server_init_msg = server_init_message.ServerInitMessage.from_json(
             json.loads(self.socket.recv(50).decode("utf8"))
         )
@@ -75,7 +79,10 @@ class BaseConnection:
     def receive(self, cls):
         """Receive a deserialized object from the server"""
         json_string = self.receive_json()
-        return cls.from_json(json.loads(json_string))
+        try:
+            return cls.from_json(json.loads(json_string))
+        except Exception as e:
+            return None
 
     def receive_response(self):
         """Receive a base response from the server"""
@@ -108,7 +115,7 @@ class BaseConnection:
                         part = self.socket.recv(BUFF_SIZE)
                         data += part
                     except socket.timeout:
-                        pass
+                        return None
                     except Exception as e:
                         raise e
                     # either 0 or end of data
