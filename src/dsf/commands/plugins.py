@@ -8,7 +8,7 @@ def install_plugin(plugin_file: str):
     """
     if not isinstance(plugin_file, str) or not plugin_file:
         raise TypeError("plugin_file must be a string")
-    return BaseCommand("InstallPlugin", **{"PluginFile": plugin_file})
+    return BaseCommand("InstallPlugin", **{"pluginFile": plugin_file})
 
 
 def reload_plugin(plugin: str):
@@ -18,7 +18,7 @@ def reload_plugin(plugin: str):
     """
     if not isinstance(plugin, str) or not plugin:
         raise TypeError("plugin must be a string")
-    return BaseCommand("ReloadPlugin", **{"Plugin": plugin})
+    return BaseCommand("ReloadPlugin", **{"plugin": plugin})
 
 
 def set_plugin_data(plugin: str, key: str, value: str):
@@ -37,7 +37,7 @@ def set_plugin_data(plugin: str, key: str, value: str):
     if not isinstance(value, str):
         raise TypeError("value must be a string")
     return BaseCommand(
-        "SetPluginData", **{"Plugin": plugin, "Key": key, "Value": value}
+        "SetPluginData", **{"Plugin": plugin, "key": key, "value": value}
     )
 
 
@@ -49,7 +49,7 @@ def start_plugin(plugin: str, save_state: bool = True):
     """
     if not isinstance(plugin, str) or not plugin:
         raise TypeError("plugin must be a string")
-    return BaseCommand("StartPlugin", **{"Plugin": plugin, "SaveState": save_state})
+    return BaseCommand("StartPlugin", **{"plugin": plugin, "saveState": save_state})
 
 
 def start_plugins():
@@ -65,7 +65,7 @@ def stop_plugin(plugin: str, save_state: bool = True):
     """
     if not isinstance(plugin, str) or not plugin:
         raise TypeError("plugin must be a string")
-    return BaseCommand("StopPlugin", **{"Plugin": plugin, "SaveState": save_state})
+    return BaseCommand("StopPlugin", **{"plugin": plugin, "saveState": save_state})
 
 
 def stop_plugins():
@@ -81,4 +81,4 @@ def uninstall_plugin(plugin: str):
     """
     if not isinstance(plugin, str) or not plugin:
         raise TypeError("plugin must be a string")
-    return BaseCommand("UninstallPlugin", **{"Plugin": plugin})
+    return BaseCommand("UninstallPlugin", **{"plugin": plugin})

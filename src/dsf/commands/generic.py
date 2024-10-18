@@ -17,7 +17,7 @@ def check_password(password: str):
     """
     if not isinstance(password, str) or not password:
         raise TypeError("password must be a string")
-    return BaseCommand("CheckPassword", **{"Password": password})
+    return BaseCommand("CheckPassword", **{"password": password})
 
 
 def evaluate_expression(channel: CodeChannel, expression: str):
@@ -33,7 +33,7 @@ def evaluate_expression(channel: CodeChannel, expression: str):
         raise TypeError("channel must be a CodeChannel")
     if not isinstance(expression, str) or not expression:
         raise TypeError("expression must be a string")
-    return BaseCommand("EvaluateExpression", **{"Channel": channel, "Expression": expression})
+    return BaseCommand("EvaluateExpression", **{"channel": channel, "expression": expression})
 
 
 def flush(channel: CodeChannel, sync_file_streams: bool = False, if_executing: bool = True):
@@ -57,7 +57,7 @@ def flush(channel: CodeChannel, sync_file_streams: bool = False, if_executing: b
     if not isinstance(if_executing, bool):
         raise TypeError("if_executing must be a boolean")
     return BaseCommand("Flush",
-                       **{"Channel": channel, "SyncFileStreams": sync_file_streams, "IfExecuting": if_executing})
+                       **{"channel": channel, "syncFileStreams": sync_file_streams, "ifExecuting": if_executing})
 
 
 def invalidate_channel(channel: CodeChannel):
@@ -70,7 +70,7 @@ def invalidate_channel(channel: CodeChannel):
     """
     if not isinstance(channel, CodeChannel):
         raise TypeError("channel must be a CodeChannel")
-    return BaseCommand("InvalidateChannel", **{"Channel": channel})
+    return BaseCommand("InvalidateChannel", **{"channel": channel})
 
 
 def set_update_status(updating: bool):
@@ -81,7 +81,7 @@ def set_update_status(updating: bool):
     """
     if not isinstance(updating, bool):
         raise TypeError("updating must be a boolean")
-    return BaseCommand("SetUpdateStatus", **{"Updating": updating})
+    return BaseCommand("SetUpdateStatus", **{"updating": updating})
 
 
 def simple_code(code: str, channel: CodeChannel = CodeChannel.DEFAULT_CHANNEL, async_exec: bool = False):
@@ -101,7 +101,7 @@ def simple_code(code: str, channel: CodeChannel = CodeChannel.DEFAULT_CHANNEL, a
         raise TypeError("code must be a string")
     if not isinstance(channel, CodeChannel):
         raise TypeError("channel must be a CodeChannel")
-    return BaseCommand("SimpleCode", **{"Code": code, "Channel": channel, "ExecuteAsynchronously": async_exec})
+    return BaseCommand("SimpleCode", **{"code": code, "channel": channel, "executeAsynchronously": async_exec})
 
 
 def write_message(
@@ -129,9 +129,9 @@ def write_message(
     return BaseCommand(
         "WriteMessage",
         **{
-            "Type": message_type,
-            "Content": content,
-            "OutputMessage": output_message,
-            "LogLevel": log_level,
+            "type": message_type,
+            "content": content,
+            "outputMessage": output_message,
+            "logLevel": log_level,
         },
     )

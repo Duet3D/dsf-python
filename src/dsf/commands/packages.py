@@ -7,7 +7,7 @@ def install_system_package(package_file: str):
     """
     if not isinstance(package_file, str) or not package_file:
         raise TypeError("package_file must be a string")
-    return BaseCommand("InstallSystemPackage", **{"PackageFile": package_file})
+    return BaseCommand("InstallSystemPackage", **{"packageFile": package_file})
 
 
 def uninstall_system_package(package: str):
@@ -16,4 +16,4 @@ def uninstall_system_package(package: str):
     """
     if not isinstance(package, str) or not package:
         raise TypeError("package must be a string")
-    return BaseCommand("UninstallSystemPackage", **{"Package": package})
+    return BaseCommand("UninstallSystemPackage", **{"package": package})

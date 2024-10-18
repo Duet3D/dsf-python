@@ -70,12 +70,12 @@ def intercept_init_message(
     return ClientInitMessage(
         ConnectionMode.INTERCEPT,
         **{
-            "InterceptionMode": intercept_mode,
-            "Channels": channels,
-            "AutoFlush": auto_flush,
-            "AutoEvaluateExpressions": auto_evaluate_expression,
-            "Filters": filters,
-            "PriorityCodes": priority_codes,
+            "interceptionMode": intercept_mode,
+            "channels": channels,
+            "autoFlush": auto_flush,
+            "autoEvaluateExpressions": auto_evaluate_expression,
+            "filters": filters,
+            "priorityCodes": priority_codes,
         },
     )
 
@@ -90,8 +90,8 @@ def subscribe_init_message(subscription_mode: SubscriptionMode, filter_string: s
     return ClientInitMessage(
         ConnectionMode.SUBSCRIBE,
         **{
-            "SubscriptionMode": subscription_mode,
-            "Filter": filter_string,
-            "Filters": filter_list,
+            "subscriptionMode": subscription_mode,
+            "filter": filter_string,
+            "filters": filter_list,
         },
     )

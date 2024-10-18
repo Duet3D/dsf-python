@@ -19,9 +19,9 @@ def add_user_session(access_level: AccessLevel, session_type: SessionType, origi
     return BaseCommand(
         "AddUserSession",
         **{
-            "AccessLevel": access_level,
-            "SessionType": session_type,
-            "Origin": origin,
+            "accessLevel": access_level,
+            "sessionType": session_type,
+            "origin": origin,
         },
     )
 
@@ -33,4 +33,4 @@ def remove_user_session(session_id: int):
     """
     if not isinstance(session_id, int):
         raise TypeError("session_id must be an integer")
-    return BaseCommand("RemoveUserSession", **{"Id": session_id})
+    return BaseCommand("RemoveUserSession", **{"id": session_id})

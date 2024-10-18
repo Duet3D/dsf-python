@@ -24,7 +24,7 @@ def patch_object_model(key: str, patch: str):
         raise TypeError("key must be a string")
     if not isinstance(patch, str) or not patch:
         raise TypeError("patch must be a string")
-    return BaseCommand("PatchObjectModel", **{"Key": key, "Patch": patch})
+    return BaseCommand("PatchObjectModel", **{"key": key, "patch": patch})
 
 
 def set_network_protocol(protocol: str, enabled: bool):
@@ -38,7 +38,7 @@ def set_network_protocol(protocol: str, enabled: bool):
         raise TypeError("protocol must be a string")
     if not isinstance(enabled, bool):
         raise TypeError("enabled must be a boolean")
-    return BaseCommand("SetNetworkProtocol", **{"NetworkProtocol": protocol, "Enabled": enabled})
+    return BaseCommand("SetNetworkProtocol", **{"networkProtocol": protocol, "enabled": enabled})
 
 
 def set_object_model(property_path: str, value: str):
@@ -53,7 +53,7 @@ def set_object_model(property_path: str, value: str):
         raise TypeError("property_path must be a string")
     if not isinstance(value, str):
         raise TypeError("value must be a string")
-    return BaseCommand("SetObjectModel", **{"PropertyPath": property_path, "Value": value})
+    return BaseCommand("SetObjectModel", **{"propertyPath": property_path, "value": value})
 
 
 def sync_object_model():

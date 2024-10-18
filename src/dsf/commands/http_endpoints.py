@@ -25,10 +25,10 @@ def add_http_endpoint(endpoint_type: HttpEndpointType, namespace: str, path: str
     return BaseCommand(
         "AddHttpEndpoint",
         **{
-            "EndpointType": endpoint_type,
-            "Namespace": namespace,
-            "Path": path,
-            "IsUploadRequest": is_upload_request,
+            "endpointType": endpoint_type,
+            "namespace": namespace,
+            "path": path,
+            "isUploadRequest": is_upload_request,
         },
     )
 
@@ -49,5 +49,5 @@ def remove_http_endpoint(endpoint_type: HttpEndpointType, namespace: str, path: 
         raise TypeError("path must be a string")
     return BaseCommand(
         "RemoveHttpEndpoint",
-        **{"EndpointType": endpoint_type, "Namespace": namespace, "Path": path},
+        **{"endpointType": endpoint_type, "namespace": namespace, "path": path},
     )

@@ -9,7 +9,7 @@ def get_file_info(file_name: str, read_thumbnail_content: bool = False):
     """
     if not isinstance(file_name, str) or not file_name:
         raise TypeError("file_name must be a string")
-    return BaseCommand("GetFileInfo", **{"FileName": file_name, "ReadThumbnailContent": read_thumbnail_content})
+    return BaseCommand("GetFileInfo", **{"fileName": file_name, "readThumbnailContent": read_thumbnail_content})
 
 
 def resolve_path(path: str):
