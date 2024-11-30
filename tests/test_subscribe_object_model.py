@@ -26,7 +26,7 @@ def test_subscribe_object_model(monkeypatch, tmp_path):
         server.bind(mock_dcs_socket_file)
         server.listen(1)
         conn, _ = server.accept()
-        conn.sendall('{"version":11, "id":"foobar"}'.encode())
+        conn.sendall('{"version":12, "id":"foobar"}'.encode())
         assert (
             conn.recv(1024)
             == b'{"mode":"Subscribe","version":11,"SubscriptionMode":"Patch","Filter":"","Filters":null}'

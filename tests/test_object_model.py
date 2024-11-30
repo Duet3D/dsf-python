@@ -50,7 +50,7 @@ class Model(unittest.TestCase):
     def test_json_serialization(self):
         # Hint: To get the object model, execute the command get_object_model() from any connection in debug mode
         # and take the JSON returned from debug (after "recv:")
-        with open('object_model/model_geminiv2.json') as fp:
+        with open('tests/object_model/model_geminiv2.json') as fp:
             json_data = json.load(fp)
         model = ObjectModel.from_json(json_data)
         json_text = json.dumps(json_data, sort_keys=True)
