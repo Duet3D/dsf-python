@@ -36,3 +36,6 @@ class ProbeType(IntEnum):
 
     # Z motor stall detection
     ZMotorStall = 10
+
+    # Scanning Z Probe
+    ScanningZProbe = 11

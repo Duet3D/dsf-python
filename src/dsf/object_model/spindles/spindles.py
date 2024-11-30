@@ -1,6 +1,8 @@
 from .spindle_state import SpindleState
 from ..model_object import ModelObject
 
+from typing import Union
+
 
 class Spindle(ModelObject):
     """Information about a CNC spindles"""
@@ -29,85 +31,85 @@ class Spindle(ModelObject):
         self._state = SpindleState.unconfigured
         
     @property
-    def active(self) -> int:
+    def active(self) -> Union[int, None]:
         """Active RPM"""
         return self._active
     
     @active.setter
-    def active(self, value: int):
-        self._active = int(value)
+    def active(self, value: Union[int, None]):
+        self._active = None if value is None else int(value)
         
     @property
-    def can_reverse(self) -> bool:
+    def can_reverse(self) -> Union[bool, None]:
         """Flags whether the spindles may spin in reverse direction"""
         return self._can_reverse
     
     @can_reverse.setter
-    def can_reverse(self, value: bool):
-        self._can_reverse = bool(value)
+    def can_reverse(self, value: Union[bool, None]):
+        self._can_reverse = None if value is None else bool(value)
         
     @property
-    def current(self) -> int:
+    def current(self) -> Union[int, None]:
         """Current RPM, negative if anticlockwise direction"""
         return self._current
     
     @current.setter
-    def current(self, value: int):
-        self._current = int(value)
+    def current(self, value: Union[int, None]):
+        self._current = None if value is None else int(value)
         
     @property
-    def frequency(self) -> int:
+    def frequency(self) -> Union[int, None]:
         """Frequency (in Hz)"""
         return self._frequency
     
     @frequency.setter
-    def frequency(self, value: int):
-        self._frequency = int(value)
+    def frequency(self, value: Union[int, None]):
+        self._frequency = None if value is None else int(value)
 
     @property
-    def idle_pwm(self) -> float:
+    def idle_pwm(self) -> Union[float, None]:
         """Idle PWM value (0..1)"""
         return self._idle_pwm
 
     @idle_pwm.setter
-    def idle_pwm(self, value: float):
-        self._idle_pwm = float(value)
+    def idle_pwm(self, value: Union[float, None]):
+        self._idle_pwm = None if value is None else float(value)
         
     @property
-    def max(self) -> int:
+    def max(self) -> Union[int, None]:
         """Maximum RPM"""
         return self._max
     
     @max.setter
-    def max(self, value: int):
-        self._max = int(value)
+    def max(self, value: Union[int, None]):
+        self._max = None if value is None else int(value)
 
     @property
-    def max_pwm(self) -> float:
+    def max_pwm(self) -> Union[float, None]:
         """Maximum PWM value when turned on (0..1)"""
         return self._max_pwm
 
     @max_pwm.setter
-    def max_pwm(self, value: float):
-        self._max_pwm = float(value)
+    def max_pwm(self, value: Union[float, None]):
+        self._max_pwm = None if value is None else float(value)
         
     @property
-    def min(self) -> int:
+    def min(self) -> Union[int, None]:
         """Minimum RPM when turned on"""
         return self._min
     
     @min.setter
-    def min(self, value: int):
-        self._min = int(value)
+    def min(self, value: Union[int, None]):
+        self._min = None if value is None else int(value)
 
     @property
-    def min_pwm(self) -> float:
+    def min_pwm(self) -> Union[float, None]:
         """Minimum PWM value when turned on (0..1)"""
         return self._min_pwm
 
     @min_pwm.setter
-    def min_pwm(self, value: float):
-        self._min_pwm = float(value)
+    def min_pwm(self, value: Union[float, None]):
+        self._min_pwm = None if value is None else float(value)
         
     @property
     def state(self) -> SpindleState:

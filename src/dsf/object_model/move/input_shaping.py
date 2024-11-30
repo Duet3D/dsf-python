@@ -23,10 +23,10 @@ class InputShapingType(str, Enum):
     zvddd = "zvddd"
 
     # EI2 (2-hump)
-    ei2 = "ei2"
+    ei2 = "eI2"
 
     # EI3 (3-hump)
-    ei3 = "ei3"
+    ei3 = "eI3"
 
     # Custom
     custom = "custom"
