@@ -47,7 +47,7 @@ def start_intercept():
                 # it is not needed. It is not needed either if a filter is set, see above
 
                 # Flush the code's channel to be sure we are being in sync with the machine
-                success = intercept_connection.flush(cde.channel)
+                success = intercept_connection.flush(cde.channel).success
 
                 # Flushing failed so we need to cancel our code
                 if not success:

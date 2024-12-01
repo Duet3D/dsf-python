@@ -18,6 +18,51 @@
             "env": {
                 "PYTHONPATH": "${workspaceFolder}/src"
             }
-        }
+        },
+        {
+            "name": "Python: Send Simple Code",
+            "type": "debugpy",
+            "request": "launch",
+            "program": "${workspaceFolder}/examples/send_simple_code.py",
+            "console": "integratedTerminal",
+            "autoReload": {
+                "enable": true
+            },
+            "justMyCode": false,
+            "cwd": "${workspaceFolder}/src",
+            "env": {
+                "PYTHONPATH": "${workspaceFolder}/src"
+            }
+        },
+        {
+            "name": "Python: Custom M Codes",
+            "type": "debugpy",
+            "request": "launch",
+            "program": "${workspaceFolder}/examples/custom_m_codes.py",
+            "console": "integratedTerminal",
+            "autoReload": {
+                "enable": true
+            },
+            "justMyCode": false,
+            "cwd": "${workspaceFolder}/src",
+            "env": {
+                "PYTHONPATH": "${workspaceFolder}/src"
+            }
+        },
+        {
+            "name": "Python: Custom HTTP Endpoint",
+            "type": "debugpy",
+            "request": "launch",
+            "program": "${workspaceFolder}/examples/custom_http_endpoint.py",
+            "console": "integratedTerminal",
+            "autoReload": {
+                "enable": true
+            },
+            "justMyCode": false,
+            "cwd": "${workspaceFolder}/src",
+            "env": {
+                "PYTHONPATH": "${workspaceFolder}/src"
+            }
+        },
     ]
 }
