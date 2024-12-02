@@ -134,7 +134,7 @@ class Code(BaseCommand):
         if self.type == CodeType.Comment:
             return "(comment)"
 
-        prefix = "G53 " if self.flags & CodeFlags.EnforceAbsolutePosition != 0 else ""
+        prefix = "G53 " if self.is_flag_set(CodeFlags.EnforceAbsolutePosition) else ""
         if self.majorNumber is not None:
             if self.minorNumber is not None:
                 return f"{prefix}{self.type}{self.majorNumber}.{self.minorNumber}"
@@ -158,3 +158,6 @@ class Code(BaseCommand):
             KeywordType.Echo: "echo",
             KeywordType.Global: "global",
         }.get(self.keyword)
+
+    def is_flag_set(self, flag: CodeFlags):
+        return self.flags & flag != 0

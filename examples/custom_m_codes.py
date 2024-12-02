@@ -30,6 +30,20 @@ def start_intercept():
 
             # Check for the type of the code
             if cde.type == CodeType.MCode and cde.majorNumber == 1234:
+                # --------------- BEGIN FLUSH ---------------------
+                # Flushing is only necessary if the action below needs to be in sync with the machine
+                # at this point in the GCode stream. Otherwise, it can and should be skipped
+
+                # Flush the code's channel to be sure we are being in sync with the machine
+                success = intercept_connection.flush(cde.channel).success
+
+                # Flushing failed so we need to cancel our code
+                if not success:
+                    print("Flush failed")
+                    intercept_connection.cancel_code()
+                    continue
+                # -------------- END FLUSH ------------------------
+
                 # Do whatever needs to be done if this is the right code
                 print(cde, cde.flags)
 

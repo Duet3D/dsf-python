@@ -27,18 +27,18 @@ def test_custom_m_codes(monkeypatch, tmp_path):
         server.listen(1)
         conn, _ = server.accept()
         print("send all")
-        conn.sendall(b'{"version":11, "id":"foobar"}')
+        conn.sendall(b'{"version":12, "id":"foobar"}')
         assert (
             conn.recv(1024) == b"{"
-            b'"mode":"Intercept","version":11,"InterceptionMode":"Pre","Channels":["HTTP","Telnet",'
-            b'"File","USB","Aux","Trigger","Queue","LCD","SBC","Daemon","Aux2","AutoPause","Unknown"],'
-            b'"Filters":null,"PriorityCodes":false'
+            b'"mode":"Intercept","version":12,"interceptionMode":"Pre","channels":["HTTP","Telnet",'
+            b'"File","USB","Aux","Trigger","Queue","LCD","SBC","Daemon","Aux2","Autopause","Unknown"],'
+            b'"filters":null,"priorityCodes":false'
             b"}"
         )
         conn.sendall(b'{"success":true}')
         conn.sendall(
             b"{"
-            b'"connection":{"id":12,"apiVersion":10,"isConnected":true},"sourceConnection":12,'
+            b'"connection":{"id":12,"apiVersion":12,"isConnected":true},"sourceConnection":12,'
             b'"result":null,"type":"M","channel":"HTTP","lineNumber":null,"indent":0,"keyword":0,'
             b'"keywordArgument":null,"majorNumber":1234,"minorNumber":null,"flags":2048,"comment":null,'
             b'"filePosition":null,"length":6,"parameters":[],"command":"Code"'
@@ -49,7 +49,7 @@ def test_custom_m_codes(monkeypatch, tmp_path):
         assert conn.recv(1024) == b'{"command":"Resolve","Type":0,"Content":null}'
         conn.sendall(
             b"{"
-            b'"connection":{"id":12,"apiVersion":10,"isConnected":true},"sourceConnection":12,'
+            b'"connection":{"id":12,"apiVersion":12,"isConnected":true},"sourceConnection":12,'
             b'"result":null,"type":"M","channel":"HTTP","lineNumber":null,"indent":0,"keyword":0,'
             b'"keywordArgument":null,"majorNumber":5678,"minorNumber":null,"flags":2048,"comment":null,'
             b'"filePosition":null,"length":6,"parameters":[],"command":"Code"'
