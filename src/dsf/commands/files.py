@@ -12,12 +12,13 @@ def get_file_info(file_name: str, read_thumbnail_content: bool = False):
     return BaseCommand("GetFileInfo", **{"fileName": file_name, "readThumbnailContent": read_thumbnail_content})
 
 
-def resolve_path(path: str):
+def resolve_path(path: str, base_directory: str = None):
     """
     Resolve a RepRapFirmware-style path to an actual file path
     :param path: Path that is RepRapFirmware-compatible
+    :param base_directory: Optional base directory to resolve the path relative to
     :returns: The resolved path
     """
     if not isinstance(path, str) or not path:
         raise TypeError("path must be a string")
-    return BaseCommand("ResolvePath", **{"Path": path})
+    return BaseCommand("ResolvePath", **{"path": path, "baseDirectory": base_directory})
