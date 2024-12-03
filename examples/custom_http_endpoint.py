@@ -7,15 +7,19 @@ Make sure when running this script to have access to the DSF UNIX socket owned b
 """
 
 import time
+import os
+import json
 
 from dsf.connections import CommandConnection
-from dsf.http import HttpEndpointConnection
+from dsf.http import HttpEndpointConnection, HttpResponseType
 from dsf.object_model import HttpEndpointType
 
 
 async def respond_something(http_endpoint_connection: HttpEndpointConnection):
-    await http_endpoint_connection.read_request()
-    await http_endpoint_connection.send_response(200, "so happy you asked for it!")
+    r = await http_endpoint_connection.read_request()
+    if (len(r.body) > 0):
+        data = json.loads(r.body)
+    await http_endpoint_connection.send_response(200, "so happy you asked for it!", HttpResponseType.PlainText)
     http_endpoint_connection.close()
 
 
@@ -25,6 +29,7 @@ def custom_http_endpoint():
 
     # Setup the endpoint
     endpoint = cmd_conn.add_http_endpoint(HttpEndpointType.GET, "custom", "getIt")
+    
     # Register our handler to reply on requests
     endpoint.set_endpoint_handler(respond_something)
 
