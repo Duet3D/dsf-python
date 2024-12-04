@@ -11,10 +11,10 @@ on:
   workflow_dispatch:
 
 jobs:
-  bumpversion:
-    name: Bumpversion
+  build:
+    name: Build distribution 📦
     runs-on: ubuntu-latest
-  
+
     steps:
     - uses: actions/checkout@v4
     - name: Set up Python
@@ -36,19 +36,6 @@ jobs:
           git tag -f ${{ github.event.release.tag_name }}
           git push origin HEAD:v3.6-dev
           git push origin -f --tags
-
-  build:
-    name: Build distribution 📦
-    needs:
-    - bumpversion
-    runs-on: ubuntu-latest
-
-    steps:
-    - uses: actions/checkout@v4
-    - name: Set up Python
-      uses: actions/setup-python@v4
-      with:
-        python-version: "3.x"
     - name: Install pypa/build
       run: >-
         python3 -m
