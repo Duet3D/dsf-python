@@ -1,3 +1,5 @@
+__version__ = "3.6.0-b2"
+
 # path to unix socket file
 SOCKET_FILE = "/run/dsf/dcs.sock"
 
