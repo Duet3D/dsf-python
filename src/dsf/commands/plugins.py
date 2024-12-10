@@ -21,7 +21,7 @@ def reload_plugin(plugin: str):
     return BaseCommand("ReloadPlugin", **{"plugin": plugin})
 
 
-def set_plugin_data(plugin: str, key: str, value: str):
+def set_plugin_data(plugin: str, key: str, value):
     """
     Update custom plugin data in the object model
     May be used to update only the own plugin data unless the plugin has the ManagePlugins permission.
@@ -34,10 +34,8 @@ def set_plugin_data(plugin: str, key: str, value: str):
         raise TypeError("plugin must be a string")
     if not isinstance(key, str) or not key:
         raise TypeError("key must be a string")
-    if not isinstance(value, str):
-        raise TypeError("value must be a string")
     return BaseCommand(
-        "SetPluginData", **{"Plugin": plugin, "key": key, "value": value}
+        "SetPluginData", **{"plugin": plugin, "key": key, "value": value}
     )
 
 
