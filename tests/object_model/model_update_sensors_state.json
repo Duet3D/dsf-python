@@ -1,0 +1,34 @@
+{
+    "sensors": {
+        "analog": [
+            {
+                "lastReading": 16.22
+            },
+            {},
+            {
+                "lastReading": 18.39
+            },
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            {
+                "lastReading": 21.23
+            }
+        ],
+        "endstops": [
+            {},
+            {},
+            null,
+            {},
+            null
+        ]
+    },
+    "state": {
+        "msUpTime": 124,
+        "upTime": 3658
+    }
+}

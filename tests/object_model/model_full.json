@@ -1,0 +1,2561 @@
+{
+    "boards": [
+        {
+            "accelerometer": null,
+            "bootloaderFileName": null,
+            "canAddress": 0,
+            "closedLoop": null,
+            "directDisplay": null,
+            "drivers": [
+                {
+                    "closedLoop": null,
+                    "status": 65536
+                },
+                {
+                    "closedLoop": null,
+                    "status": 65536
+                },
+                {
+                    "closedLoop": null,
+                    "status": 65536
+                },
+                {
+                    "closedLoop": null,
+                    "status": 65536
+                },
+                {
+                    "closedLoop": null,
+                    "status": 65536
+                },
+                {
+                    "closedLoop": null,
+                    "status": 65536
+                }
+            ],
+            "firmwareDate": "2025-03-10",
+            "firmwareFileName": "Duet3Firmware_MB6HC.bin",
+            "firmwareName": "RepRapFirmware for Duet 3 MB6HC",
+            "firmwareVersion": "3.6.0-rc.1+2",
+            "freeRam": 104020,
+            "iapFileNameSBC": "Duet3_SBCiap32_MB6HC.bin",
+            "iapFileNameSD": "Duet3_SDiap32_MB6HC.bin",
+            "inductiveSensor": null,
+            "maxHeaters": 32,
+            "maxMotors": 6,
+            "mcuTemp": {
+                "current": 36.8,
+                "max": 37.4,
+                "min": 31.5
+            },
+            "name": "Duet 3 MB6HC",
+            "shortName": "MB6HC",
+            "state": "unknown",
+            "supports12864": false,
+            "supportsDirectDisplay": false,
+            "uniqueId": "08DJM-956L2-G43S4-6JTD6-3SD6R-KU52F",
+            "v12": {
+                "current": 12,
+                "max": 12,
+                "min": 11.9
+            },
+            "vIn": {
+                "current": 24.1,
+                "max": 24.2,
+                "min": 24.1
+            },
+            "wifiFirmwareFileName": "DuetWiFiModule_32S3.bin"
+        },
+        {
+            "accelerometer": null,
+            "bootloaderFileName": null,
+            "canAddress": 1,
+            "closedLoop": null,
+            "directDisplay": null,
+            "drivers": [
+                {
+                    "closedLoop": null,
+                    "status": 65536
+                },
+                {
+                    "closedLoop": null,
+                    "status": 65536
+                },
+                {
+                    "closedLoop": null,
+                    "status": 65536
+                }
+            ],
+            "firmwareDate": "2025-03-10 20:27",
+            "firmwareFileName": "Duet3Firmware_EXP3HC.bin",
+            "firmwareName": "",
+            "firmwareVersion": "3.6.0-rc.1+2",
+            "freeRam": 170248,
+            "iapFileNameSBC": null,
+            "iapFileNameSD": null,
+            "inductiveSensor": null,
+            "maxHeaters": 0,
+            "maxMotors": 3,
+            "mcuTemp": {
+                "current": 33.7,
+                "max": 34.3,
+                "min": 33.5
+            },
+            "name": "Duet 3 Expansion EXP3HC",
+            "shortName": "EXP3HC",
+            "state": "running",
+            "supports12864": false,
+            "supportsDirectDisplay": false,
+            "uniqueId": "1WSLY-2G6P9-F65J0-401FS-22N0Z-RST0Z",
+            "v12": {
+                "current": 12.2,
+                "max": 12.2,
+                "min": 12.1
+            },
+            "vIn": {
+                "current": 24.3,
+                "max": 24.3,
+                "min": 24.3
+            },
+            "wifiFirmwareFileName": null
+        },
+        {
+            "accelerometer": null,
+            "bootloaderFileName": null,
+            "canAddress": 2,
+            "closedLoop": {
+                "points": 0,
+                "runs": 0
+            },
+            "directDisplay": null,
+            "drivers": [
+                {
+                    "closedLoop": {
+                        "currentFraction": {
+                            "max": 0.37
+                        },
+                        "positionError": {
+                            "max": 0.061
+                        }
+                    }
+                }
+            ],
+            "firmwareDate": "2025-03-10 20:26",
+            "firmwareFileName": "Duet3Firmware_EXP1HCL.bin",
+            "firmwareName": "",
+            "firmwareVersion": "3.6.0-rc.1+2",
+            "freeRam": 51452,
+            "iapFileNameSBC": null,
+            "iapFileNameSD": null,
+            "inductiveSensor": null,
+            "maxHeaters": 0,
+            "maxMotors": 1,
+            "mcuTemp": {
+                "current": 25.1,
+                "max": 25.8,
+                "min": 25.1
+            },
+            "name": "Duet 3 Expansion EXP1HCL",
+            "shortName": "EXP1HCL",
+            "state": "running",
+            "supports12864": false,
+            "supportsDirectDisplay": false,
+            "uniqueId": "HR4VW-F173U-L65J0-40TPA-1153Z-R3STB",
+            "v12": {
+                "current": 12,
+                "max": 12,
+                "min": 12
+            },
+            "vIn": {
+                "current": 24.5,
+                "max": 24.5,
+                "min": 24.4
+            },
+            "wifiFirmwareFileName": null
+        },
+        {
+            "accelerometer": null,
+            "bootloaderFileName": null,
+            "canAddress": 3,
+            "closedLoop": {
+                "points": 0,
+                "runs": 0
+            },
+            "directDisplay": null,
+            "drivers": [
+                {
+                    "closedLoop": {
+                        "currentFraction": {
+                            "max": 0.37
+                        },
+                        "positionError": {
+                            "max": 0.073,
+                            "rms": 0.019
+                        }
+                    }
+                }
+            ],
+            "firmwareDate": "2025-03-10 20:26",
+            "firmwareFileName": "Duet3Firmware_EXP1HCL.bin",
+            "firmwareName": "",
+            "firmwareVersion": "3.6.0-rc.1+2",
+            "freeRam": 51452,
+            "iapFileNameSBC": null,
+            "iapFileNameSD": null,
+            "inductiveSensor": null,
+            "maxHeaters": 0,
+            "maxMotors": 1,
+            "mcuTemp": {
+                "current": 26.6,
+                "max": 27.5,
+                "min": 26.6
+            },
+            "name": "Duet 3 Expansion EXP1HCL",
+            "shortName": "EXP1HCL",
+            "state": "running",
+            "supports12864": false,
+            "supportsDirectDisplay": false,
+            "uniqueId": "K3A50-R073U-L65J0-40TPJ-2A43Z-RX6S2",
+            "v12": {
+                "current": 12,
+                "max": 12.1,
+                "min": 12
+            },
+            "vIn": {
+                "current": 24.2,
+                "max": 24.2,
+                "min": 24.1
+            },
+            "wifiFirmwareFileName": null
+        },
+        {
+            "accelerometer": {
+                "orientation": 20,
+                "points": 0,
+                "runs": 0
+            },
+            "bootloaderFileName": null,
+            "canAddress": 4,
+            "closedLoop": null,
+            "directDisplay": null,
+            "drivers": [
+                {
+                    "closedLoop": null,
+                    "status": 65536
+                }
+            ],
+            "firmwareDate": "2025-03-10 20:28",
+            "firmwareFileName": "Duet3Firmware_TOOL1LC.bin",
+            "firmwareName": "",
+            "firmwareVersion": "3.6.0-rc.1+2",
+            "freeRam": 7688,
+            "iapFileNameSBC": null,
+            "iapFileNameSD": null,
+            "inductiveSensor": null,
+            "maxHeaters": 0,
+            "maxMotors": 1,
+            "mcuTemp": {
+                "current": 43.7,
+                "max": 43.9,
+                "min": 42
+            },
+            "name": "Duet 3 Expansion TOOL1LC",
+            "shortName": "TOOL1LC",
+            "state": "running",
+            "supports12864": false,
+            "supportsDirectDisplay": false,
+            "uniqueId": "JLW2H-U1AL9-NW4J0-409JL-JGW2Z-RXK5V",
+            "v12": null,
+            "vIn": {
+                "current": 24.6,
+                "max": 24.6,
+                "min": 24.6
+            },
+            "wifiFirmwareFileName": null
+        },
+        {
+            "accelerometer": {
+                "orientation": 10,
+                "points": 0,
+                "runs": 0
+            },
+            "bootloaderFileName": null,
+            "canAddress": 5,
+            "closedLoop": null,
+            "directDisplay": null,
+            "drivers": [
+                {
+                    "closedLoop": null,
+                    "status": 65536
+                }
+            ],
+            "firmwareDate": "2025-03-10 20:28",
+            "firmwareFileName": "Duet3Firmware_TOOL1LC.bin",
+            "firmwareName": "",
+            "firmwareVersion": "3.6.0-rc.1+2",
+            "freeRam": 7000,
+            "iapFileNameSBC": null,
+            "iapFileNameSD": null,
+            "inductiveSensor": null,
+            "maxHeaters": 0,
+            "maxMotors": 1,
+            "mcuTemp": {
+                "current": 36.8,
+                "max": 37,
+                "min": 35.4
+            },
+            "name": "Duet 3 Expansion TOOL1LC",
+            "shortName": "TOOL1LC",
+            "state": "running",
+            "supports12864": false,
+            "supportsDirectDisplay": false,
+            "uniqueId": "J4UG1-23AL9-NW4J0-409JU-2BS2Z-RP1RY",
+            "v12": null,
+            "vIn": {
+                "current": 24.5,
+                "max": 24.5,
+                "min": 24.4
+            },
+            "wifiFirmwareFileName": null
+        },
+        {
+            "accelerometer": {
+                "orientation": 10,
+                "points": 0,
+                "runs": 0
+            },
+            "bootloaderFileName": null,
+            "canAddress": 6,
+            "closedLoop": null,
+            "directDisplay": null,
+            "drivers": [
+                {
+                    "closedLoop": null,
+                    "status": 65536
+                }
+            ],
+            "firmwareDate": "2025-03-10 20:28",
+            "firmwareFileName": "Duet3Firmware_TOOL1LC.bin",
+            "firmwareName": "",
+            "firmwareVersion": "3.6.0-rc.1+2",
+            "freeRam": 7000,
+            "iapFileNameSBC": null,
+            "iapFileNameSD": null,
+            "inductiveSensor": null,
+            "maxHeaters": 0,
+            "maxMotors": 1,
+            "mcuTemp": {
+                "current": 32.4,
+                "max": 32.9,
+                "min": 31.5
+            },
+            "name": "Duet 3 Expansion TOOL1LC",
+            "shortName": "TOOL1LC",
+            "state": "running",
+            "supports12864": false,
+            "supportsDirectDisplay": false,
+            "uniqueId": "PP6V2-P3AL9-NW4J0-409JY-26W2Z-Z2DK6",
+            "v12": null,
+            "vIn": {
+                "current": 24.5,
+                "max": 24.5,
+                "min": 24.4
+            },
+            "wifiFirmwareFileName": null
+        },
+        {
+            "accelerometer": {
+                "orientation": 20,
+                "points": 0,
+                "runs": 0
+            },
+            "bootloaderFileName": null,
+            "canAddress": 7,
+            "closedLoop": null,
+            "directDisplay": null,
+            "drivers": null,
+            "firmwareDate": "2025-03-10 20:28",
+            "firmwareFileName": "Duet3Firmware_SZP.bin",
+            "firmwareName": "",
+            "firmwareVersion": "3.6.0-rc.1+2",
+            "freeRam": 11688,
+            "iapFileNameSBC": null,
+            "iapFileNameSD": null,
+            "inductiveSensor": {},
+            "maxHeaters": 0,
+            "maxMotors": 0,
+            "mcuTemp": {
+                "current": 23.4,
+                "max": 23.5,
+                "min": 22.8
+            },
+            "name": "Duet 3 Expansion SZP",
+            "shortName": "SZP",
+            "state": "running",
+            "supports12864": false,
+            "supportsDirectDisplay": false,
+            "uniqueId": "BVLB4-R2AL9-NW4J0-409JQ-L4S2Z-71KPU",
+            "v12": null,
+            "vIn": {
+                "current": 4.9,
+                "max": 5,
+                "min": 4.9
+            },
+            "wifiFirmwareFileName": null
+        }
+    ],
+    "directories": {
+        "filaments": "0:/filaments/",
+        "firmware": "0:/firmware/",
+        "gCodes": "0:/gcodes/",
+        "macros": "0:/macros/",
+        "menu": "0:/menu/",
+        "system": "0:/sys/",
+        "web": "0:/www/"
+    },
+    "fans": [
+        {
+            "actualValue": 0,
+            "blip": 0.1,
+            "frequency": 250,
+            "max": 1,
+            "min": 0,
+            "name": "",
+            "requestedValue": 0,
+            "rpm": -1,
+            "tachoPpr": 2,
+            "thermostatic": {
+                "heaters": [],
+                "highTemperature": null,
+                "lowTemperature": null,
+                "sensors": []
+            }
+        },
+        {
+            "actualValue": 0,
+            "blip": 0.1,
+            "frequency": 250,
+            "max": 1,
+            "min": 0.1,
+            "name": "",
+            "requestedValue": 1,
+            "rpm": -1,
+            "tachoPpr": 2,
+            "thermostatic": {
+                "heaters": [
+                    1
+                ],
+                "highTemperature": 70,
+                "lowTemperature": 70,
+                "sensors": [
+                    1
+                ]
+            }
+        },
+        {
+            "actualValue": 0,
+            "blip": 0.1,
+            "frequency": 250,
+            "max": 1,
+            "min": 0.1,
+            "name": "",
+            "requestedValue": 0,
+            "rpm": -1,
+            "tachoPpr": 2,
+            "thermostatic": {
+                "heaters": [],
+                "highTemperature": null,
+                "lowTemperature": null,
+                "sensors": []
+            }
+        },
+        {
+            "actualValue": 0,
+            "blip": 0.1,
+            "frequency": 250,
+            "max": 1,
+            "min": 0.1,
+            "name": "",
+            "requestedValue": 1,
+            "rpm": -1,
+            "tachoPpr": 2,
+            "thermostatic": {
+                "heaters": [
+                    2
+                ],
+                "highTemperature": 70,
+                "lowTemperature": 70,
+                "sensors": [
+                    2
+                ]
+            }
+        },
+        {
+            "actualValue": 0,
+            "blip": 0.1,
+            "frequency": 250,
+            "max": 1,
+            "min": 0.1,
+            "name": "",
+            "requestedValue": 0,
+            "rpm": -1,
+            "tachoPpr": 2,
+            "thermostatic": {
+                "heaters": [],
+                "highTemperature": null,
+                "lowTemperature": null,
+                "sensors": []
+            }
+        }
+    ],
+    "global": {
+        "daemonTick": 250,
+        "debug": false,
+        "defaultFilamentTemperature": 0,
+        "defaultPA": 0.03,
+        "lastTool": -1,
+        "nozzleDiameters": [
+            0.6,
+            0.4
+        ],
+        "nozzleHF": [
+            true,
+            true
+        ],
+        "prev_max_accel_x": null,
+        "prev_max_accel_y": null,
+        "prev_max_accel_z": null,
+        "prev_max_speed_x": null,
+        "prev_max_speed_y": null,
+        "prev_max_speed_z": null,
+        "prev_z_height": null,
+        "ret": null,
+        "tasks": null
+    },
+    "heat": {
+        "bedHeaters": [
+            0,
+            -1,
+            -1,
+            -1,
+            -1,
+            -1,
+            -1,
+            -1,
+            -1,
+            -1,
+            -1,
+            -1
+        ],
+        "chamberHeaters": [
+            -1,
+            -1,
+            -1,
+            -1,
+            -1,
+            -1,
+            -1,
+            -1
+        ],
+        "coldExtrudeTemperature": 160,
+        "coldRetractTemperature": 90,
+        "heaters": [
+            {
+                "active": 0,
+                "avgPwm": 0,
+                "current": 16.13,
+                "max": 225,
+                "maxBadReadings": 3,
+                "maxHeatingFaultTime": 5,
+                "maxTempExcursion": 15,
+                "min": -273.1,
+                "model": {
+                    "coolingExp": 1.4,
+                    "coolingRate": 0.527,
+                    "deadTime": 6.7,
+                    "enabled": true,
+                    "fanCoolingRate": 0,
+                    "heatingRate": 1.123,
+                    "inverted": false,
+                    "maxPwm": 1,
+                    "pid": {
+                        "d": 0.436,
+                        "i": 0.005109,
+                        "overridden": false,
+                        "p": 0.09262,
+                        "used": true
+                    },
+                    "standardVoltage": 0
+                },
+                "monitors": [
+                    {
+                        "action": 0,
+                        "condition": "tooHigh",
+                        "limit": 225,
+                        "sensor": 0
+                    },
+                    {
+                        "action": null,
+                        "condition": "disabled",
+                        "limit": null,
+                        "sensor": -1
+                    },
+                    {
+                        "action": null,
+                        "condition": "disabled",
+                        "limit": null,
+                        "sensor": -1
+                    }
+                ],
+                "sensor": 0,
+                "standby": 0,
+                "state": "off"
+            },
+            {
+                "active": 0,
+                "avgPwm": 0,
+                "current": 18.97,
+                "max": 300,
+                "maxBadReadings": 3,
+                "maxHeatingFaultTime": 5,
+                "maxTempExcursion": 30,
+                "min": -273.1,
+                "model": {
+                    "coolingExp": 1.4,
+                    "coolingRate": 0.526,
+                    "deadTime": 2.2,
+                    "enabled": true,
+                    "fanCoolingRate": 0.982,
+                    "heatingRate": 4.105,
+                    "inverted": false,
+                    "maxPwm": 1,
+                    "pid": {
+                        "d": 0.119,
+                        "i": 0.01044,
+                        "overridden": false,
+                        "p": 0.076127,
+                        "used": true
+                    },
+                    "standardVoltage": 24.2
+                },
+                "monitors": [
+                    {
+                        "action": 0,
+                        "condition": "tooHigh",
+                        "limit": 300,
+                        "sensor": 1
+                    },
+                    {
+                        "action": null,
+                        "condition": "disabled",
+                        "limit": null,
+                        "sensor": -1
+                    },
+                    {
+                        "action": null,
+                        "condition": "disabled",
+                        "limit": null,
+                        "sensor": -1
+                    }
+                ],
+                "sensor": 1,
+                "standby": 0,
+                "state": "off"
+            },
+            {
+                "active": 0,
+                "avgPwm": 0,
+                "current": 18.44,
+                "max": 300,
+                "maxBadReadings": 3,
+                "maxHeatingFaultTime": 5,
+                "maxTempExcursion": 30,
+                "min": -273.1,
+                "model": {
+                    "coolingExp": 1.4,
+                    "coolingRate": 0.526,
+                    "deadTime": 2.2,
+                    "enabled": true,
+                    "fanCoolingRate": 0.982,
+                    "heatingRate": 4.105,
+                    "inverted": false,
+                    "maxPwm": 1,
+                    "pid": {
+                        "d": 0.119,
+                        "i": 0.01044,
+                        "overridden": false,
+                        "p": 0.076127,
+                        "used": true
+                    },
+                    "standardVoltage": 24.2
+                },
+                "monitors": [
+                    {
+                        "action": 0,
+                        "condition": "tooHigh",
+                        "limit": 300,
+                        "sensor": 2
+                    },
+                    {
+                        "action": null,
+                        "condition": "disabled",
+                        "limit": null,
+                        "sensor": -1
+                    },
+                    {
+                        "action": null,
+                        "condition": "disabled",
+                        "limit": null,
+                        "sensor": -1
+                    }
+                ],
+                "sensor": 2,
+                "standby": 0,
+                "state": "off"
+            }
+        ]
+    },
+    "inputs": [
+        {
+            "active": true,
+            "axesRelative": false,
+            "compatibility": "RepRapFirmware",
+            "distanceUnit": "mm",
+            "drivesRelative": false,
+            "feedRate": 50,
+            "inMacro": false,
+            "inverseTimeMode": false,
+            "lineNumber": 0,
+            "macroRestartable": false,
+            "motionSystem": 0,
+            "name": "HTTP",
+            "selectedPlane": 0,
+            "stackDepth": 0,
+            "state": "idle",
+            "volumetric": false
+        },
+        {
+            "active": true,
+            "axesRelative": false,
+            "compatibility": "Marlin",
+            "distanceUnit": "mm",
+            "drivesRelative": false,
+            "feedRate": 50,
+            "inMacro": false,
+            "inverseTimeMode": false,
+            "lineNumber": 0,
+            "macroRestartable": false,
+            "motionSystem": 0,
+            "name": "Telnet",
+            "selectedPlane": 0,
+            "stackDepth": 0,
+            "state": "idle",
+            "volumetric": false
+        },
+        {
+            "active": true,
+            "axesRelative": false,
+            "compatibility": "RepRapFirmware",
+            "distanceUnit": "mm",
+            "drivesRelative": false,
+            "feedRate": 50,
+            "inMacro": false,
+            "inverseTimeMode": false,
+            "lineNumber": 0,
+            "macroRestartable": false,
+            "motionSystem": 0,
+            "name": "File",
+            "selectedPlane": 0,
+            "stackDepth": 0,
+            "state": "idle",
+            "volumetric": false
+        },
+        {
+            "active": true,
+            "axesRelative": false,
+            "compatibility": "Marlin",
+            "distanceUnit": "mm",
+            "drivesRelative": false,
+            "feedRate": 50,
+            "inMacro": false,
+            "inverseTimeMode": false,
+            "lineNumber": 0,
+            "macroRestartable": false,
+            "motionSystem": 0,
+            "name": "USB",
+            "selectedPlane": 0,
+            "stackDepth": 0,
+            "state": "idle",
+            "volumetric": false
+        },
+        {
+            "active": true,
+            "axesRelative": false,
+            "compatibility": "RepRapFirmware",
+            "distanceUnit": "mm",
+            "drivesRelative": false,
+            "feedRate": 50,
+            "inMacro": false,
+            "inverseTimeMode": false,
+            "lineNumber": 0,
+            "macroRestartable": false,
+            "motionSystem": 0,
+            "name": "Aux",
+            "selectedPlane": 0,
+            "stackDepth": 0,
+            "state": "idle",
+            "volumetric": false
+        },
+        {
+            "active": true,
+            "axesRelative": false,
+            "compatibility": "Marlin",
+            "distanceUnit": "mm",
+            "drivesRelative": true,
+            "feedRate": 333.3,
+            "inMacro": true,
+            "inverseTimeMode": false,
+            "lineNumber": 0,
+            "macroRestartable": false,
+            "motionSystem": 0,
+            "name": "Trigger",
+            "selectedPlane": 0,
+            "stackDepth": 2,
+            "state": "awaitingAcknowledgement",
+            "volumetric": false
+        },
+        {
+            "active": true,
+            "axesRelative": false,
+            "compatibility": "RepRapFirmware",
+            "distanceUnit": "mm",
+            "drivesRelative": false,
+            "feedRate": 50,
+            "inMacro": false,
+            "inverseTimeMode": false,
+            "lineNumber": 0,
+            "macroRestartable": false,
+            "motionSystem": 0,
+            "name": "Queue",
+            "selectedPlane": 0,
+            "stackDepth": 0,
+            "state": "idle",
+            "volumetric": false
+        },
+        {
+            "active": true,
+            "axesRelative": false,
+            "compatibility": "RepRapFirmware",
+            "distanceUnit": "mm",
+            "drivesRelative": false,
+            "feedRate": 50,
+            "inMacro": false,
+            "inverseTimeMode": false,
+            "lineNumber": 0,
+            "macroRestartable": false,
+            "motionSystem": 0,
+            "name": "LCD",
+            "selectedPlane": 0,
+            "stackDepth": 0,
+            "state": "idle",
+            "volumetric": false
+        },
+        {
+            "active": true,
+            "axesRelative": false,
+            "compatibility": "RepRapFirmware",
+            "distanceUnit": "mm",
+            "drivesRelative": false,
+            "feedRate": 50,
+            "inMacro": false,
+            "inverseTimeMode": false,
+            "lineNumber": 0,
+            "macroRestartable": false,
+            "motionSystem": 0,
+            "name": "SBC",
+            "selectedPlane": 0,
+            "stackDepth": 0,
+            "state": "idle",
+            "volumetric": false
+        },
+        {
+            "active": true,
+            "axesRelative": false,
+            "compatibility": "RepRapFirmware",
+            "distanceUnit": "mm",
+            "drivesRelative": false,
+            "feedRate": 50,
+            "inMacro": false,
+            "inverseTimeMode": false,
+            "lineNumber": 0,
+            "macroRestartable": false,
+            "motionSystem": 0,
+            "name": "Daemon",
+            "selectedPlane": 0,
+            "stackDepth": 0,
+            "state": "idle",
+            "volumetric": false
+        },
+        {
+            "active": true,
+            "axesRelative": false,
+            "compatibility": "RepRapFirmware",
+            "distanceUnit": "mm",
+            "drivesRelative": false,
+            "feedRate": 50,
+            "inMacro": false,
+            "inverseTimeMode": false,
+            "lineNumber": 0,
+            "macroRestartable": false,
+            "motionSystem": 0,
+            "name": "Aux2",
+            "selectedPlane": 0,
+            "stackDepth": 0,
+            "state": "idle",
+            "volumetric": false
+        },
+        {
+            "active": true,
+            "axesRelative": false,
+            "compatibility": "RepRapFirmware",
+            "distanceUnit": "mm",
+            "drivesRelative": false,
+            "feedRate": 50,
+            "inMacro": false,
+            "inverseTimeMode": false,
+            "lineNumber": 0,
+            "macroRestartable": false,
+            "motionSystem": 0,
+            "name": "Autopause",
+            "selectedPlane": 0,
+            "stackDepth": 0,
+            "state": "idle",
+            "volumetric": false
+        },
+        {
+            "active": true,
+            "axesRelative": false,
+            "compatibility": "RepRapFirmware",
+            "distanceUnit": "mm",
+            "drivesRelative": false,
+            "feedRate": 50,
+            "inMacro": false,
+            "inverseTimeMode": false,
+            "lineNumber": 0,
+            "macroRestartable": false,
+            "motionSystem": 0,
+            "name": "File2",
+            "selectedPlane": 0,
+            "stackDepth": 0,
+            "state": "idle",
+            "volumetric": false
+        },
+        {
+            "active": true,
+            "axesRelative": false,
+            "compatibility": "RepRapFirmware",
+            "distanceUnit": "mm",
+            "drivesRelative": false,
+            "feedRate": 50,
+            "inMacro": false,
+            "inverseTimeMode": false,
+            "lineNumber": 0,
+            "macroRestartable": false,
+            "motionSystem": 1,
+            "name": "Queue2",
+            "selectedPlane": 0,
+            "stackDepth": 0,
+            "state": "idle",
+            "volumetric": false
+        }
+    ],
+    "job": {
+        "build": null,
+        "duration": null,
+        "file": {
+            "customInfo": {},
+            "filament": [],
+            "fileName": null,
+            "generatedBy": null,
+            "height": 0,
+            "lastModified": null,
+            "layerHeight": 0,
+            "numLayers": 0,
+            "printTime": null,
+            "simulatedTime": null,
+            "size": 0,
+            "thumbnails": []
+        },
+        "filePosition": 0,
+        "lastDuration": 0,
+        "lastFileAborted": false,
+        "lastFileCancelled": false,
+        "lastFileName": null,
+        "lastFileSimulated": false,
+        "lastWarmUpDuration": 0,
+        "layer": null,
+        "layerTime": null,
+        "layers": [],
+        "pauseDuration": null,
+        "rawExtrusion": null,
+        "timesLeft": {
+            "filament": null,
+            "file": null,
+            "slicer": null
+        },
+        "warmUpDuration": null
+    },
+    "ledStrips": [
+        {
+            "board": 0,
+            "pin": "led",
+            "stopMovement": false,
+            "type": "dotstar"
+        }
+    ],
+    "limits": {
+        "axes": 30,
+        "axesPlusExtruders": 32,
+        "bedHeaters": 12,
+        "boards": 21,
+        "chamberHeaters": 8,
+        "drivers": 36,
+        "driversPerAxis": 8,
+        "extruders": 20,
+        "extrudersPerTool": 12,
+        "fans": 32,
+        "gpInPorts": 56,
+        "gpOutPorts": 64,
+        "heaters": 32,
+        "heatersPerTool": 20,
+        "ledStrips": 5,
+        "monitorsPerHeater": 3,
+        "portsPerHeater": 3,
+        "restorePoints": 6,
+        "sensors": 56,
+        "spindles": 4,
+        "tools": 50,
+        "trackedObjects": 64,
+        "triggers": 32,
+        "volumes": 1,
+        "workplaces": 9,
+        "zProbeProgramBytes": 8,
+        "zProbes": 8
+    },
+    "messages": [],
+    "move": {
+        "axes": [
+            {
+                "acceleration": 7000,
+                "babystep": 0,
+                "backlash": 0,
+                "current": 2000,
+                "drivers": [
+                    "3.0"
+                ],
+                "homed": false,
+                "jerk": 3000,
+                "letter": "X",
+                "machinePosition": 0,
+                "max": 336,
+                "maxProbed": false,
+                "microstepping": {
+                    "interpolated": true,
+                    "value": 16
+                },
+                "min": -20.2,
+                "minProbed": false,
+                "percentCurrent": 100,
+                "percentStstCurrent": 71,
+                "printingJerk": 3000,
+                "reducedAcceleration": 1000,
+                "speed": 35000,
+                "stepsPerMm": 100,
+                "userPosition": 0,
+                "visible": true,
+                "workplaceOffsets": [
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0
+                ]
+            },
+            {
+                "acceleration": 7000,
+                "babystep": 0,
+                "backlash": 0,
+                "current": 2000,
+                "drivers": [
+                    "2.0"
+                ],
+                "homed": false,
+                "jerk": 3000,
+                "letter": "Y",
+                "machinePosition": 0,
+                "max": 200,
+                "maxProbed": false,
+                "microstepping": {
+                    "interpolated": true,
+                    "value": 16
+                },
+                "min": -49,
+                "minProbed": false,
+                "percentCurrent": 100,
+                "percentStstCurrent": 71,
+                "printingJerk": 3000,
+                "reducedAcceleration": 1000,
+                "speed": 35000,
+                "stepsPerMm": 100,
+                "userPosition": 0,
+                "visible": true,
+                "workplaceOffsets": [
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0
+                ]
+            },
+            {
+                "acceleration": 400,
+                "babystep": 0,
+                "backlash": 0,
+                "current": 1330,
+                "drivers": [
+                    "0.0"
+                ],
+                "homed": false,
+                "jerk": 100,
+                "letter": "Z",
+                "machinePosition": 0,
+                "max": 288,
+                "maxProbed": false,
+                "microstepping": {
+                    "interpolated": true,
+                    "value": 16
+                },
+                "min": 0,
+                "minProbed": false,
+                "percentCurrent": 100,
+                "percentStstCurrent": 71,
+                "printingJerk": 100,
+                "reducedAcceleration": 200,
+                "speed": 2000,
+                "stepsPerMm": 1600,
+                "userPosition": 0,
+                "visible": true,
+                "workplaceOffsets": [
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0
+                ]
+            },
+            {
+                "acceleration": 500,
+                "babystep": 0,
+                "backlash": 0,
+                "current": 1000,
+                "drivers": [
+                    "0.2"
+                ],
+                "homed": true,
+                "jerk": 200,
+                "letter": "B",
+                "machinePosition": 55,
+                "max": 60,
+                "maxProbed": false,
+                "microstepping": {
+                    "interpolated": true,
+                    "value": 16
+                },
+                "min": 0,
+                "minProbed": false,
+                "percentCurrent": 100,
+                "percentStstCurrent": 71,
+                "printingJerk": 200,
+                "reducedAcceleration": 500,
+                "speed": 3500,
+                "stepsPerMm": 1600,
+                "userPosition": 55,
+                "visible": true,
+                "workplaceOffsets": [
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0
+                ]
+            },
+            {
+                "acceleration": 500,
+                "babystep": 0,
+                "backlash": 0,
+                "current": 500,
+                "drivers": [
+                    "4.0"
+                ],
+                "homed": true,
+                "jerk": 6,
+                "letter": "C",
+                "machinePosition": -0.005,
+                "max": 120,
+                "maxProbed": false,
+                "microstepping": {
+                    "interpolated": true,
+                    "value": 16
+                },
+                "min": 0,
+                "minProbed": false,
+                "percentCurrent": 50,
+                "percentStstCurrent": 71,
+                "printingJerk": 6,
+                "reducedAcceleration": 500,
+                "speed": 10000,
+                "stepsPerMm": 200,
+                "userPosition": -0.005,
+                "visible": true,
+                "workplaceOffsets": [
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0
+                ]
+            }
+        ],
+        "backlashFactor": 10,
+        "calibration": {
+            "final": {
+                "deviation": 0,
+                "mean": 0
+            },
+            "initial": {
+                "deviation": 0,
+                "mean": 0
+            },
+            "numFactors": 0
+        },
+        "compensation": {
+            "fadeHeight": 15,
+            "file": null,
+            "liveGrid": null,
+            "meshDeviation": null,
+            "probeGrid": {
+                "axes": [
+                    "X",
+                    "Y"
+                ],
+                "maxs": [
+                    290,
+                    180
+                ],
+                "mins": [
+                    10,
+                    10
+                ],
+                "radius": -1,
+                "spacings": [
+                    10,
+                    10
+                ]
+            },
+            "skew": {
+                "compensateXY": true,
+                "tanXY": 0,
+                "tanXZ": 0,
+                "tanYZ": 0
+            },
+            "type": "none"
+        },
+        "currentMove": {
+            "acceleration": 0,
+            "deceleration": 0,
+            "extrusionRate": 0,
+            "laserPwm": null,
+            "requestedSpeed": 0,
+            "topSpeed": 0
+        },
+        "extruders": [
+            {
+                "acceleration": 4000,
+                "current": 1340,
+                "driver": "5.0",
+                "factor": 1,
+                "filament": "",
+                "filamentDiameter": 1.75,
+                "jerk": 2000,
+                "microstepping": {
+                    "interpolated": true,
+                    "value": 16
+                },
+                "nonlinear": {
+                    "a": 0,
+                    "b": 0,
+                    "upperLimit": 0.2
+                },
+                "percentCurrent": 100,
+                "percentStstCurrent": 71,
+                "position": 0,
+                "pressureAdvance": 0.03,
+                "printingJerk": 2000,
+                "rawPosition": 0,
+                "speed": 5000,
+                "stepsPerMm": 396
+            },
+            {
+                "acceleration": 4000,
+                "current": 1340,
+                "driver": "6.0",
+                "factor": 1,
+                "filament": "3DXTech ASA CF",
+                "filamentDiameter": 1.75,
+                "jerk": 2000,
+                "microstepping": {
+                    "interpolated": true,
+                    "value": 16
+                },
+                "nonlinear": {
+                    "a": 0,
+                    "b": 0,
+                    "upperLimit": 0.2
+                },
+                "percentCurrent": 100,
+                "percentStstCurrent": 71,
+                "position": 0,
+                "pressureAdvance": 0.03,
+                "printingJerk": 2000,
+                "rawPosition": 0,
+                "speed": 5000,
+                "stepsPerMm": 396
+            }
+        ],
+        "idle": {
+            "factor": 0.3,
+            "timeout": 120
+        },
+        "keepout": [],
+        "kinematics": {
+            "forwardMatrix": [
+                [
+                    0.5,
+                    0.5,
+                    0,
+                    0,
+                    0
+                ],
+                [
+                    0.5,
+                    -0.5,
+                    0,
+                    0,
+                    0
+                ],
+                [
+                    0,
+                    0,
+                    1,
+                    0,
+                    0
+                ],
+                [
+                    0,
+                    0,
+                    0,
+                    1,
+                    0
+                ],
+                [
+                    0,
+                    0,
+                    0,
+                    0,
+                    1
+                ]
+            ],
+            "inverseMatrix": [
+                [
+                    1,
+                    1,
+                    0,
+                    0,
+                    0
+                ],
+                [
+                    1,
+                    -1,
+                    0,
+                    0,
+                    0
+                ],
+                [
+                    0,
+                    0,
+                    1,
+                    0,
+                    0
+                ],
+                [
+                    0,
+                    0,
+                    0,
+                    1,
+                    0
+                ],
+                [
+                    0,
+                    0,
+                    0,
+                    0,
+                    1
+                ]
+            ],
+            "name": "coreXY",
+            "segmentation": null,
+            "tiltCorrection": {
+                "correctionFactor": 1,
+                "lastCorrections": [],
+                "maxCorrection": 1,
+                "screwPitch": 0.5,
+                "screwX": [],
+                "screwY": []
+            }
+        },
+        "limitAxes": true,
+        "noMovesBeforeHoming": true,
+        "printingAcceleration": 50000,
+        "queue": [
+            {
+                "gracePeriod": 0.01,
+                "length": 60
+            },
+            {
+                "gracePeriod": 0.01,
+                "length": 60
+            }
+        ],
+        "rotation": {
+            "angle": 0,
+            "centre": [
+                0,
+                0
+            ]
+        },
+        "shaping": {
+            "amplitudes": [
+                0.204,
+                0.355,
+                0.308,
+                0.132
+            ],
+            "damping": 0.05,
+            "delays": [
+                0,
+                0.010141,
+                0.0201,
+                0.02992
+            ],
+            "frequency": 50,
+            "type": "eI2"
+        },
+        "speedFactor": 1,
+        "travelAcceleration": 50000,
+        "virtualEPos": 0,
+        "workplaceNumber": 0
+    },
+    "network": {
+        "corsSite": null,
+        "hostname": "Duet3",
+        "interfaces": [
+            {
+                "activeProtocols": [
+                    "ssh",
+                    "sftp"
+                ],
+                "actualIP": null,
+                "configuredIP": null,
+                "dnsServer": "1.1.1.1",
+                "firmwareVersion": null,
+                "gateway": null,
+                "mac": "xx:xx:xx:xx:xx:xx",
+                "numReconnects": null,
+                "rssi": null,
+                "signal": null,
+                "speed": -1,
+                "ssid": null,
+                "state": "disabled",
+                "subnet": null,
+                "type": "lan",
+                "wifiCountry": null
+            },
+            {
+                "activeProtocols": [
+                    "ssh",
+                    "sftp"
+                ],
+                "actualIP": "192.168.0.3",
+                "configuredIP": "0.0.0.0",
+                "dnsServer": "1.1.1.1",
+                "firmwareVersion": null,
+                "gateway": "192.168.0.1",
+                "mac": "xx:xx:xx:xx:xx:xx",
+                "numReconnects": null,
+                "rssi": -51,
+                "signal": -51,
+                "speed": 0,
+                "ssid": "SSID",
+                "state": "active",
+                "subnet": "255.255.252.0",
+                "type": "wifi",
+                "wifiCountry": "GB"
+            }
+        ],
+        "name": "Duet3"
+    },
+    "plugins": {
+        "DuetPiManagementPlugin": {
+            "author": "Duet3D Ltd",
+            "data": {},
+            "dsfFiles": [
+                "DuetAPI.dll",
+                "DuetAPI.pdb",
+                "DuetAPI.xml",
+                "DuetAPIClient.dll",
+                "DuetAPIClient.pdb",
+                "DuetAPIClient.xml",
+                "DuetPiManagementPlugin",
+                "DuetPiManagementPlugin.deps.json",
+                "DuetPiManagementPlugin.dll",
+                "DuetPiManagementPlugin.pdb",
+                "DuetPiManagementPlugin.runtimeconfig.json",
+                "System.Collections.Concurrent.dll",
+                "System.Collections.Immutable.dll",
+                "System.Collections.NonGeneric.dll",
+                "System.Collections.dll",
+                "System.ComponentModel.Primitives.dll",
+                "System.ComponentModel.TypeConverter.dll",
+                "System.Console.dll",
+                "System.Diagnostics.DiagnosticSource.dll",
+                "System.Diagnostics.Process.dll",
+                "System.Diagnostics.StackTrace.dll",
+                "System.IO.Compression.dll",
+                "System.IO.FileSystem.Watcher.dll",
+                "System.IO.MemoryMappedFiles.dll",
+                "System.IO.Pipes.dll",
+                "System.Linq.dll",
+                "System.Memory.dll",
+                "System.Net.NameResolution.dll",
+                "System.Net.NetworkInformation.dll",
+                "System.Net.Primitives.dll",
+                "System.Net.Sockets.dll",
+                "System.ObjectModel.dll",
+                "System.Private.CoreLib.dll",
+                "System.Private.Uri.dll",
+                "System.Reflection.Metadata.dll",
+                "System.Text.Encodings.Web.dll",
+                "System.Text.Json.dll",
+                "System.Text.RegularExpressions.dll",
+                "System.dll",
+                "createdump",
+                "dnsmasq.conf",
+                "gen-https-cert.sh",
+                "hostapd.conf",
+                "http-mixed.json",
+                "http-secure.json",
+                "http-simple.json",
+                "install-dsf.sh",
+                "libSystem.Globalization.Native.so",
+                "libSystem.IO.Compression.Native.so",
+                "libSystem.Native.so",
+                "libSystem.Net.Security.Native.so",
+                "libSystem.Security.Cryptography.Native.OpenSsl.so",
+                "libclrgc.so",
+                "libclrjit.so",
+                "libcoreclr.so",
+                "libcoreclrtraceptprovider.so",
+                "libhostfxr.so",
+                "libhostpolicy.so",
+                "libmscordaccore.so",
+                "libmscordbi.so"
+            ],
+            "dwcDependencies": [],
+            "dwcFiles": [],
+            "dwcVersion": null,
+            "homepage": "https://github.com/Duet3D/DSF-Plugins",
+            "id": "DuetPiManagementPlugin",
+            "license": "GPL-3.0-or-later",
+            "name": "DuetPi Management Plugin",
+            "pid": 1435,
+            "rrfVersion": null,
+            "sbcAutoRestart": false,
+            "sbcConfigFiles": [],
+            "sbcDsfVersion": "3.6.0-rc.1",
+            "sbcExecutable": "DuetPiManagementPlugin",
+            "sbcExecutableArguments": null,
+            "sbcExtraExecutables": [
+                "gen-https-cert.sh"
+            ],
+            "sbcOutputRedirected": false,
+            "sbcPackageDependencies": [],
+            "sbcPermissions": [
+                "superUser"
+            ],
+            "sbcPluginDependencies": [],
+            "sbcPythonDependencies": [],
+            "sbcRequired": true,
+            "sdFiles": [],
+            "tags": [],
+            "version": "3.6.0-rc.1"
+        },
+        "ExecOnMcode": {
+            "author": "Lo\\u00efc GRENON",
+            "data": {},
+            "dsfFiles": [
+                "MCodeAction.py",
+                "__init__.py",
+                "execOnMcode.py",
+                "http_endpoints.py"
+            ],
+            "dwcDependencies": [],
+            "dwcFiles": [
+                "js/ExecOnMcode.bce778b5.js",
+                "js/ExecOnMcode.bce778b5.js.gz",
+                "js/ExecOnMcode.bce778b5.js.map",
+                "js/ExecOnMcode.bce778b5.js.map.gz"
+            ],
+            "dwcVersion": "3.6",
+            "homepage": "https://github.com/LoicGRENON/DSF_ExecOnMcode_Plugin",
+            "id": "ExecOnMcode",
+            "license": "GPL-3.0-or-later",
+            "name": "Exec On M-Code",
+            "pid": 1430,
+            "rrfVersion": null,
+            "sbcAutoRestart": false,
+            "sbcConfigFiles": [],
+            "sbcDsfVersion": "3.6",
+            "sbcExecutable": "execOnMcode.py",
+            "sbcExecutableArguments": null,
+            "sbcExtraExecutables": [],
+            "sbcOutputRedirected": true,
+            "sbcPackageDependencies": [],
+            "sbcPermissions": [
+                "commandExecution",
+                "codeInterceptionReadWrite",
+                "objectModelReadWrite",
+                "registerHttpEndpoints",
+                "fileSystemAccess",
+                "launchProcesses",
+                "networkAccess",
+                "webcamAccess",
+                "gpioAccess"
+            ],
+            "sbcPluginDependencies": [],
+            "sbcPythonDependencies": [
+                "git+https://git@github.com/Duet3D/dsf-python.git@v3.6-dev#egg=dsf-python"
+            ],
+            "sbcRequired": true,
+            "sdFiles": [
+                "sys/ExecOnMcode/top-example.py"
+            ],
+            "tags": [],
+            "version": "0.7"
+        }
+    },
+    "sbc": {
+        "appArmor": true,
+        "cpu": {
+            "avgLoad": 41.76,
+            "hardware": null,
+            "numCores": 4,
+            "temperature": 57.3
+        },
+        "distribution": "Debian GNU/Linux 12 (bookworm)",
+        "distributionBuildTime": "2024-12-31T10:25:00",
+        "dsf": {
+            "buildDateTime": "2025-03-01 14:49:39",
+            "httpEndpoints": [
+                {
+                    "endpointType": "GET",
+                    "isUploadRequest": false,
+                    "namespace": "ExecOnMcode",
+                    "path": "getCmdList",
+                    "unixSocket": "/run/dsf/ExecOnMcode/getCmdList-GET.sock"
+                },
+                {
+                    "endpointType": "POST",
+                    "isUploadRequest": false,
+                    "namespace": "ExecOnMcode",
+                    "path": "saveCmdList",
+                    "unixSocket": "/run/dsf/ExecOnMcode/saveCmdList-POST.sock"
+                }
+            ],
+            "is64Bit": false,
+            "pluginSupport": true,
+            "rootPluginSupport": false,
+            "userSessions": [
+                {
+                    "accessLevel": "readWrite",
+                    "id": 1,
+                    "origin": "::ffff:127.0.0.1",
+                    "originId": -1,
+                    "sessionType": "http"
+                },
+                {
+                    "accessLevel": "readWrite",
+                    "id": 5,
+                    "origin": "::ffff:192.168.0.2",
+                    "originId": -1,
+                    "sessionType": "http"
+                },
+                {
+                    "accessLevel": "readWrite",
+                    "id": 8,
+                    "origin": "::1",
+                    "originId": -1,
+                    "sessionType": "http"
+                }
+            ],
+            "version": "3.6.0-rc.1"
+        },
+        "memory": {
+            "available": 5131878400,
+            "total": 8454815744
+        },
+        "model": "Raspberry Pi 5 Model B Rev 1.0",
+        "serial": "9e8b6b99725f2499",
+        "uptime": 3647.07
+    },
+    "sensors": {
+        "analog": [
+            {
+                "beta": 4725,
+                "c": 7.06e-08,
+                "highReading": null,
+                "lastReading": 16.13,
+                "lowReading": null,
+                "name": "Bed",
+                "offsetAdj": 0,
+                "port": "temp0",
+                "r25": 100000,
+                "rRef": 2200,
+                "slopeAdj": 0,
+                "state": "ok",
+                "type": "thermistor"
+            },
+            {
+                "beta": null,
+                "c": null,
+                "highReading": null,
+                "lastReading": 18.97,
+                "lowReading": null,
+                "name": "Revo 60W",
+                "offsetAdj": 0,
+                "port": null,
+                "r25": null,
+                "rRef": null,
+                "slopeAdj": 0,
+                "state": "ok",
+                "type": "unknown"
+            },
+            {
+                "beta": null,
+                "c": null,
+                "highReading": null,
+                "lastReading": 18.44,
+                "lowReading": null,
+                "name": "Revo 60W",
+                "offsetAdj": 0,
+                "port": null,
+                "r25": null,
+                "rRef": null,
+                "slopeAdj": 0,
+                "state": "ok",
+                "type": "unknown"
+            },
+            {
+                "beta": null,
+                "c": null,
+                "highReading": null,
+                "lastReading": null,
+                "lowReading": null,
+                "name": null,
+                "offsetAdj": 0,
+                "port": null,
+                "r25": null,
+                "rRef": null,
+                "slopeAdj": 0,
+                "state": "ok",
+                "type": "unknown"
+            },
+            {
+                "beta": null,
+                "c": null,
+                "highReading": null,
+                "lastReading": null,
+                "lowReading": null,
+                "name": null,
+                "offsetAdj": 0,
+                "port": null,
+                "r25": null,
+                "rRef": null,
+                "slopeAdj": 0,
+                "state": "ok",
+                "type": "unknown"
+            },
+            {
+                "beta": null,
+                "c": null,
+                "highReading": null,
+                "lastReading": null,
+                "lowReading": null,
+                "name": null,
+                "offsetAdj": 0,
+                "port": null,
+                "r25": null,
+                "rRef": null,
+                "slopeAdj": 0,
+                "state": "ok",
+                "type": "unknown"
+            },
+            {
+                "beta": null,
+                "c": null,
+                "highReading": null,
+                "lastReading": null,
+                "lowReading": null,
+                "name": null,
+                "offsetAdj": 0,
+                "port": null,
+                "r25": null,
+                "rRef": null,
+                "slopeAdj": 0,
+                "state": "ok",
+                "type": "unknown"
+            },
+            {
+                "beta": null,
+                "c": null,
+                "highReading": null,
+                "lastReading": null,
+                "lowReading": null,
+                "name": null,
+                "offsetAdj": 0,
+                "port": null,
+                "r25": null,
+                "rRef": null,
+                "slopeAdj": 0,
+                "state": "ok",
+                "type": "unknown"
+            },
+            {
+                "beta": null,
+                "c": null,
+                "highReading": null,
+                "lastReading": null,
+                "lowReading": null,
+                "name": null,
+                "offsetAdj": 0,
+                "port": null,
+                "r25": null,
+                "rRef": null,
+                "slopeAdj": 0,
+                "state": "ok",
+                "type": "unknown"
+            },
+            {
+                "beta": null,
+                "c": null,
+                "highReading": null,
+                "lastReading": null,
+                "lowReading": null,
+                "name": null,
+                "offsetAdj": 0,
+                "port": null,
+                "r25": null,
+                "rRef": null,
+                "slopeAdj": 0,
+                "state": "ok",
+                "type": "unknown"
+            },
+            {
+                "beta": null,
+                "c": null,
+                "highReading": null,
+                "lastReading": 21.24,
+                "lowReading": null,
+                "name": "SZP coil",
+                "offsetAdj": 0,
+                "port": null,
+                "r25": null,
+                "rRef": null,
+                "slopeAdj": 0,
+                "state": "ok",
+                "type": "unknown"
+            }
+        ],
+        "endstops": [
+            {
+                "highEnd": false,
+                "probe": null,
+                "triggered": false,
+                "type": "inputPin"
+            },
+            {
+                "highEnd": true,
+                "probe": null,
+                "triggered": false,
+                "type": "inputPin"
+            },
+            {
+                "highEnd": null,
+                "probe": null,
+                "triggered": null,
+                "type": null
+            },
+            {
+                "highEnd": true,
+                "probe": null,
+                "triggered": false,
+                "type": "motorStallAny"
+            },
+            {
+                "highEnd": null,
+                "probe": null,
+                "triggered": null,
+                "type": null
+            }
+        ],
+        "filamentMonitors": [
+            {
+                "avgPercentage": null,
+                "calibrated": null,
+                "configured": {
+                    "allMoves": false,
+                    "mmPerRev": 28.8,
+                    "percentMax": 160,
+                    "percentMin": 20,
+                    "sampleDistance": 3
+                },
+                "enableMode": 1,
+                "enabled": true,
+                "lastPercentage": null,
+                "maxPercentage": null,
+                "minPercentage": null,
+                "position": 0,
+                "status": "ok",
+                "totalExtrusion": 0,
+                "type": "rotatingMagnet"
+            },
+            {
+                "avgPercentage": null,
+                "calibrated": null,
+                "configured": {
+                    "allMoves": false,
+                    "mmPerRev": 28.8,
+                    "percentMax": 160,
+                    "percentMin": 20,
+                    "sampleDistance": 3
+                },
+                "enableMode": 1,
+                "enabled": true,
+                "lastPercentage": null,
+                "maxPercentage": null,
+                "minPercentage": null,
+                "position": 0,
+                "status": "ok",
+                "totalExtrusion": 0,
+                "type": "rotatingMagnet"
+            }
+        ],
+        "gpIn": [],
+        "probes": [
+            {
+                "calibA": null,
+                "calibB": null,
+                "calibrationTemperature": 25,
+                "deployedByUser": false,
+                "disablesHeaters": false,
+                "diveHeight": 3,
+                "diveHeights": [
+                    3,
+                    3
+                ],
+                "isCalibrated": null,
+                "lastStopHeight": 0,
+                "maxProbeCount": 5,
+                "measuredHeight": null,
+                "offsets": [
+                    0,
+                    0,
+                    0,
+                    0,
+                    0
+                ],
+                "recoveryTime": 0,
+                "scanCoefficients": null,
+                "speeds": [
+                    360,
+                    360
+                ],
+                "temperatureCoefficients": [
+                    0,
+                    0
+                ],
+                "threshold": 200,
+                "tolerance": 0.03,
+                "travelSpeed": 50000,
+                "triggerHeight": 0,
+                "type": 8,
+                "value": [
+                    0
+                ]
+            },
+            {
+                "calibA": null,
+                "calibB": null,
+                "calibrationTemperature": 25,
+                "deployedByUser": false,
+                "disablesHeaters": false,
+                "diveHeight": 5,
+                "diveHeights": [
+                    5,
+                    5
+                ],
+                "isCalibrated": false,
+                "lastStopHeight": 0,
+                "maxProbeCount": 1,
+                "measuredHeight": null,
+                "offsets": [
+                    0.8,
+                    -14,
+                    -2,
+                    0,
+                    0
+                ],
+                "recoveryTime": 0,
+                "scanCoefficients": [
+                    0,
+                    0,
+                    0,
+                    0
+                ],
+                "speeds": [
+                    36000,
+                    36000,
+                    36000
+                ],
+                "temperatureCoefficients": [
+                    0,
+                    0
+                ],
+                "threshold": 500,
+                "tolerance": 0.03,
+                "travelSpeed": 36000,
+                "triggerHeight": 2,
+                "type": 11,
+                "value": [
+                    8022
+                ]
+            },
+            {
+                "calibA": null,
+                "calibB": null,
+                "calibrationTemperature": 25,
+                "deployedByUser": false,
+                "disablesHeaters": false,
+                "diveHeight": 5,
+                "diveHeights": [
+                    5,
+                    5
+                ],
+                "isCalibrated": null,
+                "lastStopHeight": 0,
+                "maxProbeCount": 1,
+                "measuredHeight": null,
+                "offsets": [
+                    0,
+                    0,
+                    0,
+                    0,
+                    0
+                ],
+                "recoveryTime": 0,
+                "scanCoefficients": null,
+                "speeds": [
+                    360,
+                    360
+                ],
+                "temperatureCoefficients": [
+                    0,
+                    0
+                ],
+                "threshold": 200,
+                "tolerance": 0.03,
+                "travelSpeed": 1000,
+                "triggerHeight": 0,
+                "type": 8,
+                "value": [
+                    0
+                ]
+            }
+        ]
+    },
+    "spindles": [
+        {
+            "active": null,
+            "canReverse": null,
+            "current": null,
+            "frequency": null,
+            "idlePwm": null,
+            "max": null,
+            "maxPwm": null,
+            "min": null,
+            "minPwm": null,
+            "state": "unconfigured",
+            "type": "null"
+        },
+        {
+            "active": null,
+            "canReverse": null,
+            "current": null,
+            "frequency": null,
+            "idlePwm": null,
+            "max": null,
+            "maxPwm": null,
+            "min": null,
+            "minPwm": null,
+            "state": "unconfigured",
+            "type": "null"
+        },
+        {
+            "active": null,
+            "canReverse": null,
+            "current": null,
+            "frequency": null,
+            "idlePwm": null,
+            "max": null,
+            "maxPwm": null,
+            "min": null,
+            "minPwm": null,
+            "state": "unconfigured",
+            "type": "null"
+        },
+        {
+            "active": null,
+            "canReverse": null,
+            "current": null,
+            "frequency": null,
+            "idlePwm": null,
+            "max": null,
+            "maxPwm": null,
+            "min": null,
+            "minPwm": null,
+            "state": "unconfigured",
+            "type": "null"
+        }
+    ],
+    "state": {
+        "atxPower": null,
+        "atxPowerPort": null,
+        "beep": null,
+        "currentTool": -1,
+        "deferredPowerDown": null,
+        "displayMessage": "",
+        "gpOut": [
+            {
+                "freq": 50,
+                "pwm": 0.0478
+            },
+            {
+                "freq": 50,
+                "pwm": 0.0994
+            }
+        ],
+        "laserPwm": null,
+        "logFile": null,
+        "logLevel": "off",
+        "machineMode": "FFF",
+        "macroRestarted": false,
+        "messageBox": {
+            "axisControls": 0,
+            "cancelButton": true,
+            "choices": null,
+            "default": null,
+            "max": null,
+            "message": "Home XYZ?",
+            "min": null,
+            "mode": 3,
+            "seq": 1,
+            "timeout": 0,
+            "title": ""
+        },
+        "msUpTime": 861,
+        "nextTool": -1,
+        "pluginsStarted": true,
+        "powerFailScript": "",
+        "previousTool": -1,
+        "restorePoints": [
+            {
+                "coords": [
+                    0,
+                    0,
+                    0,
+                    0,
+                    0
+                ],
+                "extruderPos": 0,
+                "fanPwm": 0,
+                "feedRate": 50,
+                "ioBits": 0,
+                "laserPwm": null,
+                "toolNumber": -1
+            },
+            {
+                "coords": [
+                    0,
+                    0,
+                    0,
+                    0,
+                    0
+                ],
+                "extruderPos": 0,
+                "fanPwm": 0,
+                "feedRate": 50,
+                "ioBits": 0,
+                "laserPwm": null,
+                "toolNumber": -1
+            },
+            {
+                "coords": [
+                    0,
+                    0,
+                    0,
+                    0,
+                    0
+                ],
+                "extruderPos": 0,
+                "fanPwm": 0,
+                "feedRate": 50,
+                "ioBits": 0,
+                "laserPwm": null,
+                "toolNumber": -1
+            },
+            {
+                "coords": [
+                    0,
+                    0,
+                    0,
+                    0,
+                    0
+                ],
+                "extruderPos": 0,
+                "fanPwm": 0,
+                "feedRate": 50,
+                "ioBits": 0,
+                "laserPwm": null,
+                "toolNumber": -1
+            },
+            {
+                "coords": [
+                    0,
+                    0,
+                    0,
+                    0,
+                    0
+                ],
+                "extruderPos": 0,
+                "fanPwm": 0,
+                "feedRate": 50,
+                "ioBits": 0,
+                "laserPwm": null,
+                "toolNumber": -1
+            },
+            {
+                "coords": [
+                    0,
+                    0,
+                    0,
+                    0,
+                    0
+                ],
+                "extruderPos": 0,
+                "fanPwm": 0,
+                "feedRate": 50,
+                "ioBits": 0,
+                "laserPwm": null,
+                "toolNumber": -1
+            }
+        ],
+        "startupError": null,
+        "status": "starting",
+        "thisActive": false,
+        "thisInput": null,
+        "time": "2025-03-14T11:53:18",
+        "upTime": 3657
+    },
+    "tools": [
+        {
+            "active": [
+                0
+            ],
+            "axes": [
+                [
+                    0
+                ],
+                [
+                    1
+                ],
+                [
+                    2
+                ]
+            ],
+            "extruders": [
+                0
+            ],
+            "fans": [
+                2
+            ],
+            "feedForward": [
+                0
+            ],
+            "feedForwardAdvance": 10,
+            "feedForwardPwm": [
+                0
+            ],
+            "feedForwardTemp": [
+                0
+            ],
+            "filamentExtruder": 0,
+            "heaters": [
+                1
+            ],
+            "isRetracted": false,
+            "mix": [
+                1
+            ],
+            "name": "T0 - Hemera XS",
+            "number": 0,
+            "offsets": [
+                22.34,
+                41.62,
+                -12.24,
+                0,
+                0
+            ],
+            "offsetsProbed": 31,
+            "retraction": {
+                "extraRestart": 0,
+                "length": 2,
+                "speed": 16.7,
+                "unretractSpeed": 16.7,
+                "zHop": 0
+            },
+            "spindle": -1,
+            "spindleRpm": 0,
+            "standby": [
+                0
+            ],
+            "state": "off"
+        },
+        {
+            "active": [
+                0
+            ],
+            "axes": [
+                [
+                    0
+                ],
+                [
+                    1
+                ],
+                [
+                    2
+                ]
+            ],
+            "extruders": [
+                1
+            ],
+            "fans": [
+                4
+            ],
+            "feedForward": [
+                0
+            ],
+            "feedForwardAdvance": 10,
+            "feedForwardPwm": [
+                0
+            ],
+            "feedForwardTemp": [
+                0
+            ],
+            "filamentExtruder": 1,
+            "heaters": [
+                2
+            ],
+            "isRetracted": false,
+            "mix": [
+                1
+            ],
+            "name": "T1 - Hemera XS",
+            "number": 1,
+            "offsets": [
+                21.867,
+                41.528,
+                -12.56,
+                0,
+                0
+            ],
+            "offsetsProbed": 31,
+            "retraction": {
+                "extraRestart": 0,
+                "length": 2,
+                "speed": 16.7,
+                "unretractSpeed": 16.7,
+                "zHop": 0
+            },
+            "spindle": -1,
+            "spindleRpm": 0,
+            "standby": [
+                0
+            ],
+            "state": "off"
+        },
+        {
+            "active": [],
+            "axes": [
+                [
+                    0
+                ],
+                [
+                    1
+                ],
+                [
+                    2
+                ]
+            ],
+            "extruders": [],
+            "fans": [
+                0
+            ],
+            "feedForward": [],
+            "feedForwardAdvance": 0,
+            "feedForwardPwm": [],
+            "feedForwardTemp": [],
+            "filamentExtruder": -1,
+            "heaters": [],
+            "isRetracted": false,
+            "mix": [],
+            "name": "T2",
+            "number": 2,
+            "offsets": [
+                0,
+                0,
+                0,
+                0,
+                0
+            ],
+            "offsetsProbed": 31,
+            "retraction": {
+                "extraRestart": 0,
+                "length": 2,
+                "speed": 16.7,
+                "unretractSpeed": 16.7,
+                "zHop": 0
+            },
+            "spindle": -1,
+            "spindleRpm": 0,
+            "standby": [],
+            "state": "off"
+        },
+        {
+            "active": [],
+            "axes": [
+                [
+                    0
+                ],
+                [
+                    1
+                ],
+                [
+                    2
+                ]
+            ],
+            "extruders": [],
+            "fans": [
+                0
+            ],
+            "feedForward": [],
+            "feedForwardAdvance": 0,
+            "feedForwardPwm": [],
+            "feedForwardTemp": [],
+            "filamentExtruder": -1,
+            "heaters": [],
+            "isRetracted": false,
+            "mix": [],
+            "name": "T3",
+            "number": 3,
+            "offsets": [
+                0,
+                50,
+                -205,
+                0,
+                0
+            ],
+            "offsetsProbed": 31,
+            "retraction": {
+                "extraRestart": 0,
+                "length": 2,
+                "speed": 16.7,
+                "unretractSpeed": 16.7,
+                "zHop": 0
+            },
+            "spindle": -1,
+            "spindleRpm": 0,
+            "standby": [],
+            "state": "off"
+        }
+    ],
+    "volumes": [
+        {
+            "capacity": 30815240192,
+            "freeSpace": 14562697216,
+            "mounted": true,
+            "name": null,
+            "openFiles": null,
+            "partitionSize": 30815240192,
+            "path": "/",
+            "speed": null
+        },
+        {
+            "capacity": 534763520,
+            "freeSpace": 445802496,
+            "mounted": true,
+            "name": "/boot/firmware",
+            "openFiles": null,
+            "partitionSize": 534763520,
+            "path": "/boot/firmware",
+            "speed": null
+        }
+    ]
+}

@@ -1,0 +1,28 @@
+{
+    "boards": [
+        {},
+        {},
+        {
+            "vIn": {
+                "current": 24.4
+            }
+        },
+        {
+            "drivers": [
+                {
+                    "closedLoop": {
+                        "currentFraction": {
+                            "max": 0.38
+                        },
+                        "positionError": {
+                            "max": 0.085
+                        }
+                    }
+                }
+            ]
+        },
+        {},
+        {},
+        {}
+    ]
+}

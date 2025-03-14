@@ -19,7 +19,14 @@ class ModelCollection(Generic[T], list):
         self._item_constructor: Type[T] = item_constructor
 
         if value is not None:
-            self[:] = value
+            self[:] = []
+            for (i, item) in enumerate(value):
+                if isinstance(item, self._item_constructor):
+                    self.append(item)
+                else:
+                    ref_item = self._item_constructor()
+                    ref_item.update_from_json(item)
+                    self.append(ref_item)
 
     def update_from_json(self, json_element: List[Any]) -> 'ModelCollection[T]':
         """

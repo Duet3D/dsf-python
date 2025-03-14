@@ -1,5 +1,6 @@
 import json
 import socket
+import time
 from typing import Optional
 
 from .exceptions import IncompatibleVersionException, InternalServerException, TaskCanceledException
@@ -25,7 +26,8 @@ class BaseConnection:
 
         self.socket = socket.socket(socket.AF_UNIX, socket.SOCK_STREAM)
         self.socket.connect(socket_file)
-        self.socket.setblocking(True)
+        self.socket.settimeout(self.timeout if self.timeout > 0 else None)
+        # self.socket.setblocking(True)
         server_init_msg = server_init_message.ServerInitMessage.from_json(
             json.loads(self.socket.recv(50).decode("utf8"))
         )
@@ -98,7 +100,11 @@ class BaseConnection:
             json_string = json_string[:end_index]
         else:
             found = False
+            start_time = time.time()
             while not found:
+                if (self.timeout > 0) and (time.time() - start_time > self.timeout):
+                    raise TimeoutError("Timeout while waiting for JSON response")
+
                 # Refill the buffer and check again
                 BUFF_SIZE = 4096  # 4 KiB
                 data = b""

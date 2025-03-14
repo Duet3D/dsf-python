@@ -1,0 +1,78 @@
+{
+    "boards": [
+        {},
+        {},
+        {
+            "vIn": {
+                "current": 24.4
+            }
+        },
+        {
+            "drivers": [
+                {
+                    "closedLoop": {
+                        "currentFraction": {
+                            "max": 0.38
+                        },
+                        "positionError": {
+                            "max": 0.085
+                        }
+                    }
+                }
+            ]
+        },
+        {},
+        {},
+        {}
+    ],
+    "fans": [
+        null,
+        {},
+        {},
+        {},
+        {}
+    ],
+    "heat": {
+        "heaters": [
+            {
+                "current": 16.22
+            },
+            {},
+            {
+                "current": 18.39
+            }
+        ]
+    },
+    "sensors": {
+        "analog": [
+            {
+                "lastReading": 16.22
+            },
+            {},
+            {
+                "lastReading": 18.39
+            },
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            {
+                "lastReading": 21.23
+            }
+        ],
+        "endstops": [
+            {},
+            {},
+            null,
+            {},
+            null
+        ]
+    },
+    "state": {
+        "msUpTime": 124,
+        "upTime": 3658
+    }
+}

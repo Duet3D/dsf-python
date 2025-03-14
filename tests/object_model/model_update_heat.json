@@ -1,0 +1,13 @@
+{
+    "heat": {
+        "heaters": [
+            {
+                "current": 10
+            },
+            {},
+            {
+                "current": 20
+            }
+        ]
+    }
+}

@@ -37,8 +37,9 @@ class InterceptConnection(BaseCommandConnection):
         auto_evaluate_expression: bool = True,
         priority_codes: bool = False,
         debug: bool = False,
+        timeout: int = 0
     ):
-        super().__init__(debug)
+        super().__init__(debug, timeout)
         self.interception_mode = interception_mode
         self.channels = channels if channels is not None else CodeChannel.list()
         self.filters = filters

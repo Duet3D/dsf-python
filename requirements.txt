@@ -3,3 +3,4 @@ wheel
 build
 twine
 bump2version
+python-dateutil

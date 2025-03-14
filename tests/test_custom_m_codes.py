@@ -5,36 +5,52 @@ import socket
 import time
 import importlib.util
 import json
+import unittest
+import tempfile
+from unittest.mock import patch
 
 from src.dsf import PROTOCOL_VERSION
-
-here = pathlib.Path(__file__).parent.parent.resolve()
-example_path = here / "examples/custom_m_codes.py"
-spec = importlib.util.spec_from_file_location("custom_m_codes", example_path)
-custom_m_codes = importlib.util.module_from_spec(spec)
-spec.loader.exec_module(custom_m_codes)
+from src.dsf.connections import InterceptConnection, InterceptionMode
+from src.dsf.commands.code import CodeType
+from src.dsf.object_model import MessageType
 
 
-def test_custom_m_codes(monkeypatch, tmp_path):
-    mock_dcs_socket_file = os.path.join(tmp_path, "dsf.socket")
-    monkeypatch.setattr(
-        "dsf.connections.InterceptConnection.connect.__defaults__",
-        (mock_dcs_socket_file,),
-    )
+class TestCustomMCodes(unittest.TestCase):
+    def setUp(self):
+        # Create a temporary directory
+        self.temp_dir = tempfile.TemporaryDirectory()
+        self.mock_dcs_socket_file = os.path.join(self.temp_dir.name, "dsf.socket")
 
-    dcs_passed = threading.Event()
+        # Set up the threading event for synchronization
+        self.dcs_passed = threading.Event()
+        self.server_ready = threading.Event()
 
-    def mock_dcs():
+        # Start the mock DCS server in a separate thread
+        self.server_thread = threading.Thread(target=self.mock_dcs, daemon=True)
+        self.server_thread.start()
+
+        # Wait for server to be ready
+        self.assertTrue(self.server_ready.wait(timeout=5), "Mock DCS server failed to start")
+
+    def tearDown(self):
+        # Clean up resources
+        if self.server_thread.is_alive():
+            self.server_thread.join(timeout=1)
+        self.temp_dir.cleanup()
+
+    def mock_dcs(self):
         server = socket.socket(socket.AF_UNIX, socket.SOCK_STREAM)
-        server.bind(mock_dcs_socket_file)
+        server.bind(self.mock_dcs_socket_file)
         server.listen(1)
+        self.server_ready.set()
+
         conn, _ = server.accept()
-        print("send all")
+
         conn.sendall(b'{"version":' + str(PROTOCOL_VERSION).encode() + b', "id":"foobar"}')
         # Receive and verify the intercept setup message
         setup_msg = conn.recv(1024)
-        assert b'"mode":"Intercept"' in setup_msg
-        assert b'"interceptionMode":"Pre"' in setup_msg
+        self.assertIn(b'"mode":"Intercept"', setup_msg)
+        self.assertIn(b'"interceptionMode":"Pre"', setup_msg)
         
         conn.sendall(b'{"success":true}')
         
@@ -51,14 +67,14 @@ def test_custom_m_codes(monkeypatch, tmp_path):
         # Process responses more flexibly
         response1 = json.loads(conn.recv(1024))
         # Either a Flush or Resolve command is acceptable based on implementation
-        assert "command" in response1
+        self.assertIn("command", response1)
         
         # Send appropriate response based on what was received
         if response1.get("command") == "Flush":
             conn.sendall(b'{"result":true,"success":true}')
             # After Flush, there should be a Resolve
             response2 = json.loads(conn.recv(1024))
-            assert response2.get("command") == "Resolve"
+            self.assertEqual(response2.get("command"), "Resolve")
         
         # Send M5678 code
         conn.sendall(
@@ -72,19 +88,58 @@ def test_custom_m_codes(monkeypatch, tmp_path):
         
         # Expect a response for M5678
         response3 = json.loads(conn.recv(1024))
-        assert "command" in response3
+        self.assertIn("command", response3)
         
         conn.close()
-        dcs_passed.set()  # indicate that all asserts passed and the mock_dcs is shutting down
+        self.dcs_passed.set()  # indicate that all asserts passed and the mock_dcs is shutting down
 
-    thread = threading.Thread(target=mock_dcs, daemon=True)
-    thread.start()
-    time.sleep(1)
+    def test_custom_m_codes(self):
+        filters = ["M1234", "M5678"]
+        intercept_connection = InterceptConnection(
+            InterceptionMode.PRE, filters=filters, debug=True, timeout=3)
+        intercept_connection.connect(self.mock_dcs_socket_file)
+        while True:
+            # Wait for a code to arrive
+            cde = intercept_connection.receive_code()
 
-    custom_m_codes.start_intercept()
-    
-    # Wait for the mock DCS to complete with a timeout
-    thread.join(timeout=5)
-    
-    # Verify the test completed successfully
-    assert dcs_passed.is_set(), "The mock DCS did not complete successfully"
+            # Check for the type of the code
+            if cde.type == CodeType.MCode and cde.majorNumber == 1234:
+                # --------------- BEGIN FLUSH ---------------------
+                # Flushing is only necessary if the action below needs to be in sync with the machine
+                # at this point in the GCode stream. Otherwise, it can and should be skipped
+
+                # Flush the code's channel to be sure we are being in sync with the machine
+                success = intercept_connection.flush(cde.channel).success
+
+                # Flushing failed so we need to cancel our code
+                if not success:
+                    print("Flush failed")
+                    intercept_connection.cancel_code()
+                    continue
+                # -------------- END FLUSH ------------------------
+
+                # Do whatever needs to be done if this is the right code
+                print(cde, cde.flags)
+
+                # Resolve it so that DCS knows we took care of it
+                intercept_connection.resolve_code()
+            elif cde.type == CodeType.MCode and cde.majorNumber == 5678:
+                intercept_connection.resolve_code()
+                intercept_connection.close()
+                # Exit this example
+                break
+            else:
+                # We did not handle it so we ignore it and it will be continued to be processed
+                intercept_connection.ignore_code()
+
+        intercept_connection.close()
+
+        # Wait for the mock DCS to complete with a timeout
+        self.server_thread.join(timeout=5)
+
+        # Verify the test completed successfully
+        self.assertTrue(self.dcs_passed.is_set(), "The mock DCS did not complete successfully")
+
+
+if __name__ == "__main__":
+    unittest.main()

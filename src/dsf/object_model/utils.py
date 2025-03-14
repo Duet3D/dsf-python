@@ -1,3 +1,5 @@
+from typing import Type, TypeVar, Any, Union, Dict
+
 
 def is_model_object(o):
     from .model_object import ModelObject
@@ -7,7 +9,10 @@ def is_model_object(o):
     return isinstance(o, ModelObject) or isinstance(o, ModelCollection) or isinstance(o, ModelDictionary)
 
 
-def wrap_model_property(name, model_type):
+T = TypeVar('T')  # Type variable for model objects
+
+
+def wrap_model_property(name: str, model_type: Type[T]) -> Union[Type[T], None]:
     """
     Wrap a nullable model object property so that type checks can be performed during update
     :param name: Property of the derived class
@@ -18,11 +23,11 @@ def wrap_model_property(name, model_type):
     STORAGE_NAME = '_' + name
 
     @property
-    def prop(self):
+    def prop(self) -> Union[Type[T], None]:
         return getattr(self, STORAGE_NAME)
 
     @prop.setter
-    def prop(self, value):
+    def prop(self, value: Union[Type[T], str, Dict[str, Any], None]):
         if value is None or isinstance(value, model_type):
             setattr(self, STORAGE_NAME, value)
         elif isinstance(value, dict):  # Update from JSON

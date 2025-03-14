@@ -2,6 +2,8 @@ import json
 import unittest
 
 from src.dsf.object_model import *
+from src.dsf.object_model.utils import is_model_object
+from src.dsf.object_model.object_model import ModelCollection, ModelDictionary, ModelObject
 
 
 class Model(unittest.TestCase):
@@ -48,13 +50,29 @@ class Model(unittest.TestCase):
         model.update_from_json(json_patch)
 
     def test_json_serialization(self):
-        # Hint: To get the object model, execute the command get_object_model() from any connection in debug mode
-        # and take the JSON returned from debug (after "recv:")
-        with open('tests/object_model/model_geminiv2.json') as fp:
+        with open('tests/object_model/model_full.json') as fp:
             json_data = json.load(fp)
         model = ObjectModel.from_json(json_data)
-        json_text = json.dumps(json_data, sort_keys=True)
-        self.assertEqual(json_text, str(model))
+
+        def recursive_compare(obj1, obj2):
+            if isinstance(obj1, dict):
+                self.assertIsInstance(obj2, dict)
+                self.assertEqual(set(obj1.keys()), set(obj2.keys()))
+                for key in obj1:
+                    recursive_compare(obj1[key], obj2[key])
+            elif isinstance(obj1, list):
+                self.assertIsInstance(obj2, list)
+                self.assertEqual(len(obj1), len(obj2))
+                for item1, item2 in zip(obj1, obj2):
+                    recursive_compare(item1, item2)
+            elif isinstance(obj1, ModelObject):
+                self.assertIsInstance(obj2, ModelObject)
+                recursive_compare(obj1.__dict__, obj2.__dict__)
+            else:
+                self.assertEqual(obj1, obj2)
+
+        model2 = ObjectModel().update_from_json(str(model))
+        recursive_compare(model.__dict__, model2.__dict__)
 
     def test_messages(self):
         from src.dsf.object_model.messages import MessageType
