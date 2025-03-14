@@ -4,6 +4,7 @@ from .network_interface_type import NetworkInterfaceType
 from .network_protocol import NetworkProtocol
 from .network_state import NetworkState
 from ..model_object import ModelObject
+from ...utils import deprecated
 
 
 class NetworkInterface(ModelObject):
@@ -27,6 +28,8 @@ class NetworkInterface(ModelObject):
         self._mac = ""
         # Number of reconnect attempts or null if unknown
         self._num_reconnects = None
+        # Received signal strength indicator of the WiFi adapter (only WiFi, in dBm, or null if unknown)
+        self._rssi = None
         # Signal of the Wi-Fi adapter (only Wi-Fi, in dBm, or null if unknown)
         self._signal = None
         # Speed of the network interface (in MBit, null if unknown, 0 if not connected)
@@ -112,10 +115,20 @@ class NetworkInterface(ModelObject):
         self._num_reconnects = int(value) if value is not None else None
         
     @property
+    def rssi(self) -> Union[int, None]:
+        """Received signal strength indicator of the WiFi adapter (only WiFi, in dBm, or None if unknown)"""
+        return self._rssi
+
+    @rssi.setter
+    def rssi(self, value):
+        self._rssi = int(value) if value is not None else None
+
+    @property
+    @deprecated(f"Use '{__name__}.rssi' instead.")
     def signal(self) -> Union[int, None]:
         """Signal of the Wi-Fi adapter (only Wi-Fi, in dBm, or null if unknown)"""
         return self._signal
-    
+
     @signal.setter
     def signal(self, value):
         self._signal = int(value) if value is not None else None

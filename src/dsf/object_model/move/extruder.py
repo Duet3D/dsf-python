@@ -41,6 +41,8 @@ class Extruder(ModelObject):
         self._position = 0
         # Pressure advance
         self._pressure_advance = 0
+        # Motor jerk during the current print only (in mm/s)
+        self._printing_jerk = None
         # Raw extruder position as commanded by the slicer without extrusion factor applied (in mm)
         self._raw_position = 0
         # Maximum speed (in mm/s)
@@ -147,6 +149,15 @@ class Extruder(ModelObject):
     @pressure_advance.setter
     def pressure_advance(self, value):
         self._pressure_advance = float(value)
+
+    @property
+    def printing_jerk(self) -> Union[float, None]:
+        """Motor jerk during the current print only (in mm/s)"""
+        return self._printing_jerk
+
+    @printing_jerk.setter
+    def printing_jerk(self, value):
+        self._printing_jerk = float(value) if value is not None else None
 
     @property
     def raw_position(self) -> float:

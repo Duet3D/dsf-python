@@ -86,6 +86,8 @@ class Axis(ModelObject):
         self._percent_current = 100
         # Percentage applied to the motor current during standstill (0..100 or None if not supported)
         self._percent_stst_current = None
+        # Motor jerk during the current print only (in mm/s)
+        self._printing_jerk = None
         # Reduced accelerations used by Z probing and stall homing moves (in mm/s^2)
         self._reduced_acceleration = 0
         # Maximum speed (in mm/min)
@@ -241,6 +243,15 @@ class Axis(ModelObject):
     @percent_stst_current.setter
     def percent_stst_current(self, value):
         self._percent_stst_current = int(value) if value is not None else None
+
+    @property
+    def printing_jerk(self) -> Union[float, None]:
+        """Motor jerk during the current print only (in mm/s)"""
+        return self._printing_jerk
+
+    @printing_jerk.setter
+    def printing_jerk(self, value):
+        self._printing_jerk = float(value) if value is not None else None
 
     @property
     def reduced_acceleration(self) -> float:

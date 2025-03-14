@@ -108,9 +108,19 @@ class PulsedFilamentMonitor(FilamentMonitor):
         super(PulsedFilamentMonitor, self).__init__()
         self._calibrated = None
         self._configured = PulsedFilamentMonitorConfigured()
+        self._position = None
         self._type = FilamentMonitorType.Pulsed
         
     @property
     def configured(self) -> PulsedFilamentMonitorConfigured:
         """Configured properties of this filament monitor"""
         return self._configured
+
+    @property
+    def position(self) -> float:
+        """Position of the sensor (in mm)"""
+        return self._position
+
+    @position.setter
+    def position(self, value):
+        self._position = float(value)

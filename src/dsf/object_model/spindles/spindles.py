@@ -1,4 +1,5 @@
 from .spindle_state import SpindleState
+from .spindle_type import SpindleType
 from ..model_object import ModelObject
 
 from typing import Union
@@ -29,6 +30,8 @@ class Spindle(ModelObject):
         self._min_pwm = 0
         # Current state
         self._state = SpindleState.unconfigured
+        # Spindle type
+        self._type = SpindleType.null
         
     @property
     def active(self) -> Union[int, None]:
@@ -126,3 +129,19 @@ class Spindle(ModelObject):
             self._state = value
         else:
             raise TypeError(f"{__name__}.state must be of type SpindleState. Got {type(value)}: {value}")
+
+    @property
+    def type(self) -> SpindleType:
+        """Spindle type"""
+        return self._type
+
+    @type.setter
+    def type(self, value):
+        if value is None or value == "":
+            self._type = SpindleType.null
+        elif isinstance(value, str):
+            self._type = SpindleType(value)
+        elif isinstance(value, SpindleType):
+            self._type = value
+        else:
+            raise TypeError(f"{__name__}.type must be of type SpindleType. Got {type(value)}: {value}")

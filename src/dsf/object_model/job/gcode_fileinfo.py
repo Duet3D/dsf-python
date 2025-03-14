@@ -11,6 +11,7 @@ class GCodeFileInfo(ModelObject):
 
     def __init__(self):
         super().__init__()
+        self._custom_info = {}
         self._filament = []
         self._file_name = ""
         self._generated_by = ""
@@ -22,6 +23,11 @@ class GCodeFileInfo(ModelObject):
         self._simulated_time = None
         self._size = 0
         self._thumbnails = ModelCollection(ThumbnailInfo)
+
+    @property
+    def custom_info(self) -> dict:
+        """Custom information extracted from the G-code file"""
+        return self._custom_info
 
     @property
     def filament(self) -> List[float]:

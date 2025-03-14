@@ -3,6 +3,7 @@ from typing import List
 from .tool_state import ToolState
 from .tool_retraction import ToolRetraction
 from ..model_object import ModelObject
+from ...utils import deprecated
 
 
 class Tool(ModelObject):
@@ -20,6 +21,9 @@ class Tool(ModelObject):
         self._fans = []
         # Feedforward coefficients to apply to the mapped heaters during extrusions
         self._feed_forward = []
+        self._feed_forward_pwm = []
+        self._feed_forward_advance = None
+        self._feed_forward_temp = []
         # Extruder drive index for resolving the tool filament (index or -1)
         self._filament_extruder = -1
         # List of associated heaters (indices)
@@ -74,10 +78,30 @@ class Tool(ModelObject):
         return self._fans
     
     @property
+    @deprecated("Use feed_forward_pwm instead.")
     def feed_forward(self) -> List[float]:
         """Feedforward coefficients to apply to the mapped heaters during extrusions"""
         return self._feed_forward
     
+    @property
+    def feed_forward_advance(self) -> float:
+        """Time advance for applying feedforward in milliseconds"""
+        return self._feed_forward_advance
+
+    @feed_forward_advance.setter
+    def feed_forward_advance(self, value):
+        self._feed_forward_advance = float(value)
+
+    @property
+    def feed_forward_pwm(self) -> List[float]:
+        """Feedforward coefficients to apply to the mapped heaters during extrusions"""
+        return self._feed_forward_pwm
+
+    @property
+    def feed_forward_temp(self) -> List[float]:
+        """Temperature increase per mm/dec extrusion speed"""
+        return self._feed_forward_temp
+
     @property
     def filament_extruder(self) -> int:
         """Extruder drive index for resolving the tool filament (index or -1)"""

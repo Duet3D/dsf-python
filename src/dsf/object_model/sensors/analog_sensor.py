@@ -12,7 +12,9 @@ class AnalogSensor(ModelObject):
         super(AnalogSensor, self).__init__()
         self._beta = None
         self._c = None
+        self._high_reading = None
         self._last_reading = None
+        self._low_reading = None
         self._name = None
         self._offset_adj = 0.0
         self._port = None
@@ -41,6 +43,15 @@ class AnalogSensor(ModelObject):
         self._c = float(value) if value is not None else None
 
     @property
+    def high_reading(self) -> Union[float, None]:
+        """High sensor reading (only linear analog sensors, otherwise null)"""
+        return self._high_reading
+
+    @high_reading.setter
+    def high_reading(self, value):
+        self._high_reading = float(value) if value is not None else None
+
+    @property
     def last_reading(self) -> Union[float, None]:
         """Last sensor reading (in C) or null if invalid"""
         return self._last_reading
@@ -48,6 +59,15 @@ class AnalogSensor(ModelObject):
     @last_reading.setter
     def last_reading(self, value):
         self._last_reading = float(value) if value is not None else None
+
+    @property
+    def low_reading(self) -> Union[float, None]:
+        """Low sensor reading (only linear analog sensors, otherwise null)"""
+        return self._low_reading
+
+    @low_reading.setter
+    def low_reading(self, value):
+        self._low_reading = float(value) if value is not None else None
         
     @property
     def name(self) -> Union[str, None]:

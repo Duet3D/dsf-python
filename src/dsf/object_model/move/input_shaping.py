@@ -40,13 +40,10 @@ class InputShaping(ModelObject):
         self._amplitudes = []
         # Damping factor
         self._damping = 0.1
-        # Input shaper durations (in s)
-        self._durations = []
+        # Input shaper delays (in s)
+        self._delays = []
         # Frequency (in Hz)
         self._frequency = 40
-        # Minimum fraction of the original acceleration or feed rate to which the acceleration or
-        # feed rate may be reduced in order to apply input shaping
-        self._reduction_limit = 0.25
         # Configured input shaping type
         self._type = InputShapingType.none
 
@@ -65,9 +62,9 @@ class InputShaping(ModelObject):
         self._damping = float(value)
 
     @property
-    def durations(self) -> List[float]:
-        """Input shaper durations (in s)"""
-        return self._durations
+    def delays(self) -> List[float]:
+        """Input shaper delays (in s)"""
+        return self._delays
 
     @property
     def frequency(self) -> float:
@@ -77,16 +74,6 @@ class InputShaping(ModelObject):
     @frequency.setter
     def frequency(self, value):
         self._frequency = float(value)
-
-    @property
-    def reduction_limit(self) -> float:
-        """Minimum fraction of the original acceleration or feed rate to which the acceleration or
-        feed rate may be reduced in order to apply input shaping"""
-        return self._reduction_limit
-
-    @reduction_limit.setter
-    def reduction_limit(self, value):
-        self._reduction_limit = float(value)
 
     @property
     def type(self) -> InputShapingType:

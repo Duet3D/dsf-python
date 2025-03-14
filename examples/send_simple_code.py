@@ -14,6 +14,7 @@ def send_simple_code():
     command_connection.connect()
 
     try:
+        # res = command_connection.set_plugin_data("ExecOnMcode", "test", "1")
         # Perform a simple command and wait for its output
         res = command_connection.perform_simple_code("M115")
         print("M115 is telling us:", res)
