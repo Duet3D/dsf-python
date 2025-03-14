@@ -140,7 +140,8 @@ class HttpEndpointUnixSocket:
         if self._loop is not None:
             # TODO: this enables correctly ending the loop. Why?
             self._loop.set_debug(True)
-            self._server.close()
+            if self._server is not None:
+                self._server.close()
             self._loop.stop()
         self.event_loop.cancel()
         self.executor.shutdown(wait=False)

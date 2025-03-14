@@ -89,7 +89,7 @@ class TestCustomHttpEndpoint(unittest.TestCase):
         # Wait for mock DCS server to complete
         self.server_thread.join(timeout=1)
 
-        time.sleep(0.1)
+        time.sleep(1)
 
         if endpoint is not None:
             endpoint.close()
