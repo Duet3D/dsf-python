@@ -4,3 +4,4 @@ build
 twine
 bump2version
 python-dateutil
+stdeb
