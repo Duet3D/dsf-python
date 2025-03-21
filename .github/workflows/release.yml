@@ -1,0 +1,86 @@
+name: Bump Version and Release
+
+on:
+  workflow_dispatch:
+    inputs:
+      new_version:
+        description: 'New version number (e.g., 1.2.3)'
+        required: true
+
+jobs:
+  bump-and-release:
+    runs-on: ubuntu-latest
+    # Add write permissions for the GITHUB_TOKEN
+    permissions:
+      contents: write
+      packages: write
+      pull-requests: write
+
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          # Explicitly provide the token for private repo access
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.x'
+
+      - name: Install bumpversion
+        run: pip install bump2version
+
+      - name: Bump version
+        run: |
+          bumpversion --new-version ${{ github.event.inputs.new_version }} --no-commit --no-tag minor
+
+      - name: Commit and tag version
+        run: |
+          git config --global user.name "GitHub Actions"
+          git config --global user.email "actions@github.com"
+          git commit -am "Bump version to ${{ github.event.inputs.new_version }}" --allow-empty
+          git tag ${{ github.event.inputs.new_version }}
+
+      - name: Push changes and tag
+        run: |
+          # Use authenticated URL format for pushing
+          git remote set-url origin https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }}
+          git push origin HEAD:gh-actions
+          git push origin --tags
+
+      - name: Get previous tag
+        id: prev_tag
+        run: |
+          git fetch --tags
+          git for-each-ref --sort=-creatordate --format '%(refname:short)' refs/tags > tags.txt
+          readarray -t tags < tags.txt
+          if [ ${#tags[@]} -lt 2 ]; then
+            echo "prev_tag=" >> $GITHUB_OUTPUT
+          else
+            echo "prev_tag=${tags[1]}" >> $GITHUB_OUTPUT
+          fi
+
+      - name: Generate changelog
+        id: changelog
+        run: |
+          if [ -z "${{ steps.prev_tag.outputs.prev_tag }}" ]; then
+            echo "body=Initial release" >> $GITHUB_OUTPUT
+          else
+            log=$(git log --pretty=format:"- %s (%h)" ${{ steps.prev_tag.outputs.prev_tag }}..${{ github.event.inputs.new_version }})
+            echo "body<<EOF" >> $GITHUB_OUTPUT
+            echo "## Changelog since ${{ steps.prev_tag.outputs.prev_tag }}" >> $GITHUB_OUTPUT
+            echo "$log" >> $GITHUB_OUTPUT
+            echo "EOF" >> $GITHUB_OUTPUT
+          fi
+
+      - name: Create GitHub Release
+        id: create_release
+        uses: actions/create-release@v1.1.0
+        env:
+          GITHUB_TOKEN: ${{ secrets.PAT }}
+        with:
+          tag_name: ${{ github.event.inputs.new_version }}
+          release_name: ${{ github.event.inputs.new_version }}
+          body: ${{ steps.changelog.outputs.body }}
+          draft: false
+          prerelease: false
