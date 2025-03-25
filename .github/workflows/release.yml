@@ -45,7 +45,7 @@ jobs:
         run: |
           # Use authenticated URL format for pushing
           git remote set-url origin https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }}
-          git push origin HEAD:gh-actions
+          git push origin HEAD:v3.6-dev
           git push origin --tags
 
       - name: Get previous tag
