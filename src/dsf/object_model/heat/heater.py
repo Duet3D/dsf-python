@@ -1,5 +1,5 @@
 from enum import Enum
-from typing import List
+from typing import List, Union
 
 from .heater_model import HeaterModel
 from .heater_monitor import HeaterMonitor
@@ -39,6 +39,10 @@ class Heater(ModelObject):
         self._avg_pwm = 0
         # Current temperature of the heater (in C)
         self._current = -273.15
+        # Current feedforward PWM boost applied to the heater
+        self._extr_pwm_boost = 0.0
+        # Current temperature boost applied to the heater
+        self._extr_temp_boost = 0.0
         # Maximum temperature allowed for this heater (in C)
         # This is only temporary and should be replaced by a representation of the heater protection as in RRF
         self._max = 285
@@ -88,6 +92,24 @@ class Heater(ModelObject):
     @current.setter
     def current(self, value: float):
         self._current = float(value)
+
+    @property
+    def extr_pwm_boost(self) -> float:
+        """Current feedforward PWM boost applied to the heater"""
+        return self._extr_pwm_boost
+
+    @extr_pwm_boost.setter
+    def extr_pwm_boost(self, value: float):
+        self._extr_pwm_boost = float(value)
+
+    @property
+    def extr_temp_boost(self) -> float:
+        """Current temperature boost applied to the heater"""
+        return self._extr_temp_boost
+
+    @extr_temp_boost.setter
+    def extr_temp_boost(self, value: float):
+        self._extr_temp_boost = float(value)
 
     @property
     def max(self) -> float:
