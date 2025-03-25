@@ -45,6 +45,9 @@ jobs:
     needs:
     - build
     runs-on: ubuntu-latest
+    environment:
+      name: pypi
+      url: https://pypi.org/p/dsf-python
     permissions:
       id-token: write  # IMPORTANT: mandatory for trusted publishing
     steps:
@@ -75,6 +78,7 @@ jobs:
         python -m pip install --upgrade pip
         pip install setuptools
         pip install stdeb3
+        pip install python-dateutil
         pip install wheel
     - name: Clean up previous builds
       run: rm -rf deb_dist/ || true
