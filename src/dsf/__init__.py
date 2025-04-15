@@ -1,4 +1,4 @@
-__version__ = "3.6.0-rc.2"
+__version__ = "3.6.0-rc.2.post1"
 
 import json
 import os
