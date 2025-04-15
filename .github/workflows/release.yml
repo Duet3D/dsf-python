@@ -32,7 +32,7 @@ jobs:
 
       - name: Bump version
           if [[ ! "${{ github.event.inputs.new_version }}" =~ ^[0-9]+\.[0-9]+\.[0-9]+(-[alpha|beta|rc]\.[0-9]+)?(\.post[0-9]+)?$ ]]; then
-          echo "Error: New version does not match the required format (e.g., major.minor.patch-[alpha|beta|rc].N.postN)." >&2
+          echo "Error - New version does not match the required format (e.g., major.minor.patch-[alpha|beta|rc].N.postN)." >&2
           exit 1
           fi
           bumpversion --new-version ${{ github.event.inputs.new_version }} --no-commit --no-tag minor
