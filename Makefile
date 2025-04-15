@@ -17,7 +17,7 @@ check_dist: update_dist
 
 build_deb:
 	rm -rf deb_dist/
-	sed -i -E '/forced-upstream-version/ s/([0-9]+)\.([0-9]+)\.([0-9]+)-([a-z]+)([0-9]+)/\1.\2.\3~\4\5/' setup.cfg
+	sed -i -E '/forced-upstream-version/ s/([0-9]+)\.([0-9]+)\.([0-9]+)-([a-z]+)\.([0-9]+)/\1.\2.\3~\4.\5/' setup.cfg
 	python3 setup.py --command-packages=stdeb3.command sdist_dsc bdist_deb
-	sed -i -E '/forced-upstream-version/ s/([0-9]+)\.([0-9]+)\.([0-9]+)~([a-z]+)([0-9]+)/\1.\2.\3-\4\5/' setup.cfg
+	sed -i -E '/forced-upstream-version/ s/([0-9]+)\.([0-9]+)\.([0-9]+)~([a-z]+)\.([0-9]+)/\1.\2.\3-\4.\5/' setup.cfg
 	dpkg-deb -I deb_dist/*.deb
