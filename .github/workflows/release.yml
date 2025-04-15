@@ -31,6 +31,8 @@ jobs:
         run: pip install bump2version
 
       - name: Bump version
+        run: |
+          # Check if the new version matches the required format
           if [[ ! "${{ github.event.inputs.new_version }}" =~ ^[0-9]+\.[0-9]+\.[0-9]+(-[alpha|beta|rc]\.[0-9]+)?(\.post[0-9]+)?$ ]]; then
           echo "Error - New version does not match the required format (e.g., major.minor.patch-[alpha|beta|rc].N.postN)." >&2
           exit 1
