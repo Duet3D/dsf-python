@@ -38,13 +38,13 @@ class AnalogSensorType(str, Enum):
     BME280 = "bme280"
 
     # BME280 pressure sensor
-    BME280Pressure = "bme280-pressure"
+    BME280Pressure = "bmepressure"
 
     # BME280 humidity sensor
-    BME280Humidity = "bme280-humidity"
+    BME280Humidity = "bmehumidity"
 
     # Current loop sensor
-    CurrentLoop = "currentloooppyro"
+    CurrentLoop = "currentlooppyro"
 
     # MCU temperature
     McuTemp = "mcutemp"
