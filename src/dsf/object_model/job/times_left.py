@@ -14,6 +14,8 @@ class TimesLeft(ModelObject):
         self._file = None
         # Time left based on the slicer reports (see M73, in s or null)
         self._slicer = None
+        # Time left before the next colour change is expected (see M73 C, in s or null)
+        self._to_pause = None
 
     @property
     def filament(self) -> Union[int, None]:
@@ -41,3 +43,12 @@ class TimesLeft(ModelObject):
     @slicer.setter
     def slicer(self, value):
         self._slicer = int(value) if value is not None else None
+
+    @property
+    def to_pause(self) -> Union[int, None]:
+        """Time left before the next colour change is expected (see M73 C, in s or null)"""
+        return self._to_pause
+
+    @to_pause.setter
+    def to_pause(self, value):
+        self._to_pause = int(value) if value is not None else None
