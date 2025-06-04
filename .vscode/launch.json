@@ -5,6 +5,19 @@
     "version": "0.2.0",
     "configurations": [
         {
+            "name": "Python: Build Deb",
+            "type": "debugpy",
+            "request": "launch",
+            "program": "setup.py",
+            "console": "integratedTerminal",
+            "args": [
+                "--command-packages=stdeb.command",
+                "bdist_deb"
+            ],
+            "justMyCode": false,
+            "preLaunchTask": "Clean deb build"
+        },
+        {
             "name": "Python: Subscribe OM",
             "type": "debugpy",
             "request": "launch",
