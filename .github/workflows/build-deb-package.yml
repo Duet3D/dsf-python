@@ -23,9 +23,14 @@ jobs:
     - name: Install system packages
       run: |
         apt-get update
-        apt-get install -y python3.11 python3-pip dpkg-dev debhelper dh-python build-essential python3-all git
+        apt-get install -y python3.11 python3-pip python3-venv dpkg-dev debhelper dh-python build-essential python3-all git
+    - name: Set up virtual environment
+      run: |
+        python3 -m venv /opt/venv
+        . /opt/venv/bin/activate
     - name: Install dependencies
       run: |
+        . /opt/venv/bin/activate
         python3 -m pip install --upgrade pip
         pip3 install setuptools
         pip3 install git+https://github.com/AndyEveritt/stdeb.git
@@ -35,6 +40,7 @@ jobs:
       run: rm -rf deb_dist/ || true
     - name: Build Debian package
       run: |
+        . /opt/venv/bin/activate
         make build_deb || exit 1
     - name: List built packages
       run: find deb_dist -name "*.deb"
