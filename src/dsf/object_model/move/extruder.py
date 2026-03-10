@@ -16,39 +16,41 @@ class Extruder(ModelObject):
     def __init__(self):
         super().__init__()
         # Acceleration of this extruder (in mm/s^2)
-        self._acceleration = 500
+        self._acceleration: float = 500
         # Motor current (in mA)
-        self._current = 0
+        self._current: int = 0
         # Assigned driver
         self._driver = None
         # Extrusion factor to use (0..1 or greater)
-        self._factor = 1
+        self._factor: float = 1
         # Name of the currently loaded filament
-        self._filament = ""
+        self._filament: str = ""
         # Diameter of the corresponding filament (in mm)
-        self._filament_diameter = 1.75
+        self._filament_diameter: float = 1.75
         # Motor jerk (in mm/s)
-        self._jerk = 15
+        self._jerk: float = 15
         # Microstepping configuration
-        self._microstepping = MicroStepping()
+        self._microstepping: MicroStepping = MicroStepping()
         # Nonlinear extrusion parameters (see M592)
-        self._nonlinear = ExtruderNonlinear()
+        self._nonlinear: ExtruderNonlinear = ExtruderNonlinear()
         # Percentage applied to the motor current (0..100)
-        self._percent_current = 100
+        self._percent_current: int = 100
         # Percentage applied to the motor current during standstill (0..100 or null if not supported)
-        self._percent_stst_current = None
+        self._percent_stst_current: Union[int, None] = None
+        # Whether or not the extruder is currently using phase stepping
+        self._phase_step: Union[bool, None] = None
         # Extruder position (in mm)
-        self._position = 0
+        self._position: float = 0
         # Pressure advance
-        self._pressure_advance = 0
+        self._pressure_advance: float = 0
         # Motor jerk during the current print only (in mm/s)
-        self._printing_jerk = None
+        self._printing_jerk: float = 15
         # Raw extruder position as commanded by the slicer without extrusion factor applied (in mm)
-        self._raw_position = 0
+        self._raw_position: float = 0
         # Maximum speed (in mm/s)
-        self._speed = 100
+        self._speed: float = 100
         # Number of microsteps per mm
-        self._steps_per_mm = 420
+        self._steps_per_mm: float = 420
 
     @property
     def acceleration(self) -> float:
@@ -133,6 +135,15 @@ class Extruder(ModelObject):
         self._percent_stst_current = int(value) if value is not None else None
 
     @property
+    def phase_stepping(self) -> Union[bool, None]:
+        """Whether or not the axis is currently using phase stepping"""
+        return self._phase_stepping
+
+    @phase_stepping.setter
+    def phase_stepping(self, value: Union[bool, None]):
+        self._phase_stepping = bool(value) if value is not None else None
+
+    @property
     def position(self) -> float:
         """Extruder position (in mm)"""
         return self._position
@@ -157,7 +168,7 @@ class Extruder(ModelObject):
 
     @printing_jerk.setter
     def printing_jerk(self, value):
-        self._printing_jerk = float(value) if value is not None else None
+        self._printing_jerk = float(value)
 
     @property
     def raw_position(self) -> float:

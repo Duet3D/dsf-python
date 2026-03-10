@@ -16,6 +16,8 @@ class CodeChannel(str, Enum):
     # Code channel for USB requests
     USB = "USB"
 
+    USB2 = "USB2"
+
     # Code channel for serial devices (e.g. PanelDue)
     Aux = "Aux"
 

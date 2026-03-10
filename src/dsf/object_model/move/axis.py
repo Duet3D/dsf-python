@@ -55,51 +55,55 @@ class Axis(ModelObject):
     def __init__(self):
         super().__init__()
         # Acceleration of this axis (in mm/s^2)
-        self._acceleration = 0
+        self._acceleration: float = 0
         # Babystep amount (in mm)
-        self._babystep = 0
+        self._babystep: float = 0
         # Configured backlash of this axis (in mm)
-        self._backlash = 0
+        self._backlash: float = 0
         # Motor current (in mA)
-        self._current = 0
+        self._current: int = 0
         # List of the assigned drivers
-        self._drivers = ModelCollection(DriverId)
+        self._drivers: ModelCollection = ModelCollection(DriverId)
         # Whether the axis is homed
-        self._homed = False
+        self._homed: bool = False
         # Motor jerk (in mm/min)
-        self._jerk = 15
+        self._jerk: float = 15
         # Letter of this axis
-        self._letter = AxisLetter.none
+        self._letter: AxisLetter = AxisLetter.none
         # Current machine position (in mm) or None if unknown/unset
-        self._machine_position = None
+        self._machine_position: Union[float, None] = None
         # Maximum travel of this axis (in mm)
-        self._max = 200
+        self._max: float = 200
         # Whether the axis maximum was probed
-        self._max_probed = False
+        self._max_probed: bool = False
         # Microstepping configuration
-        self._microstepping = MicroStepping()
+        self._microstepping: MicroStepping = MicroStepping()
         # Minimum travel of this axis (in mm)
-        self._min = 0
+        self._min: float = 0
         # Whether the axis minimum was probed
-        self._min_probed = False
+        self._min_probed: bool = False
         # Percentage applied to the motor current (0..100)
-        self._percent_current = 100
+        self._percent_current: int = 100
         # Percentage applied to the motor current during standstill (0..100 or None if not supported)
-        self._percent_stst_current = None
+        self._percent_stst_current: Union[int, None] = None
+        # Whether or not the axis is currently using phase stepping
+        self._phase_stepping: Union[bool, None] = None
         # Motor jerk during the current print only (in mm/s)
-        self._printing_jerk = None
+        self._printing_jerk: float = 15
         # Reduced accelerations used by Z probing and stall homing moves (in mm/s^2)
-        self._reduced_acceleration = 0
+        self._reduced_acceleration: float = 0
         # Maximum speed (in mm/min)
-        self._speed = 100
+        self._speed: float = 100
         # Number of microsteps per mm
-        self._steps_per_mm = 80
+        self._steps_per_mm: float = 80
+        # Current step position of the axis (in steps)
+        self._step_pos: int = 0
         # Current user position (in mm) or None if unknown
-        self._user_position = None
+        self._user_position: Union[float, None] = None
         # Whether the axis is visible
-        self._visible = True
+        self._visible: bool = True
         # Offsets of this axis for each workplace (in mm)
-        self._workplace_offsets = []
+        self._workplace_offsets: List[float] = []
 
     @property
     def acceleration(self) -> float:
@@ -245,13 +249,22 @@ class Axis(ModelObject):
         self._percent_stst_current = int(value) if value is not None else None
 
     @property
-    def printing_jerk(self) -> Union[float, None]:
+    def phase_stepping(self) -> Union[bool, None]:
+        """Whether or not the axis is currently using phase stepping"""
+        return self._phase_stepping
+
+    @phase_stepping.setter
+    def phase_stepping(self, value: Union[bool, None]):
+        self._phase_stepping = bool(value) if value is not None else None
+
+    @property
+    def printing_jerk(self) -> float:
         """Motor jerk during the current print only (in mm/s)"""
         return self._printing_jerk
 
     @printing_jerk.setter
     def printing_jerk(self, value):
-        self._printing_jerk = float(value) if value is not None else None
+        self._printing_jerk = float(value)
 
     @property
     def reduced_acceleration(self) -> float:
@@ -279,6 +292,15 @@ class Axis(ModelObject):
     @steps_per_mm.setter
     def steps_per_mm(self, value):
         self._steps_per_mm = float(value)
+
+    @property
+    def step_pos(self) -> int:
+        """Current step position of the axis (in steps)"""
+        return self._step_pos
+
+    @step_pos.setter
+    def step_pos(self, value: int):
+        self._step_pos = int(value)
 
     @property
     def user_position(self) -> Union[float, None]:

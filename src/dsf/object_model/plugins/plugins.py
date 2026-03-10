@@ -12,6 +12,7 @@ class Plugin(PluginManifest):
         self._dwc_files = []
         self._sd_files = []
         self._pid = -1
+        self._started: bool = False
 
     @property
     def dsf_files(self) -> List[str]:
@@ -36,3 +37,12 @@ class Plugin(PluginManifest):
     @pid.setter
     def pid(self, value):
         self._pid = int(value)
+
+    @property
+    def started(self) -> bool:
+        """Whether the plugin is started"""
+        return self._started
+
+    @started.setter
+    def started(self, value: bool):
+        self._started = bool(value)

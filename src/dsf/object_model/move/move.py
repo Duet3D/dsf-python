@@ -53,6 +53,8 @@ class Move(ModelObject):
         self._speed_factor = 1
         # Maximum acceleration allowed while travelling (in mm/s^2)
         self._travel_acceleration = 0
+        # Indicates if third-order S-curve acceleration is enabled
+        self._s_curve_acceleration: bool = False
         # Virtual total extruder position
         self._virtual_e_pos = 0
         # Index of the currently selected workplace
@@ -168,6 +170,15 @@ class Move(ModelObject):
     @travel_acceleration.setter
     def travel_acceleration(self, value):
         self._travel_acceleration = float(value)
+
+    @property
+    def s_curve_acceleration(self) -> bool:
+        """Indicates if third-order S-curve acceleration is enabled"""
+        return self._s_curve_acceleration
+
+    @s_curve_acceleration.setter
+    def s_curve_acceleration(self, value: bool):
+        self._s_curve_acceleration = bool(value)
 
     @property
     def virtual_e_pos(self) -> float:

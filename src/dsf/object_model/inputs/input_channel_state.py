@@ -18,3 +18,6 @@ class InputChannelState(str, Enum):
 
     # Channel is reading a G/M/T-code
     reading = "reading"
+
+    # Channel is unused
+    unused = "unused"

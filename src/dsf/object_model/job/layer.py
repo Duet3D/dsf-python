@@ -12,6 +12,8 @@ class Layer(ModelObject):
         self._duration = 0
         # Actual amount of filament extruded during this layer (in mm)
         self._filament = []
+        # Amount of total filament extruderd during this layer (in mm)
+        self._filament_usage = 0
         # Fraction of the file printed during this layer (0..1)
         self._fraction_printed = 0
         # Height of the layer (in mm or 0 if unknown)
@@ -32,6 +34,15 @@ class Layer(ModelObject):
     def filament(self) -> List[float]:
         """Actual amount of filament extruded during this layer (in mm)"""
         return self._filament
+
+    @property
+    def filament_usage(self) -> float:
+        """Amount of total filament extruderd during this layer (in mm)"""
+        return self._filament_usage
+
+    @filament_usage.setter
+    def filament_usage(self, value):
+        self._filament_usage = float(value)
 
     @property
     def fraction_printed(self) -> float:
