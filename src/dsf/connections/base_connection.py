@@ -1,4 +1,5 @@
 import json
+import select
 import socket
 import time
 from typing import Optional
@@ -83,6 +84,17 @@ class BaseConnection:
         """Receive a base response from the server"""
         json_string = self.receive_json()
         return responses.decode_response(json.loads(json_string))
+
+    def has_data_available(self) -> bool:
+        """Return whether buffered or socket data is available to be read without blocking."""
+        if self.get_json_object_end_index(self.input) > 1:
+            return True
+
+        if not self.socket:
+            return False
+
+        readable, _, _ = select.select([self.socket], [], [], 0)
+        return bool(readable)
 
     def receive_json(self) -> str:
         """Receive the JSON response from the server"""

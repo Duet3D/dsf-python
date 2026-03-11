@@ -13,3 +13,19 @@ This package contains a `setup.py` so it can be installed with `python3 setup.py
 
 ## Usage
 See included `examples/` folder for various use cases.
+
+For patch subscriptions, `BaseConnection.has_data_available()` can be used to poll a
+subscription socket without blocking on `receive_json()` or `get_object_model_patch()`.
+This is useful when object model updates arrive less frequently than another data source.
+
+```python
+from dsf.connections import SubscribeConnection, SubscriptionMode
+
+subscription = SubscribeConnection(SubscriptionMode.PATCH)
+subscription.connect()
+object_model = subscription.get_object_model()
+
+while True:
+	if subscription.has_data_available():
+		object_model.update_from_json(subscription.get_object_model_patch())
+```

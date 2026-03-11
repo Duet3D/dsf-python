@@ -17,6 +17,15 @@ from src.dsf.connections import SubscribeConnection, SubscriptionMode
 class TestSubscribeObjectModel(unittest.TestCase):
     """Test suite for the object model subscription example."""
 
+    @staticmethod
+    def _wait_for_data_available(subscribe_connection: SubscribeConnection, timeout: float = 1.0) -> bool:
+        deadline = time.time() + timeout
+        while time.time() < deadline:
+            if subscribe_connection.has_data_available():
+                return True
+            time.sleep(0.01)
+        return False
+
     def setUp(self):
         """Set up test environment before each test."""
         self.tmp_dir = tempfile.TemporaryDirectory()
@@ -129,6 +138,32 @@ class TestSubscribeObjectModel(unittest.TestCase):
         self.server_thread.join(timeout=5)
 
         # Verify the test completed successfully
+        self.assertTrue(self.dcs_passed.is_set(), "The mock DCS did not complete successfully")
+
+    def test_has_data_available_during_subscription_flow(self):
+        """Test that has_data_available reflects queued model and patch updates."""
+        subscribe_connection = SubscribeConnection(SubscriptionMode.PATCH)
+        subscribe_connection.connect(self.mock_dcs_socket_file)
+
+        self.assertTrue(
+            self._wait_for_data_available(subscribe_connection),
+            "Expected the initial object model to be readable",
+        )
+
+        subscribe_connection.get_object_model()
+
+        self.assertTrue(
+            self._wait_for_data_available(subscribe_connection),
+            "Expected the next object model patch to be readable after acknowledge",
+        )
+
+        subscribe_connection.get_object_model_patch()
+
+        self.assertFalse(subscribe_connection.has_data_available())
+
+        subscribe_connection.close()
+
+        self.server_thread.join(timeout=5)
         self.assertTrue(self.dcs_passed.is_set(), "The mock DCS did not complete successfully")
 
 
