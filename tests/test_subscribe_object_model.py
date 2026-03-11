@@ -166,6 +166,95 @@ class TestSubscribeObjectModel(unittest.TestCase):
         self.server_thread.join(timeout=5)
         self.assertTrue(self.dcs_passed.is_set(), "The mock DCS did not complete successfully")
 
+    def test_subscribe_to_keys_runs_callback_for_matching_changes(self):
+        """Test that subscribe_to_keys invokes callbacks synchronously for matching patch keys."""
+        subscribe_connection = SubscribeConnection(SubscriptionMode.PATCH)
+        subscribe_connection.connect(self.mock_dcs_socket_file)
+
+        try:
+            subscribe_connection.get_object_model()
+
+            callback_changes: list[tuple[str, object, tuple[int, ...] | None]] = []
+
+            unsubscribe = subscribe_connection.subscribe_to_keys(
+                ["boards", "heat.heaters.0.current", "state.upTime"],
+                lambda **kwargs: callback_changes.append(
+                    (kwargs["key"], kwargs["data"], kwargs["indices"])
+                ),
+            )
+
+            self.assertTrue(
+                self._wait_for_data_available(subscribe_connection),
+                "Expected the next object model patch to be readable",
+            )
+            subscribe_connection.get_object_model()
+
+            self.assertEqual(len(callback_changes), 3)
+            self.assertIn(("heat.heaters.0.current", 16.22, None), callback_changes)
+            self.assertIn(("state.upTime", 3658, None), callback_changes)
+            self.assertIn(("boards", unittest.mock.ANY, None), callback_changes)
+            boards_data = next(data for key, data, indices in callback_changes if key == "boards")
+            self.assertEqual(len(boards_data), 7)
+
+            unsubscribe()
+        finally:
+            subscribe_connection.close()
+
+        self.server_thread.join(timeout=5)
+        self.assertTrue(self.dcs_passed.is_set(), "The mock DCS did not complete successfully")
+
+    def test_subscribe_to_keys_passes_wildcard_indexes(self):
+        """Test that ^ wildcard key paths pass the matched list indexes to the callback."""
+        subscribe_connection = SubscribeConnection(SubscriptionMode.PATCH)
+        subscribe_connection.connect(self.mock_dcs_socket_file)
+
+        try:
+            subscribe_connection.get_object_model()
+
+            callback_changes: list[tuple[str, object, tuple[int, ...] | None]] = []
+
+            unsubscribe = subscribe_connection.subscribe_to_keys(
+                ["heat.heaters.^.current", "sensors.analog.^.lastReading"],
+                lambda **kwargs: callback_changes.append(
+                    (kwargs["key"], kwargs["data"], kwargs["indices"])
+                ),
+            )
+
+            self.assertTrue(
+                self._wait_for_data_available(subscribe_connection),
+                "Expected the next object model patch to be readable",
+            )
+            subscribe_connection.get_object_model()
+
+            self.assertEqual(len(callback_changes), 5)
+            self.assertIn(
+                ("heat.heaters.^.current", 16.22, (0,)),
+                callback_changes,
+            )
+            self.assertIn(
+                ("sensors.analog.^.lastReading", 16.22, (0,)),
+                callback_changes,
+            )
+            self.assertIn(
+                ("heat.heaters.^.current", 18.39, (2,)),
+                callback_changes,
+            )
+            self.assertIn(
+                ("sensors.analog.^.lastReading", 18.39, (2,)),
+                callback_changes,
+            )
+            self.assertIn(
+                ("sensors.analog.^.lastReading", 21.23, (10,)),
+                callback_changes,
+            )
+
+            unsubscribe()
+        finally:
+            subscribe_connection.close()
+
+        self.server_thread.join(timeout=5)
+        self.assertTrue(self.dcs_passed.is_set(), "The mock DCS did not complete successfully")
+
 
 if __name__ == "__main__":
     unittest.main()
