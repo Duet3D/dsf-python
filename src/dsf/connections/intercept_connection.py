@@ -1,4 +1,4 @@
-from typing import List, Optional
+from typing import Optional
 
 from .base_command_connection import BaseCommandConnection
 from .init_messages import client_init_messages
@@ -31,8 +31,8 @@ class InterceptConnection(BaseCommandConnection):
     def __init__(
         self,
         interception_mode: client_init_messages.InterceptionMode,
-        channels: List[CodeChannel] = None,
-        filters: List[str] = None,
+        channels: list[CodeChannel] | None = None,
+        filters: list[str] | None = None,
         auto_flush: bool = True,
         auto_evaluate_expression: bool = True,
         priority_codes: bool = False,
@@ -42,12 +42,12 @@ class InterceptConnection(BaseCommandConnection):
         super().__init__(debug, timeout)
         self.interception_mode = interception_mode
         self.channels = channels if channels is not None else CodeChannel.list()
-        self.filters = filters
+        self.filters = filters if filters is not None else []
         self.auto_flush = auto_flush
         self.auto_evaluate_expression = auto_evaluate_expression
         self.priority_codes = priority_codes
 
-    def connect(self, socket_file: str = SOCKET_FILE):  # noqa
+    def connect(self, socket_file: str = SOCKET_FILE) -> None:
         """Establishes a connection to the given UNIX socket file"""
         iim = client_init_messages.intercept_init_message(
             self.interception_mode,
@@ -57,21 +57,21 @@ class InterceptConnection(BaseCommandConnection):
             self.auto_flush,
             self.auto_evaluate_expression
         )
-        return super().connect(iim, socket_file)
+        super()._connect(iim, socket_file)
 
     def receive_code(self) -> commands.code.Code:
         """Wait for a code to be intercepted and read it"""
         return self.receive(commands.code.Code)
 
-    def cancel_code(self):
+    def cancel_code(self) -> None:
         """Instruct the control server to cancel the last received code (in intercepting mode)"""
         self.send(commands.code_interception.cancel())
 
-    def ignore_code(self):
+    def ignore_code(self) -> None:
         """Instruct the control server to ignore the last received code (in intercepting mode)"""
         self.send(commands.code_interception.ignore())
 
-    def resolve_code(self, rtype: MessageType = MessageType.Success, content: Optional[str] = None):
+    def resolve_code(self, rtype: MessageType = MessageType.Success, content: Optional[str] = None) -> None:
         """
         Instruct the control server to resolve the last received code with the given
         message details (in intercepting mode)

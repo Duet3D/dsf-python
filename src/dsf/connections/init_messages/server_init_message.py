@@ -29,16 +29,23 @@ class ServerInitMessage:
     """
 
     @classmethod
-    def from_json(cls, data):
+    def from_json(cls, data: dict[str, object]) -> "ServerInitMessage":
         """Deserialize a dictionary coming from JSON into an instance of this class"""
-        return cls(**preserve_builtin(data))
+        converted = preserve_builtin(data)
+        version = converted.get("version")
+        id_ = converted.get("id_")
+        if not isinstance(version, (int, str)):
+            raise TypeError(f"version must be int or str, got {type(version)}")
+        if not isinstance(id_, (int, str)):
+            raise TypeError(f"id must be int or str, got {type(id_)}")
+        return cls(version=version, id_=id_)
 
     PROTOCOL_VERSION = PROTOCOL_VERSION
 
-    def __init__(self, version: int, id_: int):
-        self.version = version
+    def __init__(self, version: int | str, id_: int | str):
+        self.version = int(version)
         self.id = id_
 
-    def is_compatible(self):
+    def is_compatible(self) -> bool:
         """Check if the message received from the server indicates compatibility with this client"""
         return self.version >= ServerInitMessage.PROTOCOL_VERSION

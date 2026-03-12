@@ -5,18 +5,19 @@ from ..model_object import ModelObject
 
 class ProbeGrid(ModelObject):
     """Information about the configured probe grid (see M557)"""
-    def __init__(self):
+
+    def __init__(self) -> None:
         super().__init__()
         # Axis letters of this heightmap
-        self._axes = ['X', 'Y']
+        self._axes: List[str] = ['X', 'Y']
         # End coordinates of the heightmap
-        self._maxs = [-1, -1]
+        self._maxs: List[float] = [-1.0, -1.0]
         # Start coordinates of the heightmap
-        self._mins = [0, 0]
+        self._mins: List[float] = [0.0, 0.0]
         # Probing radius for delta kinematics
-        self._radius = 0
+        self._radius: float = 0
         # Spacings between the coordinates
-        self._spacings = [0, 0]
+        self._spacings: List[float] = [0.0, 0.0]
 
     @property
     def axes(self) -> List[str]:
@@ -39,7 +40,7 @@ class ProbeGrid(ModelObject):
         return self._radius
 
     @radius.setter
-    def radius(self, value):
+    def radius(self, value: float | int | str):
         self._radius = float(value)
 
     @property

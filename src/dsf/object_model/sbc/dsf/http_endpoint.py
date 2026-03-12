@@ -5,20 +5,20 @@ from ...model_object import ModelObject
 class HttpEndpoint(ModelObject):
     """Class representing an extra HTTP endpoint"""
 
-    def __init__(self):
+    def __init__(self) -> None:
         super().__init__()
         # HTTP type of this endpoint
-        self._endpoint_type = HttpEndpointType.GET
+        self._endpoint_type: HttpEndpointType = HttpEndpointType.GET
         # Whether this is an upload request
         # If set to true, the whole body payload is written to a temporary file
         # and the file path is passed via the Commands.ReceivedHttpRequest.Body property
-        self._is_upload_request = False
+        self._is_upload_request: bool = False
         # Namespace of the endpoint
-        self._namespace = ""
+        self._namespace: str = ""
         # Path to the endpoint
-        self._path = ""
+        self._path: str = ""
         # Path to the UNIX socket
-        self._unix_socket = ""
+        self._unix_socket: str = ""
 
     @property
     def endpoint_type(self) -> HttpEndpointType:
@@ -26,7 +26,7 @@ class HttpEndpoint(ModelObject):
         return self._endpoint_type
 
     @endpoint_type.setter
-    def endpoint_type(self, value):
+    def endpoint_type(self, value: HttpEndpointType | str):
         if isinstance(value, HttpEndpointType):
             self._endpoint_type = value
         elif isinstance(value, str):
@@ -42,7 +42,7 @@ class HttpEndpoint(ModelObject):
         return self._is_upload_request
 
     @is_upload_request.setter
-    def is_upload_request(self, value):
+    def is_upload_request(self, value: bool | int | str):
         self._is_upload_request = bool(value)
 
     @property
@@ -51,7 +51,7 @@ class HttpEndpoint(ModelObject):
         return self._namespace
 
     @namespace.setter
-    def namespace(self, value):
+    def namespace(self, value: str):
         self._namespace = str(value)
 
     @property
@@ -60,7 +60,7 @@ class HttpEndpoint(ModelObject):
         return self._path
 
     @path.setter
-    def path(self, value):
+    def path(self, value: str):
         self._path = str(value)
 
     @property
@@ -69,5 +69,5 @@ class HttpEndpoint(ModelObject):
         return self._unix_socket
 
     @unix_socket.setter
-    def unix_socket(self, value):
+    def unix_socket(self, value: str):
         self._unix_socket = str(value)

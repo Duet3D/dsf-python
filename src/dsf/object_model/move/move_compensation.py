@@ -26,39 +26,39 @@ class MoveCompensation(ModelObject):
     # Deviations of the mesh grid or null if not applicable
     mesh_deviation = wrap_model_property('mesh_deviation', MoveDeviations)
 
-    def __init__(self):
+    def __init__(self) -> None:
         super().__init__()
         # Effective height before the bed compensation is turned off (in mm) or null if not configured
-        self._fade_height = None
+        self._fade_height: float | None = None
         # Full path to the currently used height map file or null if none is in use
-        self._file = ""
+        self._file: str | None = ""
         # Grid settings of the loaded heightmap or null if no heightmap is loaded
-        self._live_grid = None
+        self._live_grid: ProbeGrid | None = None
         # Deviations of the mesh grid or null if not applicable
-        self._mesh_deviation = None
+        self._mesh_deviation: MoveDeviations | None = None
         # Probe grid settings as defined by M557
-        self._probe_grid = ProbeGrid()
+        self._probe_grid: ProbeGrid = ProbeGrid()
         # Information about the configured orthogonal axis parameters
-        self._skew = Skew()
+        self._skew: Skew = Skew()
         # Type of the compensation in use
-        self._type = MoveCompensationType.none
+        self._type: MoveCompensationType = MoveCompensationType.none
 
     @property
-    def fade_height(self) -> Union[float, None]:
+    def fade_height(self) -> float | None:
         """Effective height before the bed compensation is turned off (in mm) or null if not configured"""
         return self._fade_height
 
     @fade_height.setter
-    def fade_height(self, value):
+    def fade_height(self, value: float | int | str | None):
         self._fade_height = float(value) if value is not None else None
 
     @property
-    def file(self) -> Union[str, None]:
+    def file(self) -> str | None:
         """Full path to the currently used height map file or null if none is in use"""
         return self._file
 
     @file.setter
-    def file(self, value):
+    def file(self, value: str | None):
         self._file = str(value) if value is not None else None
 
     @property
@@ -77,7 +77,7 @@ class MoveCompensation(ModelObject):
         return self._type
 
     @type.setter
-    def type(self, value):
+    def type(self, value: MoveCompensationType | str | None):
         if value is None or value == "":
             self._type = MoveCompensationType.none
         elif isinstance(value, MoveCompensationType):

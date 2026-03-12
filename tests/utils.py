@@ -1,8 +1,9 @@
 import json
 
-from typing import Dict, Union
+from typing import Any
 
-def check_json(expected_dict: Dict[str, Union[Dict, str, int, float]], json_str: str) -> None:
+
+def check_json(expected_dict: dict[str, Any], json_str: str) -> None:
     try:
         json_obj = json.loads(json_str)
     except json.JSONDecodeError:

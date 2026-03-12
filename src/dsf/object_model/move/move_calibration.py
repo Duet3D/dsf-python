@@ -4,14 +4,15 @@ from ..model_object import ModelObject
 
 class MoveCalibration(ModelObject):
     """Information about configured calibration options"""
-    def __init__(self):
+
+    def __init__(self) -> None:
         super().__init__()
         # Final calibration results (for Delta calibration)
-        self._final = MoveDeviations()
+        self._final: MoveDeviations = MoveDeviations()
         # Initial calibration results (for Delta calibration)
-        self._initial = MoveDeviations()
+        self._initial: MoveDeviations = MoveDeviations()
         # Number of factors used (for Delta calibration)
-        self._num_factors = 0
+        self._num_factors: int = 0
 
     @property
     def final(self) -> MoveDeviations:
@@ -29,5 +30,5 @@ class MoveCalibration(ModelObject):
         return self._num_factors
 
     @num_factors.setter
-    def num_factors(self, value):
+    def num_factors(self, value: int | str):
         self._num_factors = int(value)

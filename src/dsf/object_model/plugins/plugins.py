@@ -6,12 +6,12 @@ from .plugin_manifest import PluginManifest
 class Plugin(PluginManifest):
     """Class representing a loaded plugin"""
 
-    def __init__(self):
+    def __init__(self) -> None:
         super(Plugin, self).__init__()
-        self._dsf_files = []
-        self._dwc_files = []
-        self._sd_files = []
-        self._pid = -1
+        self._dsf_files: List[str] = []
+        self._dwc_files: List[str] = []
+        self._sd_files: List[str] = []
+        self._pid: int = -1
         self._started: bool = False
 
     @property
@@ -35,7 +35,7 @@ class Plugin(PluginManifest):
         return self._pid
 
     @pid.setter
-    def pid(self, value):
+    def pid(self, value: int | str):
         self._pid = int(value)
 
     @property

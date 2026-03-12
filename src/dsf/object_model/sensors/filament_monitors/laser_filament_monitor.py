@@ -9,13 +9,13 @@ from ...utils import wrap_model_property
 class LaserFilamentMonitorCalibrated(ModelObject):
     """Calibrated properties of a laser filament monitor"""
 
-    def __init__(self):
+    def __init__(self) -> None:
         super(LaserFilamentMonitorCalibrated, self).__init__()
-        self._calibration_factor = 0
-        self._percent_max = 0
-        self._percent_min = 0
-        self._sensivity = 0
-        self._total_distance = 0
+        self._calibration_factor: float = 0
+        self._percent_max: float = 0
+        self._percent_min: float = 0
+        self._sensivity: float = 0
+        self._total_distance: float = 0
 
     @property
     def calibration_factor(self) -> float:
@@ -23,7 +23,7 @@ class LaserFilamentMonitorCalibrated(ModelObject):
         return self._calibration_factor
 
     @calibration_factor.setter
-    def calibration_factor(self, value):
+    def calibration_factor(self, value: float | int | str):
         self._calibration_factor = float(value)
 
     @property
@@ -32,7 +32,7 @@ class LaserFilamentMonitorCalibrated(ModelObject):
         return self._percent_max
 
     @percent_max.setter
-    def percent_max(self, value):
+    def percent_max(self, value: float | int | str):
         self._percent_max = float(value)
 
     @property
@@ -41,7 +41,7 @@ class LaserFilamentMonitorCalibrated(ModelObject):
         return self._percent_min
 
     @percent_min.setter
-    def percent_min(self, value):
+    def percent_min(self, value: float | int | str):
         self._percent_min = float(value)
 
     @property
@@ -50,7 +50,7 @@ class LaserFilamentMonitorCalibrated(ModelObject):
         return self._sensivity
 
     @sensivity.setter
-    def sensivity(self, value):
+    def sensivity(self, value: float | int | str):
         self._sensivity = float(value)
 
     @property
@@ -59,19 +59,19 @@ class LaserFilamentMonitorCalibrated(ModelObject):
         return self._total_distance
 
     @total_distance.setter
-    def total_distance(self, value):
+    def total_distance(self, value: float | int | str):
         self._total_distance = float(value)
 
 
 class LaserFilamentMonitorConfigured(ModelObject):
     """Configured  properties of a laser filament monitor"""
 
-    def __init__(self):
+    def __init__(self) -> None:
         super(LaserFilamentMonitorConfigured, self).__init__()
-        self._all_moves = False
-        self._percent_max = 0
-        self._percent_min = 0
-        self._sample_distance = 0
+        self._all_moves: bool = False
+        self._percent_max: float = 0
+        self._percent_min: float = 0
+        self._sample_distance: float = 0
 
     @property
     def all_moves(self) -> bool:
@@ -79,7 +79,7 @@ class LaserFilamentMonitorConfigured(ModelObject):
         return self._all_moves
 
     @all_moves.setter
-    def all_moves(self, value):
+    def all_moves(self, value: bool | int | str):
         self._all_moves = bool(value)
 
     @property
@@ -88,7 +88,7 @@ class LaserFilamentMonitorConfigured(ModelObject):
         return self._percent_max
 
     @percent_max.setter
-    def percent_max(self, value):
+    def percent_max(self, value: float | int | str):
         self._percent_max = float(value)
 
     @property
@@ -97,7 +97,7 @@ class LaserFilamentMonitorConfigured(ModelObject):
         return self._percent_min
 
     @percent_min.setter
-    def percent_min(self, value):
+    def percent_min(self, value: float | int | str):
         self._percent_min = float(value)
 
     @property
@@ -106,7 +106,7 @@ class LaserFilamentMonitorConfigured(ModelObject):
         return self._sample_distance
 
     @sample_distance.setter
-    def sample_distance(self, value):
+    def sample_distance(self, value: float | int | str):
         self._sample_distance = float(value)
 
 
@@ -116,12 +116,12 @@ class LaserFilamentMonitor(Duet3DFilamentMonitor):
     # Calibrated properties of this filament monitor
     calibrated = wrap_model_property('calibrated', LaserFilamentMonitorCalibrated)
 
-    def __init__(self):
+    def __init__(self) -> None:
         super(LaserFilamentMonitor, self).__init__()
-        self._calibrated = None
-        self._configured = LaserFilamentMonitorConfigured()
-        self._filament_present = False
-        self._type = FilamentMonitorType.Laser
+        self._calibrated: LaserFilamentMonitorCalibrated | None = None
+        self._configured: LaserFilamentMonitorConfigured = LaserFilamentMonitorConfigured()
+        self._filament_present: bool | None = False
+        self._type: FilamentMonitorType = FilamentMonitorType.Laser
 
     @property
     def configured(self) -> LaserFilamentMonitorConfigured:
@@ -129,10 +129,10 @@ class LaserFilamentMonitor(Duet3DFilamentMonitor):
         return self._configured
 
     @property
-    def filament_present(self) -> Union[bool, None]:
+    def filament_present(self) -> bool | None:
         """Indicates if a filament is present"""
         return self._filament_present
 
     @filament_present.setter
-    def filament_present(self, value):
+    def filament_present(self, value: bool | int | str | None):
         self._filament_present = bool(value) if value is not None else None

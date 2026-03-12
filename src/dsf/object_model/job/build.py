@@ -1,4 +1,4 @@
-from typing import List
+from typing import Sequence
 
 from .build_object import BuildObject
 from ..model_collection import ModelCollection
@@ -7,16 +7,17 @@ from ..model_object import ModelObject
 
 class Build(ModelObject):
     """Information about the current build"""
-    def __init__(self):
+
+    def __init__(self) -> None:
         super().__init__()
         # Index of the current object being printed or -1 if unknown
-        self._current_object = -1
+        self._current_object: int = -1
         # Whether M486 names are being used
-        self._m486_names = False
+        self._m486_names: bool = False
         # Whether M486 numbers are being used
-        self._m486_numbers = False
+        self._m486_numbers: bool = False
         # List of detected build objects
-        self._objects = ModelCollection(BuildObject)
+        self._objects: ModelCollection[BuildObject] = ModelCollection(BuildObject)
 
     @property
     def current_object(self) -> int:
@@ -28,7 +29,7 @@ class Build(ModelObject):
         return self._current_object
 
     @current_object.setter
-    def current_object(self, value):
+    def current_object(self, value: int | str):
         self._current_object = int(value)
 
     @property
@@ -37,7 +38,7 @@ class Build(ModelObject):
         return self._m486_names
 
     @m486_names.setter
-    def m486_names(self, value):
+    def m486_names(self, value: bool | int | str):
         self._m486_names = bool(value)
 
     @property
@@ -46,10 +47,10 @@ class Build(ModelObject):
         return self._m486_numbers
 
     @m486_numbers.setter
-    def m486_numbers(self, value):
+    def m486_numbers(self, value: bool | int | str):
         self._m486_numbers = bool(value)
 
     @property
-    def objects(self) -> List[BuildObject]:
+    def objects(self) -> Sequence[BuildObject | None]:
         """List of detected build objects"""
         return self._objects

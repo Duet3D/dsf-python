@@ -10,12 +10,12 @@ class DirectDisplay(ModelObject):
 
     encoder = wrap_model_property('encoder', DirectDisplayEncoder)
 
-    def __init__(self):
+    def __init__(self) -> None:
         super(DirectDisplay, self).__init__()
         # Encoder of this screen or null if none
-        self._encoder = None
+        self._encoder: DirectDisplayEncoder | None = None
         # Screen information
-        self._screen = DirectDisplayScreen()
+        self._screen: DirectDisplayScreen = DirectDisplayScreen()
 
     @property
     def screen(self) -> DirectDisplayScreen:

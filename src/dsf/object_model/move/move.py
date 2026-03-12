@@ -1,4 +1,4 @@
-from typing import List
+from typing import Optional, Sequence
 
 from .axis import Axis
 from .current_move import CurrentMove
@@ -17,51 +17,52 @@ from ..model_object import ModelObject
 
 class Move(ModelObject):
     """Information about the move subsystem"""
-    def __init__(self):
+
+    def __init__(self) -> None:
         super().__init__()
         # List of the configured axes
-        self._axes = ModelCollection(Axis)
+        self._axes: ModelCollection[Axis] = ModelCollection(Axis)
         # Backlash distance multiplier
-        self._backlash_factor = 10
+        self._backlash_factor: int = 10
         # Information about the automatic calibration
-        self._calibration = MoveCalibration()
+        self._calibration: MoveCalibration = MoveCalibration()
         # Information about the currently configured compensation options
-        self._compensation = MoveCompensation()
+        self._compensation: MoveCompensation = MoveCompensation()
         # Information about the current move
-        self._current_move = CurrentMove()
+        self._current_move: CurrentMove = CurrentMove()
         # List of configured extruders
-        self._extruders = ModelCollection(Extruder)
+        self._extruders: ModelCollection[Extruder] = ModelCollection(Extruder)
         # Idle current reduction parameters
-        self._idle = MotorsIdleControl()
+        self._idle: MotorsIdleControl = MotorsIdleControl()
         # List of configured keep-out zones
-        self._keepout = ModelCollection(KeepoutZone)
+        self._keepout: ModelCollection[KeepoutZone] = ModelCollection(KeepoutZone)
         # Configured kinematics options
-        self._kinematics = Kinematics()
+        self._kinematics: Kinematics = Kinematics()
         # Limit axis positions by their minima and maxima
-        self._limit_axes = True
+        self._limit_axes: bool = True
         # Indicates if standard moves are forbidden if the corresponding axis is not homed
-        self._no_moves_before_homing = True
+        self._no_moves_before_homing: bool = True
         # Maximum acceleration allowed while printing (in mm/s^2)
-        self._printing_acceleration = 10000
+        self._printing_acceleration: float = 10000
         # List of move queue items (DDA rings)
-        self._queue = ModelCollection(MoveQueueItem)
+        self._queue: ModelCollection[MoveQueueItem] = ModelCollection(MoveQueueItem)
         # Parameters for centre rotation
-        self._rotation = MoveRotation()
+        self._rotation: MoveRotation = MoveRotation()
         # Parameters for input shaping
-        self._shaping = InputShaping()
+        self._shaping: InputShaping = InputShaping()
         # Speed factor applied to every regular move (0.01..1 or greater)
-        self._speed_factor = 1
+        self._speed_factor: float = 1
         # Maximum acceleration allowed while travelling (in mm/s^2)
-        self._travel_acceleration = 0
+        self._travel_acceleration: float = 0
         # Indicates if third-order S-curve acceleration is enabled
         self._s_curve_acceleration: bool = False
         # Virtual total extruder position
-        self._virtual_e_pos = 0
+        self._virtual_e_pos: float = 0
         # Index of the currently selected workplace
-        self._workplace_number = 0
+        self._workplace_number: int = 0
 
     @property
-    def axes(self) -> List[Axis]:
+    def axes(self) -> Sequence[Optional[Axis]]:
         """List of the configured axes
         See Axis()"""
         return self._axes
@@ -72,7 +73,7 @@ class Move(ModelObject):
         return self._backlash_factor
 
     @backlash_factor.setter
-    def backlash_factor(self, value):
+    def backlash_factor(self, value: int | str):
         self._backlash_factor = int(value)
 
     @property
@@ -91,7 +92,7 @@ class Move(ModelObject):
         return self._current_move
 
     @property
-    def extruders(self) -> List[Extruder]:
+    def extruders(self) -> Sequence[Optional[Extruder]]:
         """List of configured extruders
         See Extruder()"""
         return self._extruders
@@ -102,7 +103,7 @@ class Move(ModelObject):
         return self._idle
 
     @property
-    def keepout(self) -> List[KeepoutZone]:
+    def keepout(self) -> Sequence[Optional[KeepoutZone]]:
         """List of configured keep-out zones"""
         return self._keepout
 
@@ -117,7 +118,7 @@ class Move(ModelObject):
         return self._limit_axes
 
     @limit_axes.setter
-    def limit_axes(self, value):
+    def limit_axes(self, value: bool | int | str):
         self._limit_axes = bool(value)
 
     @property
@@ -126,7 +127,7 @@ class Move(ModelObject):
         return self._no_moves_before_homing
 
     @no_moves_before_homing.setter
-    def no_moves_before_homing(self, value):
+    def no_moves_before_homing(self, value: bool | int | str):
         self._no_moves_before_homing = bool(value)
 
     @property
@@ -135,11 +136,11 @@ class Move(ModelObject):
         return self._printing_acceleration
 
     @printing_acceleration.setter
-    def printing_acceleration(self, value):
+    def printing_acceleration(self, value: float | int | str):
         self._printing_acceleration = float(value)
 
     @property
-    def queue(self) -> List[MoveQueueItem]:
+    def queue(self) -> Sequence[Optional[MoveQueueItem]]:
         """List of move queue items (DDA rings)"""
         return self._queue
 
@@ -159,7 +160,7 @@ class Move(ModelObject):
         return self._speed_factor
 
     @speed_factor.setter
-    def speed_factor(self, value):
+    def speed_factor(self, value: float | int | str):
         self._speed_factor = float(value)
 
     @property
@@ -168,7 +169,7 @@ class Move(ModelObject):
         return self._travel_acceleration
 
     @travel_acceleration.setter
-    def travel_acceleration(self, value):
+    def travel_acceleration(self, value: float | int | str):
         self._travel_acceleration = float(value)
 
     @property
@@ -186,7 +187,7 @@ class Move(ModelObject):
         return self._virtual_e_pos
 
     @virtual_e_pos.setter
-    def virtual_e_pos(self, value):
+    def virtual_e_pos(self, value: float | int | str):
         self._virtual_e_pos = float(value)
 
     @property
@@ -195,5 +196,5 @@ class Move(ModelObject):
         return self._workplace_number
 
     @workplace_number.setter
-    def workplace_number(self, value):
+    def workplace_number(self, value: int | str):
         self._workplace_number = int(value)

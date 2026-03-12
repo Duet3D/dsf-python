@@ -5,28 +5,28 @@ from .heater_model_pid import HeaterModelPID
 class HeaterModel(ModelObject):
     """Information about the way the heater heats up"""
 
-    def __init__(self):
+    def __init__(self) -> None:
         super().__init__()
         # Cooling rate exponent
-        self._cooling_exp = 1.35
+        self._cooling_exp: float = 1.35
         # Cooling rate (in K/s)
-        self._cooling_rate = 0.56
+        self._cooling_rate: float = 0.56
         # Dead time (in s)
-        self._dead_time = 5.5
+        self._dead_time: float = 5.5
         # Indicates if this heater is enabled
-        self._enabled = False
+        self._enabled: bool = False
         # Cooling rate with the fan on (in K/s)
-        self._fan_cooling_rate = 0.56
+        self._fan_cooling_rate: float = 0.56
         # Heating rate (in K/s)
-        self._heating_rate = 2.43
+        self._heating_rate: float = 2.43
         # Indicates if the heater PWM signal is inverted
-        self._inverted = False
+        self._inverted: bool = False
         # Maximum PWM value
-        self._max_pwm = 1
+        self._max_pwm: float = 1
         # Details about the PID controller
-        self._pid = HeaterModelPID()
+        self._pid: HeaterModelPID = HeaterModelPID()
         # Standard voltage or None if unknown
-        self._standard_voltage = None
+        self._standard_voltage: float | None = None
 
     @property
     def cooling_exp(self) -> float:
@@ -106,10 +106,10 @@ class HeaterModel(ModelObject):
         return self._pid
 
     @property
-    def standard_voltage(self) -> float:
+    def standard_voltage(self) -> float | None:
         """Standard voltage or null if unknown"""
         return self._standard_voltage
 
     @standard_voltage.setter
-    def standard_voltage(self, value):
+    def standard_voltage(self, value: float | int | str | None):
         self._standard_voltage = float(value) if value is not None else None

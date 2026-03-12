@@ -7,23 +7,22 @@ Make sure when running this script to have access to the DSF UNIX socket owned b
 """
 
 import time
-import os
 import json
 
 from dsf.connections import CommandConnection
-from dsf.http import HttpEndpointConnection, HttpResponseType
+from dsf.http import HttpEndpointConnection, HttpEndpointUnixSocket, HttpResponseType
 from dsf.object_model import HttpEndpointType
 
 
-async def respond_something(http_endpoint_connection: HttpEndpointConnection):
+async def respond_something(http_endpoint_connection: HttpEndpointConnection) -> None:
     r = await http_endpoint_connection.read_request()
     if (len(r.body) > 0):
-        data = json.loads(r.body)
+        json.loads(r.body)
     await http_endpoint_connection.send_response(200, "so happy you asked for it!", HttpResponseType.PlainText)
     http_endpoint_connection.close()
 
 
-def custom_http_endpoint():
+def custom_http_endpoint() -> tuple[CommandConnection, HttpEndpointUnixSocket]:
     cmd_conn = CommandConnection(debug=True)
     cmd_conn.connect()
 
@@ -39,6 +38,8 @@ def custom_http_endpoint():
 
 
 if __name__ == "__main__":
+    cmd_conn: CommandConnection | None = None
+    endpoint: HttpEndpointUnixSocket | None = None
     try:
         cmd_conn, endpoint = custom_http_endpoint()
         # This just simulates doing other things as the new endpoint handler runs async
@@ -46,4 +47,5 @@ if __name__ == "__main__":
     finally:
         if endpoint is not None:
             endpoint.close()
-        cmd_conn.close()
+        if cmd_conn is not None:
+            cmd_conn.close()

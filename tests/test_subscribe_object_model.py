@@ -1,13 +1,12 @@
 import unittest
-from unittest.mock import patch
+from unittest.mock import ANY
 import threading
 import os
-import pathlib
 import socket
 import tempfile
 import time
-import importlib.util
 import json
+from typing import Any, cast
 
 from tests.utils import check_json
 from src.dsf import PROTOCOL_VERSION
@@ -69,7 +68,7 @@ class TestSubscribeObjectModel(unittest.TestCase):
 
                     # Verify subscription setup
                     setup_msg = conn.recv(1024)
-                    expected_setup = {
+                    expected_setup: dict[str, Any] = {
                         "mode": "Subscribe",
                         "version": PROTOCOL_VERSION,
                         "subscriptionMode": "Patch",
@@ -114,15 +113,30 @@ class TestSubscribeObjectModel(unittest.TestCase):
 
         # Get the complete model once
         om = subscribe_connection.get_object_model()
-        self.assertEqual(om.boards[0].name, "Duet 3 MB6HC")
+        board = om.boards[0]
+        self.assertIsNotNone(board)
+        assert board is not None
+        self.assertEqual(board.name, "Duet 3 MB6HC")
         self.assertEqual(len(om.boards), 8)
 
         # Get boards patch
         # This should remove 1 of the boards
         update = subscribe_connection.get_object_model_patch()
         om.update_from_json(update)
-        self.assertEqual(len(om.boards), 7)
-        self.assertEqual(om.boards[3].drivers[0].closed_loop.position_error.max, 0.085)
+        boards = cast(list[Any], om.boards)
+        self.assertEqual(len(boards), 7)
+        self.assertIsNotNone(boards[3])
+        board = boards[3]
+        assert board is not None
+        self.assertIsNotNone(board.drivers)
+        drivers = cast(list[Any], board.drivers)
+        self.assertIsNotNone(drivers[0])
+        driver = drivers[0]
+        assert driver is not None
+        closed_loop = driver.closed_loop
+        self.assertIsNotNone(closed_loop)
+        assert closed_loop is not None
+        self.assertEqual(closed_loop.position_error.max, 0.085)
 
         # # Get heat patch
         # update = subscribe_connection.get_object_model_patch()
@@ -176,11 +190,12 @@ class TestSubscribeObjectModel(unittest.TestCase):
 
             callback_changes: list[tuple[str, object, tuple[int, ...] | None]] = []
 
+            def record_change(*, key: str, data: object, indices: tuple[int, ...] | None) -> None:
+                callback_changes.append((key, data, indices))
+
             unsubscribe = subscribe_connection.subscribe_to_keys(
                 ["boards", "heat.heaters.0.current", "state.upTime"],
-                lambda **kwargs: callback_changes.append(
-                    (kwargs["key"], kwargs["data"], kwargs["indices"])
-                ),
+                record_change,
             )
 
             self.assertTrue(
@@ -192,9 +207,10 @@ class TestSubscribeObjectModel(unittest.TestCase):
             self.assertEqual(len(callback_changes), 3)
             self.assertIn(("heat.heaters.0.current", 16.22, None), callback_changes)
             self.assertIn(("state.upTime", 3658, None), callback_changes)
-            self.assertIn(("boards", unittest.mock.ANY, None), callback_changes)
-            boards_data = next(data for key, data, indices in callback_changes if key == "boards")
-            self.assertEqual(len(boards_data), 7)
+            self.assertIn(("boards", ANY, None), callback_changes)
+            boards_data = next(data for key, data, _ in callback_changes if key == "boards")
+            self.assertIsInstance(boards_data, list)
+            self.assertEqual(len(cast(list[Any], boards_data)), 7)
 
             unsubscribe()
         finally:
@@ -213,11 +229,12 @@ class TestSubscribeObjectModel(unittest.TestCase):
 
             callback_changes: list[tuple[str, object, tuple[int, ...] | None]] = []
 
+            def record_change(*, key: str, data: object, indices: tuple[int, ...] | None) -> None:
+                callback_changes.append((key, data, indices))
+
             unsubscribe = subscribe_connection.subscribe_to_keys(
                 ["heat.heaters.^.current", "sensors.analog.^.lastReading"],
-                lambda **kwargs: callback_changes.append(
-                    (kwargs["key"], kwargs["data"], kwargs["indices"])
-                ),
+                record_change,
             )
 
             self.assertTrue(

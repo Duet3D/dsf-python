@@ -13,15 +13,23 @@ class Code(BaseCommand):
     """A parsed representation of a generic G/M/T-code"""
 
     @classmethod
-    def from_json(cls, data):
+    def from_json(cls, data: dict[str, object] | str) -> "Code":
         """Deserialize an instance of this class from JSON deserialized dictionary"""
-        data["result"] = None if data["result"] is None else list(map(Message.from_json, data["result"]))
-        data["parameters"] = list(map(CodeParameter.from_json, data["parameters"]))
+        if isinstance(data, str):
+            raise TypeError("Code.from_json expects a decoded JSON dictionary")
+        data = dict(data)
+        result = data.get("result")
+        parameters = data.get("parameters")
+        data["result"] = None if not isinstance(result, list) else [Message.from_json(item)
+                                                                    for item in result if isinstance(item, dict)]
+        data["parameters"] = [] if not isinstance(parameters, list) else [CodeParameter.from_json(
+            item) for item in parameters if isinstance(item, dict)]
         if "channel" in data:
             data["channel"] = CodeChannel(data["channel"])
-        return cls(**data)
+        command = str(data.pop("command", ""))
+        return cls(command=command, **data)
 
-    def __init__(self, **kwargs):
+    def __init__(self, command: str = "", **kwargs: object):
         # The connection ID this code was received from. If this is 0, the code originates from an internal DCS task
         # Usually there is no need to populate this property.
         # It is internally overwritten by the control server on receipt
@@ -73,14 +81,14 @@ class Code(BaseCommand):
         # List of parsed code parameters
         self.parameters: List[CodeParameter] = []
 
-        super().__init__(**kwargs)
+        super().__init__(command=command, **kwargs)
 
     @property
     def is_from_file_channel(self) -> bool:
         """Check if this code is from a file channel"""
         return self.channel is CodeChannel.File or self.channel is CodeChannel.File2
 
-    def parameter(self, letter: str, default=None):
+    def parameter(self, letter: str, default: object = None) -> CodeParameter | None:
         """Retrieve the parameter whose letter equals c or generate a default parameter"""
         letter = letter.upper()
         param = [param for param in self.parameters if param.letter.upper() == letter]
@@ -90,7 +98,7 @@ class Code(BaseCommand):
             return CodeParameter.simple_param(letter, default)
         return None
 
-    def get_unprecedented_string(self, quote: bool = False):
+    def get_unprecedented_string(self, quote: bool = False) -> str:
         """
         Reconstruct an unprecedented string from the parameter list or
         retrieve the parameter which does not have a letter assigned.
@@ -103,7 +111,7 @@ class Code(BaseCommand):
                 str_list.append(f"{param.letter}{param.string_value}")
         return " ".join(str_list)
 
-    def __str__(self):
+    def __str__(self) -> str:
         """Convert the parsed code back to a text-based G/M/T-code"""
         if self.keyword != KeywordType.KeywordNone:
             if self.keywordArgument is not None:
@@ -129,7 +137,7 @@ class Code(BaseCommand):
 
         return "".join(str_list)
 
-    def short_str(self):
+    def short_str(self) -> str:
         """Convert only the command portion to a text-based G/M/T-code (e.g. G28)"""
         if self.type == CodeType.Comment:
             return "(comment)"
@@ -143,7 +151,7 @@ class Code(BaseCommand):
 
         return f"{prefix}{self.type}"
 
-    def keyword_to_str(self):
+    def keyword_to_str(self) -> str:
         """Convert the keyword to a string"""
         return {
             KeywordType.If: "if",
@@ -157,7 +165,7 @@ class Code(BaseCommand):
             KeywordType.Set: "set",
             KeywordType.Echo: "echo",
             KeywordType.Global: "global",
-        }.get(self.keyword)
+        }[self.keyword]
 
-    def is_flag_set(self, flag: CodeFlags):
+    def is_flag_set(self, flag: CodeFlags) -> bool:
         return self.flags & flag != 0

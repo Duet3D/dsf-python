@@ -36,16 +36,16 @@ class HeaterMonitorCondition(str, Enum):
 class HeaterMonitor(ModelObject):
     """Information about a heater monitor"""
 
-    def __init__(self):
+    def __init__(self) -> None:
         super().__init__()
         # Action to perform when the trigger condition is met
-        self._action = None
+        self._action: HeaterMonitorAction | None = None
         # Condition to meet to perform an action
-        self._condition = HeaterMonitorCondition.disabled
+        self._condition: HeaterMonitorCondition | None = HeaterMonitorCondition.disabled
         # Limit threshold for this heater monitor
-        self._limit = None
+        self._limit: float | None = None
         # Sensor number to monitor
-        self._sensor = -1
+        self._sensor: int = -1
 
     @property
     def action(self) -> Union[HeaterMonitorAction, None]:
@@ -63,7 +63,7 @@ class HeaterMonitor(ModelObject):
                             f"Got {type(value)}: {value}")
 
     @property
-    def condition(self):
+    def condition(self) -> HeaterMonitorCondition | None:
         """Condition to meet to perform an action"""
         return self._condition
 
@@ -78,7 +78,7 @@ class HeaterMonitor(ModelObject):
                             f"Got {type(value)}: {value}")
 
     @property
-    def limit(self) -> float:
+    def limit(self) -> float | None:
         """Limit threshold for this heater monitor"""
         return self._limit
 

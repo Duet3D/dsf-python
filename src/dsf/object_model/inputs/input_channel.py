@@ -8,42 +8,42 @@ from ...commands.code_channel import CodeChannel
 class InputChannel(ModelObject):
     """Information about a G/M/T-code channel"""
     
-    def __init__(self):
+    def __init__(self) -> None:
         super().__init__()
         # True if the input is in active mode i.e. executing commands for its assigned motion system,
         # false if it is assigned to a motion system other than the current one
         # This will always be true except for the File and File2 inputs
-        self._active = False
+        self._active: bool = False
         # Whether relative positioning is being used
-        self._axes_relative = False
+        self._axes_relative: bool = False
         # Emulation used on this channel
-        self._compatibility = Compatibility.RepRapFirmware
+        self._compatibility: Compatibility = Compatibility.RepRapFirmware
         # Whether inches are being used instead of mm
-        self._distance_unit = DistanceUnit.mm
+        self._distance_unit: DistanceUnit = DistanceUnit.mm
         # Whether relative extrusion is being used
-        self._drives_relative = True
+        self._drives_relative: bool = True
         # Current feedrate in mm/s
-        self._feed_rate = 50.0
+        self._feed_rate: float = 50.0
         # Whether a macro file is being processed
-        self._in_macro = False
+        self._in_macro: bool = False
         # Indicates if inverse time mode (G73) is active
-        self._inverse_time_mode = False
+        self._inverse_time_mode: bool = False
         # Indicates if the current macro file can be restarted after a pause
-        self._macro_restartable = False
+        self._macro_restartable: bool = False
         # Active motion system index
-        self._motion_system = 0
+        self._motion_system: int = 0
         # Name of this channel
-        self._name = CodeChannel.Unknown
+        self._name: CodeChannel = CodeChannel.Unknown
         # Index of the selected plane
-        self._selected_plane = 0
+        self._selected_plane: int = 0
         # Depth of the stack
-        self._stack_depth = 0
+        self._stack_depth: int = 0
         # State of this input channel
-        self._state = InputChannelState.idle
+        self._state: InputChannelState = InputChannelState.idle
         # Number of the current line
-        self._line_number = 0
+        self._line_number: int = 0
         # Whether volumetric extrusion is being used
-        self._volumetric = False
+        self._volumetric: bool = False
 
     @property
     def active(self) -> bool:
@@ -53,7 +53,7 @@ class InputChannel(ModelObject):
         return self._active
 
     @active.setter
-    def active(self, value):
+    def active(self, value: bool | int | str):
         self._active = bool(value)
 
     @property
@@ -62,7 +62,7 @@ class InputChannel(ModelObject):
         return self._axes_relative
 
     @axes_relative.setter
-    def axes_relative(self, value):
+    def axes_relative(self, value: bool | int | str):
         self._axes_relative = bool(value)
 
     @property
@@ -71,7 +71,7 @@ class InputChannel(ModelObject):
         return self._compatibility
 
     @compatibility.setter
-    def compatibility(self, value):
+    def compatibility(self, value: Compatibility | str):
         if isinstance(value, Compatibility):
             self._compatibility = value
         elif isinstance(value, str):
@@ -85,7 +85,7 @@ class InputChannel(ModelObject):
         return self._distance_unit
 
     @distance_unit.setter
-    def distance_unit(self, value):
+    def distance_unit(self, value: DistanceUnit | str):
         if isinstance(value, DistanceUnit):
             self._distance_unit = value
         elif isinstance(value, str):
@@ -99,7 +99,7 @@ class InputChannel(ModelObject):
         return self._drives_relative
 
     @drives_relative.setter
-    def drives_relative(self, value):
+    def drives_relative(self, value: bool | int | str):
         self._drives_relative = bool(value)
 
     @property
@@ -108,7 +108,7 @@ class InputChannel(ModelObject):
         return self._feed_rate
 
     @feed_rate.setter
-    def feed_rate(self, value):
+    def feed_rate(self, value: float | int | str):
         self._feed_rate = float(value)
 
     @property
@@ -117,7 +117,7 @@ class InputChannel(ModelObject):
         return self._in_macro
 
     @in_macro.setter
-    def in_macro(self, value):
+    def in_macro(self, value: bool | int | str):
         self._in_macro = bool(value)
 
     @property
@@ -126,7 +126,7 @@ class InputChannel(ModelObject):
         return self._inverse_time_mode
 
     @inverse_time_mode.setter
-    def inverse_time_mode(self, value):
+    def inverse_time_mode(self, value: bool | int | str):
         self._inverse_time_mode = bool(value)
 
     @property
@@ -135,7 +135,7 @@ class InputChannel(ModelObject):
         return self._line_number
 
     @line_number.setter
-    def line_number(self, value):
+    def line_number(self, value: int | str):
         self._line_number = int(value)
 
     @property
@@ -144,7 +144,7 @@ class InputChannel(ModelObject):
         return self._macro_restartable
 
     @macro_restartable.setter
-    def macro_restartable(self, value):
+    def macro_restartable(self, value: bool | int | str):
         self._macro_restartable = bool(value)
 
     @property
@@ -153,7 +153,7 @@ class InputChannel(ModelObject):
         return self._motion_system
 
     @motion_system.setter
-    def motion_system(self, value):
+    def motion_system(self, value: int | str):
         self._motion_system = int(value)
 
     @property
@@ -162,7 +162,7 @@ class InputChannel(ModelObject):
         return self._name
 
     @name.setter
-    def name(self, value):
+    def name(self, value: CodeChannel | str):
         if isinstance(value, CodeChannel):
             self._name = value
         elif isinstance(value, str):
@@ -176,7 +176,7 @@ class InputChannel(ModelObject):
         return self._selected_plane
 
     @selected_plane.setter
-    def selected_plane(self, value):
+    def selected_plane(self, value: int | str):
         self._selected_plane = int(value)
 
     @property
@@ -185,7 +185,7 @@ class InputChannel(ModelObject):
         return self._stack_depth
 
     @stack_depth.setter
-    def stack_depth(self, value):
+    def stack_depth(self, value: int | str):
         self._stack_depth = int(value)
 
     @property
@@ -194,7 +194,7 @@ class InputChannel(ModelObject):
         return self._state
 
     @state.setter
-    def state(self, value):
+    def state(self, value: InputChannelState | str):
         if isinstance(value, InputChannelState):
             self._state = value
         elif isinstance(value, str):
@@ -208,5 +208,5 @@ class InputChannel(ModelObject):
         return self._volumetric
 
     @volumetric.setter
-    def volumetric(self, value):
+    def volumetric(self, value: bool | int | str):
         self._volumetric = bool(value)

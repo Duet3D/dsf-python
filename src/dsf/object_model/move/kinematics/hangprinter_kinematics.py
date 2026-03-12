@@ -1,4 +1,4 @@
-from typing import List
+from typing import List, SupportsFloat
 
 from .kinematics import Kinematics
 from .kinematics_name import KinematicsName
@@ -11,10 +11,10 @@ class HangprinterKinematics(Kinematics):
         self._name = KinematicsName.hangprinter
         # Anchor configurations for A, B, C, Dz
         self._anchors = [
-            [0,     -2000, -100],
-            [2000,   1000, -100],
-            [-2000,  1000, -100],
-            [0,      0,    3000]
+            [0.0, -2000.0, -100.0],
+            [2000.0, 1000.0, -100.0],
+            [-2000.0, 1000.0, -100.0],
+            [0.0, 0.0, 3000.0]
         ]
         self._print_radius = 1500
 
@@ -29,5 +29,5 @@ class HangprinterKinematics(Kinematics):
         return self._print_radius
     
     @print_radius.setter
-    def print_radius(self, value):
+    def print_radius(self, value: SupportsFloat | str) -> None:
         self._print_radius = float(value)

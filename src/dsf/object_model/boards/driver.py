@@ -9,19 +9,19 @@ class Driver(ModelObject):
     # Closed-loop settings (if applicable)
     closed_loop = wrap_model_property('closed_loop', DriverClosedLoop)
 
-    def __init__(self):
+    def __init__(self) -> None:
         super(Driver, self).__init__()
         # Closed-loop settings (if applicable)
-        self._closed_loop = None
+        self._closed_loop: DriverClosedLoop | None = None
         # Driver status register value
-        self._status = 0
+        self._status: int = 0
 
     @property
     def status(self) -> int:
         return self._status
 
     @status.setter
-    def status(self, value):
+    def status(self, value: int | str):
         """Driver status register value
         The lowest 8 bits of these have the same bit positions as in the TMC2209 DRV_STATUS register.
         The TMC5160 DRV_STATUS is different so the bits are translated to this. Similarly for TMC2660.

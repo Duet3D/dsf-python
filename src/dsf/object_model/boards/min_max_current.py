@@ -4,14 +4,14 @@ from ..model_object import ModelObject
 class MinMaxCurrent(ModelObject):
     """Provides minimum, maximum and current values"""
 
-    def __init__(self):
+    def __init__(self) -> None:
         super(MinMaxCurrent, self).__init__()
         # Current value (mA)
-        self._current = 0
+        self._current: float = 0
         # Minimum value (mA)
-        self._min = 0
+        self._min: float = 0
         # Maximum value (mA)
-        self._max = 0
+        self._max: float = 0
 
     @property
     def current(self) -> float:

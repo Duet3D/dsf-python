@@ -1,11 +1,16 @@
 import inspect
 import re
 import warnings
+from typing import Callable, ParamSpec, TypeVar, cast
 
 
 # We don't want our deprecations to be ignored by default, so create our own type.
 class DeprecatedWarning(UserWarning):
     pass
+
+
+P = ParamSpec("P")
+R = TypeVar("R")
 
 
 def camel_to_snake(s: str, keep_acronyms: bool = True) -> str:
@@ -18,24 +23,28 @@ def camel_to_snake(s: str, keep_acronyms: bool = True) -> str:
     return '_'.join(w if w.isupper() else w.lower() for w in snake.split('_')) if keep_acronyms else snake.lower()
 
 
-def deprecated(instructions: str):
+def deprecated(instructions: str) -> Callable[[Callable[P, R]], Callable[P, R]]:
     """Flags a function/method as deprecated.
     :param instructions: A human-friendly string of instructions
     """
-    def decorator(func):
+    def decorator(func: Callable[P, R]) -> Callable[P, R]:
         """This is a decorator which can be used to mark functions as deprecated.
         It will result in a warning being emitted when the function is used."""
-        def deprecated_func(*args, **kwargs):
+        def deprecated_func(*args: P.args, **kwargs: P.kwargs) -> R:
             # Do not show DeprecatedWarning on ObjectModel update (function called by update_from_json)
-            if inspect.currentframe().f_back.f_code.co_name not in ['_update_from_json', 'update_from_json']:
+            current_frame = inspect.currentframe()
+            caller_name = ""
+            if current_frame is not None and current_frame.f_back is not None:
+                caller_name = current_frame.f_back.f_code.co_name
+            if caller_name not in ['_update_from_json', 'update_from_json']:
                 warnings.warn(f"Call to deprecated function {func.__name__}(). {instructions}",
                               DeprecatedWarning, stacklevel=2)
             return func(*args, **kwargs)
-        return deprecated_func
+        return cast(Callable[P, R], deprecated_func)
     return decorator
 
 
-def preserve_builtin(data: dict) -> dict:
+def preserve_builtin(data: dict[str, object] | None) -> dict[str, object]:
     """Add a trailing underscore to parameters using built-in name
     when unpacking parameters directly from JSON imported data
     to avoid name shadowing. e.g: type => type_"""

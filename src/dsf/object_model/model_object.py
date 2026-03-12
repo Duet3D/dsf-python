@@ -1,6 +1,6 @@
 import json
 from datetime import datetime
-from typing import Union
+from typing import Optional, Self
 
 
 from .utils import is_model_object
@@ -9,25 +9,47 @@ from ..utils import preserve_builtin, camel_to_snake, snake_to_camel
 
 class FloatJSON(float):
     # Remove trailing zeros from float numbers
-    __repr__ = staticmethod(lambda o: f'{o:g}')
+    def __repr__(self) -> str:
+        return f'{self:g}'
 
 
-json.encoder.c_make_encoder = None
-json.encoder.float = FloatJSON
+setattr(json.encoder, "c_make_encoder", None)
+setattr(json.encoder, "float", FloatJSON)
 
 
 class ModelObject:
     """Base class for object model classes"""
 
-    def __init__(self, *args, **kwargs):
+    def __init__(self, *args: object, **kwargs: object) -> None:
         pass
 
-    def __str__(self, **kwargs):
+    def __str__(
+        self,
+        *,
+        skipkeys: bool = False,
+        ensure_ascii: bool = True,
+        check_circular: bool = True,
+        allow_nan: bool = True,
+        cls: Optional[type[json.JSONEncoder]] = None,
+        indent: Optional[int | str] = None,
+        separators: Optional[tuple[str, str]] = None,
+    ) -> str:
         """Serialize this instance of this class into a JSON dictionary"""
-        return json.dumps(self, default=self.__json_serialize, sort_keys=True, **kwargs)
+        return json.dumps(
+            self,
+            default=self.__json_serialize,
+            sort_keys=True,
+            skipkeys=skipkeys,
+            ensure_ascii=ensure_ascii,
+            check_circular=check_circular,
+            allow_nan=allow_nan,
+            cls=cls,
+            indent=indent,
+            separators=separators,
+        )
 
     @staticmethod
-    def __json_serialize(obj):
+    def __json_serialize(obj: object) -> object:
         from .plugins.sbc_permissions import SbcPermissions
         from .move import DriverId
 
@@ -44,7 +66,7 @@ class ModelObject:
         # also convert back 'globals' to 'global'
         return {snake_to_camel(k if k != '_globals' else '_global'): v for k, v in obj.__dict__.items()}
 
-    def _update_from_json(self, **kwargs) -> 'ModelObject':
+    def _update_from_json(self, **kwargs: object) -> Self:
         """Update this instance from a given JSON element
         This method iterate over all writeable properties to update them.
         It means classes with get-only properties should override this method in order to update them.
@@ -79,18 +101,24 @@ class ModelObject:
         return self
 
     @classmethod
-    def from_json(cls, data: Union[dict, str]) -> 'ModelObject':
+    def from_json(cls, data: dict[str, object] | str) -> Self:
         """Deserialize a new instance of this class from JSON deserialized dictionary"""
         # Deserialize a string object into a JSON (dict) object
+        json_data: dict[str, object]
         if isinstance(data, str):
-            data = json.loads(data)
-        return cls()._update_from_json(**preserve_builtin(data))
+            json_data = json.loads(data)
+        else:
+            json_data = data
+        return cls()._update_from_json(**preserve_builtin(json_data))
 
-    def update_from_json(self, data: Union[dict, str]):
+    def update_from_json(self, data: dict[str, object] | str) -> Self:
         """Update the current instance of this class from JSON deserialized dictionary"""
+        json_data: dict[str, object]
         if isinstance(data, str):
-            data = json.loads(data)
-        return self._update_from_json(**preserve_builtin(data))
+            json_data = json.loads(data)
+        else:
+            json_data = data
+        return self._update_from_json(**preserve_builtin(json_data))
 
     def to_json(self) -> str:
         """Serialize this instance of this class into a JSON dictionary"""

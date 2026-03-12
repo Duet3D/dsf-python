@@ -3,12 +3,13 @@ from ..model_object import ModelObject
 
 class MoveQueueItem(ModelObject):
     """Information about a DDA ring"""
-    def __init__(self):
+
+    def __init__(self) -> None:
         super().__init__()
         # The minimum idle time before we should start a move (in s)
-        self._grace_period = 0
+        self._grace_period: float = 0
         # Maximum number of moves that can be accomodated in the DDA ring
-        self._length = 0
+        self._length: int = 0
 
     @property
     def grace_period(self) -> float:
@@ -16,7 +17,7 @@ class MoveQueueItem(ModelObject):
         return self._grace_period
 
     @grace_period.setter
-    def grace_period(self, value):
+    def grace_period(self, value: float | int | str):
         self._grace_period = float(value)
 
     @property
@@ -25,5 +26,5 @@ class MoveQueueItem(ModelObject):
         return self._length
 
     @length.setter
-    def length(self, value):
+    def length(self, value: int | str):
         self._length = int(value)

@@ -5,16 +5,17 @@ from ...utils import deprecated
 
 class FanThermostaticControl(ModelObject):
     """Thermostatic parameters of a fan"""
-    def __init__(self):
+
+    def __init__(self) -> None:
         super().__init__()
         # List of the heaters to monitor (indices)
-        self._heaters = []
+        self._heaters: List[int] = []
         # Upper temperature range required to turn on the fan (in C)
-        self._high_temperature = None
+        self._high_temperature: Union[float, None] = None
         # Lower temperature range required to turn on the fan (in C)
-        self._low_temperature = None
+        self._low_temperature: Union[float, None] = None
         # List of sensors to monitor (indices)
-        self._sensors = []
+        self._sensors: List[int] = []
 
     @property
     @deprecated(f"Use {__name__}.sensors instead")
@@ -29,7 +30,7 @@ class FanThermostaticControl(ModelObject):
         return self._high_temperature
 
     @high_temperature.setter
-    def high_temperature(self, value):
+    def high_temperature(self, value: float | int | str | None):
         self._high_temperature = float(value) if value is not None else None
 
     @property
@@ -38,7 +39,7 @@ class FanThermostaticControl(ModelObject):
         return self._low_temperature
 
     @low_temperature.setter
-    def low_temperature(self, value):
+    def low_temperature(self, value: float | int | str | None):
         self._low_temperature = float(value) if value is not None else None
 
     @property

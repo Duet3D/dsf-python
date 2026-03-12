@@ -4,9 +4,9 @@ from ..model_object import ModelObject
 class GpInputPort(ModelObject):
     """Details about a general-purpose input port"""
 
-    def __init__(self):
+    def __init__(self) -> None:
         super(GpInputPort, self).__init__()
-        self._value = 0
+        self._value: float = 0
 
     @property
     def value(self) -> float:
@@ -14,5 +14,5 @@ class GpInputPort(ModelObject):
         return self._value
 
     @value.setter
-    def value(self, value):
+    def value(self, value: float | int | str):
         self._value = float(value)

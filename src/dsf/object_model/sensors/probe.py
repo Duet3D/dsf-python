@@ -1,4 +1,4 @@
-from typing import List, Optional
+from typing import List, Optional, Sequence
 
 from .probe_type import ProbeType
 from ..model_object import ModelObject
@@ -8,30 +8,30 @@ from ...utils import deprecated
 class Probe(ModelObject):
     """Information about a configured probe"""
 
-    def __init__(self):
+    def __init__(self) -> None:
         super(Probe, self).__init__()
-        self._calib_a = None
-        self._calib_b = None
-        self._calibration_temperature = 0
-        self._deployed_by_user = False
-        self._disables_heaters = False
-        self._dive_height = 5
-        self._dive_heights = [0, 0]
-        self._is_calibrated = None
-        self._last_stop_height = 0
-        self._max_probe_count = 1
-        self._measured_height = None
-        self._offsets = [0, 0]
-        self._recovery_time = 0
-        self._scan_coefficients = None
-        self._speeds = [2, 2]
-        self._temperature_coefficients = [0, 0]
-        self._threshold = 500
-        self._tolerance = 0.03
-        self._travel_speed = 6000
-        self._trigger_height = 0.7
-        self._type = ProbeType.NoProbe
-        self._value = []
+        self._calib_a: Optional[float] = None
+        self._calib_b: Optional[float] = None
+        self._calibration_temperature: float = 0
+        self._deployed_by_user: bool = False
+        self._disables_heaters: bool = False
+        self._dive_height: float = 5
+        self._dive_heights: List[float] = [0.0, 0.0]
+        self._is_calibrated: Optional[bool] = None
+        self._last_stop_height: float = 0
+        self._max_probe_count: int = 1
+        self._measured_height: Optional[float] = None
+        self._offsets: List[float] = [0.0, 0.0]
+        self._recovery_time: float = 0
+        self._scan_coefficients: Optional[List[float]] = None
+        self._speeds: List[float] = [2.0, 2.0]
+        self._temperature_coefficients: List[float] = [0.0, 0.0]
+        self._threshold: int = 500
+        self._tolerance: float = 0.03
+        self._travel_speed: float = 6000
+        self._trigger_height: float = 0.7
+        self._type: ProbeType = ProbeType.NoProbe
+        self._value: List[int] = []
 
     @property
     def calib_a(self) -> Optional[float]:
@@ -39,7 +39,7 @@ class Probe(ModelObject):
         return self._calib_a
 
     @calib_a.setter
-    def calib_a(self, value):
+    def calib_a(self, value: Optional[float | int | str]):
         self._calib_a = float(value) if value is not None else None
 
     @property
@@ -48,7 +48,7 @@ class Probe(ModelObject):
         return self._calib_b
 
     @calib_b.setter
-    def calib_b(self, value):
+    def calib_b(self, value: Optional[float | int | str]):
         self._calib_b = float(value) if value is not None else None
 
     @property
@@ -57,7 +57,7 @@ class Probe(ModelObject):
         return self._calibration_temperature
 
     @calibration_temperature.setter
-    def calibration_temperature(self, value):
+    def calibration_temperature(self, value: float | int | str):
         self._calibration_temperature = float(value)
         
     @property
@@ -66,7 +66,7 @@ class Probe(ModelObject):
         return self._deployed_by_user
     
     @deployed_by_user.setter
-    def deployed_by_user(self, value):
+    def deployed_by_user(self, value: bool | int | str):
         self._deployed_by_user = bool(value)
         
     @property
@@ -75,7 +75,7 @@ class Probe(ModelObject):
         return self._disables_heaters
     
     @disables_heaters.setter
-    def disables_heaters(self, value):
+    def disables_heaters(self, value: bool | int | str):
         self._disables_heaters = bool(value)
         
     @property
@@ -87,7 +87,7 @@ class Probe(ModelObject):
         return self._dive_height
     
     @dive_height.setter
-    def dive_height(self, value):
+    def dive_height(self, value: float | int | str):
         self._dive_height = float(value)
 
     @property
@@ -103,7 +103,7 @@ class Probe(ModelObject):
         return self._is_calibrated
 
     @is_calibrated.setter
-    def is_calibrated(self, value):
+    def is_calibrated(self, value: Optional[bool | int | str]):
         self._is_calibrated = bool(value) if value is not None else None
         
     @property
@@ -112,7 +112,7 @@ class Probe(ModelObject):
         return self._last_stop_height
     
     @last_stop_height.setter
-    def last_stop_height(self, value):
+    def last_stop_height(self, value: float | int | str):
         self._last_stop_height = float(value)
         
     @property
@@ -121,7 +121,7 @@ class Probe(ModelObject):
         return self._max_probe_count
     
     @max_probe_count.setter
-    def max_probe_count(self, value):
+    def max_probe_count(self, value: int | str):
         self._max_probe_count = int(value)
         
     @property
@@ -130,7 +130,7 @@ class Probe(ModelObject):
         return self._measured_height
     
     @measured_height.setter
-    def measured_height(self, value):
+    def measured_height(self, value: Optional[float | int | str]):
         self._measured_height = None if value is None else float(value)
         
     @property
@@ -144,7 +144,7 @@ class Probe(ModelObject):
         return self._recovery_time
     
     @recovery_time.setter
-    def recovery_time(self, value):
+    def recovery_time(self, value: float | int | str):
         self._recovery_time = float(value)
         
     @property
@@ -159,7 +159,7 @@ class Probe(ModelObject):
         return self._scan_coefficients
 
     @scan_coefficients.setter
-    def scan_coefficients(self, value):
+    def scan_coefficients(self, value: Optional[Sequence[float | int | str]]):
         self._scan_coefficients = None if value is None else [float(v) for v in value]
         
     @property
@@ -169,7 +169,7 @@ class Probe(ModelObject):
         return self._speeds
     
     @speeds.setter
-    def speeds(self, values):
+    def speeds(self, values: Sequence[float | int | str]):
         self._speeds = [float(value) for value in values]
         
     @property
@@ -183,7 +183,7 @@ class Probe(ModelObject):
         return self._threshold
     
     @threshold.setter
-    def threshold(self, value):
+    def threshold(self, value: int | str):
         self._threshold = int(value)
         
     @property
@@ -192,7 +192,7 @@ class Probe(ModelObject):
         return self._tolerance
     
     @tolerance.setter
-    def tolerance(self, value):
+    def tolerance(self, value: float | int | str):
         self._tolerance = float(value)
         
     @property
@@ -201,7 +201,7 @@ class Probe(ModelObject):
         return self._travel_speed
     
     @travel_speed.setter
-    def travel_speed(self, value):
+    def travel_speed(self, value: float | int | str):
         self._travel_speed = float(value)
 
     @property
@@ -210,7 +210,7 @@ class Probe(ModelObject):
         return self._trigger_height
 
     @trigger_height.setter
-    def trigger_height(self, value):
+    def trigger_height(self, value: float | int | str):
         self._trigger_height = float(value)
         
     @property
@@ -220,8 +220,10 @@ class Probe(ModelObject):
         return self._type
     
     @type.setter
-    def type(self, value):
-        if value is None or isinstance(value, ProbeType):
+    def type(self, value: Optional[ProbeType | int]):
+        if value is None:
+            self._type = ProbeType.NoProbe
+        elif isinstance(value, ProbeType):
             self._type = value
         elif isinstance(value, int):
             self._type = ProbeType(value)

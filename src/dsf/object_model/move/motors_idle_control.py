@@ -3,12 +3,13 @@ from ..model_object import ModelObject
 
 class MotorsIdleControl(ModelObject):
     """Idle factor parameters for automatic motor current reduction"""
-    def __init__(self):
+
+    def __init__(self) -> None:
         super().__init__()
         # Motor current reduction factor (0..1)
-        self._factor = 0.3
+        self._factor: float = 0.3
         # Idle timeout after which the stepper motor currents are reduced (in s)
-        self._timeout = 30
+        self._timeout: float = 30
 
     @property
     def factor(self) -> float:
@@ -16,7 +17,7 @@ class MotorsIdleControl(ModelObject):
         return self._factor
 
     @factor.setter
-    def factor(self, value):
+    def factor(self, value: float | int | str):
         self._factor = float(value)
 
     @property
@@ -25,5 +26,5 @@ class MotorsIdleControl(ModelObject):
         return self._timeout
 
     @timeout.setter
-    def timeout(self, value):
+    def timeout(self, value: float | int | str):
         self._timeout = float(value)

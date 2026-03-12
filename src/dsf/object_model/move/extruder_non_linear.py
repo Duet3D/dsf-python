@@ -3,13 +3,14 @@ from ..model_object import ModelObject
 
 class ExtruderNonlinear(ModelObject):
     """Nonlinear extrusion parameters (see M592)"""
-    def __init__(self):
+
+    def __init__(self) -> None:
         super().__init__()
         # A coefficient in the extrusion formula
-        self._a = 0
+        self._a: float = 0
         # B coefficient in the extrusion formula
-        self._b = 0
-        self._upper_limit = 0.2
+        self._b: float = 0
+        self._upper_limit: float = 0.2
 
     @property
     def a(self) -> float:
@@ -17,7 +18,7 @@ class ExtruderNonlinear(ModelObject):
         return self._a
 
     @a.setter
-    def a(self, value):
+    def a(self, value: float | int | str):
         self._a = float(value)
 
     @property
@@ -26,7 +27,7 @@ class ExtruderNonlinear(ModelObject):
         return self._b
 
     @b.setter
-    def b(self, value):
+    def b(self, value: float | int | str):
         self._b = float(value)
 
     @property
@@ -35,5 +36,5 @@ class ExtruderNonlinear(ModelObject):
         return self._upper_limit
 
     @upper_limit.setter
-    def upper_limit(self, value):
+    def upper_limit(self, value: float | int | str):
         self._upper_limit = float(value)

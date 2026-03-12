@@ -1,4 +1,4 @@
-from typing import List
+from typing import SupportsFloat
 
 from .delta_tower import DeltaTower
 from .kinematics import Kinematics
@@ -8,20 +8,22 @@ from ...model_collection import ModelCollection
 
 class DeltaKinematics(Kinematics):
     """Delta kinematics"""
-    def __init__(self, name: KinematicsName = KinematicsName.delta):
+
+    def __init__(self, name: KinematicsName = KinematicsName.delta) -> None:
         super().__init__(name)
         # Delta radius (in mm)
-        self._delta_radius = 0
+        self._delta_radius: float = 0
         # Homed height of a delta printer in mm
-        self._homed_height = 0
+        self._homed_height: float = 0
         # Print radius for Hangprinter and Delta geometries (in mm)
-        self._print_radius = 0
+        self._print_radius: float = 0
         # Delta tower properties
-        self._towers = ModelCollection(DeltaTower, [{}, {}, {}])
+        self._towers: ModelCollection[DeltaTower] = ModelCollection(
+            DeltaTower, [DeltaTower(), DeltaTower(), DeltaTower()])
         # How much Z needs to be raised for each unit of movement in the +X direction
-        self._x_tilt = 0
+        self._x_tilt: float = 0
         # How much Z needs to be raised for each unit of movement in the +Y direction
-        self._y_tilt = 0
+        self._y_tilt: float = 0
         
     @property
     def delta_radius(self) -> float:
@@ -29,7 +31,7 @@ class DeltaKinematics(Kinematics):
         return self._delta_radius
     
     @delta_radius.setter
-    def delta_radius(self, value):
+    def delta_radius(self, value: SupportsFloat | str) -> None:
         self._delta_radius = float(value)
     
     @property
@@ -38,7 +40,7 @@ class DeltaKinematics(Kinematics):
         return self._homed_height
     
     @homed_height.setter
-    def homed_height(self, value):
+    def homed_height(self, value: SupportsFloat | str) -> None:
         self._homed_height = float(value)
     
     @property
@@ -47,11 +49,11 @@ class DeltaKinematics(Kinematics):
         return self._print_radius
     
     @print_radius.setter
-    def print_radius(self, value):
+    def print_radius(self, value: SupportsFloat | str) -> None:
         self._print_radius = float(value)
 
     @property
-    def towers(self) -> List[DeltaTower]:
+    def towers(self) -> ModelCollection[DeltaTower]:
         """Delta tower properties"""
         return self._towers
     
@@ -61,7 +63,7 @@ class DeltaKinematics(Kinematics):
         return self._x_tilt
     
     @x_tilt.setter
-    def x_tilt(self, value):
+    def x_tilt(self, value: SupportsFloat | str) -> None:
         self._x_tilt = float(value)
     
     @property
@@ -70,5 +72,5 @@ class DeltaKinematics(Kinematics):
         return self._y_tilt
     
     @y_tilt.setter
-    def y_tilt(self, value):
+    def y_tilt(self, value: SupportsFloat | str) -> None:
         self._y_tilt = float(value)

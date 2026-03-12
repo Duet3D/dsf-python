@@ -2,11 +2,20 @@ import json
 import select
 import socket
 import time
-from typing import Optional
+from typing import Optional, Protocol, TypeVar
 
 from .exceptions import IncompatibleVersionException, InternalServerException, TaskCanceledException
 from .init_messages import client_init_messages, server_init_message
 from ..commands import responses
+
+
+T_co = TypeVar("T_co", covariant=True)
+
+
+class _FromJson(Protocol[T_co]):
+    @classmethod
+    def from_json(cls, data: dict[str, object]) -> T_co:
+        ...
 
 
 class BaseConnection:
@@ -19,10 +28,14 @@ class BaseConnection:
         self.debug = debug
         self.timeout = timeout
         self.socket: Optional[socket.socket] = None
-        self.id = None
+        self.id: object | None = None
         self.input = ""
 
-    def connect(self, init_message: client_init_messages.ClientInitMessage, socket_file: str):
+    def connect(self, socket_file: str) -> None:
+        """Establish a connection to the given UNIX socket file."""
+        raise NotImplementedError("BaseConnection.connect must be implemented by subclasses")
+
+    def _connect(self, init_message: client_init_messages.ClientInitMessage, socket_file: str) -> None:
         """Establishes a connection to the given UNIX socket file"""
 
         self.socket = socket.socket(socket.AF_UNIX, socket.SOCK_STREAM)
@@ -40,23 +53,23 @@ class BaseConnection:
         self.send(init_message)
 
         response = self.receive_response()
-        if not response.success:
+        if isinstance(response, responses.ErrorResponse):
             raise Exception(
                 f"Could not set connection type {init_message.mode} ({response.error_type}: {response.error_message})"
             )
 
-    def close(self):
+    def close(self) -> None:
         """Closes the current connection and disposes it"""
         if self.socket is not None:
             self.socket.close()
             self.socket = None
 
-    def perform_command(self, command, cls=None):
+    def perform_command(self, command: object, cls: type[_FromJson[T_co]] | None = None) -> responses.Response:
         """Perform an arbitrary command"""
         self.send(command)
 
         response = self.receive_response()
-        if response.success:
+        if isinstance(response, responses.Response):
             if cls is not None and response.result is not None:
                 response.result = cls.from_json(response.result)
             return response
@@ -68,19 +81,22 @@ class BaseConnection:
             command, response.error_type, response.error_message
         )
 
-    def send(self, msg):
+    def send(self, msg: object) -> None:
         """Serialize an arbitrary object into JSON and send it to the server plus NL"""
+        if self.socket is None:
+            raise RuntimeError("socket is closed or missing")
+
         json_string = json.dumps(msg, separators=(",", ":"), default=lambda o: o.__dict__)
         if self.debug:
             print(f"send: {json_string}")
         self.socket.sendall(json_string.encode("utf8"))
 
-    def receive(self, cls):
+    def receive(self, cls: type[_FromJson[T_co]]) -> T_co:
         """Receive a deserialized object from the server"""
         json_string = self.receive_json()
         return cls.from_json(json.loads(json_string))
 
-    def receive_response(self):
+    def receive_response(self) -> responses.Response | responses.ErrorResponse:
         """Receive a base response from the server"""
         json_string = self.receive_json()
         return responses.decode_response(json.loads(json_string))
@@ -94,7 +110,13 @@ class BaseConnection:
             return False
 
         readable, _, _ = select.select([self.socket], [], [], 0)
-        return bool(readable)
+        if not readable:
+            return False
+
+        try:
+            return bool(self.socket.recv(1, socket.MSG_PEEK | socket.MSG_DONTWAIT))
+        except BlockingIOError:
+            return False
 
     def receive_json(self) -> str:
         """Receive the JSON response from the server"""
@@ -148,7 +170,7 @@ class BaseConnection:
         return json_string
 
     @staticmethod
-    def get_json_object_end_index(json_string: str):
+    def get_json_object_end_index(json_string: str) -> int:
         """Return the end index of the next full JSON object in the string"""
         count = 0
         index = 0

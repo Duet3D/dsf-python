@@ -14,7 +14,7 @@ class Kinematics(ModelObject):
         self._segmentation = None
 
     @staticmethod
-    def get_kinematics_type(name: KinematicsName):
+    def get_kinematics_type(name: KinematicsName | str) -> "Kinematics":
         from .core_kinematics import CoreKinematics
         from .delta_kinematics import DeltaKinematics
         from .hangprinter_kinematics import HangprinterKinematics
@@ -49,7 +49,7 @@ class Kinematics(ModelObject):
             return ScaraKinematics(name)
         elif name == KinematicsName.polar:
             return PolarKinematics()
-        return name
+        return Kinematics(name)
 
     @property
     def name(self) -> KinematicsName:
@@ -62,7 +62,7 @@ class Kinematics(ModelObject):
         return self._segmentation
 
     @segmentation.setter
-    def segmentation(self, value):
+    def segmentation(self, value: MoveSegmentation | dict[str, object] | None) -> None:
         if value is None or isinstance(value, MoveSegmentation):
             self._segmentation = value
         elif isinstance(value, dict):  # Update from JSON
@@ -74,10 +74,11 @@ class Kinematics(ModelObject):
             raise TypeError(f"{__name__}.segmentation must be None or of type MoveSegmentation."
                             f"Got {type(value)}: {value}")
 
-    def _update_from_json(self, **kwargs):
+    def _update_from_json(self, **kwargs: object) -> "Kinematics":
         """Override ObjectModel._update_from_json to return the Kinematics type matching the given name"""
-        if 'name' in kwargs and self.name != KinematicsName(kwargs.get('name')):
-            kinematic_type = self.get_kinematics_type(kwargs.get('name'))
+        name_value = kwargs.get('name')
+        if isinstance(name_value, str) and self.name != KinematicsName(name_value):
+            kinematic_type = self.get_kinematics_type(name_value)
             new_kinematic = kinematic_type.update_from_json(kwargs)
             return new_kinematic
 

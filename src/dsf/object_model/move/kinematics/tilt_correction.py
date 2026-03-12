@@ -1,4 +1,4 @@
-from typing import List
+from typing import List, SupportsFloat
 
 from ...model_object import ModelObject
 
@@ -26,7 +26,7 @@ class TiltCorrection(ModelObject):
         return self._correction_factor
     
     @correction_factor.setter
-    def correction_factor(self, value):
+    def correction_factor(self, value: SupportsFloat | str) -> None:
         self._correction_factor = float(value)
         
     @property
@@ -40,7 +40,7 @@ class TiltCorrection(ModelObject):
         return self._max_correction
 
     @max_correction.setter
-    def max_correction(self, value):
+    def max_correction(self, value: SupportsFloat | str) -> None:
         self._max_correction = float(value)
 
     @property
@@ -49,7 +49,7 @@ class TiltCorrection(ModelObject):
         return self._screw_pitch
 
     @screw_pitch.setter
-    def screw_pitch(self, value):
+    def screw_pitch(self, value: SupportsFloat | str) -> None:
         self._screw_pitch = float(value)
         
     @property

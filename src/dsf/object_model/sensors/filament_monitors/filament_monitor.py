@@ -10,10 +10,10 @@ class FilamentMonitor(ModelObject):
 
     def __init__(self, type_: FilamentMonitorType = FilamentMonitorType.Unknown):
         super(FilamentMonitor, self).__init__()
-        self._enabled = False
-        self._enable_mode = FilamentMonitorEnableMode.Disabled
-        self._status = FilamentMonitorStatus.NoDataReceived
-        self._type = type_
+        self._enabled: bool = False
+        self._enable_mode: FilamentMonitorEnableMode = FilamentMonitorEnableMode.Disabled
+        self._status: FilamentMonitorStatus = FilamentMonitorStatus.NoDataReceived
+        self._type: FilamentMonitorType = type_
         
     @property
     def enable_mode(self) -> FilamentMonitorEnableMode:
@@ -21,7 +21,7 @@ class FilamentMonitor(ModelObject):
         return self._enable_mode
     
     @enable_mode.setter
-    def enable_mode(self, value):
+    def enable_mode(self, value: FilamentMonitorEnableMode | int | None):
         if value is None:
             self._enable_mode = FilamentMonitorEnableMode.Disabled
         elif isinstance(value, FilamentMonitorEnableMode):
@@ -40,11 +40,11 @@ class FilamentMonitor(ModelObject):
         return self._enabled
 
     @enabled.setter
-    def enabled(self, value):
+    def enabled(self, value: bool | int | str):
         self._enabled = bool(value)
 
     @staticmethod
-    def get_filament_monitor(type_: FilamentMonitorType):
+    def get_filament_monitor(type_: FilamentMonitorType | str) -> "FilamentMonitor":
         from .laser_filament_monitor import LaserFilamentMonitor
         from .pulsed_filament_monitor import PulsedFilamentMonitor
         from .rotating_magnet_filament_monitor import RotatingMagnetFilamentMonitor
@@ -69,7 +69,7 @@ class FilamentMonitor(ModelObject):
         return self._status
 
     @status.setter
-    def status(self, value):
+    def status(self, value: FilamentMonitorStatus | str | None):
         if value is None:
             self._status = FilamentMonitorStatus.NoDataReceived
         elif isinstance(value, FilamentMonitorStatus):
@@ -84,10 +84,11 @@ class FilamentMonitor(ModelObject):
         """Type of this filament monitor"""
         return self._type
 
-    def _update_from_json(self, **kwargs):
+    def _update_from_json(self, **kwargs: object) -> "FilamentMonitor":
         """Override ObjectModel._update_from_json to return the FilamentMonitorType type matching the given type"""
-        if 'type_' in kwargs and self.type != FilamentMonitorType(kwargs.get('type_')):
-            required_type = self.get_filament_monitor(kwargs.get('type_'))
+        type_value = kwargs.get('type_')
+        if isinstance(type_value, str) and self.type != FilamentMonitorType(type_value):
+            required_type = self.get_filament_monitor(type_value)
             new_filament_monitor = required_type.update_from_json(kwargs)
             return new_filament_monitor
 

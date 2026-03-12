@@ -5,12 +5,12 @@ from .direct_display_controller import DirectDisplayController
 class DirectDisplayScreenST7567(DirectDisplayScreen):
     """Direct-connected display screen with a ST7567 controller"""
 
-    def __init__(self):
+    def __init__(self) -> None:
         super().__init__(controller=DirectDisplayController.ST7567)
         # Configured contrast
-        self._contrast = 30
+        self._contrast: int = 30
         # Configured resistor ratio
-        self._resistor_ratio = 6
+        self._resistor_ratio: int = 6
 
     @property
     def contrast(self) -> int:

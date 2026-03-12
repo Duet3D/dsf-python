@@ -3,12 +3,13 @@ from ..model_object import ModelObject
 
 class MicroStepping(ModelObject):
     """Microstepping configuration"""
-    def __init__(self):
+
+    def __init__(self) -> None:
         super().__init__()
         # Indicates if the stepper driver uses interpolation
-        self._interpolated = False
+        self._interpolated: bool = False
         # Microsteps per full step
-        self._value = 16
+        self._value: int = 16
 
     @property
     def interpolated(self) -> bool:
@@ -16,7 +17,7 @@ class MicroStepping(ModelObject):
         return self._interpolated
 
     @interpolated.setter
-    def interpolated(self, value):
+    def interpolated(self, value: bool | int | str):
         self._interpolated = bool(value)
 
     @property
@@ -25,5 +26,5 @@ class MicroStepping(ModelObject):
         return self._value
 
     @value.setter
-    def value(self, value):
+    def value(self, value: int | str):
         self._value = int(value)

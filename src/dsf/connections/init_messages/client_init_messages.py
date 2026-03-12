@@ -17,7 +17,7 @@ clientinitmessages holds all messages a client can send to the server to initiat
     You should have received a copy of the GNU Lesser General Public License
     along with this program.  If not, see <https://www.gnu.org/licenses/>.
 """
-from typing import List
+from typing import Sequence
 from .server_init_message import ServerInitMessage
 from .. import ConnectionMode, InterceptionMode, SubscriptionMode
 from ...commands.code_channel import CodeChannel
@@ -29,7 +29,7 @@ class ClientInitMessage:
     to the ServerInitMessage. It allows a client to select the connection mode.
     """
 
-    def __init__(self, mode: ConnectionMode = ConnectionMode.UNKNOWN, **kwargs):
+    def __init__(self, mode: ConnectionMode = ConnectionMode.UNKNOWN, **kwargs: object) -> None:
         self.mode = mode
         self.version = ServerInitMessage.PROTOCOL_VERSION
         for key, value in kwargs.items():
@@ -37,12 +37,12 @@ class ClientInitMessage:
 
 
 def intercept_init_message(
-        intercept_mode: InterceptionMode,
-        channels: List[CodeChannel],
-        filters: List[str],
-        priority_codes: bool,
-        auto_flush: bool = True,
-        auto_evaluate_expression: bool = True):
+            intercept_mode: InterceptionMode,
+        channels: list[CodeChannel],
+        filters: list[str],
+            priority_codes: bool,
+            auto_flush: bool = True,
+        auto_evaluate_expression: bool = True) -> ClientInitMessage:
     """
     Enter interception mode
     Whenever a code is received, the connection must respond with one of
@@ -80,12 +80,16 @@ def intercept_init_message(
     )
 
 
-def command_init_message():
+def command_init_message() -> ClientInitMessage:
     """Enter command-based connection mode"""
     return ClientInitMessage(ConnectionMode.COMMAND)
 
 
-def subscribe_init_message(subscription_mode: SubscriptionMode, filter_string: str, filter_list):
+def subscribe_init_message(
+    subscription_mode: SubscriptionMode,
+    filter_string: str,
+    filter_list: Sequence[str] | None,
+) -> ClientInitMessage:
     """Enter subscription mode"""
     return ClientInitMessage(
         ConnectionMode.SUBSCRIBE,

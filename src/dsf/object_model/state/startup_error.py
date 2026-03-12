@@ -5,15 +5,16 @@ class StartupError(ModelObject):
     """
     Details about the first error on start-up
     """
-    def __init__(self):
+
+    def __init__(self) -> None:
         super().__init__()
 
         # Filename of the macro where the error occurred
-        self._file = ""
+        self._file: str = ""
         # Line number of the error
-        self._line = 0
+        self._line: int = 0
         # Message of the error
-        self._message = ""
+        self._message: str = ""
 
     @property
     def file(self) -> str:
@@ -21,7 +22,7 @@ class StartupError(ModelObject):
         return self._file
 
     @file.setter
-    def file(self, value):
+    def file(self, value: str):
         self._file = str(value)
 
     @property
@@ -30,7 +31,7 @@ class StartupError(ModelObject):
         return self._line
 
     @line.setter
-    def line(self, value):
+    def line(self, value: int | str):
         self._line = int(value)
 
     @property
@@ -39,5 +40,5 @@ class StartupError(ModelObject):
         return self._message
 
     @message.setter
-    def message(self, value):
+    def message(self, value: str):
         self._message = str(value)

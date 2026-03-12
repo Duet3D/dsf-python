@@ -7,23 +7,24 @@ class RestorePoint(ModelObject):
     """
     Class holding information about a restore point
     """
-    def __init__(self):
+
+    def __init__(self) -> None:
         super(RestorePoint, self).__init__()
 
         # Axis coordinates of the restore point (in mm)
-        self._coords = []
+        self._coords: List[float] = []
         # The virtual extruder position at the start of this move
-        self._extruder_pos = 0
+        self._extruder_pos: float = 0
         # PWM value of the tool fan (0..1)
-        self._fan_pwm = 0
+        self._fan_pwm: float = 0
         # Requested feedrate (in mm/s)
-        self._feed_rate = 0
+        self._feed_rate: float = 0
         # The output port bits setting for this move or null if not applicable
-        self._io_bits = None
+        self._io_bits: Union[int, None] = None
         # Laser PWM value (0..1) or null if not applicable
-        self._laser_pwm = None
+        self._laser_pwm: Union[float, None] = None
         # The tool number that was active
-        self._tool_number = -1
+        self._tool_number: int = -1
         
     @property
     def coords(self) -> List[float]:
@@ -36,7 +37,7 @@ class RestorePoint(ModelObject):
         return self._extruder_pos
     
     @extruder_pos.setter
-    def extruder_pos(self, value):
+    def extruder_pos(self, value: float | int | str):
         self._extruder_pos = float(value)
         
     @property
@@ -45,7 +46,7 @@ class RestorePoint(ModelObject):
         return self._fan_pwm
     
     @fan_pwm.setter
-    def fan_pwm(self, value):
+    def fan_pwm(self, value: float | int | str):
         self._fan_pwm = float(value)
         
     @property
@@ -54,7 +55,7 @@ class RestorePoint(ModelObject):
         return self._feed_rate
     
     @feed_rate.setter
-    def feed_rate(self, value):
+    def feed_rate(self, value: float | int | str):
         self._feed_rate = float(value)
         
     @property
@@ -63,7 +64,7 @@ class RestorePoint(ModelObject):
         return self._io_bits
     
     @io_bits.setter
-    def io_bits(self, value):
+    def io_bits(self, value: int | str | None):
         self._io_bits = int(value) if value is not None else None
         
     @property
@@ -72,7 +73,7 @@ class RestorePoint(ModelObject):
         return self._laser_pwm
     
     @laser_pwm.setter
-    def laser_pwm(self, value):
+    def laser_pwm(self, value: float | int | str | None):
         self._laser_pwm = float(value) if value is not None else None
     
     @property
@@ -81,5 +82,5 @@ class RestorePoint(ModelObject):
         return self._tool_number
     
     @tool_number.setter
-    def tool_number(self, value):
+    def tool_number(self, value: int | str):
         self._tool_number = int(value)

@@ -20,16 +20,16 @@ class LedStripType(str, Enum):
 class LedStrip(ModelObject):
     """Type of this LED strip"""
 
-    def __init__(self):
+    def __init__(self) -> None:
         super().__init__()
         # Board address of the corresponding pin
-        self._board = 0
+        self._board: int = 0
         # Name of the pin this LED strip is connected to
-        self._pin = ""
+        self._pin: str = ""
         # Indicates if this strip is bit-banged and therefore requires motion to be stopped before sending a command
-        self._stop_movement = False
+        self._stop_movement: bool = False
         # Type of this LED strip
-        self._type = LedStripType.DotStar
+        self._type: LedStripType = LedStripType.DotStar
 
     @property
     def board(self) -> int:

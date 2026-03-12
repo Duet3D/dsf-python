@@ -19,8 +19,10 @@ from DuetSoftwareFramework.
     along with this program.  If not, see <https://www.gnu.org/licenses/>.
 """
 
+from typing import Any
 
-def decode_response(obj):
+
+def decode_response(obj: dict[str, Any]) -> "Response | ErrorResponse":
     """Deserialization helper to convert a response to the appropriate type"""
     if obj["success"]:
         if "result" in obj:
@@ -33,14 +35,14 @@ def decode_response(obj):
 class BaseResponse:
     """Base class for every response to a command request."""
 
-    def __init__(self, success):
+    def __init__(self, success: bool):
         self.success = success
 
 
 class Response(BaseResponse):
     """Response of a Command"""
 
-    def __init__(self, result=None):
+    def __init__(self, result: Any = None):
         super().__init__(True)
         self.result = result
 
@@ -48,7 +50,7 @@ class Response(BaseResponse):
 class ErrorResponse(BaseResponse):
     """Response indicating a runtime exception during the internal processing of a command"""
 
-    def __init__(self, error_type, error_message):
+    def __init__(self, error_type: str, error_message: str):
         super().__init__(False)
         self.error_type = error_type
         self.error_message = error_message

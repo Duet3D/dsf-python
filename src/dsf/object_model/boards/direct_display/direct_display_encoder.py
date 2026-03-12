@@ -4,10 +4,10 @@ from ...model_object import ModelObject
 class DirectDisplayEncoder(ModelObject):
     """Class providing information about a connected display encoder"""
 
-    def __init__(self):
+    def __init__(self) -> None:
         super().__init__()
         # Number of pulses per click of the rotary encoder
-        self._pulses_per_click = 1
+        self._pulses_per_click: int = 1
 
     @property
     def pulses_per_click(self) -> int:

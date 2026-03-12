@@ -1,5 +1,3 @@
-from typing import Union
-
 from .access_level import AccessLevel
 from .session_type import SessionType
 from ....model_object import ModelObject
@@ -7,18 +5,19 @@ from ....model_object import ModelObject
 
 class UserSession(ModelObject):
     """Class representing a user session"""
-    def __init__(self):
+
+    def __init__(self) -> None:
         super().__init__()
         # Access level of this session
-        self._access_level = AccessLevel.readOnly
+        self._access_level: AccessLevel = AccessLevel.readOnly
         # Identifier of this session
-        self._id = 0
+        self._id: int = 0
         # Origin of this session. For remote sessions, this equals the remote IP address
-        self._origin = None
+        self._origin: str | None = None
         # Corresponding identifier of the origin.
-        self._origin_id = -1
+        self._origin_id: int = -1
         # Type of this session
-        self._session_type = SessionType.local
+        self._session_type: SessionType = SessionType.local
         
     @property
     def access_level(self) -> AccessLevel:
@@ -26,7 +25,7 @@ class UserSession(ModelObject):
         return self._access_level
     
     @access_level.setter
-    def access_level(self, value):
+    def access_level(self, value: AccessLevel):
         self._access_level = value
         
     @property
@@ -35,16 +34,16 @@ class UserSession(ModelObject):
         return self._id
     
     @id.setter
-    def id(self, value):
+    def id(self, value: int | str):
         self._id = int(value)
         
     @property
-    def origin(self) -> Union[str, None]:
+    def origin(self) -> str | None:
         """Origin of this session. For remote sessions, this equals the remote IP address"""
         return self._origin
     
     @origin.setter
-    def origin(self, value):
+    def origin(self, value: str | None):
         self._origin = str(value) if value is not None else None
         
     @property
@@ -54,7 +53,7 @@ class UserSession(ModelObject):
         return self._origin_id
     
     @origin_id.setter
-    def origin_id(self, value):
+    def origin_id(self, value: int | str):
         self._origin_id = int(value)
         
     @property
@@ -63,7 +62,7 @@ class UserSession(ModelObject):
         return self._session_type
     
     @session_type.setter
-    def session_type(self, value):
+    def session_type(self, value: SessionType | str | None):
         if value is None or value == "":
             self._session_type = SessionType.local
         elif isinstance(value, SessionType):

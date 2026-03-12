@@ -8,30 +8,30 @@ from typing import Union
 class Spindle(ModelObject):
     """Information about a CNC spindles"""
 
-    def __init__(self):
+    def __init__(self) -> None:
         super().__init__()
         # Active RPM
-        self._active = 0
+        self._active: int | None = 0
         # Flags whether the spindles may spin in reverse direction
-        self._can_reverse = False
+        self._can_reverse: bool | None = False
         # Current RPM, negative if anticlockwise direction
-        self._current = 0
+        self._current: int | None = 0
         # Frequency (in Hz)
-        self._frequency = 0
+        self._frequency: int | None = 0
         #
-        self._idle_pwm = 0
+        self._idle_pwm: float | None = 0
         # Maximum RPM
-        self._max = 10000
+        self._max: int | None = 10000
         #
-        self._max_pwm = 1
+        self._max_pwm: float | None = 1
         # Minimum RPM when turned on
-        self._min = 60
+        self._min: int | None = 60
         #
-        self._min_pwm = 0
+        self._min_pwm: float | None = 0
         # Current state
-        self._state = SpindleState.unconfigured
+        self._state: SpindleState = SpindleState.unconfigured
         # Spindle type
-        self._type = SpindleType.null
+        self._type: SpindleType = SpindleType.null
         
     @property
     def active(self) -> Union[int, None]:
@@ -120,7 +120,7 @@ class Spindle(ModelObject):
         return self._state
     
     @state.setter
-    def state(self, value):
+    def state(self, value: SpindleState | str | None):
         if value is None or value == "":
             self._state = SpindleState.unconfigured
         elif isinstance(value, str):
@@ -136,7 +136,7 @@ class Spindle(ModelObject):
         return self._type
 
     @type.setter
-    def type(self, value):
+    def type(self, value: SpindleType | str | None):
         if value is None or value == "":
             self._type = SpindleType.null
         elif isinstance(value, str):

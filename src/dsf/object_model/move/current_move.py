@@ -30,7 +30,7 @@ class CurrentMove(ModelObject):
         return self._acceleration
 
     @acceleration.setter
-    def acceleration(self, value):
+    def acceleration(self, value: float | int | str):
         self._acceleration = float(value)
 
     @property
@@ -39,7 +39,7 @@ class CurrentMove(ModelObject):
         return self._deceleration
 
     @deceleration.setter
-    def deceleration(self, value):
+    def deceleration(self, value: float | int | str):
         self._deceleration = float(value)
 
     @property
@@ -66,7 +66,7 @@ class CurrentMove(ModelObject):
         return self._extrusion_rate
 
     @extrusion_rate.setter
-    def extrusion_rate(self, value):
+    def extrusion_rate(self, value: float | int | str):
         self._extrusion_rate = float(value)
 
     @property
@@ -75,7 +75,7 @@ class CurrentMove(ModelObject):
         return self._laser_pwm
 
     @laser_pwm.setter
-    def laser_pwm(self, value):
+    def laser_pwm(self, value: float | int | str | None):
         self._laser_pwm = float(value) if value is not None else None
 
     @property
@@ -84,7 +84,7 @@ class CurrentMove(ModelObject):
         return self._requested_speed
 
     @requested_speed.setter
-    def requested_speed(self, value):
+    def requested_speed(self, value: float | int | str):
         self._requested_speed = float(value)
 
     @property
@@ -93,5 +93,5 @@ class CurrentMove(ModelObject):
         return self._top_speed
 
     @top_speed.setter
-    def top_speed(self, value):
+    def top_speed(self, value: float | int | str):
         self._top_speed = float(value)

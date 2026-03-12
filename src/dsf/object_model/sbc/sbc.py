@@ -1,6 +1,5 @@
 import dateutil.parser as dp
 from datetime import datetime
-from typing import Union
 
 from .cpu import CPU
 from .memory import Memory
@@ -11,17 +10,17 @@ from ..model_object import ModelObject
 class SBC(ModelObject):
     """Information about the SBC in SBC mode"""
 
-    def __init__(self):
+    def __init__(self) -> None:
         super().__init__()
-        self._app_armor = False
-        self._cpu = CPU()
-        self._distribution = None
-        self._distribution_build_time = None
-        self._dsf = DSF()
-        self._memory = Memory()
-        self._model = None
-        self._serial = None
-        self._uptime = None
+        self._app_armor: bool = False
+        self._cpu: CPU = CPU()
+        self._distribution: str | None = None
+        self._distribution_build_time: datetime | None = None
+        self._dsf: DSF = DSF()
+        self._memory: Memory = Memory()
+        self._model: str | None = None
+        self._serial: str | None = None
+        self._uptime: float | None = None
 
     @property
     def app_armor(self) -> bool:
@@ -30,7 +29,7 @@ class SBC(ModelObject):
         return self._app_armor
 
     @app_armor.setter
-    def app_armor(self, value):
+    def app_armor(self, value: bool | int | str):
         self._app_armor = bool(value)
 
     @property
@@ -39,21 +38,21 @@ class SBC(ModelObject):
         return self._cpu
 
     @property
-    def distribution(self) -> Union[str, None]:
+    def distribution(self) -> str | None:
         """Name and version of the system distribution or None if unknown"""
         return self._distribution
 
     @distribution.setter
-    def distribution(self, value):
+    def distribution(self, value: str | None):
         self._distribution = str(value) if value is not None else None
 
     @property
-    def distribution_build_time(self) -> Union[datetime, None]:
+    def distribution_build_time(self) -> datetime | None:
         """Build datetime of the system distribution or None if unknown"""
         return self._distribution_build_time
 
     @distribution_build_time.setter
-    def distribution_build_time(self, value):
+    def distribution_build_time(self, value: datetime | str | None):
         if value is None or isinstance(value, datetime):
             self._distribution_build_time = value
         elif isinstance(value, str):  # Update from JSON
@@ -73,28 +72,28 @@ class SBC(ModelObject):
         return self._memory
 
     @property
-    def model(self) -> Union[str, None]:
+    def model(self) -> str | None:
         """SBC model or None if unknown"""
         return self._model
 
     @model.setter
-    def model(self, value):
+    def model(self, value: str | None):
         self._model = str(value) if value is not None else None
 
     @property
-    def serial(self) -> Union[str, None]:
+    def serial(self) -> str | None:
         """SBC serial or None if unknown"""
         return self._serial
 
     @serial.setter
-    def serial(self, value):
+    def serial(self, value: str | None):
         self._serial = str(value) if value is not None else None
 
     @property
-    def uptime(self) -> Union[float, None]:
+    def uptime(self) -> float | None:
         """Uptime of the running system (in s) or None if unknown"""
         return self._uptime
 
     @uptime.setter
-    def uptime(self, value):
+    def uptime(self, value: float | int | str | None):
         self._uptime = float(value) if value is not None else None

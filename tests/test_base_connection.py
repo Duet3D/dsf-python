@@ -1,5 +1,7 @@
 import unittest
-from unittest.mock import patch
+import socket
+from unittest.mock import Mock, patch
+from typing import cast
 
 from src.dsf.connections.base_connection import BaseConnection
 
@@ -14,14 +16,16 @@ class TestBaseConnection(unittest.TestCase):
     def test_has_data_available_returns_false_for_partial_buffer_without_socket_data(self):
         connection = BaseConnection()
         connection.input = '{"key"'
-        connection.socket = object()
+        connection.socket = cast(socket.socket, object())
 
         with patch('src.dsf.connections.base_connection.select.select', return_value=([], [], [])):
             self.assertFalse(connection.has_data_available())
 
     def test_has_data_available_returns_true_when_socket_is_readable(self):
         connection = BaseConnection()
-        connection.socket = object()
+        socket_mock = Mock(spec=socket.socket)
+        socket_mock.recv.return_value = b'{'
+        connection.socket = cast(socket.socket, socket_mock)
 
         with patch(
             'src.dsf.connections.base_connection.select.select',

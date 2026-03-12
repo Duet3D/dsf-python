@@ -1,3 +1,5 @@
+from typing import Optional
+
 from .filament_monitor import FilamentMonitor
 from .filament_monitor_type import FilamentMonitorType
 from ...model_object import ModelObject
@@ -7,12 +9,12 @@ from ...utils import wrap_model_property
 class PulsedFilamentMonitorCalibrated(ModelObject):
     """Calibrated properties of a pulsed filament monitor"""
 
-    def __init__(self):
+    def __init__(self) -> None:
         super(PulsedFilamentMonitorCalibrated, self).__init__()
-        self._mm_per_pulse = 0
-        self._percent_max = 0
-        self._percent_min = 0
-        self._total_distance = 0
+        self._mm_per_pulse: float = 0
+        self._percent_max: float = 0
+        self._percent_min: float = 0
+        self._total_distance: float = 0
 
     @property
     def mm_per_pulse(self) -> float:
@@ -20,7 +22,7 @@ class PulsedFilamentMonitorCalibrated(ModelObject):
         return self._mm_per_pulse
 
     @mm_per_pulse.setter
-    def mm_per_pulse(self, value):
+    def mm_per_pulse(self, value: float | int | str):
         self._mm_per_pulse = float(value)
 
     @property
@@ -29,7 +31,7 @@ class PulsedFilamentMonitorCalibrated(ModelObject):
         return self._percent_max
 
     @percent_max.setter
-    def percent_max(self, value):
+    def percent_max(self, value: float | int | str):
         self._percent_max = float(value)
 
     @property
@@ -38,7 +40,7 @@ class PulsedFilamentMonitorCalibrated(ModelObject):
         return self._percent_min
 
     @percent_min.setter
-    def percent_min(self, value):
+    def percent_min(self, value: float | int | str):
         self._percent_min = float(value)
 
     @property
@@ -47,19 +49,19 @@ class PulsedFilamentMonitorCalibrated(ModelObject):
         return self._total_distance
 
     @total_distance.setter
-    def total_distance(self, value):
+    def total_distance(self, value: float | int | str):
         self._total_distance = float(value)
 
 
 class PulsedFilamentMonitorConfigured(ModelObject):
     """Configured properties of a pulsed filament monitor"""
 
-    def __init__(self):
+    def __init__(self) -> None:
         super(PulsedFilamentMonitorConfigured, self).__init__()
-        self._mm_per_pulse = 0
-        self._percent_max = 0
-        self._percent_min = 0
-        self._sample_distance = 0
+        self._mm_per_pulse: float = 0
+        self._percent_max: float = 0
+        self._percent_min: float = 0
+        self._sample_distance: float = 0
 
     @property
     def mm_per_pulse(self) -> float:
@@ -67,7 +69,7 @@ class PulsedFilamentMonitorConfigured(ModelObject):
         return self._mm_per_pulse
     
     @mm_per_pulse.setter
-    def mm_per_pulse(self, value):
+    def mm_per_pulse(self, value: float | int | str):
         self._mm_per_pulse = float(value)
         
     @property
@@ -76,7 +78,7 @@ class PulsedFilamentMonitorConfigured(ModelObject):
         return self._percent_max
     
     @percent_max.setter
-    def percent_max(self, value):
+    def percent_max(self, value: float | int | str):
         self._percent_max = float(value)
         
     @property
@@ -85,7 +87,7 @@ class PulsedFilamentMonitorConfigured(ModelObject):
         return self._percent_min
     
     @percent_min.setter
-    def percent_min(self, value):
+    def percent_min(self, value: float | int | str):
         self._percent_min = float(value)
         
     @property
@@ -94,7 +96,7 @@ class PulsedFilamentMonitorConfigured(ModelObject):
         return self._sample_distance
     
     @sample_distance.setter
-    def sample_distance(self, value):
+    def sample_distance(self, value: float | int | str):
         self._sample_distance = float(value)
 
 
@@ -104,12 +106,12 @@ class PulsedFilamentMonitor(FilamentMonitor):
     # Calibrated properties of this filament monitor
     calibrated = wrap_model_property('calibrated', PulsedFilamentMonitorCalibrated)
 
-    def __init__(self):
+    def __init__(self) -> None:
         super(PulsedFilamentMonitor, self).__init__()
-        self._calibrated = None
-        self._configured = PulsedFilamentMonitorConfigured()
-        self._position = None
-        self._type = FilamentMonitorType.Pulsed
+        self._calibrated: Optional[PulsedFilamentMonitorCalibrated] = None
+        self._configured: PulsedFilamentMonitorConfigured = PulsedFilamentMonitorConfigured()
+        self._position: Optional[float] = None
+        self._type: FilamentMonitorType = FilamentMonitorType.Pulsed
         
     @property
     def configured(self) -> PulsedFilamentMonitorConfigured:
@@ -117,10 +119,10 @@ class PulsedFilamentMonitor(FilamentMonitor):
         return self._configured
 
     @property
-    def position(self) -> float:
+    def position(self) -> Optional[float]:
         """Position of the sensor (in mm)"""
         return self._position
 
     @position.setter
-    def position(self, value):
-        self._position = float(value)
+    def position(self, value: Optional[float | int | str]):
+        self._position = None if value is None else float(value)

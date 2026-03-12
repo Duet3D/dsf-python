@@ -3,23 +3,24 @@ from ..model_object import ModelObject
 
 class Directories(ModelObject):
     """Information about the configured directories"""
-    def __init__(self):
+
+    def __init__(self) -> None:
         super().__init__()
         # Path to the filaments directory
-        self._filaments = "0:/filaments"
+        self._filaments: str = "0:/filaments"
         # Path to the firmware directory
-        self._firmware = "0:/firmware"
+        self._firmware: str = "0:/firmware"
         # Path to the G-Codes directory
-        self._g_codes = "0:/gcodes"
+        self._g_codes: str = "0:/gcodes"
         # Path to the macros directory
-        self._macros = "0:/macros"
+        self._macros: str = "0:/macros"
         # Path to the menu directory
         # Intended for 12864 displays but currently unused in DSF. It is only needed for the Duet Maestro > DWC
-        self._menu = "0:/menu"
+        self._menu: str = "0:/menu"
         # Path to the system directory
-        self._system = "0:/sys"
+        self._system: str = "0:/sys"
         # Path to the web directory
-        self._web = "0:/www"
+        self._web: str = "0:/www"
 
     @property
     def filaments(self) -> str:
@@ -27,7 +28,7 @@ class Directories(ModelObject):
         return self._filaments
 
     @filaments.setter
-    def filaments(self, value):
+    def filaments(self, value: str):
         self._filaments = str(value)
 
     @property
@@ -36,7 +37,7 @@ class Directories(ModelObject):
         return self._firmware
 
     @firmware.setter
-    def firmware(self, value):
+    def firmware(self, value: str):
         self._firmware = str(value)
 
     @property
@@ -45,7 +46,7 @@ class Directories(ModelObject):
         return self._g_codes
 
     @g_codes.setter
-    def g_codes(self, value):
+    def g_codes(self, value: str):
         self._g_codes = str(value)
 
     @property
@@ -54,7 +55,7 @@ class Directories(ModelObject):
         return self._macros
 
     @macros.setter
-    def macros(self, value):
+    def macros(self, value: str):
         self._macros = str(value)
 
     @property
@@ -64,7 +65,7 @@ class Directories(ModelObject):
         return self._menu
 
     @menu.setter
-    def menu(self, value):
+    def menu(self, value: str):
         self._menu = str(value)
 
     @property
@@ -73,7 +74,7 @@ class Directories(ModelObject):
         return self._system
 
     @system.setter
-    def system(self, value):
+    def system(self, value: str):
         self._system = str(value)
 
     @property
@@ -82,5 +83,5 @@ class Directories(ModelObject):
         return self._web
 
     @web.setter
-    def web(self, value):
+    def web(self, value: str):
         self._web = str(value)

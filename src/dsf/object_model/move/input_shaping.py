@@ -60,7 +60,7 @@ class InputShaping(ModelObject):
         return self._damping
 
     @damping.setter
-    def damping(self, value):
+    def damping(self, value: float | int | str):
         self._damping = float(value)
 
     @property
@@ -74,7 +74,7 @@ class InputShaping(ModelObject):
         return self._frequency
 
     @frequency.setter
-    def frequency(self, value):
+    def frequency(self, value: float | int | str):
         self._frequency = float(value)
 
     @property
@@ -92,7 +92,7 @@ class InputShaping(ModelObject):
         return self._type
 
     @type.setter
-    def type(self, value):
+    def type(self, value: InputShapingType | str):
         if isinstance(value, InputShapingType):
             self._type = value
         elif isinstance(value, str):

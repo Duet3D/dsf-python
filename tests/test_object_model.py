@@ -23,11 +23,16 @@ class Model(unittest.TestCase):
         # Voltage change
         json_patch = '{"boards":[{"vIn":{"current":42.5}}]}'
         model.update_from_json(json_patch)
+        board = model.boards[0]
+        self.assertIsNotNone(board)
+        assert board is not None
+        self.assertIsNotNone(board.v_in)
+        assert board.v_in is not None
         # Check if the value has been modified
-        self.assertEqual(model.boards[0].v_in.current, 42.5)
+        self.assertEqual(board.v_in.current, 42.5)
         # Check if other values has not been altered
-        self.assertEqual(model.boards[0].v_in.min, 19.3)
-        self.assertEqual(model.boards[0].v_in.max, 19.4)
+        self.assertEqual(board.v_in.min, 19.3)
+        self.assertEqual(board.v_in.max, 19.4)
 
     def test_http_endpoints(self):
         from src.dsf.object_model import HttpEndpointType
@@ -81,14 +86,19 @@ class Model(unittest.TestCase):
         json_patch = '{"messages":[{"content":"File 0:/gcodes/Veil_Token.gcode will print in 0h 14m plus heating time","time":"2022-12-31T16:42:22.8058935+00:00","type":0}]}'
         model.update_from_json(json_patch)
         self.assertEqual(len(model.messages), 1)
-        self.assertEqual(str(model.messages[0].time), "2022-12-31 16:42:22.805893+00:00")
-        self.assertEqual(model.messages[0].type, MessageType.Success)
+        message = model.messages[0]
+        self.assertIsNotNone(message)
+        assert message is not None
+        self.assertEqual(str(message.time), "2022-12-31 16:42:22.805893+00:00")
+        self.assertEqual(message.type, MessageType.Success)
 
         json_patch = '{"messages":[]}'
         model.update_from_json(json_patch)
         self.assertEqual(len(model.messages), 0)
 
     def test_move_kinematics(self):
+        from typing import cast
+
         from src.dsf.object_model.move.kinematics import CoreKinematics, DeltaKinematics, KinematicsName
 
         model = ObjectModel()
@@ -96,8 +106,9 @@ class Model(unittest.TestCase):
         model.update_from_json(json_patch)
 
         self.assertIsInstance(model.move.kinematics, DeltaKinematics)
-        self.assertEqual(model.move.kinematics.name, KinematicsName.delta)
-        self.assertEqual(model.move.kinematics.delta_radius, 123)
+        delta_kinematics = cast(DeltaKinematics, model.move.kinematics)
+        self.assertEqual(delta_kinematics.name, KinematicsName.delta)
+        self.assertEqual(delta_kinematics.delta_radius, 123)
 
         # Switch to CoreXY (eg: M669 K1)
         json_patch = '{"move":{"kinematics":{"forwardMatrix":[[0.5,0.5,0],[0.5,-0.5,0],[0,0,1]],"inverseMatrix":[[1,1,0],[1,-1,0],[0,0,1]],"tiltCorrection":{"correctionFactor":1,"lastCorrections":[],"maxCorrection":1,"screwPitch":0.5,"screwX":[],"screwY":[]},"name":"coreXY","segmentation":null}}}'
@@ -109,8 +120,9 @@ class Model(unittest.TestCase):
         json_patch = '{"move":{"kinematics":{"deltaRadius":105.6,"homedHeight":240,"printRadius":80,"towers":[{"angleCorrection":0,"diagonal":215,"endstopAdjustment":0,"xPos":-91.452,"yPos":-52.8},{"angleCorrection":0,"diagonal":215,"endstopAdjustment":0,"xPos":91.452,"yPos":-52.8},{"angleCorrection":0,"diagonal":215,"endstopAdjustment":0,"xPos":0,"yPos":105.6}],"xTilt":0,"yTilt":0,"name":"delta","segmentation":null}}}'
         model.update_from_json(json_patch)
         self.assertIsInstance(model.move.kinematics, DeltaKinematics)
-        self.assertEqual(model.move.kinematics.name, KinematicsName.delta)
-        self.assertEqual(model.move.kinematics.delta_radius, 105.6)
+        delta_kinematics = cast(DeltaKinematics, model.move.kinematics)
+        self.assertEqual(delta_kinematics.name, KinematicsName.delta)
+        self.assertEqual(delta_kinematics.delta_radius, 105.6)
 
     def test_plugins(self):
         model = ObjectModel()
@@ -145,13 +157,19 @@ class Model(unittest.TestCase):
         json_patch = '{"sensors":{"filamentMonitors":[{"enabled":true,"status":"ok","type":"simple"}]}}'
         model.update_from_json(json_patch)
         self.assertEqual(len(model.sensors.filament_monitors), 1)
-        self.assertEqual(model.sensors.filament_monitors[0].type, FilamentMonitorType.Simple)
+        filament_monitor = model.sensors.filament_monitors[0]
+        self.assertIsNotNone(filament_monitor)
+        assert filament_monitor is not None
+        self.assertEqual(filament_monitor.type, FilamentMonitorType.Simple)
 
         # Change filament monitor to Pulsed (rg: M591 D0 P7 C"io2.in" S1)
         json_patch = '{"sensors":{"filamentMonitors":[{"calibrated":null,"configured":{"mmPerPulse":1,"percentMax":160,"percentMin":60,"sampleDistance":5},"enabled":true,"status":"ok","type":"pulsed"}]}}'
         model.update_from_json(json_patch)
         self.assertEqual(len(model.sensors.filament_monitors), 1)
-        self.assertEqual(model.sensors.filament_monitors[0].type, FilamentMonitorType.Pulsed)
+        filament_monitor = model.sensors.filament_monitors[0]
+        self.assertIsNotNone(filament_monitor)
+        assert filament_monitor is not None
+        self.assertEqual(filament_monitor.type, FilamentMonitorType.Pulsed)
 
     def test_user_sessions(self):
         from src.dsf.object_model import AccessLevel, SessionType

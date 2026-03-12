@@ -6,9 +6,9 @@ class BoardClosedLoop(ModelObject):
     def __init__(self):
         super(BoardClosedLoop, self).__init__()
         # Number of collected data points in the last run or 0 if it failed
-        self._points = 0
+        self._points: int = 0
         # Number of completed sampling runs
-        self._runs = 0
+        self._runs: int = 0
 
     @property
     def points(self) -> int:

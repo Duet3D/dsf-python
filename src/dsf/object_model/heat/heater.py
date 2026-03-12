@@ -1,5 +1,5 @@
 from enum import Enum
-from typing import List, Union
+from typing import List, Sequence, Union
 
 from .heater_model import HeaterModel
 from .heater_monitor import HeaterMonitor
@@ -31,40 +31,41 @@ class HeaterState(str, Enum):
 
 class Heater(ModelObject):
     """Information about a heater"""
-    def __init__(self):
+
+    def __init__(self) -> None:
         super().__init__()
         # Active temperature of the heater (in C)
-        self._active = 0
+        self._active: float = 0
         # Average heater PWM value (0..1)
-        self._avg_pwm = 0
+        self._avg_pwm: float = 0
         # Current temperature of the heater (in C)
-        self._current = -273.15
+        self._current: float = -273.15
         # Current feedforward PWM boost applied to the heater
-        self._extr_pwm_boost = None
+        self._extr_pwm_boost: float | None = None
         # Current temperature boost applied to the heater
-        self._extr_temp_boost = None
+        self._extr_temp_boost: float | None = None
         # Maximum temperature allowed for this heater (in C)
         # This is only temporary and should be replaced by a representation of the heater protection as in RRF
-        self._max = 285
+        self._max: float = 285
         # Maximum number of consecutive temperature reading failures before a heater fault is raised
-        self._max_bad_readings = 3
+        self._max_bad_readings: int = 3
         # Time for which a temperature anomaly must persist on this heater before raising a heater fault (in s)
-        self._max_heating_fault_time = 5
+        self._max_heating_fault_time: float = 5
         # Permitted temperature excursion from the setpoint for this heater (in K)
-        self._max_temp_excursion = 15
+        self._max_temp_excursion: float = 15
         # Minimum temperature allowed for this heater (in C)
         # This is only temporary and should be replaced by a representation of the heater protection as in RRF
-        self._min = -10
+        self._min: float = -10
         # Information about the heater model
-        self._model = HeaterModel()
+        self._model: HeaterModel = HeaterModel()
         # Monitors of this heater
-        self._monitors = ModelCollection(HeaterMonitor)
+        self._monitors: ModelCollection[HeaterMonitor] = ModelCollection(HeaterMonitor)
         # Sensor number of this heater or -1 if not configured
-        self._sensor = -1
+        self._sensor: int = -1
         # Standby temperature of the heater (in C)
-        self._standby = 0
+        self._standby: float = 0
         # State of the heater
-        self._state = HeaterState.off
+        self._state: HeaterState = HeaterState.off
 
     @property
     def active(self) -> float:
@@ -164,7 +165,7 @@ class Heater(ModelObject):
         return self._model
 
     @property
-    def monitors(self) -> List[HeaterMonitor]:
+    def monitors(self) -> Sequence[HeaterMonitor | None]:
         """Monitors of this heater"""
         return self._monitors
 

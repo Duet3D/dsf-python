@@ -1,5 +1,5 @@
 from enum import Enum
-from typing import List, Union
+from typing import Any, List, Sequence, Union
 
 from .driver_id import DriverId
 from .microstepping import MicroStepping
@@ -63,7 +63,7 @@ class Axis(ModelObject):
         # Motor current (in mA)
         self._current: int = 0
         # List of the assigned drivers
-        self._drivers: ModelCollection = ModelCollection(DriverId)
+        self._drivers = ModelCollection(DriverId)
         # Whether the axis is homed
         self._homed: bool = False
         # Motor jerk (in mm/min)
@@ -111,7 +111,7 @@ class Axis(ModelObject):
         return self._acceleration
 
     @acceleration.setter
-    def acceleration(self, value):
+    def acceleration(self, value: Any):
         self._acceleration = float(value)
 
     @property
@@ -120,7 +120,7 @@ class Axis(ModelObject):
         return self._babystep
 
     @babystep.setter
-    def babystep(self, value):
+    def babystep(self, value: Any):
         self._babystep = float(value)
 
     @property
@@ -129,7 +129,7 @@ class Axis(ModelObject):
         return self._backlash
 
     @backlash.setter
-    def backlash(self, value):
+    def backlash(self, value: Any):
         self._backlash = float(value)
 
     @property
@@ -138,11 +138,11 @@ class Axis(ModelObject):
         return self._current
 
     @current.setter
-    def current(self, value):
+    def current(self, value: Any):
         self._current = int(value)
 
     @property
-    def drivers(self) -> List[DriverId]:
+    def drivers(self) -> Sequence[DriverId | None]:
         """List of the assigned drivers"""
         return self._drivers
 
@@ -152,7 +152,7 @@ class Axis(ModelObject):
         return self._homed
 
     @homed.setter
-    def homed(self, value):
+    def homed(self, value: Any):
         self._homed = bool(value)
 
     @property
@@ -161,7 +161,7 @@ class Axis(ModelObject):
         return self._jerk
 
     @jerk.setter
-    def jerk(self, value):
+    def jerk(self, value: Any):
         self._jerk = float(value)
 
     @property
@@ -170,7 +170,7 @@ class Axis(ModelObject):
         return self._letter
 
     @letter.setter
-    def letter(self, value):
+    def letter(self, value: Any):
         if isinstance(value, AxisLetter):
             self._letter = value
         elif isinstance(value, str):
@@ -186,7 +186,7 @@ class Axis(ModelObject):
         return self._machine_position
 
     @machine_position.setter
-    def machine_position(self, value):
+    def machine_position(self, value: Any):
         self._machine_position = float(value) if value is not None else None
 
     @property
@@ -195,7 +195,7 @@ class Axis(ModelObject):
         return self._max
 
     @max.setter
-    def max(self, value):
+    def max(self, value: Any):
         self._max = float(value)
 
     @property
@@ -204,7 +204,7 @@ class Axis(ModelObject):
         return self._max_probed
 
     @max_probed.setter
-    def max_probed(self, value):
+    def max_probed(self, value: Any):
         self._max_probed = bool(value)
 
     @property
@@ -218,7 +218,7 @@ class Axis(ModelObject):
         return self._min
 
     @min.setter
-    def min(self, value):
+    def min(self, value: Any):
         self._min = float(value)
 
     @property
@@ -227,7 +227,7 @@ class Axis(ModelObject):
         return self._min_probed
 
     @min_probed.setter
-    def min_probed(self, value):
+    def min_probed(self, value: Any):
         self._min_probed = bool(value)
 
     @property
@@ -236,7 +236,7 @@ class Axis(ModelObject):
         return self._percent_current
 
     @percent_current.setter
-    def percent_current(self, value):
+    def percent_current(self, value: Any):
         self._percent_current = int(value)
 
     @property
@@ -245,7 +245,7 @@ class Axis(ModelObject):
         return self._percent_stst_current
 
     @percent_stst_current.setter
-    def percent_stst_current(self, value):
+    def percent_stst_current(self, value: Any):
         self._percent_stst_current = int(value) if value is not None else None
 
     @property
@@ -263,7 +263,7 @@ class Axis(ModelObject):
         return self._printing_jerk
 
     @printing_jerk.setter
-    def printing_jerk(self, value):
+    def printing_jerk(self, value: Any):
         self._printing_jerk = float(value)
 
     @property
@@ -272,7 +272,7 @@ class Axis(ModelObject):
         return self._reduced_acceleration
 
     @reduced_acceleration.setter
-    def reduced_acceleration(self, value):
+    def reduced_acceleration(self, value: Any):
         self._reduced_acceleration = float(value)
 
     @property
@@ -281,7 +281,7 @@ class Axis(ModelObject):
         return self._speed
 
     @speed.setter
-    def speed(self, value):
+    def speed(self, value: Any):
         self._speed = float(value)
 
     @property
@@ -290,7 +290,7 @@ class Axis(ModelObject):
         return self._steps_per_mm
 
     @steps_per_mm.setter
-    def steps_per_mm(self, value):
+    def steps_per_mm(self, value: Any):
         self._steps_per_mm = float(value)
 
     @property
@@ -309,7 +309,7 @@ class Axis(ModelObject):
         return self._user_position
 
     @user_position.setter
-    def user_position(self, value):
+    def user_position(self, value: Any):
         self._user_position = float(value) if value is not None else None
 
     @property
@@ -318,7 +318,7 @@ class Axis(ModelObject):
         return self._visible
 
     @visible.setter
-    def visible(self, value):
+    def visible(self, value: Any):
         self._visible = bool(value)
 
     @property

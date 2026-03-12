@@ -1,4 +1,4 @@
-from typing import List
+from typing import List, Optional, Sequence
 
 from .heater import Heater
 from ..model_collection import ModelCollection
@@ -8,18 +8,18 @@ from ..model_object import ModelObject
 class Heat(ModelObject):
     """Information about the heat subsystem"""
 
-    def __init__(self):
+    def __init__(self) -> None:
         super().__init__()
         # List of configured bed heaters (indices)
-        self._bed_heaters = []
+        self._bed_heaters: List[int] = []
         # List of configured chamber heaters (indices)
-        self._chamber_heaters = []
+        self._chamber_heaters: List[int] = []
         # Minimum required temperature for extrusion moves (in C)
-        self._cold_extrude_temperature = 160
+        self._cold_extrude_temperature: float = 160
         # Minimum required temperature for retraction moves (in C)
-        self._cold_retract_temperature = 90
+        self._cold_retract_temperature: float = 90
         # List of configured heaters
-        self._heaters = ModelCollection(Heater)
+        self._heaters: ModelCollection[Heater] = ModelCollection(Heater)
 
     @property
     def bed_heaters(self) -> List[int]:
@@ -52,6 +52,6 @@ class Heat(ModelObject):
         self._cold_retract_temperature = float(value)
 
     @property
-    def heaters(self) -> List[Heater]:
+    def heaters(self) -> Sequence[Optional[Heater]]:
         """List of configured heaters"""
         return self._heaters

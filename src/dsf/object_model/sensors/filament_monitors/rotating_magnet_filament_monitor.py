@@ -7,12 +7,12 @@ from ...utils import wrap_model_property
 class RotatingMagnetFilamentMonitorCalibrated(ModelObject):
     """Calibrated properties of a rotating magnet filament monitor"""
 
-    def __init__(self):
+    def __init__(self) -> None:
         super(RotatingMagnetFilamentMonitorCalibrated, self).__init__()
-        self._mm_per_pulse = 0
-        self._percent_max = 0
-        self._percent_min = 0
-        self._total_distance = 0
+        self._mm_per_pulse: float = 0
+        self._percent_max: float = 0
+        self._percent_min: float = 0
+        self._total_distance: float = 0
 
     @property
     def mm_per_pulse(self) -> float:
@@ -20,7 +20,7 @@ class RotatingMagnetFilamentMonitorCalibrated(ModelObject):
         return self._mm_per_pulse
 
     @mm_per_pulse.setter
-    def mm_per_pulse(self, value):
+    def mm_per_pulse(self, value: float | int | str):
         self._mm_per_pulse = float(value)
 
     @property
@@ -29,7 +29,7 @@ class RotatingMagnetFilamentMonitorCalibrated(ModelObject):
         return self._percent_max
 
     @percent_max.setter
-    def percent_max(self, value):
+    def percent_max(self, value: float | int | str):
         self._percent_max = float(value)
 
     @property
@@ -38,7 +38,7 @@ class RotatingMagnetFilamentMonitorCalibrated(ModelObject):
         return self._percent_min
 
     @percent_min.setter
-    def percent_min(self, value):
+    def percent_min(self, value: float | int | str):
         self._percent_min = float(value)
 
     @property
@@ -47,20 +47,20 @@ class RotatingMagnetFilamentMonitorCalibrated(ModelObject):
         return self._total_distance
 
     @total_distance.setter
-    def total_distance(self, value):
+    def total_distance(self, value: float | int | str):
         self._total_distance = float(value)
 
 
 class RotatingMagnetFilamentMonitorConfigured(ModelObject):
     """Configured properties of a rotating magnet filament monitor"""
 
-    def __init__(self):
+    def __init__(self) -> None:
         super(RotatingMagnetFilamentMonitorConfigured, self).__init__()
-        self._all_moves = False
-        self._mm_per_rev = 0
-        self._percent_max = 0
-        self._percent_min = 0
-        self._sample_distance = 0
+        self._all_moves: bool = False
+        self._mm_per_rev: float = 0
+        self._percent_max: float = 0
+        self._percent_min: float = 0
+        self._sample_distance: float = 0
 
     @property
     def all_moves(self) -> bool:
@@ -68,7 +68,7 @@ class RotatingMagnetFilamentMonitorConfigured(ModelObject):
         return self._all_moves
     
     @all_moves.setter
-    def all_moves(self, value):
+    def all_moves(self, value: bool | int | str):
         self._all_moves = bool(value)
         
     @property
@@ -77,7 +77,7 @@ class RotatingMagnetFilamentMonitorConfigured(ModelObject):
         return self._mm_per_rev
     
     @mm_per_rev.setter
-    def mm_per_rev(self, value):
+    def mm_per_rev(self, value: float | int | str):
         self._mm_per_rev = float(value)
         
     @property
@@ -86,7 +86,7 @@ class RotatingMagnetFilamentMonitorConfigured(ModelObject):
         return self._percent_max
     
     @percent_max.setter
-    def percent_max(self, value):
+    def percent_max(self, value: float | int | str):
         self._percent_max = float(value)
         
     @property
@@ -95,7 +95,7 @@ class RotatingMagnetFilamentMonitorConfigured(ModelObject):
         return self._percent_min
     
     @percent_min.setter
-    def percent_min(self, value):
+    def percent_min(self, value: float | int | str):
         self._percent_min = float(value)
         
     @property
@@ -104,7 +104,7 @@ class RotatingMagnetFilamentMonitorConfigured(ModelObject):
         return self._sample_distance
     
     @sample_distance.setter
-    def sample_distance(self, value):
+    def sample_distance(self, value: float | int | str):
         self._sample_distance = float(value)
 
 
@@ -114,11 +114,11 @@ class RotatingMagnetFilamentMonitor(Duet3DFilamentMonitor):
     # Calibrated properties of this filament monitor
     calibrated = wrap_model_property('calibrated', RotatingMagnetFilamentMonitorCalibrated)
 
-    def __init__(self):
+    def __init__(self) -> None:
         super(RotatingMagnetFilamentMonitor, self).__init__()
-        self._calibrated = None
-        self._configured = RotatingMagnetFilamentMonitorConfigured()
-        self._type = FilamentMonitorType.RotatingMagnet
+        self._calibrated: RotatingMagnetFilamentMonitorCalibrated | None = None
+        self._configured: RotatingMagnetFilamentMonitorConfigured = RotatingMagnetFilamentMonitorConfigured()
+        self._type: FilamentMonitorType = FilamentMonitorType.RotatingMagnet
 
     @property
     def configured(self) -> RotatingMagnetFilamentMonitorConfigured:

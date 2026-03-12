@@ -1,16 +1,22 @@
-from typing import Generic, TypeVar, Type, List, Dict, Any, Union, Optional
+from typing import Generic, Protocol, Self, TypeVar, Type, List, Optional, cast
 from .utils import is_model_object
 
-T = TypeVar('T')
+
+class _ModelItem(Protocol):
+    def update_from_json(self, data: dict[str, object] | str) -> Self:
+        ...
 
 
-class ModelCollection(Generic[T], list):
+T = TypeVar('T', bound=_ModelItem)
+
+
+class ModelCollection(Generic[T], list[T | None]):
     """
     Class for storing model object items in a list
     Useful for updating model object items from JSON data (patches)
     """
     
-    def __init__(self, item_constructor: Type[T], value: Optional[List[T]] = None) -> None:
+    def __init__(self, item_constructor: Type[T], value: Optional[List[object]] = None) -> None:
         """
         :param item_constructor: Item constructor type that items must derive from
         :param value: Value used to initialize the list from
@@ -21,14 +27,19 @@ class ModelCollection(Generic[T], list):
         if value is not None:
             self[:] = []
             for (i, item) in enumerate(value):
-                if isinstance(item, self._item_constructor):
+                if item is None:
+                    self.append(None)
+                elif isinstance(item, self._item_constructor):
                     self.append(item)
                 else:
                     ref_item = self._item_constructor()
-                    ref_item.update_from_json(item)
-                    self.append(ref_item)
+                    if isinstance(item, (dict, str)):
+                        ref_item.update_from_json(item)
+                        self.append(ref_item)
+                    else:
+                        raise TypeError(f"Invalid model collection item: {type(item)}")
 
-    def update_from_json(self, json_element: List[Any]) -> 'ModelCollection[T]':
+    def update_from_json(self, json_element: List[object]) -> 'ModelCollection[T]':
         """
         Update this instance from the given data
         :param json_element: JSON data to upgrade this instance from
@@ -47,20 +58,45 @@ class ModelCollection(Generic[T], list):
                 new_item = json_element[i]
                 if isinstance(new_item, self._item_constructor):
                     self[i] = new_item
+                elif new_item is None:
+                    self[i] = None
                 else:
                     ref_item = self._item_constructor()
-                    self[i] = ref_item.update_from_json(new_item)
+                    if isinstance(new_item, (dict, str)):
+                        self[i] = ref_item.update_from_json(new_item)
+                    else:
+                        raise TypeError(f"Invalid model collection item: {type(new_item)}")
             elif is_model_object(current_item):
-                self[i] = current_item.update_from_json(json_element[i])
+                json_item = json_element[i]
+                if json_item is None:
+                    self[i] = None
+                elif isinstance(json_item, (dict, str)):
+                    self[i] = cast(T, current_item).update_from_json(json_item)
+                elif isinstance(json_item, self._item_constructor):
+                    self[i] = json_item
+                else:
+                    raise TypeError(f"Invalid model collection patch item: {type(json_item)}")
             else:
-                self[i] = json_element[i]
+                json_item = json_element[i]
+                if json_item is None:
+                    self[i] = None
+                elif isinstance(json_item, self._item_constructor):
+                    self[i] = json_item
+                elif isinstance(json_item, (dict, str)):
+                    self[i] = cast(T, current_item).update_from_json(json_item)
+                else:
+                    raise TypeError(f"Invalid model collection patch item: {type(json_item)}")
 
         # Add new items
         for i in range(len(self), len(json_element)):
             item_to_add = json_element[i]
-            if item_to_add is None or not isinstance(item_to_add, dict):
+            if item_to_add is None:
+                self.append(None)
+            elif isinstance(item_to_add, self._item_constructor):
                 self.append(item_to_add)
-            else:
+            elif isinstance(item_to_add, (dict, str)):
                 self.append(self._item_constructor().update_from_json(item_to_add))
+            else:
+                raise TypeError(f"Invalid model collection item: {type(item_to_add)}")
 
         return self

@@ -4,18 +4,18 @@ from ..model_object import ModelObject
 class HeaterModelPID(ModelObject):
     """Details about the PID model of a heater"""
 
-    def __init__(self):
+    def __init__(self) -> None:
         super().__init__()
         # Derivative value of the PID regulator
-        self._d = 0
+        self._d: float = 0
         # Integral value of the PID regulator
-        self._i = 0
+        self._i: float = 0
         # Indicates if custom PID values are used
-        self._overridden = False
+        self._overridden: bool = False
         # Proportional value of the PID regulator
-        self._p = 0
+        self._p: float = 0
         # Indicates if PID control is being used
-        self._used = True
+        self._used: bool = True
 
     @property
     def d(self) -> float:
@@ -23,7 +23,7 @@ class HeaterModelPID(ModelObject):
         return self._d
 
     @d.setter
-    def d(self, value):
+    def d(self, value: float | int | str):
         self._d = float(value)
 
     @property
@@ -32,7 +32,7 @@ class HeaterModelPID(ModelObject):
         return self._i
 
     @i.setter
-    def i(self, value):
+    def i(self, value: float | int | str):
         self._i = float(value)
 
     @property
@@ -41,7 +41,7 @@ class HeaterModelPID(ModelObject):
         return self._overridden
 
     @overridden.setter
-    def overridden(self, value):
+    def overridden(self, value: bool | int | str):
         self._overridden = bool(value)
 
     @property
@@ -50,7 +50,7 @@ class HeaterModelPID(ModelObject):
         return self._p
 
     @p.setter
-    def p(self, value):
+    def p(self, value: float | int | str):
         self._p = float(value)
 
     @property
@@ -59,5 +59,5 @@ class HeaterModelPID(ModelObject):
         return self._used
 
     @used.setter
-    def used(self, value):
+    def used(self, value: bool | int | str):
         self._used = bool(value)

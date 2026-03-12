@@ -6,9 +6,22 @@ import errno
 import os
 from concurrent.futures import ThreadPoolExecutor
 from enum import Enum
+from typing import Awaitable, Callable, Protocol, TypeVar
 
 from . import DEFAULT_BACKLOG
 from .object_model import HttpEndpointType
+
+
+T_co = TypeVar("T_co", covariant=True)
+
+
+class _FromJson(Protocol[T_co]):
+    @classmethod
+    def from_json(cls, data: dict[str, object]) -> T_co:
+        ...
+
+
+HttpEndpointHandler = Callable[["HttpEndpointConnection"], Awaitable[None]]
 
 
 class HttpResponseType(str, Enum):
@@ -25,11 +38,23 @@ class ReceivedHttpRequest:
     """Notification sent by the webserver when a new HTTP request is received"""
 
     @classmethod
-    def from_json(cls, data):
+    def from_json(cls, data: dict[str, object]) -> "ReceivedHttpRequest":
         """Deserialize an instance of this class from deserialized JSON dictionary"""
-        return cls(**data)
+        raw_queries = data.get("queries")
+        raw_headers = data.get("headers")
+        raw_session_id = data.get("sessionId", 0)
+        queries = {str(key): value for key, value in raw_queries.items()} if isinstance(raw_queries, dict) else {}
+        headers = {str(key): value for key, value in raw_headers.items()} if isinstance(raw_headers, dict) else {}
+        session_id = int(raw_session_id) if isinstance(raw_session_id, (int, float, str)) else 0
+        return cls(
+            sessionId=session_id,
+            queries=queries,
+            headers=headers,
+            contentType=str(data.get("contentType", "")),
+            body=str(data.get("body", "")),
+        )
 
-    def __init__(self, sessionId: int, queries: dict, headers: dict, contentType: str, body: str):
+    def __init__(self, sessionId: int, queries: dict[str, object], headers: dict[str, object], contentType: str, body: str):
         self.session_id = sessionId
         self.queries = queries
         self.headers = headers
@@ -40,14 +65,14 @@ class ReceivedHttpRequest:
 class HttpEndpointConnection:
     """Connection class for dealing with requests received from a custom HTTP endpoint"""
 
-    def __init__(self, reader, writer, is_websocket: bool, debug: bool = False):
+    def __init__(self, reader: asyncio.StreamReader, writer: asyncio.StreamWriter, is_websocket: bool, debug: bool = False):
         """Constructor for a new connection dealing with a single HTTP endpoint request"""
         self.reader = reader
         self.writer = writer
         self.is_websocket = is_websocket
         self.debug = debug
 
-    def close(self):
+    def close(self) -> None:
         """Close the connection"""
         self.writer.close()
 
@@ -63,7 +88,7 @@ class HttpEndpointConnection:
         status_code: int = 204,
         response: str = "",
         response_type: HttpResponseType = HttpResponseType.StatusCode,
-    ):
+    ) -> None:
         """
         Send a simple HTTP response to the client and dispose
         this connection unless it is a WebSocket.
@@ -81,19 +106,19 @@ class HttpEndpointConnection:
             if not self.is_websocket:
                 self.close()
 
-    async def receive(self, cls):
+    async def receive(self, cls: type[_FromJson[T_co]]) -> T_co:
         """Receive a deserialized object"""
         json_string = await self.receive_json()
         return cls.from_json(json.loads(json_string))
 
-    async def receive_json(self):
+    async def receive_json(self) -> str:
         """Receive a JSON object"""
         json_string = (await self.reader.read(32 * 1024)).decode("utf8")
         if self.debug:
             print("recv:", json_string)
         return json_string
 
-    async def send(self, obj):
+    async def send(self, obj: object) -> None:
         """Send an arbitrary object"""
         json_string = json.dumps(obj, default=lambda o: o.__dict__)
         if self.debug:
@@ -120,7 +145,7 @@ class HttpEndpointUnixSocket:
         self.endpoint_path = path
         self.socket_file = socket_file
         self.backlog = backlog
-        self.handler = None
+        self.handler: HttpEndpointHandler | None = None
         self.debug = debug
         self._loop = None
         self._server = None
@@ -135,7 +160,7 @@ class HttpEndpointUnixSocket:
         self.executor = ThreadPoolExecutor(max_workers=1)
         self.event_loop = self.executor.submit(self.start_connection_listener)
 
-    def close(self):
+    def close(self) -> None:
         """Close the socket connection"""
         if self._loop is not None:
             # TODO: this enables correctly ending the loop. Why?
@@ -150,11 +175,11 @@ class HttpEndpointUnixSocket:
         except FileNotFoundError:
             pass
 
-    def set_endpoint_handler(self, handler):
+    def set_endpoint_handler(self, handler: HttpEndpointHandler) -> None:
         """Set the handler to handle client connections"""
         self.handler = handler
 
-    def _create_socket(self, path: str):
+    def _create_socket(self, path: str) -> socket.socket:
         path = os.fspath(path)
         sock = socket.socket(socket.AF_UNIX, socket.SOCK_STREAM)
 
@@ -189,7 +214,7 @@ class HttpEndpointUnixSocket:
 
         return sock
 
-    def start_connection_listener(self):
+    def start_connection_listener(self) -> None:
         try:
             self._loop = asyncio.new_event_loop()
             sock = self._create_socket(self.socket_file)
@@ -199,9 +224,10 @@ class HttpEndpointUnixSocket:
             self._loop.create_task(self._server)
             self._loop.run_forever()
         finally:
-            self._loop.close()
+            if self._loop is not None:
+                self._loop.close()
 
-    async def handle_connection(self, reader, writer):
+    async def handle_connection(self, reader: asyncio.StreamReader, writer: asyncio.StreamWriter) -> None:
         """Handle incoming UNIX socket connections (HTTP/WebSocket requests)"""
         http_endpoint_connection = HttpEndpointConnection(
             reader,

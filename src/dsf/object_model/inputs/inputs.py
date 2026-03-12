@@ -7,9 +7,9 @@ from ...commands.code_channel import CodeChannel
 
 class Inputs(ModelCollection):
 
-    def __init__(self):
+    def __init__(self) -> None:
         super().__init__(InputChannel)
-        self._valid_channels = [CodeChannel(c) for c in CodeChannel if c is not CodeChannel.Unknown]
+        self._valid_channels: List[CodeChannel] = [CodeChannel(c) for c in CodeChannel if c is not CodeChannel.Unknown]
 
     @property
     def valid_channels(self) -> List[CodeChannel]:

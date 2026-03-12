@@ -4,18 +4,18 @@ from ..model_object import ModelObject
 class ToolRetraction(ModelObject):
     """Tool retraction parameters"""
 
-    def __init__(self):
+    def __init__(self) -> None:
         super().__init__()
         # Amount of additional filament to extrude when undoing a retraction (in mm)
-        self._extra_restart = 0
+        self._extra_restart: float = 0
         # Retraction length (in mm)
-        self._length = 0
+        self._length: float = 0
         # Retraction speed (in mm/s)
-        self._speed = 0
+        self._speed: float = 0
         # Unretract speed (in mm/s)
-        self._unretract_speed = 0
+        self._unretract_speed: float = 0
         # Amount of Z lift after doing a retraction (in mm)
-        self._z_hop = 0
+        self._z_hop: float = 0
         
     @property
     def extra_restart(self) -> float:
@@ -23,7 +23,7 @@ class ToolRetraction(ModelObject):
         return self._extra_restart
     
     @extra_restart.setter
-    def extra_restart(self, value):
+    def extra_restart(self, value: float | int | str):
         self._extra_restart = float(value)
         
     @property
@@ -32,7 +32,7 @@ class ToolRetraction(ModelObject):
         return self._length
     
     @length.setter
-    def length(self, value):
+    def length(self, value: float | int | str):
         self._length = float(value)
         
     @property
@@ -41,7 +41,7 @@ class ToolRetraction(ModelObject):
         return self._speed
     
     @speed.setter
-    def speed(self, value):
+    def speed(self, value: float | int | str):
         self._speed = float(value)
         
     @property
@@ -50,7 +50,7 @@ class ToolRetraction(ModelObject):
         return self._unretract_speed
     
     @unretract_speed.setter
-    def unretract_speed(self, value):
+    def unretract_speed(self, value: float | int | str):
         self._unretract_speed = float(value)
         
     @property
@@ -59,5 +59,5 @@ class ToolRetraction(ModelObject):
         return self._z_hop
     
     @z_hop.setter
-    def z_hop(self, value):
+    def z_hop(self, value: float | int | str):
         self._z_hop = float(value)

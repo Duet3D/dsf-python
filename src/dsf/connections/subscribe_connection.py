@@ -1,7 +1,7 @@
 import json
 from dataclasses import dataclass
 from threading import Lock
-from typing import Any, Callable, Sequence
+from typing import Callable, Protocol, Sequence, cast
 
 from .base_connection import BaseConnection
 from .init_messages import client_init_messages
@@ -12,10 +12,21 @@ from ..object_model import ObjectModel
 _MISSING = object()
 
 
+class ObjectModelKeyCallback(Protocol):
+    def __call__(
+        self,
+        *,
+        key: str,
+        data: object,
+        indices: tuple[int, ...] | None,
+    ) -> None:
+        ...
+
+
 @dataclass(frozen=True)
 class _ObjectModelCallbackSubscription:
     keys: tuple[str, ...]
-    callback: Callable[..., None]
+    callback: ObjectModelKeyCallback
 
 
 class SubscribeConnection(BaseConnection):
@@ -33,9 +44,9 @@ class SubscribeConnection(BaseConnection):
         self,
         subscription_mode: client_init_messages.SubscriptionMode,
         filter_str: str = "",
-        filter_list=None,
+        filter_list: Sequence[str] | None = None,
         debug: bool = False,
-    ):
+    ) -> None:
         super().__init__(debug)
         self.subscription_mode = subscription_mode
         self.filter_str = filter_str
@@ -45,12 +56,12 @@ class SubscribeConnection(BaseConnection):
         self._key_subscriptions: list[_ObjectModelCallbackSubscription] = []
         self._key_subscription_lock = Lock()
 
-    def connect(self, socket_file: str = SOCKET_FILE, **kwargs):
+    def connect(self, socket_file: str = SOCKET_FILE) -> None:
         """Establishes a connection to the given UNIX socket file"""
         sim = client_init_messages.subscribe_init_message(
             self.subscription_mode, self.filter_str, self.filter_list
         )
-        return super().connect(sim, socket_file)
+        super()._connect(sim, socket_file)
 
     def get_object_model(self) -> ObjectModel:
         """
@@ -97,7 +108,7 @@ class SubscribeConnection(BaseConnection):
     def subscribe_to_keys(
         self,
         keys: Sequence[str],
-        callback: Callable[..., None],
+        callback: ObjectModelKeyCallback,
     ) -> Callable[[], None]:
         """
         Register a callback for one or more dot-delimited object model key paths.
@@ -118,7 +129,7 @@ class SubscribeConnection(BaseConnection):
 
         return lambda: self._remove_key_subscription(subscription)
 
-    def close(self):
+    def close(self) -> None:
         super().close()
 
     def _remove_key_subscription(self, subscription: _ObjectModelCallbackSubscription) -> None:
@@ -129,7 +140,7 @@ class SubscribeConnection(BaseConnection):
                 if current_subscription != subscription
             ]
 
-    def _notify_key_subscriptions(self, patch_data: dict[str, Any]) -> None:
+    def _notify_key_subscriptions(self, patch_data: dict[str, object]) -> None:
         with self._key_subscription_lock:
             subscriptions = tuple(self._key_subscriptions)
 
@@ -148,10 +159,10 @@ class SubscribeConnection(BaseConnection):
     @classmethod
     def _extract_key_changes(
         cls,
-        patch_data: dict[str, Any],
+        patch_data: dict[str, object],
         keys: Sequence[str],
-    ) -> list[tuple[str, Any, tuple[int, ...] | None]]:
-        matches: list[tuple[str, Any, tuple[int, ...] | None]] = []
+    ) -> list[tuple[str, object, tuple[int, ...] | None]]:
+        matches: list[tuple[str, object, tuple[int, ...] | None]] = []
         for key in keys:
             for indices, value in cls._extract_key_path_values(patch_data, key):
                 matches.append((key, value, indices))
@@ -160,9 +171,9 @@ class SubscribeConnection(BaseConnection):
     @classmethod
     def _extract_key_path_values(
         cls,
-        patch_data: dict[str, Any],
+        patch_data: dict[str, object],
         key: str,
-    ) -> list[tuple[tuple[int, ...] | None, Any]]:
+    ) -> list[tuple[tuple[int, ...] | None, object]]:
         matches = cls._walk_key_path(patch_data, key.split("."), ())
         return [
             (indexes if indexes else None, value)
@@ -172,10 +183,10 @@ class SubscribeConnection(BaseConnection):
     @classmethod
     def _walk_key_path(
         cls,
-        current_value: Any,
+        current_value: object,
         remaining_parts: Sequence[str],
         indexes: tuple[int, ...],
-    ) -> list[tuple[tuple[int, ...], Any]]:
+    ) -> list[tuple[tuple[int, ...], object]]:
         if not remaining_parts:
             return [(indexes, current_value)]
 
@@ -183,14 +194,16 @@ class SubscribeConnection(BaseConnection):
         next_parts = remaining_parts[1:]
 
         if isinstance(current_value, dict):
-            if part not in current_value:
+            current_dict = cast(dict[str, object], current_value)
+            if part not in current_dict:
                 return []
-            return cls._walk_key_path(current_value[part], next_parts, indexes)
+            return cls._walk_key_path(current_dict[part], next_parts, indexes)
 
         if isinstance(current_value, list):
+            current_list = cast(list[object], current_value)
             if part == "^":
-                matches: list[tuple[tuple[int, ...], Any]] = []
-                for index, item in enumerate(current_value):
+                matches: list[tuple[tuple[int, ...], object]] = []
+                for index, item in enumerate(current_list):
                     if item is None:
                         continue
                     matches.extend(cls._walk_key_path(item, next_parts, indexes + (index,)))
@@ -200,9 +213,9 @@ class SubscribeConnection(BaseConnection):
                 index = int(part)
             except ValueError:
                 return []
-            if index < 0 or index >= len(current_value):
+            if index < 0 or index >= len(current_list):
                 return []
-            item = current_value[index]
+            item = current_list[index]
             if item is None:
                 return []
             return cls._walk_key_path(item, next_parts, indexes)
@@ -211,10 +224,10 @@ class SubscribeConnection(BaseConnection):
 
     @staticmethod
     def _invoke_callback(
-        callback: Callable[..., None],
+        callback: ObjectModelKeyCallback,
         *,
         key: str,
-        data: Any,
+        data: object,
         indices: tuple[int, ...] | None,
     ) -> None:
         callback(key=key, data=data, indices=indices)

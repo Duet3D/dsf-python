@@ -1,7 +1,7 @@
 from .base_command import BaseCommand
 
 
-def get_file_info(file_name: str, read_thumbnail_content: bool = False):
+def get_file_info(file_name: str, read_thumbnail_content: bool = False) -> BaseCommand:
     """
     Analyse a G-code file and return an instance of GetFileInfo when ready
     :param file_name: The filename to extract information from
@@ -12,7 +12,7 @@ def get_file_info(file_name: str, read_thumbnail_content: bool = False):
     return BaseCommand("GetFileInfo", **{"fileName": file_name, "readThumbnailContent": read_thumbnail_content})
 
 
-def resolve_path(path: str, base_directory: str = None):
+def resolve_path(path: str, base_directory: str | None = None) -> BaseCommand:
     """
     Resolve a RepRapFirmware-style path to an actual file path
     :param path: Path that is RepRapFirmware-compatible

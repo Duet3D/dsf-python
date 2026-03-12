@@ -9,47 +9,47 @@ from ...utils import deprecated
 class Tool(ModelObject):
     """Information about a configured tool"""
 
-    def __init__(self):
+    def __init__(self) -> None:
         super().__init__()
         # Active temperatures of the associated heaters (in C)
-        self._active = []
+        self._active: List[float] = []
         # Associated axes. At present only X and Y can be mapped per tool.
-        self._axes = []
+        self._axes: List[int] = []
         # Extruder drives of this tool
-        self._extruders = []
+        self._extruders: List[int] = []
         # List of associated fans (indices)
-        self._fans = []
+        self._fans: List[int] = []
         # Feedforward coefficients to apply to the mapped heaters during extrusions
-        self._feed_forward = []
-        self._feed_forward_pwm = []
-        self._feed_forward_advance = None
-        self._feed_forward_temp = []
+        self._feed_forward: List[float] = []
+        self._feed_forward_pwm: List[float] = []
+        self._feed_forward_advance: float | None = None
+        self._feed_forward_temp: List[float] = []
         # Extruder drive index for resolving the tool filament (index or -1)
-        self._filament_extruder = -1
+        self._filament_extruder: int = -1
         # List of associated heaters (indices)
-        self._heaters = []
+        self._heaters: List[int] = []
         # True if the filament has been firmware-retracted
-        self._is_retracted = False
+        self._is_retracted: bool = False
         # Mix ratios of the associated extruder drives
-        self._mix = []
+        self._mix: List[float] = []
         # Name of this tool
-        self._name = ""
+        self._name: str = ""
         # Number of this tool
-        self._number = 0
+        self._number: int = 0
         # Axis offsets (in mm)
-        self._offsets = []
+        self._offsets: List[float] = []
         # Bitmap of the probed axis offsets
-        self._offsets_probed = 0
+        self._offsets_probed: int = 0
         # Firmware retraction parameters
-        self._retraction = ToolRetraction()
+        self._retraction: ToolRetraction = ToolRetraction()
         # Index of the mapped spindle or -1 if not mapped
-        self._spindle = 0
+        self._spindle: int = 0
         # RPM of the mapped spindle
-        self._spindle_rpm = 0
+        self._spindle_rpm: int = 0
         # Standby temperatures of the associated heaters (in C)
-        self._standby = []
+        self._standby: List[float] = []
         # Current state of this tool
-        self._state = ToolState.off
+        self._state: ToolState = ToolState.off
         
     @property
     def active(self) -> List[float]:
@@ -84,13 +84,13 @@ class Tool(ModelObject):
         return self._feed_forward
     
     @property
-    def feed_forward_advance(self) -> float:
+    def feed_forward_advance(self) -> float | None:
         """Time advance for applying feedforward in milliseconds"""
         return self._feed_forward_advance
 
     @feed_forward_advance.setter
-    def feed_forward_advance(self, value):
-        self._feed_forward_advance = float(value)
+    def feed_forward_advance(self, value: float | int | str | None):
+        self._feed_forward_advance = None if value is None else float(value)
 
     @property
     def feed_forward_pwm(self) -> List[float]:
@@ -108,7 +108,7 @@ class Tool(ModelObject):
         return self._filament_extruder
     
     @filament_extruder.setter
-    def filament_extruder(self, value):
+    def filament_extruder(self, value: int | str):
         self._filament_extruder = int(value)
         
     @property
@@ -122,7 +122,7 @@ class Tool(ModelObject):
         return self._is_retracted
     
     @is_retracted.setter
-    def is_retracted(self, value):
+    def is_retracted(self, value: bool | int | str):
         self._is_retracted = bool(value)
         
     @property
@@ -136,7 +136,7 @@ class Tool(ModelObject):
         return self._name
     
     @name.setter
-    def name(self, value):
+    def name(self, value: str):
         self._name = str(value)
         
     @property
@@ -145,7 +145,7 @@ class Tool(ModelObject):
         return self._number
     
     @number.setter
-    def number(self, value):
+    def number(self, value: int | str):
         self._number = int(value)
         
     @property
@@ -160,7 +160,7 @@ class Tool(ModelObject):
         return self._offsets_probed
     
     @offsets_probed.setter
-    def offsets_probed(self, value):
+    def offsets_probed(self, value: int | str):
         self._offsets_probed = int(value)
         
     @property
@@ -174,7 +174,7 @@ class Tool(ModelObject):
         return self._spindle
     
     @spindle.setter
-    def spindle(self, value):
+    def spindle(self, value: int | str):
         self._spindle = int(value)
         
     @property
@@ -183,7 +183,7 @@ class Tool(ModelObject):
         return self._spindle_rpm
     
     @spindle_rpm.setter
-    def spindle_rpm(self, value):
+    def spindle_rpm(self, value: int | str):
         self._spindle_rpm = int(value)
         
     @property
@@ -197,7 +197,7 @@ class Tool(ModelObject):
         return self._state
     
     @state.setter
-    def state(self, value):
+    def state(self, value: ToolState | str | None):
         if value is None or value == "":
             self._state = ToolState.off
         elif isinstance(value, ToolState):

@@ -20,7 +20,7 @@ class Extruder(ModelObject):
         # Motor current (in mA)
         self._current: int = 0
         # Assigned driver
-        self._driver = None
+        self._driver: DriverId | None = None
         # Extrusion factor to use (0..1 or greater)
         self._factor: float = 1
         # Name of the currently loaded filament
@@ -38,7 +38,7 @@ class Extruder(ModelObject):
         # Percentage applied to the motor current during standstill (0..100 or null if not supported)
         self._percent_stst_current: Union[int, None] = None
         # Whether or not the extruder is currently using phase stepping
-        self._phase_step: Union[bool, None] = None
+        self._phase_stepping: Union[bool, None] = None
         # Extruder position (in mm)
         self._position: float = 0
         # Pressure advance
@@ -58,7 +58,7 @@ class Extruder(ModelObject):
         return self._acceleration
 
     @acceleration.setter
-    def acceleration(self, value):
+    def acceleration(self, value: float | int | str):
         self._acceleration = float(value)
 
     @property
@@ -67,7 +67,7 @@ class Extruder(ModelObject):
         return self._current
 
     @current.setter
-    def current(self, value):
+    def current(self, value: int | str):
         self._current = int(value)
 
     @property
@@ -76,7 +76,7 @@ class Extruder(ModelObject):
         return self._factor
 
     @factor.setter
-    def factor(self, value):
+    def factor(self, value: float | int | str):
         self._factor = float(value)
 
     @property
@@ -85,7 +85,7 @@ class Extruder(ModelObject):
         return self._filament
 
     @filament.setter
-    def filament(self, value):
+    def filament(self, value: str):
         self._filament = str(value)
 
     @property
@@ -94,7 +94,7 @@ class Extruder(ModelObject):
         return self._filament_diameter
 
     @filament_diameter.setter
-    def filament_diameter(self, value):
+    def filament_diameter(self, value: float | int | str):
         self._filament_diameter = float(value)
 
     @property
@@ -103,7 +103,7 @@ class Extruder(ModelObject):
         return self._jerk
 
     @jerk.setter
-    def jerk(self, value):
+    def jerk(self, value: float | int | str):
         self._jerk = float(value)
 
     @property
@@ -122,7 +122,7 @@ class Extruder(ModelObject):
         return self._percent_current
 
     @percent_current.setter
-    def percent_current(self, value):
+    def percent_current(self, value: int | str):
         self._percent_current = int(value)
 
     @property
@@ -131,7 +131,7 @@ class Extruder(ModelObject):
         return self._percent_stst_current
 
     @percent_stst_current.setter
-    def percent_stst_current(self, value):
+    def percent_stst_current(self, value: int | str | None):
         self._percent_stst_current = int(value) if value is not None else None
 
     @property
@@ -149,7 +149,7 @@ class Extruder(ModelObject):
         return self._position
 
     @position.setter
-    def position(self, value):
+    def position(self, value: float | int | str):
         self._position = float(value)
 
     @property
@@ -158,7 +158,7 @@ class Extruder(ModelObject):
         return self._pressure_advance
 
     @pressure_advance.setter
-    def pressure_advance(self, value):
+    def pressure_advance(self, value: float | int | str):
         self._pressure_advance = float(value)
 
     @property
@@ -167,7 +167,7 @@ class Extruder(ModelObject):
         return self._printing_jerk
 
     @printing_jerk.setter
-    def printing_jerk(self, value):
+    def printing_jerk(self, value: float | int | str):
         self._printing_jerk = float(value)
 
     @property
@@ -176,7 +176,7 @@ class Extruder(ModelObject):
         return self._raw_position
 
     @raw_position.setter
-    def raw_position(self, value):
+    def raw_position(self, value: float | int | str):
         self._raw_position = float(value)
 
     @property
@@ -185,7 +185,7 @@ class Extruder(ModelObject):
         return self._speed
 
     @speed.setter
-    def speed(self, value):
+    def speed(self, value: float | int | str):
         self._speed = float(value)
 
     @property
@@ -194,5 +194,5 @@ class Extruder(ModelObject):
         return self._steps_per_mm
 
     @steps_per_mm.setter
-    def steps_per_mm(self, value):
+    def steps_per_mm(self, value: float | int | str):
         self._steps_per_mm = float(value)

@@ -27,18 +27,31 @@ class Message(ModelObject):
     """
 
     @classmethod
-    def from_json(cls, data):
+    def from_json(cls, data: dict[str, object] | str) -> "Message":
         """Deserialize an instance of this class from JSON deserialized dictionary"""
+        if isinstance(data, str):
+            raise TypeError("Message.from_json expects a decoded JSON dictionary")
+        data = dict(data)
         data['msg_type'] = data.pop('type')  # Replace 'type' to not shadow the built-in keyword name
-        return cls(**data)
+        msg_type = data.get("msg_type", MessageType.Success)
+        if isinstance(msg_type, int):
+            msg_type = MessageType(msg_type)
+        elif not isinstance(msg_type, MessageType):
+            msg_type = MessageType.Success
+        time_value = data.get("time", datetime.now())
+        if isinstance(time_value, str):
+            time_value = dp.isoparse(time_value)
+        elif not isinstance(time_value, datetime):
+            time_value = datetime.now()
+        return cls(msg_type=msg_type, content=str(data.get("content", "")), time=time_value)
 
-    def __init__(self, msg_type: MessageType = MessageType.Success, content: str = "", time: datetime = datetime.now()):
+    def __init__(self, msg_type: MessageType = MessageType.Success, content: str = "", time: datetime = datetime.now()) -> None:
         super().__init__()
-        self._content = content
-        self._time = time
-        self._type = msg_type
+        self._content: str = content
+        self._time: datetime = time
+        self._type: MessageType = msg_type
 
-    def __repr__(self):
+    def __repr__(self) -> str:
         if self.type == MessageType.Error:
             return f"Error: {self.content}"
         elif self.type == MessageType.Warning:
@@ -52,7 +65,7 @@ class Message(ModelObject):
         return self._content
 
     @content.setter
-    def content(self, value):
+    def content(self, value: str):
         self._content = str(value)
 
     @property
@@ -61,7 +74,7 @@ class Message(ModelObject):
         return self._time
 
     @time.setter
-    def time(self, value):
+    def time(self, value: datetime | str):
         if isinstance(value, datetime):
             self._time = value
         elif isinstance(value, str):  # Update from JSON
@@ -75,7 +88,7 @@ class Message(ModelObject):
         return self._type
 
     @type.setter
-    def type(self, value):
+    def type(self, value: MessageType | int):
         if isinstance(value, MessageType):
             self._type = value
         elif isinstance(value, int):

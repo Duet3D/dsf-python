@@ -7,18 +7,18 @@ from ...model_object import ModelObject
 class DirectDisplayScreen(ModelObject):
     """Class providing information about a connected display screen"""
 
-    def __init__(self, controller=DirectDisplayController.ST7920):
+    def __init__(self, controller: DirectDisplayController = DirectDisplayController.ST7920) -> None:
         super().__init__()
         # Number of colour bits
-        self._colour_bits = 1
+        self._colour_bits: int = 1
         # Display type
-        self._controller = controller
+        self._controller: DirectDisplayController = controller
         # Height of the display screen in pixels
-        self._height = 64
+        self._height: int = 64
         # SPI frequency of the display (in Hz)
-        self._spi_freq = 0
+        self._spi_freq: int = 0
         # Width of the display screen in pixels
-        self._width = 128
+        self._width: int = 128
 
     @property
     def colour_bits(self) -> int:
@@ -45,7 +45,7 @@ class DirectDisplayScreen(ModelObject):
                             f"Got {type(value)}: {value}")
 
     @staticmethod
-    def get_direct_display_screen_type(type_: DirectDisplayController):
+    def get_direct_display_screen_type(type_: DirectDisplayController) -> "DirectDisplayScreen":
         from .direct_display_screen_st7567 import DirectDisplayScreenST7567
 
         if isinstance(type_, str):
@@ -89,11 +89,12 @@ class DirectDisplayScreen(ModelObject):
     def width(self, value: int):
         self._width = int(value)
 
-    def _update_from_json(self, **kwargs):
+    def _update_from_json(self, **kwargs: object) -> "DirectDisplayScreen":
         """Override ObjectModel._update_from_json
         to return the DirectDisplayScreen type matching the given controller"""
-        if 'controller' in kwargs and self.controller != DirectDisplayController(kwargs.get('controller')):
-            required_type = self.get_direct_display_screen_type(kwargs.get('controller'))
+        controller = kwargs.get('controller')
+        if isinstance(controller, str) and self.controller != DirectDisplayController(controller):
+            required_type = self.get_direct_display_screen_type(DirectDisplayController(controller))
             new_direct_display_screen = required_type.update_from_json(kwargs)
             return new_direct_display_screen
 
