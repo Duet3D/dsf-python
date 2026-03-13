@@ -2,22 +2,17 @@ from .direct_display_encoder import DirectDisplayEncoder
 from .direct_display_screen import DirectDisplayScreen
 
 from ...model_object import ModelObject
-from ...utils import wrap_model_property
+from ...utils import nullable_model_prop, model_prop
 
 
 class DirectDisplay(ModelObject):
     """Class providing information about a connected direct-connect display"""
 
-    encoder = wrap_model_property('encoder', DirectDisplayEncoder)
+    # Encoder of this screen or null if none
+    encoder = nullable_model_prop('encoder', DirectDisplayEncoder)
+    
+    # Screen information
+    screen = model_prop('screen', DirectDisplayScreen, DirectDisplayScreen())
 
     def __init__(self):
         super(DirectDisplay, self).__init__()
-        # Encoder of this screen or null if none
-        self._encoder = None
-        # Screen information
-        self._screen = DirectDisplayScreen()
-
-    @property
-    def screen(self) -> DirectDisplayScreen:
-        """Screen information"""
-        return self._screen

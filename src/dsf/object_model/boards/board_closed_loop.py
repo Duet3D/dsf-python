@@ -1,29 +1,15 @@
 from ..model_object import ModelObject
+from ..utils import model_prop
 
 
 class BoardClosedLoop(ModelObject):
     """This represents information about closed-loop tuning"""
+
+    # Number of collected data points in the last run or 0 if it failed
+    points = model_prop("points", int)
+
+    # Number of completed sampling runs
+    runs = model_prop("runs", int)
+
     def __init__(self):
         super(BoardClosedLoop, self).__init__()
-        # Number of collected data points in the last run or 0 if it failed
-        self._points = 0
-        # Number of completed sampling runs
-        self._runs = 0
-
-    @property
-    def points(self) -> int:
-        """Number of collected data points in the last run or 0 if it failed"""
-        return self._points
-
-    @points.setter
-    def points(self, value: int):
-        self._points = int(value)
-
-    @property
-    def runs(self) -> int:
-        """Number of completed sampling runs"""
-        return self._runs
-
-    @runs.setter
-    def runs(self, value: int):
-        self._runs = int(value)

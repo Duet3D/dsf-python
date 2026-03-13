@@ -1,7 +1,7 @@
 from .Duet3DFilamentMonitor import Duet3DFilamentMonitor
 from .filament_monitor_type import FilamentMonitorType
 from ...model_object import ModelObject
-from ...utils import wrap_model_property
+from ...utils import nullable_model_prop
 
 
 class RotatingMagnetFilamentMonitorCalibrated(ModelObject):
@@ -112,7 +112,7 @@ class RotatingMagnetFilamentMonitor(Duet3DFilamentMonitor):
     """Information about a rotating magnet filament monitor"""
 
     # Calibrated properties of this filament monitor
-    calibrated = wrap_model_property('calibrated', RotatingMagnetFilamentMonitorCalibrated)
+    calibrated = nullable_model_prop('calibrated', RotatingMagnetFilamentMonitorCalibrated)
 
     def __init__(self):
         super(RotatingMagnetFilamentMonitor, self).__init__()

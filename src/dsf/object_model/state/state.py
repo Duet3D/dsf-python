@@ -11,18 +11,18 @@ from .restore_point import RestorePoint
 from .startup_error import StartupError
 from ..model_collection import ModelCollection
 from ..model_object import ModelObject
-from ..utils import wrap_model_property
+from ..utils import nullable_model_prop
 
 
 class State(ModelObject):
     """Information about the machine state"""
 
     # Information about a requested beep or null if none is requested
-    beep = wrap_model_property('beep', BeepRequest)
+    beep = nullable_model_prop('beep', BeepRequest)
     # Details about a requested message box or null if none is requested
-    message_box = wrap_model_property('message_box', MessageBox)
+    message_box = nullable_model_prop('message_box', MessageBox)
     # First error on start-up or null if there was none
-    startup_error = wrap_model_property('startup_error', StartupError)
+    startup_error = nullable_model_prop('startup_error', StartupError)
 
     def __init__(self):
         super(State, self).__init__()

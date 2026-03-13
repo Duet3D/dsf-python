@@ -3,7 +3,7 @@ from typing import Union
 from .Duet3DFilamentMonitor import Duet3DFilamentMonitor
 from .filament_monitor_type import FilamentMonitorType
 from ...model_object import ModelObject
-from ...utils import wrap_model_property
+from ...utils import nullable_model_prop
 
 
 class LaserFilamentMonitorCalibrated(ModelObject):
@@ -114,7 +114,7 @@ class LaserFilamentMonitor(Duet3DFilamentMonitor):
     """Information about a laser filament monitor"""
 
     # Calibrated properties of this filament monitor
-    calibrated = wrap_model_property('calibrated', LaserFilamentMonitorCalibrated)
+    calibrated = nullable_model_prop('calibrated', LaserFilamentMonitorCalibrated)
 
     def __init__(self):
         super(LaserFilamentMonitor, self).__init__()

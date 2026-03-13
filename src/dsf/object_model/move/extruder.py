@@ -4,14 +4,14 @@ from .driver_id import DriverId
 from .extruder_non_linear import ExtruderNonlinear
 from .microstepping import MicroStepping
 from ..model_object import ModelObject
-from ..utils import wrap_model_property
+from ..utils import nullable_model_prop
 
 
 class Extruder(ModelObject):
     """Information about an extruder drive"""
 
     # Assigned driver
-    driver = wrap_model_property('driver', DriverId)
+    driver = nullable_model_prop('driver', DriverId)
 
     def __init__(self):
         super().__init__()

@@ -1,7 +1,8 @@
 import json
 from datetime import datetime
-from typing import Union, TypeVar, Any, cast
+from typing import TypeVar, Any, Union, cast
 
+from .model_type import ModelType
 from ..utils import preserve_builtin, camel_to_snake, snake_to_camel, JSONObj
 
 
@@ -18,7 +19,8 @@ _encoder.float = FloatJSON
 
 TModelObject = TypeVar("TModelObject", bound="ModelObject")
 
-class ModelObject:
+
+class ModelObject(ModelType[Union[JSONObj, str]]):
     """Base class for object model classes"""
 
     def __init__(self, *args: object, **kwargs: object):
@@ -92,6 +94,7 @@ class ModelObject:
 
     def update_from_json(self: TModelObject, data: Union[JSONObj, str]) -> TModelObject:
         """Update the current instance of this class from JSON deserialized dictionary"""
+        # Deserialize a string object into a JSON (dict) object
         if isinstance(data, str):
             data = cast(JSONObj, json.loads(data))
         return self._update_from_json(**preserve_builtin(data))

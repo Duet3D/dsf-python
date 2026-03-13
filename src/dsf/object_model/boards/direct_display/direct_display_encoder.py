@@ -1,19 +1,12 @@
 from ...model_object import ModelObject
+from ...utils import model_prop
 
 
 class DirectDisplayEncoder(ModelObject):
     """Class providing information about a connected display encoder"""
 
+    # Number of pulses per click of the rotary encoder
+    pulses_per_click = model_prop("pulses_per_click", int, 1)
+
     def __init__(self):
         super().__init__()
-        # Number of pulses per click of the rotary encoder
-        self._pulses_per_click = 1
-
-    @property
-    def pulses_per_click(self) -> int:
-        """Number of pulses per click of the rotary encoder"""
-        return self._pulses_per_click
-
-    @pulses_per_click.setter
-    def pulses_per_click(self, value: int):
-        self._pulses_per_click = int(value)

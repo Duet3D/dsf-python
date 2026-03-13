@@ -1,7 +1,7 @@
 from .filament_monitor import FilamentMonitor
 from .filament_monitor_type import FilamentMonitorType
 from ...model_object import ModelObject
-from ...utils import wrap_model_property
+from ...utils import nullable_model_prop
 
 
 class PulsedFilamentMonitorCalibrated(ModelObject):
@@ -102,7 +102,7 @@ class PulsedFilamentMonitor(FilamentMonitor):
     """Information about a pulsed filament monitor"""
 
     # Calibrated properties of this filament monitor
-    calibrated = wrap_model_property('calibrated', PulsedFilamentMonitorCalibrated)
+    calibrated = nullable_model_prop('calibrated', PulsedFilamentMonitorCalibrated)
 
     def __init__(self):
         super(PulsedFilamentMonitor, self).__init__()

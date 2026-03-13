@@ -5,7 +5,7 @@ from .move_calibration import MoveDeviations
 from .probe_grid import ProbeGrid
 from .skew import Skew
 from ..model_object import ModelObject
-from ..utils import wrap_model_property
+from ..utils import nullable_model_prop
 
 
 class MoveCompensationType(str, Enum):
@@ -22,9 +22,9 @@ class MoveCompensation(ModelObject):
     """Information about the configured compensation options"""
 
     # Grid settings of the loaded heightmap or null if no heightmap is loaded
-    live_grid = wrap_model_property('live_grid', ProbeGrid)
+    live_grid = nullable_model_prop('live_grid', ProbeGrid)
     # Deviations of the mesh grid or null if not applicable
-    mesh_deviation = wrap_model_property('mesh_deviation', MoveDeviations)
+    mesh_deviation = nullable_model_prop('mesh_deviation', MoveDeviations)
 
     def __init__(self):
         super().__init__()

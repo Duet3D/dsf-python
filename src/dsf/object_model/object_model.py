@@ -22,18 +22,19 @@ from .state import State
 from .tools import Tool
 from .volumes import Volume
 
-from .utils import wrap_model_property
+from .utils import nullable_model_prop, model_prop
 
 
 class ObjectModel(ModelObject):
 
     # Information about the SBC which Duet Software Framework is running on.
     # This is None if the system is operating in standalone mode
-    sbc = wrap_model_property('sbc', SBC)
+    boards = model_prop('boards', ModelCollection[Board], ModelCollection(Board))
+    sbc = nullable_model_prop('sbc', SBC)
 
     def __init__(self):
         super(ObjectModel, self).__init__()
-        self._boards = ModelCollection(Board)
+        # self._boards = ModelCollection(Board)
         self._directories = Directories()
         self._fans = ModelCollection(Fan)
         self._globals = ModelDictionary(False)
@@ -53,11 +54,11 @@ class ObjectModel(ModelObject):
         self._tools = ModelCollection(Tool)
         self._volumes = ModelCollection(Volume)
 
-    @property
-    def boards(self) -> List[Board]:
-        """List of connected boards
-        The first item represents the main board"""
-        return self._boards
+    # @property
+    # def boards(self) -> List[Board]:
+    #     """List of connected boards
+    #     The first item represents the main board"""
+    #     return self._boards
 
     @property
     def directories(self) -> Directories:

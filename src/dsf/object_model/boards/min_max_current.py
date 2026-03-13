@@ -1,41 +1,18 @@
 from ..model_object import ModelObject
-
+from ..utils import model_prop
 
 class MinMaxCurrent(ModelObject):
     """Provides minimum, maximum and current values"""
 
+    # Current value
+    current = model_prop("current", float)
+    
+    # Minimum value
+    min = model_prop("min", float)
+
+    # Maximum value
+    max = model_prop("max", float)
+
     def __init__(self):
         super(MinMaxCurrent, self).__init__()
-        # Current value (mA)
-        self._current = 0
-        # Minimum value (mA)
-        self._min = 0
-        # Maximum value (mA)
-        self._max = 0
-
-    @property
-    def current(self) -> float:
-        """Current value (mA)"""
-        return self._current
-
-    @current.setter
-    def current(self, value: float):
-        self._current = float(value)
-
-    @property
-    def min(self) -> float:
-        """Minimum value (mA)"""
-        return self._min
-
-    @min.setter
-    def min(self, value: float):
-        self._min = float(value)
-
-    @property
-    def max(self) -> float:
-        """Maximum value (mA)"""
-        return self._max
-
-    @max.setter
-    def max(self, value: float):
-        self._max = float(value)
+    

@@ -1,63 +1,24 @@
 from ..model_object import ModelObject
+from ..utils import model_prop
 
 
 class HeaterModelPID(ModelObject):
     """Details about the PID model of a heater"""
 
+    # Derivative value of the PID regulator
+    d = model_prop("d", float, 0)
+
+    # Integral value of the PID regulator
+    i = model_prop("i", float, 0)
+
+    # Indicates if custom PID values are used
+    overridden = model_prop("overridden", bool, False)
+
+    # Proportional value of the PID regulator
+    p = model_prop("p", float, 0)
+
+    # Indicates if PID control is being used
+    used = model_prop("used", bool, True)
+
     def __init__(self):
         super().__init__()
-        # Derivative value of the PID regulator
-        self._d = 0
-        # Integral value of the PID regulator
-        self._i = 0
-        # Indicates if custom PID values are used
-        self._overridden = False
-        # Proportional value of the PID regulator
-        self._p = 0
-        # Indicates if PID control is being used
-        self._used = True
-
-    @property
-    def d(self) -> float:
-        """Derivative value of the PID regulator"""
-        return self._d
-
-    @d.setter
-    def d(self, value):
-        self._d = float(value)
-
-    @property
-    def i(self) -> float:
-        """Integral value of the PID regulator"""
-        return self._i
-
-    @i.setter
-    def i(self, value):
-        self._i = float(value)
-
-    @property
-    def overridden(self) -> bool:
-        """Indicates if custom PID values are used"""
-        return self._overridden
-
-    @overridden.setter
-    def overridden(self, value):
-        self._overridden = bool(value)
-
-    @property
-    def p(self) -> float:
-        """Proportional value of the PID regulator"""
-        return self._p
-
-    @p.setter
-    def p(self, value):
-        self._p = float(value)
-
-    @property
-    def used(self) -> bool:
-        """Indicates if PID control is being used"""
-        return self._used
-
-    @used.setter
-    def used(self, value):
-        self._used = bool(value)

@@ -6,16 +6,16 @@ from .layer import Layer
 from .times_left import TimesLeft
 from ..model_collection import ModelCollection
 from ..model_object import ModelObject
-from ..utils import wrap_model_property
+from ..utils import nullable_model_prop
 
 
 class Job(ModelObject):
     """Information about the current job"""
 
     # Information about the current build or None if not available
-    build = wrap_model_property('build', Build)
+    build = nullable_model_prop('build', Build)
     # Information about the file being processed
-    file = wrap_model_property('file', GCodeFileInfo)
+    file = nullable_model_prop('file', GCodeFileInfo)
 
     def __init__(self):
         super().__init__()

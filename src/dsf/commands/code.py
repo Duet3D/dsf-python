@@ -15,6 +15,7 @@ class Code(BaseCommand):
     @classmethod
     def from_json(cls, data: dict[str, object]) -> "Code":
         """Deserialize an instance of this class from JSON deserialized dictionary"""
+        # TODO refactor the types here to use JSONObj
         message_from_json = cast(Callable[[dict[str, object]], Message], getattr(Message, "from_json"))
         parameter_from_json = cast(Callable[[dict[str, object]], CodeParameter], getattr(CodeParameter, "from_json"))
 

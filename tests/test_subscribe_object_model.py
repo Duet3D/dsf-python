@@ -124,7 +124,14 @@ class TestSubscribeObjectModel(unittest.TestCase):
         update = subscribe_connection.get_object_model_patch()
         om.update_from_json(update)
         self.assertEqual(len(om.boards), 7)
-        self.assertEqual(om.boards[3].drivers[0].closed_loop.position_error.max, 0.085)
+        drivers = om.boards[3].drivers
+        self.assertIsNotNone(drivers)
+        if drivers is not None:  # to make the type checker happy
+            cl = drivers[0].closed_loop
+            self.assertIsNotNone(cl)
+            if cl is not None:
+                self.assertEqual(cl.position_error.max, 0.085)
+        om.boards[0].accelerometer
 
         # # Get heat patch
         # update = subscribe_connection.get_object_model_patch()
