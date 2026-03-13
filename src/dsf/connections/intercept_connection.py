@@ -31,8 +31,8 @@ class InterceptConnection(BaseCommandConnection):
     def __init__(
         self,
         interception_mode: client_init_messages.InterceptionMode,
-        channels: List[CodeChannel] = None,
-        filters: List[str] = None,
+        channels: Optional[List[CodeChannel]] = None,
+        filters: Optional[List[str]] = None,
         auto_flush: bool = True,
         auto_evaluate_expression: bool = True,
         priority_codes: bool = False,
@@ -57,7 +57,7 @@ class InterceptConnection(BaseCommandConnection):
             self.auto_flush,
             self.auto_evaluate_expression
         )
-        return super().connect(iim, socket_file)
+        return super()._connect(iim, socket_file)
 
     def receive_code(self) -> commands.code.Code:
         """Wait for a code to be intercepted and read it"""

@@ -1,5 +1,5 @@
 from enum import Enum
-from typing import List, Union
+from typing import List, Optional
 
 from .driver_id import DriverId
 from .microstepping import MicroStepping
@@ -63,7 +63,7 @@ class Axis(ModelObject):
         # Motor current (in mA)
         self._current: int = 0
         # List of the assigned drivers
-        self._drivers: ModelCollection = ModelCollection(DriverId)
+        self._drivers: ModelCollection[DriverId] = ModelCollection(DriverId)
         # Whether the axis is homed
         self._homed: bool = False
         # Motor jerk (in mm/min)
@@ -71,7 +71,7 @@ class Axis(ModelObject):
         # Letter of this axis
         self._letter: AxisLetter = AxisLetter.none
         # Current machine position (in mm) or None if unknown/unset
-        self._machine_position: Union[float, None] = None
+        self._machine_position: Optional[float] = None
         # Maximum travel of this axis (in mm)
         self._max: float = 200
         # Whether the axis maximum was probed
@@ -85,9 +85,9 @@ class Axis(ModelObject):
         # Percentage applied to the motor current (0..100)
         self._percent_current: int = 100
         # Percentage applied to the motor current during standstill (0..100 or None if not supported)
-        self._percent_stst_current: Union[int, None] = None
+        self._percent_stst_current: Optional[int] = None
         # Whether or not the axis is currently using phase stepping
-        self._phase_stepping: Union[bool, None] = None
+        self._phase_stepping: Optional[bool] = None
         # Motor jerk during the current print only (in mm/s)
         self._printing_jerk: float = 15
         # Reduced accelerations used by Z probing and stall homing moves (in mm/s^2)
@@ -99,7 +99,7 @@ class Axis(ModelObject):
         # Current step position of the axis (in steps)
         self._step_pos: int = 0
         # Current user position (in mm) or None if unknown
-        self._user_position: Union[float, None] = None
+        self._user_position: Optional[float] = None
         # Whether the axis is visible
         self._visible: bool = True
         # Offsets of this axis for each workplace (in mm)
@@ -142,7 +142,7 @@ class Axis(ModelObject):
         self._current = int(value)
 
     @property
-    def drivers(self) -> List[DriverId]:
+    def drivers(self) -> ModelCollection[DriverId]:
         """List of the assigned drivers"""
         return self._drivers
 
@@ -179,7 +179,7 @@ class Axis(ModelObject):
             raise TypeError(f"{__name__}.letter must be of type AxisLetter. Got {type(value)}: {value}")
 
     @property
-    def machine_position(self) -> Union[float, None]:
+    def machine_position(self) -> Optional[float]:
         """Current machine position (in mm) or None if unknown/unset
         This value reflects the machine position of the move being performed
         or of the last one if the machine is not moving"""
@@ -240,7 +240,7 @@ class Axis(ModelObject):
         self._percent_current = int(value)
 
     @property
-    def percent_stst_current(self) -> Union[int, None]:
+    def percent_stst_current(self) -> Optional[int]:
         """Percentage applied to the motor current during standstill (0..100 or None if not supported)"""
         return self._percent_stst_current
 
@@ -249,12 +249,12 @@ class Axis(ModelObject):
         self._percent_stst_current = int(value) if value is not None else None
 
     @property
-    def phase_stepping(self) -> Union[bool, None]:
+    def phase_stepping(self) -> Optional[bool]:
         """Whether or not the axis is currently using phase stepping"""
         return self._phase_stepping
 
     @phase_stepping.setter
-    def phase_stepping(self, value: Union[bool, None]):
+    def phase_stepping(self, value: Optional[bool]):
         self._phase_stepping = bool(value) if value is not None else None
 
     @property
@@ -303,7 +303,7 @@ class Axis(ModelObject):
         self._step_pos = int(value)
 
     @property
-    def user_position(self) -> Union[float, None]:
+    def user_position(self) -> Optional[float]:
         """Current user position (in mm) or None if unknown
         This value reflects the target position of the last move fed into the look-ahead buffer"""
         return self._user_position

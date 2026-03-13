@@ -2,17 +2,40 @@
 codeparameter contains all classes and methods dealing with deserialized code parameters.
 """
 import json
+from typing import Self, TypeAlias, TypedDict, cast, Optional
 
 from ..exceptions import CodeParserException
 from ..object_model.move.driver_id import DriverId
+
+
+CodeParameterScalar: TypeAlias = str | int | float | DriverId
+CodeParameterArray: TypeAlias = list[int] | list[float] | list[DriverId]
+CodeParameterValue: TypeAlias = CodeParameterScalar | CodeParameterArray
+
+
+class CodeParameterJSON(TypedDict):
+    letter: str
+    value: object
+    isString: Optional[bool]
+    isDriverId: Optional[bool]
 
 
 class CodeParameter(json.JSONEncoder):
     """Represents a parsed parameter of a G/M/T-code"""
 
     LETTER_FOR_UNPRECEDENTED_STRING = "@"
+    letter: str
+    string_value: str
+    is_string: Optional[bool]
+    is_expression: bool
+    is_driver_id: bool
+    __parsed_value: object
 
-    def default(self, o):
+    @property
+    def value(self) -> object:
+        return self.__parsed_value
+
+    def default(self, o: Self) -> dict[str, object]:
         return {
             "letter": o.letter,
             "value": o.value,
@@ -21,16 +44,22 @@ class CodeParameter(json.JSONEncoder):
         }
 
     @classmethod
-    def from_json(cls, data):
+    def from_json(cls, data: CodeParameterJSON) -> Self:
         """Instantiate a new instance of this class from JSON deserialized dictionary"""
         return cls(**data)
 
     @classmethod
-    def simple_param(cls, letter: str, value, isDriverId: bool = False):
+    def simple_param(cls, letter: str, value: object, isDriverId: bool = False) -> Self:
         """Create a new simple parameter without parsing the value"""
         return cls(letter, value, isDriverId=isDriverId)
 
-    def __init__(self, letter: str, value, isString: bool = None, isDriverId: bool = None):
+    def __init__(
+        self,
+        letter: str,
+        value: object,
+        isString: Optional[bool] = None,
+        isDriverId: Optional[bool] = None,
+    ) -> None:
         """
         Creates a new CodeParameter instance and parses value to a native data type
         if applicable
@@ -45,7 +74,7 @@ class CodeParameter(json.JSONEncoder):
             return
 
         self.letter = letter
-        self.string_value = value
+        self.string_value = str(value)
         self.is_string = isString
         self.is_expression = False
         self.is_driver_id = isDriverId if isDriverId is not None else False
@@ -53,10 +82,10 @@ class CodeParameter(json.JSONEncoder):
             self.__parsed_value = value
             return
         elif self.is_driver_id:
-            drivers = [DriverId(as_str=value) for value in self.string_value.split(":")]
+            drivers = [DriverId(as_str=driver_value) for driver_value in self.string_value.split(":")]
             self.__parsed_value = drivers[0] if len(drivers) == 1 else drivers
 
-        value = value.strip()
+        value = self.string_value.strip()
         # Empty parameters are represented as integers with the value 0 (e.g. G92 XY => G92 X0 Y0)
         if not value:
             self.__parsed_value = 0
@@ -81,7 +110,7 @@ class CodeParameter(json.JSONEncoder):
                 except:  # noqa
                     self.__parsed_value = value
 
-    def convert_driver_ids(self):
+    def convert_driver_ids(self) -> None:
         """Convert this parameter to driver id(s)"""
         if self.is_expression:
             return
@@ -95,23 +124,9 @@ class CodeParameter(json.JSONEncoder):
         else:
             self.__parsed_value = drivers
 
-        drivers = []
-        parameters = self.string_value.split(":")
-        for value in parameters:
-            segments = value.split(".")
-            segment_count = len(segments)
-            if segment_count == 1:
-                drivers.append(int(segments[0]))
-            elif segment_count == 2:
-                driver = (int(segments[0]) << 16) & 0xFFFF
-                driver |= int(segments[1] & 0xFFFF)
-            else:
-                raise CodeParserException(f"Driver value from {self.letter} parameter is invalid")
-
-        self.__parsed_value = drivers[0] if len(drivers) == 1 else drivers
         self.is_driver_id = True
 
-    def as_float(self):
+    def as_float(self) -> float:
         """Conversion to float"""
         if isinstance(self.__parsed_value, float):
             return self.__parsed_value
@@ -120,16 +135,16 @@ class CodeParameter(json.JSONEncoder):
 
         raise Exception(f"Cannot convert {self.letter} parameter to float (value {self.string_value})")
 
-    def as_int(self):
+    def as_int(self) -> int:
         """Conversion to int"""
         if isinstance(self.__parsed_value, int):
             return self.__parsed_value
         if isinstance(self.__parsed_value, DriverId):
-            return self.__parsed_value.as_int()
+            return int(self.__parsed_value.as_int())
 
         raise Exception(f"Cannot convert {self.letter} parameter to int (value {self.string_value})")
 
-    def as_driver_id(self):
+    def as_driver_id(self) -> DriverId:
         if isinstance(self.__parsed_value, DriverId):
             return self.__parsed_value
         if isinstance(self.__parsed_value, int):
@@ -139,67 +154,72 @@ class CodeParameter(json.JSONEncoder):
                 pass
         raise Exception(f"Cannot convert {self.letter} parameter to DriverId (value {self.string_value})")
 
-    def as_float_array(self):
+    def as_float_array(self) -> list[float]:
         """Conversion to float array"""
         try:
-            if isinstance(self.__parsed_value, list):
-                return list(map(float, self.__parsed_value))
-            if isinstance(self.__parsed_value, float):
-                return [self.__parsed_value]
-            if isinstance(self.__parsed_value, int):
-                return [float(self.__parsed_value)]
+            parsed_value: object = self.__parsed_value
+            if isinstance(parsed_value, list):
+                values = cast(list[int | float], parsed_value)
+                return [float(value) for value in values]
+            if isinstance(parsed_value, float):
+                return [parsed_value]
+            if isinstance(parsed_value, int):
+                return [float(parsed_value)]
         except:  # noqa
             pass
         raise Exception(f"Cannot convert {self.letter} parameter to float array (value {self.string_value})")
 
-    def as_int_array(self):
+    def as_int_array(self) -> list[int]:
         """Conversion to int array"""
         try:
-            if isinstance(self.__parsed_value, list):
-                if isinstance(self.__parsed_value[0], DriverId):
-                    return [d.as_int() for d in self.__parsed_value]
-                return list(map(int, self.__parsed_value))
-            if isinstance(self.__parsed_value, int):
-                return [self.__parsed_value]
-            if isinstance(self.__parsed_value, DriverId):
-                return [self.__parsed_value.as_int()]
+            parsed_value: object = self.__parsed_value
+            if isinstance(parsed_value, list):
+                if isinstance(parsed_value[0], DriverId):
+                    values = cast(list[DriverId], parsed_value)
+                    return [int(value.as_int()) for value in values]
+                values = cast(list[int] | list[float], parsed_value)
+                return [int(value) for value in values]
+            if isinstance(parsed_value, int):
+                return [parsed_value]
+            if isinstance(parsed_value, DriverId):
+                return [int(parsed_value.as_int())]
         except:  # noqa
             pass
         raise Exception(f"Cannot convert {self.letter} parameter to float array (value {self.string_value})")
 
-    def as_driver_id_array(self):
+    def as_driver_id_array(self) -> list[DriverId]:
         try:
-            if isinstance(self.__parsed_value, list):
-                if isinstance(self.__parsed_value[0], DriverId):
-                    return self.__parsed_value
-                if isinstance(self.__parsed_value[0], int):
-                    return list(map(DriverId, self.__parsed_value))
-            if isinstance(self.__parsed_value, DriverId):
-                return [self.__parsed_value]
-            if isinstance(self.__parsed_value, int):
-                return [DriverId(as_int=self.__parsed_value)]
+            parsed_value: object = self.__parsed_value
+            if isinstance(parsed_value, list):
+                if isinstance(parsed_value[0], DriverId):
+                    return cast(list[DriverId], parsed_value)
+                if isinstance(parsed_value[0], int):
+                    values = cast(list[int], parsed_value)
+                    return [DriverId(as_int=value) for value in values]
+            if isinstance(parsed_value, DriverId):
+                return [parsed_value]
+            if isinstance(parsed_value, int):
+                return [DriverId(as_int=parsed_value)]
         except:  # noqa
             pass
         raise Exception(f"Cannot convert {self.letter} parameter to DriverId array (value {self.string_value})")
 
-    def as_bool(self):
+    def as_bool(self) -> bool:
         """Conversion to bool"""
         try:
             return float(self.string_value) > 0
         except:  # noqa
             return False
 
-    def __eq__(self, other):
-        if self is None:
-            return other is None
+    def __eq__(self, other: object) -> bool:
         if isinstance(other, CodeParameter):
             return self.letter == other.letter and self.__parsed_value == other.__parsed_value
         return self.__parsed_value == other
 
-    def __ne__(self, other):
+    def __ne__(self, other: object) -> bool:
         return not self == other
 
-    def __str__(self):
+    def __str__(self) -> str:
         letter = self.letter if not self.letter == CodeParameter.LETTER_FOR_UNPRECEDENTED_STRING else ""
         if self.is_string and not self.is_expression:
             double_quoted = self.string_value.replace('"', '""')

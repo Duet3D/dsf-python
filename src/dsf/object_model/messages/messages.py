@@ -27,10 +27,16 @@ class Message(ModelObject):
     """
 
     @classmethod
-    def from_json(cls, data):
+    def from_json(cls, data: dict[str, object]) -> 'Message':
         """Deserialize an instance of this class from JSON deserialized dictionary"""
-        data['msg_type'] = data.pop('type')  # Replace 'type' to not shadow the built-in keyword name
-        return cls(**data)
+        raw_msg_type = data.pop('type')  # Replace 'type' to not shadow the built-in keyword name
+        if isinstance(raw_msg_type, MessageType):
+            msg_type: MessageType = raw_msg_type
+        elif isinstance(raw_msg_type, int):
+            msg_type = MessageType(raw_msg_type)
+        else:
+            raise TypeError(f"{__name__}.type must be of type MessageType. Got {type(raw_msg_type)}: {raw_msg_type}")
+        return cls(msg_type, **data)
 
     def __init__(self, msg_type: MessageType = MessageType.Success, content: str = "", time: datetime = datetime.now()):
         super().__init__()

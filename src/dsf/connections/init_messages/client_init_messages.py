@@ -17,7 +17,7 @@ clientinitmessages holds all messages a client can send to the server to initiat
     You should have received a copy of the GNU Lesser General Public License
     along with this program.  If not, see <https://www.gnu.org/licenses/>.
 """
-from typing import List
+from typing import List, Optional, Any
 from .server_init_message import ServerInitMessage
 from .. import ConnectionMode, InterceptionMode, SubscriptionMode
 from ...commands.code_channel import CodeChannel
@@ -29,7 +29,7 @@ class ClientInitMessage:
     to the ServerInitMessage. It allows a client to select the connection mode.
     """
 
-    def __init__(self, mode: ConnectionMode = ConnectionMode.UNKNOWN, **kwargs):
+    def __init__(self, mode: ConnectionMode = ConnectionMode.UNKNOWN, **kwargs: Any):
         self.mode = mode
         self.version = ServerInitMessage.PROTOCOL_VERSION
         for key, value in kwargs.items():
@@ -42,7 +42,7 @@ def intercept_init_message(
         filters: List[str],
         priority_codes: bool,
         auto_flush: bool = True,
-        auto_evaluate_expression: bool = True):
+        auto_evaluate_expression: bool = True) -> ClientInitMessage:
     """
     Enter interception mode
     Whenever a code is received, the connection must respond with one of
@@ -80,13 +80,27 @@ def intercept_init_message(
     )
 
 
-def command_init_message():
+def command_init_message() -> ClientInitMessage:
     """Enter command-based connection mode"""
     return ClientInitMessage(ConnectionMode.COMMAND)
 
 
-def subscribe_init_message(subscription_mode: SubscriptionMode, filter_string: str, filter_list):
-    """Enter subscription mode"""
+def subscribe_init_message(subscription_mode: SubscriptionMode, filter_string: Optional[str] = None, filter_list: List[str] = []) -> ClientInitMessage:
+    """_summary_
+
+    Args:
+        subscription_mode (SubscriptionMode): FULL to receive the entire OM every request, PATCH to only get the changes
+        filter_string (Optional[str], optional): deprecated, use filter_list instead. Defaults to None.
+        filter_list (List[str], optional): 
+            The style of a filter is similar to XPath. For example, if you want to monitor only the current heater
+            temperatures, you can use the filter expression "heat/heaters[*]/current". Wildcards are supported either
+            for full names or indices. To get updates for an entire namespace, the ** wildcard can be used 
+            for example heat/** for everything heat-related), however it can be only used at the end of a filter expression.
+            Defaults to [].
+
+    Returns:
+        ClientInitMessage: The initialized client message for subscription
+    """
     return ClientInitMessage(
         ConnectionMode.SUBSCRIBE,
         **{

@@ -20,10 +20,6 @@ def patch_object_model(key: str, patch: str):
     :param key: Key to update
     :param patch: JSON patch to apply
     """
-    if not isinstance(key, str) or not key:
-        raise TypeError("key must be a string")
-    if not isinstance(patch, str) or not patch:
-        raise TypeError("patch must be a string")
     return BaseCommand("PatchObjectModel", **{"key": key, "patch": patch})
 
 
@@ -34,10 +30,6 @@ def set_network_protocol(protocol: str, enabled: bool):
     :param enabled: Whether the protocol is enabled or not
     :returns: true if the protocol could be flagged
     """
-    if not isinstance(protocol, str) or not protocol:
-        raise TypeError("protocol must be a string")
-    if not isinstance(enabled, bool):
-        raise TypeError("enabled must be a boolean")
     return BaseCommand("SetNetworkProtocol", **{"networkProtocol": protocol, "enabled": enabled})
 
 
@@ -49,10 +41,6 @@ def set_object_model(property_path: str, value: str):
     :param value: String representation of the value to set
     :returns: true if the field could be updated
     """
-    if not isinstance(property_path, str) or not property_path:
-        raise TypeError("property_path must be a string")
-    if not isinstance(value, str):
-        raise TypeError("value must be a string")
     return BaseCommand("SetObjectModel", **{"propertyPath": property_path, "value": value})
 
 

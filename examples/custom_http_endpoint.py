@@ -7,7 +7,6 @@ Make sure when running this script to have access to the DSF UNIX socket owned b
 """
 
 import time
-import os
 import json
 
 from dsf.connections import CommandConnection
@@ -19,6 +18,7 @@ async def respond_something(http_endpoint_connection: HttpEndpointConnection):
     r = await http_endpoint_connection.read_request()
     if (len(r.body) > 0):
         data = json.loads(r.body)
+        print(data)
     await http_endpoint_connection.send_response(200, "so happy you asked for it!", HttpResponseType.PlainText)
     http_endpoint_connection.close()
 

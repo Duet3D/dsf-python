@@ -53,7 +53,7 @@ class TestCustomHttpEndpoint(unittest.TestCase):
         self.server_ready.set()
 
         conn, _ = server.accept()
-        conn.sendall(f'{{"version":{PROTOCOL_VERSION}, "id":"foobar"}}'.encode())
+        conn.sendall(f'{{"version":{PROTOCOL_VERSION}, "id":1234}}'.encode())
 
         setup_msg = conn.recv(1024)
         self.assertEqual(json.loads(setup_msg.decode()), {"mode": "Command", "version": PROTOCOL_VERSION})

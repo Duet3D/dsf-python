@@ -55,7 +55,7 @@ class TestSendSimpleCode(unittest.TestCase):
         try:
             with conn:
                 # Initial handshake - send version and ID
-                conn.sendall(f'{{"version":{PROTOCOL_VERSION}, "id":"foobar"}}'.encode())
+                conn.sendall(f'{{"version":{PROTOCOL_VERSION}, "id":1234}}'.encode())
 
                 # Receive and verify the command setup message
                 setup_msg = conn.recv(1024)

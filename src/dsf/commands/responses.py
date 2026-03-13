@@ -18,37 +18,50 @@ from DuetSoftwareFramework.
     You should have received a copy of the GNU Lesser General Public License
     along with this program.  If not, see <https://www.gnu.org/licenses/>.
 """
-
-
-def decode_response(obj):
-    """Deserialization helper to convert a response to the appropriate type"""
-    if obj["success"]:
-        if "result" in obj:
-            return Response(obj["result"])
-        return Response()
-
-    return ErrorResponse(obj["errorType"], obj["errorMessage"])
+from ..utils import JSONObj, JSONElement
+from ..object_model.model_object import ModelObject
 
 
 class BaseResponse:
     """Base class for every response to a command request."""
+    success: bool
 
-    def __init__(self, success):
+    def __init__(self, success: bool):
         self.success = success
-
 
 class Response(BaseResponse):
     """Response of a Command"""
+    result: JSONElement | ModelObject
 
-    def __init__(self, result=None):
+    def __init__(self, result: JSONElement = None):
         super().__init__(True)
         self.result = result
 
 
 class ErrorResponse(BaseResponse):
     """Response indicating a runtime exception during the internal processing of a command"""
+    error_type: str
+    error_message: str
 
-    def __init__(self, error_type, error_message):
+    def __init__(self, error_type: str, error_message: str):
         super().__init__(False)
         self.error_type = error_type
         self.error_message = error_message
+
+
+def decode_response(obj: JSONObj) -> Response | ErrorResponse:
+    """Deserialization helper to convert a response to the appropriate type"""
+    if obj["success"]:
+        if "result" in obj:
+            return Response(obj["result"])
+        return Response()
+
+    error_type = obj.get("errorType")
+    if not isinstance(error_type, str):
+        raise TypeError("Error type must be string")
+
+    error_message = obj.get("errorMessage")
+    if not isinstance(error_message, str):
+        raise TypeError("Error message must be string")
+
+    return ErrorResponse(error_type, error_message)

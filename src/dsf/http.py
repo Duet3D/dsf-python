@@ -6,10 +6,13 @@ import errno
 import os
 from concurrent.futures import ThreadPoolExecutor
 from enum import Enum
+from typing import Optional, Any, Callable, TypeAlias, Coroutine
 
 from . import DEFAULT_BACKLOG
 from .object_model import HttpEndpointType
+from .utils import JSONObj, get_typed_value
 
+HttpCallback: TypeAlias = Callable[["HttpEndpointConnection"], Coroutine[Any, Any, None]]
 
 class HttpResponseType(str, Enum):
     """Enumeration of supported HTTP responses"""
@@ -25,11 +28,22 @@ class ReceivedHttpRequest:
     """Notification sent by the webserver when a new HTTP request is received"""
 
     @classmethod
-    def from_json(cls, data):
+    def from_json(cls, data: JSONObj) -> "ReceivedHttpRequest":
         """Deserialize an instance of this class from deserialized JSON dictionary"""
-        return cls(**data)
+        sessionId = get_typed_value(data, "sessionId", int)
+        queries = get_typed_value(data, "queries", dict[str, str])
+        headers = get_typed_value(data, "headers", dict[str, str])
+        contentType: Optional[str] = get_typed_value(data, "contentType", Optional[str])
+        body = get_typed_value(data, "body", str)
+        return cls(
+            sessionId=sessionId,
+            queries=queries,
+            headers=headers,
+            contentType=contentType,
+            body=body,
+        )
 
-    def __init__(self, sessionId: int, queries: dict, headers: dict, contentType: str, body: str):
+    def __init__(self, sessionId: int, queries: dict[str, str], headers: dict[str, str], contentType: Optional[str], body: str):
         self.session_id = sessionId
         self.queries = queries
         self.headers = headers
@@ -40,7 +54,7 @@ class ReceivedHttpRequest:
 class HttpEndpointConnection:
     """Connection class for dealing with requests received from a custom HTTP endpoint"""
 
-    def __init__(self, reader, writer, is_websocket: bool, debug: bool = False):
+    def __init__(self, reader: asyncio.StreamReader, writer: asyncio.StreamWriter, is_websocket: bool, debug: bool = False):
         """Constructor for a new connection dealing with a single HTTP endpoint request"""
         self.reader = reader
         self.writer = writer
@@ -81,7 +95,7 @@ class HttpEndpointConnection:
             if not self.is_websocket:
                 self.close()
 
-    async def receive(self, cls):
+    async def receive(self, cls: type[ReceivedHttpRequest]) -> ReceivedHttpRequest:
         """Receive a deserialized object"""
         json_string = await self.receive_json()
         return cls.from_json(json.loads(json_string))
@@ -93,7 +107,7 @@ class HttpEndpointConnection:
             print("recv:", json_string)
         return json_string
 
-    async def send(self, obj):
+    async def send(self, obj: object) -> None:
         """Send an arbitrary object"""
         json_string = json.dumps(obj, default=lambda o: o.__dict__)
         if self.debug:
@@ -120,10 +134,10 @@ class HttpEndpointUnixSocket:
         self.endpoint_path = path
         self.socket_file = socket_file
         self.backlog = backlog
-        self.handler = None
+        self.handler: Optional[HttpCallback] = None
         self.debug = debug
-        self._loop = None
-        self._server = None
+        self._loop: Optional[asyncio.AbstractEventLoop] = None
+        self._server: Optional[asyncio.Server] = None
 
         try:
             os.remove(self.socket_file)
@@ -150,7 +164,7 @@ class HttpEndpointUnixSocket:
         except FileNotFoundError:
             pass
 
-    def set_endpoint_handler(self, handler):
+    def set_endpoint_handler(self, handler: HttpCallback) -> None:
         """Set the handler to handle client connections"""
         self.handler = handler
 
@@ -165,7 +179,7 @@ class HttpEndpointUnixSocket:
                     os.remove(path)
             except FileNotFoundError:
                 pass
-            except OSError as err:
+            except OSError:
                 # Directory may have permissions only to create socket.
                 # logger.error('Unable to check or remove stale UNIX socket '
                 #                 '%r: %r', path, err)
@@ -192,16 +206,19 @@ class HttpEndpointUnixSocket:
     def start_connection_listener(self):
         try:
             self._loop = asyncio.new_event_loop()
+            asyncio.set_event_loop(self._loop)
             sock = self._create_socket(self.socket_file)
-            self._server = asyncio.start_unix_server(
-                self.handle_connection, sock=sock, backlog=self.backlog
+            self._server = self._loop.run_until_complete(
+                asyncio.start_unix_server(
+                    self.handle_connection, sock=sock, backlog=self.backlog
+                )
             )
-            self._loop.create_task(self._server)
             self._loop.run_forever()
         finally:
-            self._loop.close()
+            if self._loop is not None:
+                self._loop.close()
 
-    async def handle_connection(self, reader, writer):
+    async def handle_connection(self, reader: asyncio.StreamReader, writer: asyncio.StreamWriter):
         """Handle incoming UNIX socket connections (HTTP/WebSocket requests)"""
         http_endpoint_connection = HttpEndpointConnection(
             reader,

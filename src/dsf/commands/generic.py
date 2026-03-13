@@ -15,8 +15,8 @@ def check_password(password: str):
 
     :returns: true if the password matches or is not set
     """
-    if not isinstance(password, str) or not password:
-        raise TypeError("password must be a string")
+    if not password:
+        raise ValueError("password must not be empty")
     return BaseCommand("CheckPassword", **{"password": password})
 
 
@@ -29,10 +29,8 @@ def evaluate_expression(channel: CodeChannel, expression: str):
     :param channel: Code channel where the expression is evaluated
     :param expression: Expression to evaluate
     """
-    if not isinstance(channel, CodeChannel):
-        raise TypeError("channel must be a CodeChannel")
-    if not isinstance(expression, str) or not expression:
-        raise TypeError("expression must be a string")
+    if not expression:
+        raise ValueError("expression must not be empty")
     return BaseCommand("EvaluateExpression", **{"channel": channel, "expression": expression})
 
 
@@ -50,12 +48,6 @@ def flush(channel: CodeChannel, sync_file_streams: bool = False, if_executing: b
 
     :returns: true if the flush request is successful
     """
-    if not isinstance(channel, CodeChannel):
-        raise TypeError("channel must be a CodeChannel")
-    if not isinstance(sync_file_streams, bool):
-        raise TypeError("sync_file_streams must be a boolean")
-    if not isinstance(if_executing, bool):
-        raise TypeError("if_executing must be a boolean")
     return BaseCommand("Flush",
                        **{"channel": channel, "syncFileStreams": sync_file_streams, "ifExecuting": if_executing})
 
@@ -68,8 +60,6 @@ def invalidate_channel(channel: CodeChannel):
 
     :returns: true if the invalidate request is successful
     """
-    if not isinstance(channel, CodeChannel):
-        raise TypeError("channel must be a CodeChannel")
     return BaseCommand("InvalidateChannel", **{"channel": channel})
 
 
@@ -79,8 +69,6 @@ def set_update_status(updating: bool):
 
     :param updating: Whether an update is now in progress
     """
-    if not isinstance(updating, bool):
-        raise TypeError("updating must be a boolean")
     return BaseCommand("SetUpdateStatus", **{"updating": updating})
 
 
@@ -97,10 +85,6 @@ def simple_code(code: str, channel: CodeChannel = CodeChannel.DEFAULT_CHANNEL, a
     :param async_exec: Whether this code may be executed asynchronously.
                        If set, the code reply is output as a generic message
     """
-    if not isinstance(code, str) or not code:
-        raise TypeError("code must be a string")
-    if not isinstance(channel, CodeChannel):
-        raise TypeError("channel must be a CodeChannel")
     return BaseCommand("SimpleCode", **{"code": code, "channel": channel, "executeAsynchronously": async_exec})
 
 
@@ -118,14 +102,6 @@ def write_message(
     :param output_message: Output the message on the console and via the object model
     :param log_level: Log level of this message
     """
-    if not isinstance(message_type, MessageType):
-        raise TypeError("rtype must be a MessageType")
-    if not isinstance(content, str):
-        raise TypeError("content must be a string")
-    if not isinstance(output_message, bool):
-        raise TypeError("output_message must be a boolean")
-    if log_level is not None and not isinstance(log_level, LogLevel):
-        raise TypeError("log_message must be a LogLevel")
     return BaseCommand(
         "WriteMessage",
         **{

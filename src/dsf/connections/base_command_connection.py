@@ -1,5 +1,7 @@
 import os
 
+from typing import Optional
+
 from .base_connection import BaseConnection
 from .. import commands, DEFAULT_BACKLOG
 from ..commands import code
@@ -26,6 +28,9 @@ class BaseCommandConnection(BaseConnection):
         res = self.perform_command(
             commands.http_endpoints.add_http_endpoint(endpoint_type, namespace, path, is_upload_request)
         )
+        if not isinstance(res.result, str):
+            raise TypeError(f"Unexpected result type for AddHttpEndpoint command: {type(res.result)}")
+
         socket_file = res.result
         return HttpEndpointUnixSocket(endpoint_type, namespace, path, socket_file, backlog, self.debug)
 
@@ -33,7 +38,7 @@ class BaseCommandConnection(BaseConnection):
         self,
         access_level: commands.user_sessions.AccessLevel,
         session_type: commands.user_sessions.SessionType,
-        origin: str,
+        origin: Optional[str],
     ):
         """
         Add a new user session
@@ -46,13 +51,15 @@ class BaseCommandConnection(BaseConnection):
             origin = str(os.getpid())
 
         res = self.perform_command(commands.user_sessions.add_user_session(access_level, session_type, origin))
+        if not isinstance(res.result, int):
+            raise TypeError(f"Unexpected result type for AddUserSession command: {type(res.result)}")
         return int(res.result)
 
     def check_password(self, password: str):
         """Check the given password (see M551)"""
         return self.perform_command(commands.generic.check_password(password))
 
-    def evaluate_expression(self, expression, channel: CodeChannel = CodeChannel.SBC):
+    def evaluate_expression(self, expression: str, channel: CodeChannel = CodeChannel.SBC):
         """
         Evaluate an arbitrary expression
         :param expression: Expression to evaluate
@@ -105,7 +112,7 @@ class BaseCommandConnection(BaseConnection):
         """
         return self.perform_command(commands.object_model.lock_object_model())
 
-    def patch_object_model(self, key: str, patch):
+    def patch_object_model(self, key: str, patch: str):
         """
         Apply a full patch to the object model. Use with care!
         """
@@ -172,7 +179,7 @@ class BaseCommandConnection(BaseConnection):
         """
         return self.perform_command(commands.object_model.set_object_model(path, value))
 
-    def set_plugin_data(self, plugin: str, key: str, value: str):
+    def set_plugin_data(self, plugin: str, key: str, value: object):
         """Set custom plugin data in the object model"""
         res = self.perform_command(commands.plugins.set_plugin_data(plugin, key, value))
         return res.result

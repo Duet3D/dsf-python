@@ -1,15 +1,15 @@
-from typing import Type, TypeVar, Any, Union, Dict
+from typing import Type, Any, Union, Dict
+
+from .model_object import TModelObject as T
 
 
-def is_model_object(o):
+def is_model_object(o: object) -> bool:
     from .model_object import ModelObject
     from .model_collection import ModelCollection
     from .model_dictionary import ModelDictionary
 
     return isinstance(o, ModelObject) or isinstance(o, ModelCollection) or isinstance(o, ModelDictionary)
 
-
-T = TypeVar('T')  # Type variable for model objects
 
 
 def wrap_model_property(name: str, model_type: Type[T]) -> Union[Type[T], None]:
@@ -23,11 +23,11 @@ def wrap_model_property(name: str, model_type: Type[T]) -> Union[Type[T], None]:
     STORAGE_NAME = '_' + name
 
     @property
-    def prop(self) -> Union[Type[T], None]:
+    def prop(self: T) -> Union[Type[T], None]:
         return getattr(self, STORAGE_NAME)
 
     @prop.setter
-    def prop(self, value: Union[Type[T], str, Dict[str, Any], None]):
+    def prop(self: T, value: Union[Type[T], str, Dict[str, Any], None]):
         if value is None or isinstance(value, model_type):
             setattr(self, STORAGE_NAME, value)
         elif isinstance(value, dict):  # Update from JSON

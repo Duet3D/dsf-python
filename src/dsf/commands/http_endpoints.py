@@ -14,14 +14,6 @@ def add_http_endpoint(endpoint_type: HttpEndpointType, namespace: str, path: str
     to whenever a matching HTTP request is received.
     A plugin using this command has to open a new UNIX socket with the given path that DuetWebServer can connect to
     """
-    if not isinstance(endpoint_type, HttpEndpointType):
-        raise TypeError("endpoint_type must be a HttpEndpointType")
-    if not isinstance(namespace, str) or not namespace:
-        raise TypeError("namespace must be a string")
-    if not isinstance(path, str) or not path:
-        raise TypeError("path must be a string")
-    if not isinstance(is_upload_request, bool):
-        raise TypeError("is_upload_request must be a boolean")
     return BaseCommand(
         "AddHttpEndpoint",
         **{
@@ -41,12 +33,6 @@ def remove_http_endpoint(endpoint_type: HttpEndpointType, namespace: str, path: 
     :param path: Path to the endpoint to unregister
     :returns: true if the endpoint could be successfully removed
     """
-    if not isinstance(endpoint_type, HttpEndpointType):
-        raise TypeError("endpoint_type must be a HttpEndpointType")
-    if not isinstance(namespace, str) or not namespace:
-        raise TypeError("namespace must be a string")
-    if not isinstance(path, str) or not path:
-        raise TypeError("path must be a string")
     return BaseCommand(
         "RemoveHttpEndpoint",
         **{"endpointType": endpoint_type, "namespace": namespace, "path": path},

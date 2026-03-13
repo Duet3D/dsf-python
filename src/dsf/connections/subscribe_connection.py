@@ -1,12 +1,13 @@
 import json
 from dataclasses import dataclass
 from threading import Lock
-from typing import Any, Callable, Sequence
+from typing import Any, Callable, Sequence, Optional, List
 
 from .base_connection import BaseConnection
 from .init_messages import client_init_messages
 from .. import commands, SOCKET_FILE
 from ..object_model import ObjectModel
+from ..utils import JSONObj
 
 
 _MISSING = object()
@@ -32,8 +33,8 @@ class SubscribeConnection(BaseConnection):
     def __init__(
         self,
         subscription_mode: client_init_messages.SubscriptionMode,
-        filter_str: str = "",
-        filter_list=None,
+        filter_str: Optional[str] = None,  # deprecated, use filter_list instead
+        filter_list: List[str] = [],
         debug: bool = False,
     ):
         super().__init__(debug)
@@ -45,12 +46,12 @@ class SubscribeConnection(BaseConnection):
         self._key_subscriptions: list[_ObjectModelCallbackSubscription] = []
         self._key_subscription_lock = Lock()
 
-    def connect(self, socket_file: str = SOCKET_FILE, **kwargs):
+    def connect(self, socket_file: str = SOCKET_FILE):
         """Establishes a connection to the given UNIX socket file"""
         sim = client_init_messages.subscribe_init_message(
             self.subscription_mode, self.filter_str, self.filter_list
         )
-        return super().connect(sim, socket_file)
+        return super()._connect(sim, socket_file)
 
     def get_object_model(self) -> ObjectModel:
         """
@@ -129,7 +130,7 @@ class SubscribeConnection(BaseConnection):
                 if current_subscription != subscription
             ]
 
-    def _notify_key_subscriptions(self, patch_data: dict[str, Any]) -> None:
+    def _notify_key_subscriptions(self, patch_data: JSONObj) -> None:
         with self._key_subscription_lock:
             subscriptions = tuple(self._key_subscriptions)
 
@@ -148,7 +149,7 @@ class SubscribeConnection(BaseConnection):
     @classmethod
     def _extract_key_changes(
         cls,
-        patch_data: dict[str, Any],
+        patch_data: JSONObj,
         keys: Sequence[str],
     ) -> list[tuple[str, Any, tuple[int, ...] | None]]:
         matches: list[tuple[str, Any, tuple[int, ...] | None]] = []
@@ -160,7 +161,7 @@ class SubscribeConnection(BaseConnection):
     @classmethod
     def _extract_key_path_values(
         cls,
-        patch_data: dict[str, Any],
+        patch_data: JSONObj,
         key: str,
     ) -> list[tuple[tuple[int, ...] | None, Any]]:
         matches = cls._walk_key_path(patch_data, key.split("."), ())

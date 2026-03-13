@@ -10,12 +10,8 @@ def add_user_session(access_level: AccessLevel, session_type: SessionType, origi
     :param session_type: Type of this session
     :param origin: Origin of this session. For remote sessions, this equals the remote IP address
     """
-    if not isinstance(access_level, AccessLevel):
-        raise TypeError("access_level must be an AccessLevel")
-    if not isinstance(session_type, SessionType):
-        raise TypeError("session_type must be an SessionType")
-    if not isinstance(origin, str) or not origin:
-        raise TypeError("origin must be a string")
+    if not origin:
+        raise ValueError("origin must not be empty")
     return BaseCommand(
         "AddUserSession",
         **{
@@ -31,6 +27,4 @@ def remove_user_session(session_id: int):
     Remove an existing user session
     :param session_id: Identifier of the user session to remove
     """
-    if not isinstance(session_id, int):
-        raise TypeError("session_id must be an integer")
     return BaseCommand("RemoveUserSession", **{"id": session_id})

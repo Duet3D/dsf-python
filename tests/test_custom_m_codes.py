@@ -46,7 +46,7 @@ class TestCustomMCodes(unittest.TestCase):
 
         conn, _ = server.accept()
 
-        conn.sendall(b'{"version":' + str(PROTOCOL_VERSION).encode() + b', "id":"foobar"}')
+        conn.sendall(b'{"version":' + str(PROTOCOL_VERSION).encode() + b', "id":1234}')
         # Receive and verify the intercept setup message
         setup_msg = conn.recv(1024)
         self.assertIn(b'"mode":"Intercept"', setup_msg)

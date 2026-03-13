@@ -19,7 +19,7 @@ serverinitmessage holds everything relevant to the first message received from t
 """
 
 from ... import PROTOCOL_VERSION
-from ...utils import preserve_builtin
+from ...utils import preserve_builtin, JSONObj
 
 
 class ServerInitMessage:
@@ -29,9 +29,15 @@ class ServerInitMessage:
     """
 
     @classmethod
-    def from_json(cls, data):
+    def from_json(cls, data: JSONObj) -> 'ServerInitMessage':
         """Deserialize a dictionary coming from JSON into an instance of this class"""
-        return cls(**preserve_builtin(data))
+        version = data.get("version")
+        id = data.get("id")
+        if not version or not id:
+            raise ValueError("Invalid ServerInitMessage: missing required fields 'version' or 'id'")
+        if not isinstance(version, int) or not isinstance(id, int):
+            raise ValueError("Invalid ServerInitMessage: 'version' and 'id' must be integers")
+        return cls(version, id)
 
     PROTOCOL_VERSION = PROTOCOL_VERSION
 

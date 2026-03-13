@@ -29,7 +29,7 @@ setuptools.setup(
         "Programming Language :: Python :: 3 :: Only",
     ],
     install_requires=[
-        'python-dateutil'
+        'python-dateutil',
     ],
     keywords="Duet3D, DuetSoftwareFramework, DSF, dsf-python",
     package_dir={"": "src"},

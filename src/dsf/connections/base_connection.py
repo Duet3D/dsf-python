@@ -7,7 +7,9 @@ from typing import Optional
 from .exceptions import IncompatibleVersionException, InternalServerException, TaskCanceledException
 from .init_messages import client_init_messages, server_init_message
 from ..commands import responses
-
+from ..commands.responses import Response, ErrorResponse
+from ..commands.base_command import BaseCommand
+from ..object_model.model_object import TModelObject
 
 class BaseConnection:
     """
@@ -22,7 +24,7 @@ class BaseConnection:
         self.id = None
         self.input = ""
 
-    def connect(self, init_message: client_init_messages.ClientInitMessage, socket_file: str):
+    def _connect(self, init_message: client_init_messages.ClientInitMessage, socket_file: str):
         """Establishes a connection to the given UNIX socket file"""
 
         self.socket = socket.socket(socket.AF_UNIX, socket.SOCK_STREAM)
@@ -40,7 +42,7 @@ class BaseConnection:
         self.send(init_message)
 
         response = self.receive_response()
-        if not response.success:
+        if isinstance(response, ErrorResponse):
             raise Exception(
                 f"Could not set connection type {init_message.mode} ({response.error_type}: {response.error_message})"
             )
@@ -51,13 +53,17 @@ class BaseConnection:
             self.socket.close()
             self.socket = None
 
-    def perform_command(self, command, cls=None):
+    def perform_command(self, command: BaseCommand, cls: Optional[type[TModelObject]] = None) -> Response:
         """Perform an arbitrary command"""
         self.send(command)
 
         response = self.receive_response()
-        if response.success:
+        if isinstance(response, Response):
             if cls is not None and response.result is not None:
+                if not isinstance(response.result, dict):
+                    raise InternalServerException(
+                        command, "InvalidResponseType", f"Expected result type JSONObj, got {type(response.result)}"
+                    )
                 response.result = cls.from_json(response.result)
             return response
 
@@ -68,14 +74,15 @@ class BaseConnection:
             command, response.error_type, response.error_message
         )
 
-    def send(self, msg):
+    def send(self, msg: object):
         """Serialize an arbitrary object into JSON and send it to the server plus NL"""
         json_string = json.dumps(msg, separators=(",", ":"), default=lambda o: o.__dict__)
         if self.debug:
             print(f"send: {json_string}")
-        self.socket.sendall(json_string.encode("utf8"))
+        if self.socket:
+            self.socket.sendall(json_string.encode("utf8"))
 
-    def receive(self, cls):
+    def receive(self, cls: type[TModelObject]) -> TModelObject:
         """Receive a deserialized object from the server"""
         json_string = self.receive_json()
         return cls.from_json(json.loads(json_string))

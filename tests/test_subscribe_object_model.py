@@ -8,10 +8,12 @@ import tempfile
 import time
 import importlib.util
 import json
+from typing import Union, Dict
 
 from tests.utils import check_json
 from src.dsf import PROTOCOL_VERSION
 from src.dsf.connections import SubscribeConnection, SubscriptionMode
+from src.dsf.utils import JSONObj
 
 
 class TestSubscribeObjectModel(unittest.TestCase):
@@ -65,16 +67,16 @@ class TestSubscribeObjectModel(unittest.TestCase):
                 conn, _ = server.accept()
                 with conn:
                     # Initial handshake
-                    conn.sendall(f'{{"version":{PROTOCOL_VERSION}, "id":"foobar"}}'.encode())
+                    conn.sendall(f'{{"version":{PROTOCOL_VERSION}, "id":1234}}'.encode())
 
                     # Verify subscription setup
                     setup_msg = conn.recv(1024)
-                    expected_setup = {
+                    expected_setup: JSONObj = {
                         "mode": "Subscribe",
                         "version": PROTOCOL_VERSION,
                         "subscriptionMode": "Patch",
-                        "filter": "",
-                        "filters": None
+                        "filter": None,
+                        "filters": []
                     }
                     check_json(expected_setup, setup_msg.decode())
 

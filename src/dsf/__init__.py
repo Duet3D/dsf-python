@@ -4,7 +4,7 @@ import json
 import os
 
 # Default socket file path
-SOCKET_FILE = "/run/dsf/dcs.sock"
+SOCKET_FILE: str = "/run/dsf/dcs.sock"
 
 # Try to read socket file path from config
 config_path = "/opt/dsf/conf/config.json"

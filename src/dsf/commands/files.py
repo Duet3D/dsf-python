@@ -1,3 +1,5 @@
+from typing import Optional
+
 from .base_command import BaseCommand
 
 
@@ -7,18 +9,18 @@ def get_file_info(file_name: str, read_thumbnail_content: bool = False):
     :param file_name: The filename to extract information from
     :param read_thumbnail_content: Whether thumbnail content shall be returned
     """
-    if not isinstance(file_name, str) or not file_name:
-        raise TypeError("file_name must be a string")
+    if not file_name:
+        raise ValueError("file_name must not be empty")
     return BaseCommand("GetFileInfo", **{"fileName": file_name, "readThumbnailContent": read_thumbnail_content})
 
 
-def resolve_path(path: str, base_directory: str = None):
+def resolve_path(path: str, base_directory: Optional[str] = None):
     """
     Resolve a RepRapFirmware-style path to an actual file path
     :param path: Path that is RepRapFirmware-compatible
     :param base_directory: Optional base directory to resolve the path relative to
     :returns: The resolved path
     """
-    if not isinstance(path, str) or not path:
-        raise TypeError("path must be a string")
+    if not path:
+        raise ValueError("path must not be empty")
     return BaseCommand("ResolvePath", **{"path": path, "baseDirectory": base_directory})

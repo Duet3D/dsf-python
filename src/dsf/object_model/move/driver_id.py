@@ -1,10 +1,12 @@
 import re
 
+from typing import Optional
+
 from ..model_object import ModelObject
 from ...exceptions import CodeParserException
 
 
-def is_driverId(value):
+def is_driverId(value: object) -> bool:
     return isinstance(value, DriverId)
 
 
@@ -15,7 +17,10 @@ class DriverId(ModelObject):
     :param port: Port of this driver identifier
     """
 
-    def __init__(self, as_str: str = None, as_int: int = None, board: int = None, port: int = None):
+    board: int
+    port: int
+
+    def __init__(self, as_str: Optional[str] = None, as_int: Optional[int] = None, board: Optional[int] = None, port: Optional[int] = None):
         super().__init__()
 
         if board is not None:
@@ -41,11 +46,12 @@ class DriverId(ModelObject):
                 self.port = int(segments[1]) & 0xFFFF
             else:
                 raise CodeParserException("Failed to parse driver value")
+            return
 
-    def as_int(self):
+    def as_int(self) -> int:
         return (self.board << 16) | self.port
 
-    def __str__(self):
+    def __str__(self, **kwargs: object):
         """Convert this instance to a string"""
         return f"{self.port}" if self.board is None else f"{self.board}.{self.port}"
 

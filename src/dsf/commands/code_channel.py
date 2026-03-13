@@ -55,4 +55,4 @@ class CodeChannel(str, Enum):
 
     @staticmethod
     def list():
-        return list(map(lambda cc: cc.value, CodeChannel))
+        return list(map(lambda cc: cc, CodeChannel))

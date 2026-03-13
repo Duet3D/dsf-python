@@ -24,8 +24,4 @@ def resolve_code(rtype: MessageType, content: Optional[str]):
     :param rtype: Type of the resolving message
     :param content: Content of the resolving message
     """
-    if not isinstance(rtype, MessageType):
-        raise TypeError("rtype must be a MessageType")
-    if content is not None and not isinstance(content, str):
-        raise TypeError("content must be None or a string")
     return BaseCommand("Resolve", **{"type": rtype, "content": content})
