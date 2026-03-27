@@ -1,97 +1,41 @@
-from typing import Union
-
 from ..model_object import ModelObject
+from ..utils import model_prop, nullable_model_prop
 
 
 class CurrentMove(ModelObject):
     """Information about the current move"""
+
+    # Acceleration of the current move (in mm/s^2)
+    acceleration = model_prop("acceleration", float, 0.0)
+
+    # Deceleration of the current move (in mm/s^2)
+    deceleration = model_prop("deceleration", float, 0.0)
+
+    # Total distance of the current move (in mm)
+    distance = model_prop("distance", float, 0.0)
+
+    # Duration of the current move (in s)
+    duration = model_prop("duration", float, 0.0)
+
+    # Current extrusion rate (in mm/s)
+    extrusion_rate = model_prop("extrusion_rate", float, 0.0)
+
+    # Laser PWM of the current move (0..1) or null if not applicable
+    laser_pwm = nullable_model_prop("laser_pwm", float)
+
+    # Requested speed of the current move (in mm/s)
+    requested_speed = model_prop("requested_speed", float, 0.0)
+
+    # Top speed of the current move (in mm/s)
+    top_speed = model_prop("top_speed", float, 0.0)
+
     def __init__(self):
         super().__init__()
-        # Acceleration of the current move (in mm/s^2)
-        self._acceleration: float = 0
-        # Deceleration of the current move (in mm/s^2)
-        self._deceleration: float = 0
-        # Total distance of the current move (in mm)
-        self._distance: float = 0
-        # Duration of the current move (in s)
-        self._duration: float = 0
-        # Current extrusion rate (in mm/s)
-        self._extrusion_rate: float = 0
-        # Laser PWM of the current move (0..1) or null if not applicable
-        self._laser_pwm: Union[float, None] = None
-        # Requested speed of the current move (in mm/s)
-        self._requested_speed: float = 0
-        # Top speed of the current move (in mm/s)
-        self._top_speed: float = 0
-
-    @property
-    def acceleration(self) -> float:
-        """Acceleration of the current move (in mm/s^2)"""
-        return self._acceleration
-
-    @acceleration.setter
-    def acceleration(self, value):
-        self._acceleration = float(value)
-
-    @property
-    def deceleration(self) -> float:
-        """Deceleration of the current move (in mm/s^2)"""
-        return self._deceleration
-
-    @deceleration.setter
-    def deceleration(self, value):
-        self._deceleration = float(value)
-
-    @property
-    def distance(self) -> float:
-        """Total distance of the current move (in mm)"""
-        return self._distance
-
-    @distance.setter
-    def distance(self, value: float):
-        self._distance = float(value)
-
-    @property
-    def duration(self) -> float:
-        """Duration of the current move (in s)"""
-        return self._duration
-
-    @duration.setter
-    def duration(self, value: float):
-        self._duration = float(value)
-
-    @property
-    def extrusion_rate(self) -> float:
-        """Current extrusion rate (in mm/s)"""
-        return self._extrusion_rate
-
-    @extrusion_rate.setter
-    def extrusion_rate(self, value):
-        self._extrusion_rate = float(value)
-
-    @property
-    def laser_pwm(self) -> Union[float, None]:
-        """Laser PWM of the current move (0..1) or null if not applicable"""
-        return self._laser_pwm
-
-    @laser_pwm.setter
-    def laser_pwm(self, value):
-        self._laser_pwm = float(value) if value is not None else None
-
-    @property
-    def requested_speed(self) -> float:
-        """Requested speed of the current move (in mm/s)"""
-        return self._requested_speed
-
-    @requested_speed.setter
-    def requested_speed(self, value):
-        self._requested_speed = float(value)
-
-    @property
-    def top_speed(self) -> float:
-        """Top speed of the current move (in mm/s)"""
-        return self._top_speed
-
-    @top_speed.setter
-    def top_speed(self, value):
-        self._top_speed = float(value)
+        self._acceleration = 0.0
+        self._deceleration = 0.0
+        self._distance = 0.0
+        self._duration = 0.0
+        self._extrusion_rate = 0.0
+        self._laser_pwm = None
+        self._requested_speed = 0.0
+        self._top_speed = 0.0

@@ -1,9 +1,287 @@
 import json
 import unittest
 
+from typing import Optional, Sequence
+
 from src.dsf.object_model import *
-from src.dsf.object_model.utils import is_model_object
+from src.dsf.object_model.utils import is_model_object, JSONElement, JSONObj, model_prop, nullable_model_prop
 from src.dsf.object_model.object_model import ModelCollection, ModelDictionary, ModelObject
+
+class TestModelObject(unittest.TestCase):
+    class Dummy(ModelObject):
+        class SubModel(ModelObject):
+            value = model_prop("value", int, 0)
+
+        p_int = model_prop("p_int", int, 1)
+        np_int = nullable_model_prop("np_int", int)
+
+        p_float = model_prop("p_float", float, 1.0)
+        np_float = nullable_model_prop("np_float", float)
+
+        p_str = model_prop("p_str", str, "default")
+        np_str = nullable_model_prop("np_str", str)
+
+        p_model = model_prop("p_model", SubModel, SubModel())
+        np_model = nullable_model_prop("np_model", SubModel)
+
+        p_model_collection = model_prop("p_model_collection", ModelCollection[SubModel], ModelCollection(SubModel))
+        np_model_collection = nullable_model_prop("np_model_collection", ModelCollection[SubModel], lambda sub_model=SubModel: ModelCollection(sub_model))
+        
+    def setUp(self):
+        pass
+
+    def tearDown(self):
+        pass
+    
+    def test_update_from_json(self):
+        model = self.Dummy()
+
+        self.assertEqual(model.p_int, 1)
+        self.assertIsNone(model.np_int)
+        self.assertEqual(model.p_float, 1.0)
+        self.assertIsNone(model.np_float)
+        self.assertEqual(model.p_str, "default")
+        self.assertIsNone(model.np_str)
+
+        patch: JSONObj = {
+            'p_int': 10,
+            'np_int': 11,
+            'p_float': 1.1,
+            'np_float': 1.2,
+            'p_str': "hello",
+            'np_str': "world"
+        }
+        model.update_from_json(patch)
+        
+        self.assertEqual(model.p_int, 10)
+        self.assertEqual(model.np_int, 11)
+        self.assertEqual(model.p_float, 1.1)
+        self.assertEqual(model.np_float, 1.2)
+        self.assertEqual(model.p_str, "hello")
+        self.assertEqual(model.np_str, "world")
+
+    def test_update_from_json_bad_data(self):
+        model = self.Dummy()
+
+        # Test non nullable props
+
+        self.assertRaises(ValueError, lambda: model.update_from_json({'p_int': "not an int"}))
+        self.assertRaises(TypeError, lambda: model.update_from_json({'p_int': None}))
+        self.assertEqual(model.update_from_json({'p_int': 1.1}).p_int, 1) # float should be cast to int
+        self.assertEqual(model.update_from_json({'p_int': "2"}).p_int, 2) # str should be cast to int
+
+        self.assertRaises(ValueError, lambda: model.update_from_json({'p_float': "not a float"}))
+        self.assertRaises(TypeError, lambda: model.update_from_json({'p_float': None}))
+        self.assertEqual(model.update_from_json({'p_float': 2}).p_float, 2.0) # int should be cast to float
+        self.assertEqual(model.update_from_json({'p_float': "3.14"}).p_float, 3.14) # str should be cast to float
+
+        self.assertRaises(TypeError, lambda: model.update_from_json({'p_str': None}))
+        self.assertEqual(model.update_from_json({'p_str': 123}).p_str, "123") # int should be cast to str
+        self.assertEqual(model.update_from_json({'p_str': 3.14}).p_str, "3.14") # float should be cast to str
+
+        # Test nullable props
+
+        self.assertRaises(ValueError, lambda: model.update_from_json({'np_int': "not an int"}))
+        self.assertEqual(model.update_from_json({'np_int': None}).np_int, None) # nullable prop should be set to None
+        self.assertEqual(model.update_from_json({'np_int': 1.1}).np_int, 1) # float should be cast to int
+        self.assertEqual(model.update_from_json({'np_int': "2"}).np_int, 2) # str should be cast to int
+
+        self.assertRaises(ValueError, lambda: model.update_from_json({'np_float': "not a float"}))
+        self.assertEqual(model.update_from_json({'np_float': None}).np_float, None) # nullable prop should be set to None
+        self.assertEqual(model.update_from_json({'np_float': 2}).np_float, 2.0) # int should be cast to float
+        self.assertEqual(model.update_from_json({'np_float': "3.14"}).np_float, 3.14) # str should be cast to float
+
+        self.assertEqual(model.update_from_json({'np_str': None}).np_str, None) # nullable prop should be set to None
+        self.assertEqual(model.update_from_json({'np_str': 123}).np_str, "123") # int should be cast to str
+        self.assertEqual(model.update_from_json({'np_str': 3.14}).np_str, "3.14") # float should be cast to str
+        self.assertEqual(model.update_from_json({'np_str': "hello"}).np_str, "hello") # str should be accepted for nullable prop
+
+    def test_update_from_json_model_object(self):
+        model = self.Dummy()
+
+        self.assertEqual(model.p_model.value, 0)
+        self.assertIsNone(model.np_model)
+
+        patch: JSONObj = {
+            'p_model': {
+                'value': 10
+            },
+            'np_model': {
+                'value': 20
+            }
+        }
+        model.update_from_json(patch)
+
+        self.assertEqual(model.p_model.value, 10)
+        self.assertIsNotNone(model.np_model)
+        self.assertEqual(model.np_model.value, 20)
+
+        model.update_from_json({'np_model': None})
+        self.assertIsNone(model.np_model)
+
+        self.assertRaises(TypeError, lambda: model.update_from_json({'p_model': None})) # non nullable model prop should not accept None
+    
+    def test_update_from_json_model_collection(self):
+        model = self.Dummy()
+
+        self.assertEqual(len(model.p_model_collection), 0)
+        self.assertIsNone(model.np_model_collection)
+
+        patch: JSONObj = {
+            'p_model_collection': [{}],
+            'np_model_collection': [{}, None]
+        }
+
+        model.update_from_json(patch)
+        self.assertEqual(len(model.p_model_collection), 1)
+        self.assertIsNotNone(model.np_model_collection)
+        self.assertEqual(len(model.np_model_collection), 2)
+
+        self.assertIsNotNone(model.p_model_collection[0])
+        self.assertIsNotNone(model.np_model_collection[0])
+        self.assertIsNone(model.np_model_collection[1])
+
+        model.update_from_json({'p_model_collection': [{'value': 10}, {'value': 20}]})
+        self.assertEqual(len(model.p_model_collection), 2)
+        self.assertEqual(model.p_model_collection[0].value, 10)
+        self.assertEqual(model.p_model_collection[1].value, 20)
+        
+        model.update_from_json({'np_model_collection': [{'value': 30}, None, {'value': 40}]})
+        self.assertEqual(len(model.np_model_collection), 3)
+        self.assertEqual(model.np_model_collection[0].value, 30)
+        self.assertIsNone(model.np_model_collection[1])
+        self.assertEqual(model.np_model_collection[2].value, 40)
+
+        model.update_from_json({'np_model_collection': [None]})
+        self.assertEqual(len(model.np_model_collection), 1)
+        self.assertIsNone(model.np_model_collection[0])
+
+        model.update_from_json({'p_model_collection': [], 'np_model_collection': []})
+        self.assertEqual(len(model.p_model_collection), 0)
+        self.assertEqual(len(model.np_model_collection), 0)
+
+        self.assertRaises(TypeError, lambda: model.update_from_json({'p_model_collection': None})) # non nullable model collection should not accept None
+        
+        model.update_from_json({'np_model_collection': None}) # nullable model collection should accept None
+        self.assertIsNone(model.np_model_collection)
+        
+        
+
+class TestModelCollection(unittest.TestCase):
+    def setUp(self):
+        pass
+
+    def tearDown(self):
+        pass
+
+    def test_int_list(self):
+        model = ModelCollection(int)
+        model.update_from_json([1, 2, 3])
+
+        self.assertEqual(model, [1, 2, 3])
+    
+    def test_nullable_int_list(self):
+        model: ModelCollection[Optional[int]] = ModelCollection(int)
+
+        model.update_from_json([1, None, 3])
+        self.assertEqual(model, [1, None, 3])
+    
+    def test_model_object_list(self):
+        model: ModelCollection[Heater] = ModelCollection(Heater)
+
+        patch: list[JSONElement] = [{"current": 10}, {"current": 20}]
+        model.update_from_json(patch)
+        self.assertEqual(len(model), 2)
+        self.assertTrue(is_model_object(model[0]))
+        self.assertTrue(is_model_object(model[1]))
+        self.assertEqual(model[0].current, 10)
+        self.assertEqual(model[1].current, 20)
+
+        patch = [{"current": 30}]
+        model.update_from_json(patch)
+        self.assertEqual(len(model), 1)
+        self.assertTrue(is_model_object(model[0]))
+        self.assertEqual(model[0].current, 30)
+    
+    def test_nullable_model_object_list(self):
+        model: ModelCollection[Optional[Heater]] = ModelCollection(Heater)
+
+        patch: list[JSONElement] = [{"current": 10}, None, {"current": 20}]
+        model.update_from_json(patch)
+        self.assertEqual(len(model), 3)
+        self.assertTrue(is_model_object(model[0]))
+        self.assertIsNone(model[1])
+        self.assertTrue(is_model_object(model[2]))
+        self.assertEqual(model[0].current, 10)
+        self.assertEqual(model[2].current, 20)
+
+        patch = [None, {}]
+        model.update_from_json(patch)
+        self.assertEqual(len(model), 2)
+        self.assertIsNone(model[0])
+        self.assertTrue(is_model_object(model[1]))
+        
+class TestModelDictionary(unittest.TestCase):
+    class Dummy(ModelObject):
+        value = model_prop("value", int, 0)
+
+    def setUp(self):
+        pass
+
+    def tearDown(self):
+        pass
+
+    def test_generic_dict(self):
+        model = ModelDictionary(False)
+
+        model.update_from_json({"key1": 1, "key2": "hello", "key3": [1, 2, 3], "key4": {"nested": "dict"}, "key5": None})
+        self.assertEqual(model["key1"], 1)
+        self.assertEqual(model["key2"], "hello")
+        self.assertEqual(model["key3"], [1, 2, 3])
+        self.assertEqual(model["key4"], {"nested": "dict"})
+        self.assertIsNone(model["key5"])
+
+        model.update_from_json({"key1": 2, "key2": "world", "key3": [4, 5], "key4": {"nested": "updated"}, "key5": "not null anymore"})
+        self.assertEqual(model["key1"], 2)
+        self.assertEqual(model["key2"], "world")
+        self.assertEqual(model["key3"], [4, 5])
+        self.assertEqual(model["key4"], {"nested": "updated"})
+        self.assertEqual(model["key5"], "not null anymore")
+
+        model.update_from_json({"key1": None, "key2": None, "key3": None, "key4": None, "key5": None})
+        self.assertIsNone(model["key1"])
+        self.assertIsNone(model["key2"])
+        self.assertIsNone(model["key3"])
+        self.assertIsNone(model["key4"])
+        self.assertIsNone(model["key5"])
+
+    def test_generic_non_nullable_dict(self):
+        model = ModelDictionary(True)
+
+        model.update_from_json({"key1": 1, "key2": "hello", "key3": [1, 2, 3], "key4": {"nested": "dict"}, "key5": None})
+        self.assertEqual(model["key1"], 1)
+        self.assertNotIn("key5", model) # non nullable dict should delete the key when set to null
+
+        model.update_from_json({"key1": None})
+        self.assertNotIn("key1", model) # non nullable dict should delete the key when set to null
+
+    def test_model_object_dict(self):
+        model = ModelDictionary(True, self.Dummy)
+
+        model.update_from_json({"item1": {"value": 10}, "item2": {"value": 20}})
+        self.assertTrue(is_model_object(model["item1"]))
+        self.assertTrue(is_model_object(model["item2"]))
+        self.assertEqual(model["item1"].value, 10)
+        self.assertEqual(model["item2"].value, 20)
+
+        model.update_from_json({"item1": {"value": 30}})
+        self.assertEqual(model["item1"].value, 30) # item1 should be updated instead of replaced
+        self.assertEqual(model["item2"].value, 20) # item2 should not be altered
+
+        model.update_from_json({"item1": None})
+        self.assertNotIn("item1", model)
+
+        self.assertRaises(TypeError, lambda: model.update_from_json({"item1": 1})) # can't update a model object with a non-dict value
 
 
 class Model(unittest.TestCase):
@@ -92,11 +370,11 @@ class Model(unittest.TestCase):
         from src.dsf.object_model.move.kinematics import CoreKinematics, DeltaKinematics, KinematicsName
 
         model = ObjectModel()
-        json_patch = '{"move": {"kinematics": {"name": "delta","deltaRadius": 123}}}'
+        json_patch = '{"move": {"kinematics": {"name": "linearDelta","deltaRadius": 123}}}'
         model.update_from_json(json_patch)
 
         self.assertIsInstance(model.move.kinematics, DeltaKinematics)
-        self.assertEqual(model.move.kinematics.name, KinematicsName.delta)
+        self.assertEqual(model.move.kinematics.name, KinematicsName.linearDelta)
         self.assertEqual(model.move.kinematics.delta_radius, 123)
 
         # Switch to CoreXY (eg: M669 K1)
@@ -106,10 +384,10 @@ class Model(unittest.TestCase):
         self.assertEqual(model.move.kinematics.name, KinematicsName.coreXY)
 
         # Switch to linear delta (eg: M669 K3)
-        json_patch = '{"move":{"kinematics":{"deltaRadius":105.6,"homedHeight":240,"printRadius":80,"towers":[{"angleCorrection":0,"diagonal":215,"endstopAdjustment":0,"xPos":-91.452,"yPos":-52.8},{"angleCorrection":0,"diagonal":215,"endstopAdjustment":0,"xPos":91.452,"yPos":-52.8},{"angleCorrection":0,"diagonal":215,"endstopAdjustment":0,"xPos":0,"yPos":105.6}],"xTilt":0,"yTilt":0,"name":"delta","segmentation":null}}}'
+        json_patch = '{"move":{"kinematics":{"deltaRadius":105.6,"homedHeight":240,"printRadius":80,"towers":[{"angleCorrection":0,"diagonal":215,"endstopAdjustment":0,"xPos":-91.452,"yPos":-52.8},{"angleCorrection":0,"diagonal":215,"endstopAdjustment":0,"xPos":91.452,"yPos":-52.8},{"angleCorrection":0,"diagonal":215,"endstopAdjustment":0,"xPos":0,"yPos":105.6}],"xTilt":0,"yTilt":0,"name":"linearDelta","segmentation":null}}}'
         model.update_from_json(json_patch)
         self.assertIsInstance(model.move.kinematics, DeltaKinematics)
-        self.assertEqual(model.move.kinematics.name, KinematicsName.delta)
+        self.assertEqual(model.move.kinematics.name, KinematicsName.linearDelta)
         self.assertEqual(model.move.kinematics.delta_radius, 105.6)
 
     def test_plugins(self):

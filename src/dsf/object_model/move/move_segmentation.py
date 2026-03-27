@@ -1,27 +1,12 @@
 from ..model_object import ModelObject
+from ..utils import model_prop
 
 
 class MoveSegmentation(ModelObject):
     """Move segmentation parameters"""
+
+    segments_per_sec = model_prop("segments_per_sec", float, 0.0)
+    min_segment_length = model_prop("min_segment_length", float, 0.0)
+
     def __init__(self):
         super().__init__()
-        self._segments_per_sec = 0.0
-        self._min_segment_length = 0.0
-        
-    @property
-    def segments_per_sec(self) -> float:
-        """Number of segments per second"""
-        return self._segments_per_sec
-    
-    @segments_per_sec.setter
-    def segments_per_sec(self, value):
-        self._segments_per_sec = float(value)
-        
-    @property
-    def min_segment_length(self) -> float:
-        """Minimum length of a segment (in mm)"""
-        return self._min_segment_length
-    
-    @min_segment_length.setter
-    def min_segment_length(self, value):
-        self._min_segment_length = float(value)

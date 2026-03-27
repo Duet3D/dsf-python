@@ -1,46 +1,24 @@
-from typing import List, Union
+from typing import Optional
 
 from ..model_object import ModelObject
+from ..model_collection import ModelCollection
+from ..utils import model_prop, nullable_model_prop
 
 
 class BuildObject(ModelObject):
     """Information about a detected build object"""
 
+    # Indicates if this build object is cancelled
+    canceled = model_prop("canceled", bool, False)
+
+    # Name of the build object (if any)
+    name = nullable_model_prop("name", str)
+
+    # X coordinates of the build object (in mm or null if not found)
+    x = model_prop("x", ModelCollection[Optional[float]], ModelCollection(float))
+
+    # Y coordinates of the build object (in mm or null if not found)
+    y = model_prop("y", ModelCollection[Optional[float]], ModelCollection(float))
+
     def __init__(self):
         super().__init__()
-        # Indicates if this build object is cancelled
-        self._canceled = False
-        # Name of the build object (if any)
-        self._name = None
-        # X coordinates of the build object (in mm or null if not found)
-        self._x = None
-        # Y coordinates of the build object (in mm or null if not found)
-        self._y = None
-
-    @property
-    def canceled(self) -> bool:
-        """Indicates if this build object is cancelled"""
-        return self._canceled
-
-    @canceled.setter
-    def canceled(self, value):
-        self._canceled = bool(value)
-
-    @property
-    def name(self) -> Union[str, None]:
-        """Name of the build object (if any)"""
-        return self._name
-
-    @name.setter
-    def name(self, value):
-        self._name = str(value) if value is not None else None
-
-    @property
-    def x(self) -> Union[List[float], None]:
-        """X coordinates of the build object (in mm or null if not found)"""
-        return self._x
-
-    @property
-    def y(self) -> Union[List[float], None]:
-        """Y coordinates of the build object (in mm or null if not found)"""
-        return self._y

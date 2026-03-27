@@ -6,10 +6,6 @@ from ..utils import model_prop, nullable_model_prop
 class FanThermostaticControl(ModelObject):
     """Thermostatic parameters of a fan"""
 
-    # List of heaters to monitor (indices)
-    # deprecated
-    heaters = model_prop("heaters", ModelCollection[int], ModelCollection(int))
-
     # Upper temperature range required to turn on the fan (in C)
     high_temperature = nullable_model_prop("high_temperature", float)
 

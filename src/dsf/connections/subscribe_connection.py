@@ -1,7 +1,7 @@
 import json
 from dataclasses import dataclass
 from threading import Lock
-from typing import Any, Callable, Sequence, Optional, List
+from typing import Any, Callable, Sequence, List
 
 from .base_connection import BaseConnection
 from .init_messages import client_init_messages
@@ -33,13 +33,11 @@ class SubscribeConnection(BaseConnection):
     def __init__(
         self,
         subscription_mode: client_init_messages.SubscriptionMode,
-        filter_str: Optional[str] = None,  # deprecated, use filter_list instead
         filter_list: List[str] = [],
         debug: bool = False,
     ):
         super().__init__(debug)
         self.subscription_mode = subscription_mode
-        self.filter_str = filter_str
         self.filter_list = filter_list
         self._object_model = ObjectModel()
         self._initial_object_model_received = False
@@ -49,7 +47,7 @@ class SubscribeConnection(BaseConnection):
     def connect(self, socket_file: str = SOCKET_FILE):
         """Establishes a connection to the given UNIX socket file"""
         sim = client_init_messages.subscribe_init_message(
-            self.subscription_mode, self.filter_str, self.filter_list
+            self.subscription_mode, self.filter_list
         )
         return super()._connect(sim, socket_file)
 
@@ -67,7 +65,7 @@ class SubscribeConnection(BaseConnection):
             self.send(commands.model_subscription.acknowledge())
             return self._object_model
         else:
-            if (self.has_data_available()):
+            while (self.has_data_available()):
                 patch_json = self.get_object_model_patch()
                 patch_data = json.loads(patch_json)
                 self._object_model.update_from_json(patch_data)

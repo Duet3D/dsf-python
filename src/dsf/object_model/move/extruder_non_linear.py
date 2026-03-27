@@ -1,39 +1,17 @@
 from ..model_object import ModelObject
+from ..utils import model_prop
 
 
 class ExtruderNonlinear(ModelObject):
     """Nonlinear extrusion parameters (see M592)"""
+
+    # A coefficient in the extrusion formula
+    a = model_prop("a", float, 0)
+
+    # B coefficient in the extrusion formula
+    b = model_prop("b", float, 0)
+
+    upper_limit = model_prop("upper_limit", float, 0.2)
+
     def __init__(self):
         super().__init__()
-        # A coefficient in the extrusion formula
-        self._a = 0
-        # B coefficient in the extrusion formula
-        self._b = 0
-        self._upper_limit = 0.2
-
-    @property
-    def a(self) -> float:
-        """A coefficient in the extrusion formula"""
-        return self._a
-
-    @a.setter
-    def a(self, value):
-        self._a = float(value)
-
-    @property
-    def b(self) -> float:
-        """B coefficient in the extrusion formula"""
-        return self._b
-
-    @b.setter
-    def b(self, value):
-        self._b = float(value)
-
-    @property
-    def upper_limit(self) -> float:
-        """Upper limit of the nonlinear extrusion compensation"""
-        return self._upper_limit
-
-    @upper_limit.setter
-    def upper_limit(self, value):
-        self._upper_limit = float(value)

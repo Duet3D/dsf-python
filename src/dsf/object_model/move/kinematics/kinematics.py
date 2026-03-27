@@ -3,10 +3,14 @@ from typing import Union
 from .kinematics_name import KinematicsName
 from ..move_segmentation import MoveSegmentation
 from ...model_object import ModelObject
+from ...utils import model_prop, nullable_model_prop
 
 
 class Kinematics(ModelObject):
     """Information about the configured geometry"""
+
+    name = model_prop("name", KinematicsName, KinematicsName.unknown)
+    segmentation = nullable_model_prop("segmentation", MoveSegmentation)
 
     def __init__(self, name: KinematicsName = KinematicsName.unknown):
         super().__init__()
@@ -39,7 +43,7 @@ class Kinematics(ModelObject):
             KinematicsName.markForged
         ]:
             return CoreKinematics(name)
-        elif name == KinematicsName.delta:
+        elif name == KinematicsName.linearDelta:
             return DeltaKinematics(name)
         elif name == KinematicsName.rotaryDelta:
             return Kinematics(name)
@@ -50,29 +54,6 @@ class Kinematics(ModelObject):
         elif name == KinematicsName.polar:
             return PolarKinematics()
         return name
-
-    @property
-    def name(self) -> KinematicsName:
-        """Name of the configured kinematics"""
-        return self._name
-
-    @property
-    def segmentation(self) -> Union[MoveSegmentation, None]:
-        """Segmentation parameters or null if not configured"""
-        return self._segmentation
-
-    @segmentation.setter
-    def segmentation(self, value):
-        if value is None or isinstance(value, MoveSegmentation):
-            self._segmentation = value
-        elif isinstance(value, dict):  # Update from JSON
-            if self._segmentation is None:
-                self._segmentation = MoveSegmentation.from_json(value)
-            else:
-                self._segmentation.update_from_json(value)
-        else:
-            raise TypeError(f"{__name__}.segmentation must be None or of type MoveSegmentation."
-                            f"Got {type(value)}: {value}")
 
     def _update_from_json(self, **kwargs):
         """Override ObjectModel._update_from_json to return the Kinematics type matching the given name"""

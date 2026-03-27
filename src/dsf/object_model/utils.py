@@ -1,3 +1,4 @@
+from datetime import datetime
 from typing import Optional, Protocol, TypeVar, Union, Callable, cast, get_origin, overload
 
 from .model_object import ModelObject
@@ -30,7 +31,7 @@ def is_model_object(o: object) -> bool:
     return isinstance(o, ModelObject) or isinstance(o, ModelCollection) or isinstance(o, ModelDictionary)
 
 
-def _set_model_prop(instance: object, name: str, runtime_type: Union[type[T], type[JSONElement]], current_value: T, value: Union[T, JSONElement]):
+def _set_model_prop(instance: object, name: str, runtime_type: type[JSONElement | datetime], current_value: T, value: Union[T, JSONElement]):
     if isinstance(value, dict):  # Update from JSON
         if not isinstance(current_value, (ModelObject, ModelDictionary)):
             raise TypeError(f"{instance.__class__.__name__}.{name} must be of type ModelObject or ModelDictionary to update from a dict."
@@ -41,6 +42,12 @@ def _set_model_prop(instance: object, name: str, runtime_type: Union[type[T], ty
             raise TypeError(f"{instance.__class__.__name__}.{name} must be of type ModelCollection to update from a list."
                             f" Got {type(current_value).__name__}: {current_value}")
         current_value.update_from_json(cast(list[JSONElement], value))
+    elif runtime_type is datetime and isinstance(value, str):
+        try:
+            parsed_date = datetime.fromisoformat(value)
+            setattr(instance, name, parsed_date)
+        except ValueError:
+            raise TypeError(f"{instance.__class__.__name__}.{name} must be a valid ISO format datetime string to update from JSON. Got: {value}")
     elif isinstance(value, (str, int, float, bool)):
         value = runtime_type(value) # ignore type
         setattr(instance, name, value)
@@ -60,20 +67,33 @@ def model_prop(name: str, model_type: type[T], default: Optional[T] = None) -> T
     STORAGE_NAME = '_' + name
     runtime_model_type = cast(type[object], get_origin(model_type) or model_type)
 
-    if default is None:
-        default = model_type()
+    # For mutable types (ModelObject, ModelCollection, ModelDictionary), always create per-instance.
+    # For immutable scalar defaults, the scalar value is safe to share.
+    _scalar_default: Optional[T] = default
+    _use_factory = default is None and issubclass(runtime_model_type, (ModelObject, ModelCollection, ModelDictionary))
+
+    if not _use_factory and default is None:
+        _scalar_default = model_type()
+
+    def _make_default() -> T:
+        return model_type() if _use_factory else cast(T, _scalar_default)
 
     @property
     def prop(self: object) -> T:
-        return getattr(self, STORAGE_NAME, default)
+        v = getattr(self, STORAGE_NAME, None)
+        if v is None:
+            v = _make_default()
+            setattr(self, STORAGE_NAME, v)
+        return v
 
     @prop.setter
     def prop(self: object, value: Union[T, JSONElement]) -> None:
         def get_or_create_value() -> T:
             current_value: Optional[T] = getattr(self, STORAGE_NAME, None)
             if current_value is None:
-                setattr(self, STORAGE_NAME, default)
-            return getattr(self, STORAGE_NAME)
+                current_value = _make_default()
+                setattr(self, STORAGE_NAME, current_value)
+            return current_value
 
         if isinstance(value, runtime_model_type):
             setattr(self, STORAGE_NAME, value)
@@ -97,14 +117,14 @@ def nullable_model_prop(name: str, model_type: type[T], constructor: Optional[Ca
     runtime_model_type = cast(type[object], get_origin(model_type) or model_type)
     model_type_name = getattr(runtime_model_type, "__name__", str(model_type))
 
-    default = None
     if constructor is None:
         try:
-            default = model_type()
+            model_type()  # validate that the default constructor works
         except Exception:
             raise TypeError(f"Default constructor failed for type {model_type_name}. Provide a constructor function to create default values for the property {name}.")
+        _factory: Callable[[], Optional[T]] = model_type
     else:
-        default = constructor()
+        _factory = constructor
 
     @property
     def prop(self: object) -> Optional[T]:
@@ -114,8 +134,10 @@ def nullable_model_prop(name: str, model_type: type[T], constructor: Optional[Ca
     def prop(self: object, value: Union[T, JSONElement, None]) -> None:
         def get_or_create_value() -> Optional[T]:
             v = getattr(self, STORAGE_NAME, None)
-            if v is None and default is not None:
-                setattr(self, STORAGE_NAME, default)
+            if v is None:
+                new_val = _factory()
+                if new_val is not None:
+                    setattr(self, STORAGE_NAME, new_val)
             return getattr(self, STORAGE_NAME, None)
 
         if value is None or isinstance(value, runtime_model_type):

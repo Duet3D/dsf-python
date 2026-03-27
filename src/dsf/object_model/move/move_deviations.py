@@ -1,29 +1,15 @@
 from ..model_object import ModelObject
+from ..utils import model_prop
 
 
 class MoveDeviations(ModelObject):
     """Calibration or mesh grid results"""
+
+    # RMS deviation (in mm)
+    deviation = model_prop("deviation", float, 0)
+
+    # Mean deviation (in mm)
+    mean = model_prop("mean", float, 0)
+
     def __init__(self):
         super().__init__()
-        # RMS deviation (in mm)
-        self._deviation = 0
-        # Mean deviation (in mm)
-        self._mean = 0
-
-    @property
-    def deviation(self) -> float:
-        """RMS deviation (in mm)"""
-        return self._deviation
-
-    @deviation.setter
-    def deviation(self, value):
-        self._deviation = float(value)
-
-    @property
-    def mean(self) -> float:
-        """Mean deviation (in mm)"""
-        return self._mean
-
-    @mean.setter
-    def mean(self, value):
-        self._mean = float(value)

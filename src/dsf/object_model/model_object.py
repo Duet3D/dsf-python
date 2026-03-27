@@ -68,7 +68,7 @@ class ModelObject(ModelType[Union[JSONObj, str]]):
             # Write public attributes by using their setter property
             if json_key_snake in writeable_properties:
                 attr = getattr(self, json_key_snake)
-                if is_model_object(attr):
+                if is_model_object(attr) and json_value is not None:
                     new_value = attr.update_from_json(json_value)
                     setattr(self, json_key_snake, new_value)
                 else:
@@ -78,7 +78,7 @@ class ModelObject(ModelType[Union[JSONObj, str]]):
                 # Protected (non-writeable) attributes are prefixed by an underscore
                 attr_name = f"_{json_key_snake}"
                 attr = getattr(self, attr_name)
-                if is_model_object(attr):
+                if is_model_object(attr) and json_value is not None:
                     setattr(self, attr_name, attr.update_from_json(json_value))
                 elif isinstance(attr, list):
                     setattr(self, attr_name, json_value)

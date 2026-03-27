@@ -5,7 +5,7 @@ class SbcPermissions(Enum):
     """Enumeration of supported plugin permissions"""
 
     # No permissions set (default value)
-    noPermissions = "noPermissions"
+    noPermissions = "none"
 
     # Execute generic commands
     commandExecution = "commandExecution"
@@ -20,7 +20,7 @@ class SbcPermissions(Enum):
     managePlugins = "managePlugins"
 
     # Service plugin runtime information (for internal purposes only, do not use)
-    servicePlugins = "managePlugins"
+    servicePlugins = "servicePlugins"
 
     # Manage user sessions
     manageUserSessions = "manageUserSessions"

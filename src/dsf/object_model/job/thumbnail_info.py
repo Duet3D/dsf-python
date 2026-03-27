@@ -1,7 +1,7 @@
 from enum import Enum
-from typing import Union
 
 from ..model_object import ModelObject
+from ..utils import model_prop, nullable_model_prop
 
 
 class ThumbnailInfoFormat(str, Enum):
@@ -19,78 +19,23 @@ class ThumbnailInfoFormat(str, Enum):
 class ThumbnailInfo(ModelObject):
     """Information about a thumbnail from a G-code file"""
 
+    # Base64-encoded thumbnail or null if invalid or not requested
+    data = nullable_model_prop("data", str)
+
+    # Format of this thumbnail
+    format = model_prop("format", ThumbnailInfoFormat, ThumbnailInfoFormat.PNG)
+
+    # Height of this thumbnail
+    height = model_prop("height", int, 0)
+
+    # File offset of this thumbnail
+    offset = model_prop("offset", int, 0)
+
+    # Size of this thumbnail
+    size = model_prop("size", int, 0)
+
+    # Width of this thumbnail
+    width = model_prop("width", int, 0)
+
     def __init__(self):
         super().__init__()
-        # Base64-encoded thumbnail or null if invalid or not requested
-        self._data = None
-        # Format of this thumbnail
-        self._format = ThumbnailInfoFormat.PNG
-        # Height of this thumbnail
-        self._height = 0
-        # File offset of this thumbnail
-        self._offset = 0
-        # Size of this thumbnail
-        self._size = 0
-        # Width of this thumbnail
-        self._width = 0
-
-    @property
-    def data(self) -> Union[str, None]:
-        """Base64-encoded thumbnail or null if invalid or not requested
-        This property is not provided by RepRapFirmware fileinfo results,
-        and it may be null if no thumbnail content is requested"""
-        return self._data
-
-    @data.setter
-    def data(self, value):
-        self._data = str(value) if value is not None else None
-
-    @property
-    def format(self) -> ThumbnailInfoFormat:
-        """Format of this thumbnail"""
-        return self._format
-
-    @format.setter
-    def format(self, value):
-        if isinstance(value, ThumbnailInfoFormat):
-            self._format = value
-        elif isinstance(value, str):
-            self._format = ThumbnailInfoFormat(value)
-        else:
-            raise TypeError(f"{__name__}.format must be of type ThumbnailInfoFormat. Got {type(value)}: {value}")
-
-    @property
-    def height(self) -> int:
-        """Height of this thumbnail"""
-        return self._height
-
-    @height.setter
-    def height(self, value):
-        self._height = int(value)
-
-    @property
-    def offset(self) -> int:
-        """File offset of this thumbnail"""
-        return self._offset
-
-    @offset.setter
-    def offset(self, value):
-        self._offset = int(value)
-
-    @property
-    def size(self) -> int:
-        """Size of this thumbnail"""
-        return self._size
-
-    @size.setter
-    def size(self, value):
-        self._size = int(value)
-
-    @property
-    def width(self) -> int:
-        """Width of this thumbnail"""
-        return self._width
-
-    @width.setter
-    def width(self, value):
-        self._width = int(value)

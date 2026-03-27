@@ -15,12 +15,13 @@ from src.dsf.http import HttpEndpointConnection, HttpResponseType
 from src.dsf.object_model import HttpEndpointType
 
 
-# async def respond_something(http_endpoint_connection: HttpEndpointConnection):
-#     r = await http_endpoint_connection.read_request()
-#     if (len(r.body) > 0):
-#         data = json.loads(r.body)
-#     await http_endpoint_connection.send_response(200, "so happy you asked for it!", HttpResponseType.PlainText)
-#     http_endpoint_connection.close()
+async def respond_something(http_endpoint_connection: HttpEndpointConnection):
+    r = await http_endpoint_connection.read_request()
+    if (len(r.body) > 0):
+        data = json.loads(r.body)
+        print(data)
+    await http_endpoint_connection.send_response(200, "so happy you asked for it!", HttpResponseType.PlainText)
+    http_endpoint_connection.close()
 
 
 class TestCustomHttpEndpoint(unittest.TestCase):
@@ -84,15 +85,14 @@ class TestCustomHttpEndpoint(unittest.TestCase):
         endpoint = cmd_conn.add_http_endpoint(HttpEndpointType.GET, "custom", "getIt")
 
         # Register our handler to reply on requests
-        # endpoint.set_endpoint_handler(respond_something)
+        endpoint.set_endpoint_handler(respond_something)
 
         # Wait for mock DCS server to complete
         self.server_thread.join(timeout=1)
 
         time.sleep(1)
 
-        if endpoint is not None:
-            endpoint.close()
+        endpoint.close()
         cmd_conn.close()
 
         # Verify the test completed successfully

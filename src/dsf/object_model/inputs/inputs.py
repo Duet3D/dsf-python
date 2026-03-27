@@ -13,7 +13,7 @@ class Inputs(ModelCollection):
 
     @property
     def valid_channels(self) -> List[CodeChannel]:
-        """Enumeration of valid code channels"""
+        """List of valid channels"""
         return self._valid_channels
 
     @property

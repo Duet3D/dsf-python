@@ -56,3 +56,7 @@ class CodeChannel(str, Enum):
     @staticmethod
     def list():
         return list(map(lambda cc: cc, CodeChannel))
+        
+    def get_input_index(self) -> int:
+        """Get the index of this code channel for use in client init messages"""
+        return self.list().index(self)

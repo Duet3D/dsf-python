@@ -1,48 +1,25 @@
-from typing import List
-
 from .plugin_manifest import PluginManifest
+from ..utils import model_prop
+from ..model_collection import ModelCollection
 
 
 class Plugin(PluginManifest):
     """Class representing a loaded plugin"""
 
+    # List of files for the DSF plugin
+    dsf_files = model_prop("dsf_files", ModelCollection[str], ModelCollection(str))
+
+    # List of files for the DWC plugin
+    dwc_files = model_prop("dwc_files", ModelCollection[str], ModelCollection(str))
+
+    # List of files to be installed to the (virtual) SD excluding web files
+    sd_files = model_prop("sd_files", ModelCollection[str], ModelCollection(str))
+
+    # Process ID of the plugin or -1 if not started. It is set to 0 while the plugin is being shut down
+    pid = model_prop("pid", int, -1)
+
+    # Whether the plugin is started
+    started = model_prop("started", bool, False)
+
     def __init__(self):
         super(Plugin, self).__init__()
-        self._dsf_files = []
-        self._dwc_files = []
-        self._sd_files = []
-        self._pid = -1
-        self._started: bool = False
-
-    @property
-    def dsf_files(self) -> List[str]:
-        """List of files for the DSF plugin"""
-        return self._dsf_files
-
-    @property
-    def dwc_files(self) -> List[str]:
-        """List of files for the DWC plugin"""
-        return self._dwc_files
-
-    @property
-    def sd_files(self) -> List[str]:
-        """List of files to be installed to the (virtual) SD excluding web files"""
-        return self._sd_files
-
-    @property
-    def pid(self) -> int:
-        """Process ID of the plugin or -1 if not started. It is set to 0 while the plugin is being shut down"""
-        return self._pid
-
-    @pid.setter
-    def pid(self, value):
-        self._pid = int(value)
-
-    @property
-    def started(self) -> bool:
-        """Whether the plugin is started"""
-        return self._started
-
-    @started.setter
-    def started(self, value: bool):
-        self._started = bool(value)

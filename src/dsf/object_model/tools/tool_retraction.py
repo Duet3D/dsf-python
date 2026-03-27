@@ -1,63 +1,24 @@
 from ..model_object import ModelObject
+from ..utils import model_prop
 
 
 class ToolRetraction(ModelObject):
     """Tool retraction parameters"""
 
+    # Amount of additional filament to extrude when undoing a retraction (in mm)
+    extra_restart = model_prop("extra_restart", float, 0)
+
+    # Retraction length (in mm)
+    length = model_prop("length", float, 0)
+
+    # Retraction speed (in mm/s)
+    speed = model_prop("speed", float, 0)
+
+    # Unretract speed (in mm/s)
+    unretract_speed = model_prop("unretract_speed", float, 0)
+
+    # Amount of Z lift after doing a retraction (in mm)
+    z_hop = model_prop("z_hop", float, 0)
+
     def __init__(self):
-        super().__init__()
-        # Amount of additional filament to extrude when undoing a retraction (in mm)
-        self._extra_restart = 0
-        # Retraction length (in mm)
-        self._length = 0
-        # Retraction speed (in mm/s)
-        self._speed = 0
-        # Unretract speed (in mm/s)
-        self._unretract_speed = 0
-        # Amount of Z lift after doing a retraction (in mm)
-        self._z_hop = 0
-        
-    @property
-    def extra_restart(self) -> float:
-        """Amount of additional filament to extrude when undoing a retraction (in mm)"""
-        return self._extra_restart
-    
-    @extra_restart.setter
-    def extra_restart(self, value):
-        self._extra_restart = float(value)
-        
-    @property
-    def length(self) -> float:
-        """Retraction length (in mm)"""
-        return self._length
-    
-    @length.setter
-    def length(self, value):
-        self._length = float(value)
-        
-    @property
-    def speed(self) -> float:
-        """Retraction speed (in mm/s)"""
-        return self._speed
-    
-    @speed.setter
-    def speed(self, value):
-        self._speed = float(value)
-        
-    @property
-    def unretract_speed(self) -> float:
-        """Unretract speed (in mm/s)"""
-        return self._unretract_speed
-    
-    @unretract_speed.setter
-    def unretract_speed(self, value):
-        self._unretract_speed = float(value)
-        
-    @property
-    def z_hop(self) -> float:
-        """Amount of Z lift after doing a retraction (in mm)"""
-        return self._z_hop
-    
-    @z_hop.setter
-    def z_hop(self, value):
-        self._z_hop = float(value)
+        super().__init__()        

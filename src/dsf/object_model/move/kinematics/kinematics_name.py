@@ -12,7 +12,7 @@ class KinematicsName(str, Enum):
     markForged = "markForged"
     fiveBarScara = "fiveBarScara"
     hangprinter = "hangprinter"
-    delta = "delta"
+    linearDelta = "linearDelta"
     polar = "polar"
     rotaryDelta = "rotaryDelta"
     scara = "scara"

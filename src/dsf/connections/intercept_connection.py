@@ -32,7 +32,7 @@ class InterceptConnection(BaseCommandConnection):
         self,
         interception_mode: client_init_messages.InterceptionMode,
         channels: Optional[List[CodeChannel]] = None,
-        filters: Optional[List[str]] = None,
+        filters: List[str] = [],
         auto_flush: bool = True,
         auto_evaluate_expression: bool = True,
         priority_codes: bool = False,

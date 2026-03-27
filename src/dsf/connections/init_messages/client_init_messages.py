@@ -85,12 +85,11 @@ def command_init_message() -> ClientInitMessage:
     return ClientInitMessage(ConnectionMode.COMMAND)
 
 
-def subscribe_init_message(subscription_mode: SubscriptionMode, filter_string: Optional[str] = None, filter_list: List[str] = []) -> ClientInitMessage:
+def subscribe_init_message(subscription_mode: SubscriptionMode, filter_list: List[str] = []) -> ClientInitMessage:
     """_summary_
 
     Args:
         subscription_mode (SubscriptionMode): FULL to receive the entire OM every request, PATCH to only get the changes
-        filter_string (Optional[str], optional): deprecated, use filter_list instead. Defaults to None.
         filter_list (List[str], optional): 
             The style of a filter is similar to XPath. For example, if you want to monitor only the current heater
             temperatures, you can use the filter expression "heat/heaters[*]/current". Wildcards are supported either
@@ -105,7 +104,6 @@ def subscribe_init_message(subscription_mode: SubscriptionMode, filter_string: O
         ConnectionMode.SUBSCRIBE,
         **{
             "subscriptionMode": subscription_mode,
-            "filter": filter_string,
             "filters": filter_list,
         },
     )

@@ -969,47 +969,68 @@
         }
     ],
     "job": {
-        "build": null,
-        "duration": null,
+        "build": {
+            "currentObject": 0,
+            "m486Names": true,
+            "m486Numbers": true,
+            "objects": [
+                {
+                    "cancelled": false,
+                    "name": "gear",
+                    "x": [
+                        -238,
+                        -92
+                    ],
+                    "y": [
+                        -75,
+                        44
+                    ]
+                }
+            ]
+        },
+        "duration": 22,
         "file": {
             "customInfo": {},
-            "filament": [],
-            "fileName": null,
-            "generatedBy": null,
-            "height": 0,
-            "lastModified": null,
-            "layerHeight": 0,
-            "numLayers": 0,
-            "printTime": null,
+            "filament": [
+                1231.6,
+                2358.1,
+                0,
+                0,
+                614.2
+            ],
+            "fileName": "0:/gcodes/dev/gear.gcode",
+            "generatedBy": "PrusaSlicer 2.9.3 on 2026-03-18 at 10:51:20 UTC",
+            "height": 1.05,
+            "lastModified": "2026-03-18T10:52:08",
+            "layerHeight": 0.2,
+            "numLayers": 5,
+            "printTime": 114,
             "simulatedTime": null,
-            "size": 0,
+            "size": 394220,
             "thumbnails": []
         },
-        "filePosition": 0,
-        "lastDuration": 0,
-        "lastFileAborted": false,
-        "lastFileCancelled": false,
+        "filePosition": 44232,
+        "lastDuration": null,
         "lastFileName": null,
-        "lastFileSimulated": false,
-        "lastWarmUpDuration": 0,
-        "layer": null,
-        "layerTime": null,
-        "layers": [],
-        "pauseDuration": null,
-        "rawExtrusion": null,
+        "lastWarmUpDuration": null,
+        "layer": 1,
+        "layerTime": 20.9,
+        "pauseDuration": 0,
+        "rawExtrusion": 83.9,
         "timesLeft": {
             "filament": null,
             "file": null,
-            "slicer": null
+            "slicer": 92,
+            "toPause": null
         },
-        "warmUpDuration": null
+        "warmUpDuration": 0
     },
     "ledStrips": [
         {
             "board": 0,
             "pin": "led",
             "stopMovement": false,
-            "type": "dotstar"
+            "type": "DotStar"
         }
     ],
     "limits": {
@@ -1041,7 +1062,12 @@
         "zProbeProgramBytes": 8,
         "zProbes": 8
     },
-    "messages": [],
+    "messages": [
+        {
+            "type": 0,
+            "content": "hello world"
+        }
+    ],
     "move": {
         "axes": [
             {
@@ -1928,10 +1954,10 @@
                 "type": "inputPin"
             },
             {
-                "highEnd": null,
+                "highEnd": false,
                 "probe": null,
-                "triggered": null,
-                "type": null
+                "triggered": true,
+                "type": "unknown"
             },
             {
                 "highEnd": true,
@@ -1940,10 +1966,10 @@
                 "type": "motorStallAny"
             },
             {
-                "highEnd": null,
+                "highEnd": true,
                 "probe": null,
-                "triggered": null,
-                "type": null
+                "triggered": true,
+                "type": "motorStallIndividual"
             }
         ],
         "filamentMonitors": [
@@ -2133,7 +2159,7 @@
             "min": null,
             "minPwm": null,
             "state": "unconfigured",
-            "type": "null"
+            "type": null
         },
         {
             "active": null,
@@ -2146,7 +2172,7 @@
             "min": null,
             "minPwm": null,
             "state": "unconfigured",
-            "type": "null"
+            "type": "enaDir"
         },
         {
             "active": null,
@@ -2159,7 +2185,7 @@
             "min": null,
             "minPwm": null,
             "state": "unconfigured",
-            "type": "null"
+            "type": "fwdRev"
         },
         {
             "active": null,
@@ -2172,7 +2198,7 @@
             "min": null,
             "minPwm": null,
             "state": "unconfigured",
-            "type": "null"
+            "type": null
         }
     ],
     "state": {

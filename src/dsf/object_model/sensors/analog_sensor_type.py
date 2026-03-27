@@ -46,6 +46,12 @@ class AnalogSensorType(str, Enum):
     # Current loop sensor
     CurrentLoop = "currentlooppyro"
 
+    # ADS131 channel 0
+    ADS131Chan0 = "ads131.chan0"
+    
+    # ADS131 channel 1
+    ADS131Chan1 = "ads131.chan1"
+
     # MCU temperature
     McuTemp = "mcutemp"
 

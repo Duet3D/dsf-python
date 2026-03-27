@@ -3,6 +3,7 @@ from datetime import datetime
 from enum import IntEnum
 
 from ..model_object import ModelObject
+from ..utils import model_prop
 
 
 class MessageType(IntEnum):
@@ -26,23 +27,20 @@ class Message(ModelObject):
     :param msg_type: Type of this message
     """
 
-    @classmethod
-    def from_json(cls, data: dict[str, object]) -> 'Message':
-        """Deserialize an instance of this class from JSON deserialized dictionary"""
-        raw_msg_type = data.pop('type')  # Replace 'type' to not shadow the built-in keyword name
-        if isinstance(raw_msg_type, MessageType):
-            msg_type: MessageType = raw_msg_type
-        elif isinstance(raw_msg_type, int):
-            msg_type = MessageType(raw_msg_type)
-        else:
-            raise TypeError(f"{__name__}.type must be of type MessageType. Got {type(raw_msg_type)}: {raw_msg_type}")
-        return cls(msg_type, **data)
+    # Content of this message
+    content = model_prop("content", str, "")
+
+    # Time at which the message was generated
+    time = model_prop("time", datetime, datetime.now)
+
+    # Type of this message
+    type = model_prop("type", MessageType, MessageType.Success)
 
     def __init__(self, msg_type: MessageType = MessageType.Success, content: str = "", time: datetime = datetime.now()):
         super().__init__()
-        self._content = content
-        self._time = time
-        self._type = msg_type
+        self.content = content
+        self.time = time
+        self.type = msg_type
 
     def __repr__(self):
         if self.type == MessageType.Error:
@@ -51,40 +49,3 @@ class Message(ModelObject):
             return f"Warning: {self.content}"
         else:
             return f"{self.content}"
-
-    @property
-    def content(self) -> str:
-        """Content of this message"""
-        return self._content
-
-    @content.setter
-    def content(self, value):
-        self._content = str(value)
-
-    @property
-    def time(self) -> datetime:
-        """Time at which the message was generated"""
-        return self._time
-
-    @time.setter
-    def time(self, value):
-        if isinstance(value, datetime):
-            self._time = value
-        elif isinstance(value, str):  # Update from JSON
-            self._time = dp.isoparse(value)
-        else:
-            raise TypeError(f"{__name__}.time must be of type datetime. Got {type(value)}: {value}")
-
-    @property
-    def type(self) -> MessageType:
-        """Type of this message"""
-        return self._type
-
-    @type.setter
-    def type(self, value):
-        if isinstance(value, MessageType):
-            self._type = value
-        elif isinstance(value, int):
-            self._type = MessageType(value)
-        else:
-            raise TypeError(f"{__name__}.type must be of type MessageType. Got {type(value)}: {value}")

@@ -1,111 +1,48 @@
 from .Duet3DFilamentMonitor import Duet3DFilamentMonitor
 from .filament_monitor_type import FilamentMonitorType
 from ...model_object import ModelObject
-from ...utils import nullable_model_prop
+from ...utils import model_prop, nullable_model_prop
 
 
 class RotatingMagnetFilamentMonitorCalibrated(ModelObject):
     """Calibrated properties of a rotating magnet filament monitor"""
 
+    # Extruded distance per pulse (in mm)
+    mm_per_pulse = model_prop("mm_per_pulse", float, 0)
+
+    # Maximum percentage (0..1 or greater)
+    percent_max = model_prop("percent_max", float, 0)
+
+    # Minimum percentage (0..1)
+    percent_min = model_prop("percent_min", float, 0)
+
+    # Total extruded distance (in mm)
+    total_distance = model_prop("total_distance", float, 0)
+
     def __init__(self):
         super(RotatingMagnetFilamentMonitorCalibrated, self).__init__()
-        self._mm_per_pulse = 0
-        self._percent_max = 0
-        self._percent_min = 0
-        self._total_distance = 0
-
-    @property
-    def mm_per_pulse(self) -> float:
-        """Extruded distance per pulse (in mm)"""
-        return self._mm_per_pulse
-
-    @mm_per_pulse.setter
-    def mm_per_pulse(self, value):
-        self._mm_per_pulse = float(value)
-
-    @property
-    def percent_max(self) -> float:
-        """Maximum percentage (0..1 or greater)"""
-        return self._percent_max
-
-    @percent_max.setter
-    def percent_max(self, value):
-        self._percent_max = float(value)
-
-    @property
-    def percent_min(self) -> float:
-        """Minimum percentage (0..1)"""
-        return self._percent_min
-
-    @percent_min.setter
-    def percent_min(self, value):
-        self._percent_min = float(value)
-
-    @property
-    def total_distance(self) -> float:
-        """Total extruded distance (in mm)"""
-        return self._total_distance
-
-    @total_distance.setter
-    def total_distance(self, value):
-        self._total_distance = float(value)
 
 
 class RotatingMagnetFilamentMonitorConfigured(ModelObject):
     """Configured properties of a rotating magnet filament monitor"""
 
+    # Whether all moves and not only printing moves are supposed to be checked
+    all_moves = model_prop("all_moves", bool, False)
+
+    # Extruded distance per revolution (in mm)
+    mm_per_rev = model_prop("mm_per_rev", float, 0)
+
+    # Maximum percentage (0..1 or greater)
+    percent_max = model_prop("percent_max", float, 0)
+
+    # Minimum percentage (0..1)
+    percent_min = model_prop("percent_min", float, 0)
+
+    # Sample distance (in mm)
+    sample_distance = model_prop("sample_distance", float, 0)
+
     def __init__(self):
         super(RotatingMagnetFilamentMonitorConfigured, self).__init__()
-        self._all_moves = False
-        self._mm_per_rev = 0
-        self._percent_max = 0
-        self._percent_min = 0
-        self._sample_distance = 0
-
-    @property
-    def all_moves(self) -> bool:
-        """Whether all moves and not only printing moves are supposed to be checked"""
-        return self._all_moves
-    
-    @all_moves.setter
-    def all_moves(self, value):
-        self._all_moves = bool(value)
-        
-    @property
-    def mm_per_rev(self) -> float:
-        """Extruded distance per revolution (in mm)"""
-        return self._mm_per_rev
-    
-    @mm_per_rev.setter
-    def mm_per_rev(self, value):
-        self._mm_per_rev = float(value)
-        
-    @property
-    def percent_max(self) -> float:
-        """Maximum percentage (0..1 or greater)"""
-        return self._percent_max
-    
-    @percent_max.setter
-    def percent_max(self, value):
-        self._percent_max = float(value)
-        
-    @property
-    def percent_min(self) -> float:
-        """Minimum percentage (0..1)"""
-        return self._percent_min
-    
-    @percent_min.setter
-    def percent_min(self, value):
-        self._percent_min = float(value)
-        
-    @property
-    def sample_distance(self) -> float:
-        """Sample distance (in mm)"""
-        return self._sample_distance
-    
-    @sample_distance.setter
-    def sample_distance(self, value):
-        self._sample_distance = float(value)
 
 
 class RotatingMagnetFilamentMonitor(Duet3DFilamentMonitor):
@@ -114,13 +51,8 @@ class RotatingMagnetFilamentMonitor(Duet3DFilamentMonitor):
     # Calibrated properties of this filament monitor
     calibrated = nullable_model_prop('calibrated', RotatingMagnetFilamentMonitorCalibrated)
 
-    def __init__(self):
-        super(RotatingMagnetFilamentMonitor, self).__init__()
-        self._calibrated = None
-        self._configured = RotatingMagnetFilamentMonitorConfigured()
-        self._type = FilamentMonitorType.RotatingMagnet
+    # Configured properties of this filament monitor
+    configured = model_prop('configured', RotatingMagnetFilamentMonitorConfigured)
 
-    @property
-    def configured(self) -> RotatingMagnetFilamentMonitorConfigured:
-        """Configured properties of this filament monitor"""
-        return self._configured
+    def __init__(self):
+        super(RotatingMagnetFilamentMonitor, self).__init__(FilamentMonitorType.RotatingMagnet)

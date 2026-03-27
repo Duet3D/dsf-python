@@ -1,6 +1,8 @@
 from enum import IntEnum
 from typing import List, Union
 from ..model_object import ModelObject
+from ..model_collection import ModelCollection
+from ..utils import model_prop, nullable_model_prop
 
 
 class MessageBoxMode(IntEnum):
@@ -33,136 +35,18 @@ class MessageBoxMode(IntEnum):
 
 class MessageBox(ModelObject):
     """Information about the message box to show"""
+
+    axis_controls = nullable_model_prop('axis_controls', int)
+    cancel_button = model_prop('cancel_button', bool, False)
+    choices = nullable_model_prop('choices', ModelCollection[str], lambda: ModelCollection(str))
+    default = nullable_model_prop('default', object)
+    max = nullable_model_prop('max', float)
+    message = model_prop('message', str, "")
+    min = nullable_model_prop('min', float)
+    mode = model_prop('mode', MessageBoxMode, MessageBoxMode.OkOnly)
+    seq = model_prop('seq', int, -1)
+    timeout = model_prop('timeout', int, 0)
+    title = model_prop('title', str, "")
+
     def __init__(self):
         super(MessageBox, self).__init__()
-        # Bitmap of the axis movement controls to show (indices)
-        self._axis_controls = None
-        # Indicates if a cancel button is supposed to be shown
-        self._cancel_button = False
-        # List of possible choices (only for mode 4)
-        self._choices = []
-        # Default value (only for modes >= 4)
-        self._default = None
-        # Maximum input value (only for modes >= 5)
-        self._max = None
-        # Content of the message box
-        self._message = ""
-        # Minimum input value (only for modes >= 5)
-        self._min = None
-        # Mode of the message box to display
-        self._mode = MessageBoxMode.OkOnly
-        # Sequence number of the message box
-        self._seq = -1
-        # Total timeout for this message box (in ms)
-        self._timeout = 0
-        # Title of the message box
-        self._title = ""
-
-    @property
-    def axis_controls(self) -> int:
-        """Bitmap of the axis movement controls to show (indices)"""
-        return self._axis_controls
-
-    @axis_controls.setter
-    def axis_controls(self, value):
-        self._axis_controls = int(value) if value is not None else None
-
-    @property
-    def cancel_button(self) -> int:
-        """Indicates if a cancel button is supposed to be shown"""
-        return self._cancel_button
-
-    @cancel_button.setter
-    def cancel_button(self, value):
-        self._cancel_button = bool(value)
-
-    @property
-    def choices(self) -> Union[List[str], None]:
-        """List of possible choices (only for mode 4)"""
-        return self._choices
-
-    @choices.setter
-    def choices(self, value):
-        self._choices = [str(v) for v in value] if value is not None else None
-
-    @property
-    def default(self):
-        """Default value (only for modes >= 4)"""
-        return self._default
-
-    @default.setter
-    def default(self, value):
-        self._default = value
-
-    @property
-    def max(self) -> float:
-        """Maximum input value (only for modes >= 5)"""
-        return self._max
-
-    @max.setter
-    def max(self, value):
-        self._max = float(value) if value is not None else None
-        
-    @property
-    def message(self) -> str:
-        """Content of the message box"""
-        return self._message
-    
-    @message.setter
-    def message(self, value):
-        self._message = str(value)
-
-    @property
-    def min(self) -> float:
-        """Minimum input value (only for modes >= 5)"""
-        return self._min
-
-    @min.setter
-    def min(self, value):
-        self._min = float(value) if value is not None else None
-        
-    @property
-    def mode(self) -> MessageBoxMode:
-        """Mode of the message box to display"""
-        return self._mode
-    
-    @mode.setter
-    def mode(self, value):
-        if value is None:
-            self._mode = MessageBoxMode.OkOnly
-        elif isinstance(value, MessageBoxMode):
-            self._mode = value
-        elif isinstance(value, int):
-            self._mode = MessageBoxMode(value)
-        elif isinstance(value, str):
-            self._mode = MessageBoxMode[value]
-        else:
-            raise TypeError(f"{__name__}.mode must be of type MessageBoxMode. Got {type(value)}: {value}")
-        
-    @property
-    def seq(self) -> int:
-        """Sequence number of the message box
-        This is increased whenever a new message box is supposed to be displayed"""
-        return self._seq
-    
-    @seq.setter
-    def seq(self, value):
-        self._seq = int(value)
-        
-    @property
-    def timeout(self) -> int:
-        """Total timeout for this message box (in ms)"""
-        return self._timeout
-    
-    @timeout.setter
-    def timeout(self, value):
-        self._timeout = int(value)
-        
-    @property
-    def title(self) -> str:
-        """Title of the message box"""
-        return self._title
-    
-    @title.setter
-    def title(self, value):
-        self._title = str(value)

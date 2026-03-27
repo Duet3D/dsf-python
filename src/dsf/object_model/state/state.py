@@ -1,5 +1,5 @@
 from datetime import datetime
-from typing import List, Union
+from typing import Optional
 
 from .beep_request import BeepRequest
 from .gp_output_port import GpOutputPort
@@ -11,251 +11,37 @@ from .restore_point import RestorePoint
 from .startup_error import StartupError
 from ..model_collection import ModelCollection
 from ..model_object import ModelObject
-from ..utils import nullable_model_prop
+from ..utils import model_prop, nullable_model_prop
 
 
 class State(ModelObject):
     """Information about the machine state"""
 
-    # Information about a requested beep or null if none is requested
+    atx_power = nullable_model_prop('atx_power', bool)
+    atx_power_port = nullable_model_prop('atx_power_port', str)
     beep = nullable_model_prop('beep', BeepRequest)
-    # Details about a requested message box or null if none is requested
+    current_tool = model_prop('current_tool', int, -1)
+    deferred_power_down = nullable_model_prop('deferred_power_down', bool)
+    display_message = model_prop('display_message', str, "")
+    gp_out = model_prop('gp_out', ModelCollection[Optional[GpOutputPort]], ModelCollection(GpOutputPort))
+    laser_pwm = nullable_model_prop('laser_pwm', float)
+    log_file = nullable_model_prop('log_file', str)
+    log_level = model_prop('log_level', LogLevel, LogLevel.Off)
     message_box = nullable_model_prop('message_box', MessageBox)
-    # First error on start-up or null if there was none
+    machine_mode = model_prop('machine_mode', MachineMode, MachineMode.FFF)
+    macro_restarted = model_prop('macro_restarted', bool, False)
+    ms_up_time = model_prop('ms_up_time', int)
+    next_tool = model_prop('next_tool', int, -1)
+    plugins_started = model_prop('plugins_started', bool, False)
+    power_fail_script = model_prop('power_fail_script', str, "")
+    previous_tool = model_prop('previous_tool', int, -1)
+    restore_points = model_prop('restore_points', ModelCollection[RestorePoint], ModelCollection(RestorePoint))
     startup_error = nullable_model_prop('startup_error', StartupError)
+    status = model_prop('status', MachineStatus, MachineStatus.starting)
+    this_active = nullable_model_prop('this_active', bool)
+    this_input = nullable_model_prop('this_input', int)
+    time = nullable_model_prop('time', datetime, lambda: None)
+    up_time = model_prop('up_time', int, 0)
 
     def __init__(self):
         super(State, self).__init__()
-        self._atx_power = None
-        self._atx_power_port = None
-        self._beep = None
-        self._current_tool = -1
-        self._deferred_power_down = None
-        self._display_message = ""
-        self._gp_out = ModelCollection(GpOutputPort)
-        self._laser_pwm = None
-        self._log_file = None
-        self._log_level = LogLevel.Off
-        self._message_box = None
-        self._machine_mode = MachineMode.FFF
-        self._macro_restarted = False
-        self._ms_up_time = 0
-        self._next_tool = -1
-        self._plugins_started = False
-        self._power_fail_script = ""
-        self._previous_tool = -1
-        self._restore_points = ModelCollection(RestorePoint)
-        self._startup_error = None
-        self._status = MachineStatus.starting
-        self._this_active = True
-        self._this_input = None
-        self._time = None
-        self._up_time = 0
-
-    @property
-    def atx_power(self) -> Union[bool, None]:
-        """State of the ATX power pin (if controlled)"""
-        return self._atx_power
-
-    @atx_power.setter
-    def atx_power(self, value):
-        self._atx_power = bool(value) if value is not None else None
-
-    @property
-    def atx_power_port(self) -> Union[str, None]:
-        """Port of the ATX power pin or null if not assigned"""
-        return self._atx_power_port
-
-    @atx_power_port.setter
-    def atx_power_port(self, value):
-        self._atx_power_port = str(value) if value is not None else None
-
-    @property
-    def current_tool(self) -> int:
-        """Number of the currently selected tool or -1 if none is selected"""
-        return self._current_tool
-
-    @current_tool.setter
-    def current_tool(self, value):
-        self._current_tool = int(value)
-
-    @property
-    def deferred_power_down(self) -> Union[bool, None]:
-        """When provided it normally has value 0 normally and 1 when a deferred power down is pending
-        It is only available after power switching has been enabled by M80 or M81"""
-        return self._deferred_power_down
-
-    @deferred_power_down.setter
-    def deferred_power_down(self, value):
-        self._deferred_power_down = bool(value) if value is not None else None
-
-    @property
-    def display_message(self) -> str:
-        """Persistent message to display (see M117)"""
-        return self._display_message
-
-    @display_message.setter
-    def display_message(self, value):
-        self._display_message = str(value)
-
-    @property
-    def gp_out(self) -> List[GpOutputPort]:
-        """List of general-purpose output ports"""
-        return self._gp_out
-
-    @property
-    def laser_pwm(self) -> Union[float, None]:
-        """Laser PWM of the next commanded move (0..1) or null if not applicable"""
-        return self._laser_pwm
-
-    @laser_pwm.setter
-    def laser_pwm(self, value):
-        self._laser_pwm = float(value) if value is not None else None
-
-    @property
-    def log_file(self) -> Union[str, None]:
-        """Log file being written to or null if logging is disabled"""
-        return self._log_file
-
-    @log_file.setter
-    def log_file(self, value):
-        self._log_file = str(value) if value is not None else None
-
-    @property
-    def log_level(self) -> Union[LogLevel, None]:
-        """Current log level"""
-        return self._log_level
-
-    @log_level.setter
-    def log_level(self, value):
-        if value is None or isinstance(value, LogLevel):
-            self._log_level = value
-        elif isinstance(value, str):
-            self._log_level = LogLevel(value)
-        else:
-            raise TypeError(f"{__name__}.log_level must be of type LogLevel or None. Got {type(value)}: {value}")
-
-    @property
-    def machine_mode(self) -> Union[MachineMode, None]:
-        """Current mode of operation"""
-        return self._machine_mode
-
-    @machine_mode.setter
-    def machine_mode(self, value):
-        if value is None or isinstance(value, MachineMode):
-            self._machine_mode = value
-        elif isinstance(value, str):
-            self._machine_mode = MachineMode(value)
-        else:
-            raise TypeError(f"{__name__}.machine_mode must be of type MachineMode or None. Got {type(value)}: {value}")
-
-    @property
-    def macro_restarted(self) -> bool:
-        """Indicates if the current macro file was restarted after a pause"""
-        return self._macro_restarted
-
-    @macro_restarted.setter
-    def macro_restarted(self, value):
-        self._macro_restarted = bool(value)
-
-    @property
-    def ms_up_time(self) -> int:
-        """Millisecond fraction of `uptime`"""
-        return self._ms_up_time
-
-    @ms_up_time.setter
-    def ms_up_time(self, value):
-        self._ms_up_time = int(value)
-
-    @property
-    def next_tool(self) -> int:
-        """Number of the next tool to be selected"""
-        return self._next_tool
-
-    @next_tool.setter
-    def next_tool(self, value):
-        self._next_tool = int(value)
-
-    @property
-    def plugins_started(self) -> bool:
-        """Indicates if at least one plugin has been started"""
-        return self._plugins_started
-
-    @plugins_started.setter
-    def plugins_started(self, value):
-        self._plugins_started = bool(value)
-
-    @property
-    def power_fail_script(self) -> str:
-        """Script to execute when the power fails"""
-        return self._power_fail_script
-
-    @power_fail_script.setter
-    def power_fail_script(self, value):
-        self._power_fail_script = str(value)
-
-    @property
-    def previous_tool(self) -> int:
-        """Number of the previous tool"""
-        return self._previous_tool
-
-    @previous_tool.setter
-    def previous_tool(self, value):
-        self._previous_tool = int(value)
-
-    @property
-    def restore_points(self) -> List[RestorePoint]:
-        """List of restore points"""
-        return self._restore_points
-
-    @property
-    def status(self) -> Union[MachineStatus, None]:
-        """Current state of the machine"""
-        return self._status
-
-    @status.setter
-    def status(self, value):
-        if value is None or isinstance(value, MachineStatus):
-            self._status = value
-        elif isinstance(value, str):
-            self._status = MachineStatus(value)
-        else:
-            raise TypeError(f"{__name__}.status must be of type MachineStatus or None. Got {type(value)}: {value}")
-
-    @property
-    def this_active(self) -> bool:
-        """Shorthand for inputs[state.thisInput].active"""
-        return self._this_active
-
-    @this_active.setter
-    def this_active(self, value):
-        self._this_active = bool(value)
-
-    @property
-    def this_input(self) -> Union[int, None]:
-        """Index of the current G-code input channel (see ObjectModel.Inputs)
-        This is primarily intended for macro files to determine on which G-code channel it is running.
-        The value of this property is always null in object model queries"""
-        return self._this_input
-
-    @this_input.setter
-    def this_input(self, value):
-        self._this_input = int(value) if value is not None else None
-
-    @property
-    def time(self) -> Union[datetime, None]:
-        """Internal date and time in RepRapFirmware or null if unknown"""
-        return self._time
-
-    @time.setter
-    def time(self, value):
-        self._time = datetime.fromisoformat(value) if value is not None else None
-
-    @property
-    def up_time(self) -> int:
-        """How long the machine has been running (in s)"""
-        return self._up_time
-
-    @up_time.setter
-    def up_time(self, value):
-        self._up_time = int(value)

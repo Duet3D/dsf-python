@@ -29,12 +29,12 @@ class ObjectModel(ModelObject):
 
     # Information about the SBC which Duet Software Framework is running on.
     # This is None if the system is operating in standalone mode
-    boards = model_prop('boards', ModelCollection[Board], ModelCollection(Board))
+    boards = model_prop('boards', ModelCollection[Board])
     sbc = nullable_model_prop('sbc', SBC)
 
     def __init__(self):
         super(ObjectModel, self).__init__()
-        # self._boards = ModelCollection(Board)
+        self._boards = ModelCollection(Board)
         self._directories = Directories()
         self._fans = ModelCollection(Fan)
         self._globals = ModelDictionary(False)

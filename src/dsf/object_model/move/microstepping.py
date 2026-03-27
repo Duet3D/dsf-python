@@ -1,29 +1,15 @@
 from ..model_object import ModelObject
+from ..utils import model_prop
 
 
 class MicroStepping(ModelObject):
     """Microstepping configuration"""
+
+    # Indicates if the stepper driver uses interpolation
+    interpolated = model_prop("interpolated", bool, False)
+
+    # Microsteps per full step
+    value = model_prop("value", int, 16)
+
     def __init__(self):
         super().__init__()
-        # Indicates if the stepper driver uses interpolation
-        self._interpolated = False
-        # Microsteps per full step
-        self._value = 16
-
-    @property
-    def interpolated(self) -> bool:
-        """"Indicates if the stepper driver uses interpolation"""
-        return self._interpolated
-
-    @interpolated.setter
-    def interpolated(self, value):
-        self._interpolated = bool(value)
-
-    @property
-    def value(self) -> int:
-        """Microsteps per full step"""
-        return self._value
-
-    @value.setter
-    def value(self, value):
-        self._value = int(value)

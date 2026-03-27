@@ -75,7 +75,6 @@ class TestSubscribeObjectModel(unittest.TestCase):
                         "mode": "Subscribe",
                         "version": PROTOCOL_VERSION,
                         "subscriptionMode": "Patch",
-                        "filter": None,
                         "filters": []
                     }
                     check_json(expected_setup, setup_msg.decode())
