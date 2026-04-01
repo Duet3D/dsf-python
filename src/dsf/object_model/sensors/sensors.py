@@ -14,19 +14,19 @@ class Sensors(ModelObject):
     """Information about sensors"""
 
     # List of analog sensors
-    analog = model_prop("analog", ModelCollection[Optional[AnalogSensor]], ModelCollection(AnalogSensor))
+    analog = model_prop("analog", ModelCollection[Optional[AnalogSensor]], ModelCollection(Optional[AnalogSensor]))
 
     # List of configured endstops
-    endstops = model_prop("endstops", ModelCollection[Optional[Endstop]], ModelCollection(Endstop))
+    endstops = model_prop("endstops", ModelCollection[Optional[Endstop]], ModelCollection(Optional[Endstop]))
 
     # List of configured filament monitors
-    filament_monitors = model_prop("filament_monitors", ModelCollection[Optional[FilamentMonitor]], ModelCollection(FilamentMonitor))
+    filament_monitors = model_prop("filament_monitors", ModelCollection[Optional[FilamentMonitor]], ModelCollection(Optional[FilamentMonitor]))
 
     # List of general-purpose input ports
-    gp_in = model_prop("gp_in", ModelCollection[Optional[GpInputPort]], ModelCollection(GpInputPort))
+    gp_in = model_prop("gp_in", ModelCollection[Optional[GpInputPort]], ModelCollection(Optional[GpInputPort]))
 
     # List of probes
-    probes = model_prop("probes", ModelCollection[Optional[Probe]], ModelCollection(Probe))
+    probes = model_prop("probes", ModelCollection[Optional[Probe]], ModelCollection(Optional[Probe]))
 
     def __init__(self):
         super(Sensors, self).__init__()

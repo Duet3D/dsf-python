@@ -1,7 +1,7 @@
 import json
 import unittest
 
-from typing import Optional, Sequence
+from typing import Optional
 
 from src.dsf.object_model import *
 from src.dsf.object_model.utils import is_model_object, JSONElement, JSONObj, model_prop, nullable_model_prop
@@ -25,7 +25,9 @@ class TestModelObject(unittest.TestCase):
         np_model = nullable_model_prop("np_model", SubModel)
 
         p_model_collection = model_prop("p_model_collection", ModelCollection[SubModel], ModelCollection(SubModel))
+        p_model_ncollection = model_prop("p_model_ncollection", ModelCollection[Optional[SubModel]], ModelCollection(Optional[SubModel]))
         np_model_collection = nullable_model_prop("np_model_collection", ModelCollection[SubModel], lambda sub_model=SubModel: ModelCollection(sub_model))
+        np_model_ncollection = nullable_model_prop("np_model_ncollection", ModelCollection[Optional[SubModel]], lambda sub_model=SubModel: ModelCollection(Optional[sub_model]))
         
     def setUp(self):
         pass
@@ -129,41 +131,58 @@ class TestModelObject(unittest.TestCase):
 
         patch: JSONObj = {
             'p_model_collection': [{}],
-            'np_model_collection': [{}, None]
+            'p_model_ncollection': [{}, None],
+            'np_model_collection': [{}],
+            'np_model_ncollection': [{}, None],
         }
 
         model.update_from_json(patch)
         self.assertEqual(len(model.p_model_collection), 1)
-        self.assertIsNotNone(model.np_model_collection)
-        self.assertEqual(len(model.np_model_collection), 2)
+        self.assertIsNotNone(model.p_model_ncollection)
+        self.assertEqual(len(model.p_model_ncollection), 2)
+        self.assertEqual(len(model.np_model_collection), 1)
+        self.assertIsNotNone(model.np_model_ncollection)
+        self.assertEqual(len(model.np_model_ncollection), 2)
 
         self.assertIsNotNone(model.p_model_collection[0])
-        self.assertIsNotNone(model.np_model_collection[0])
-        self.assertIsNone(model.np_model_collection[1])
+        self.assertIsNotNone(model.p_model_ncollection[0])
+        self.assertIsNone(model.p_model_ncollection[1])
 
-        model.update_from_json({'p_model_collection': [{'value': 10}, {'value': 20}]})
+        model.update_from_json({'p_model_collection': [{'value': 10}, {'value': 20}], 'np_model_collection': [{'value': 30}, {'value': 40}]})
         self.assertEqual(len(model.p_model_collection), 2)
         self.assertEqual(model.p_model_collection[0].value, 10)
         self.assertEqual(model.p_model_collection[1].value, 20)
-        
-        model.update_from_json({'np_model_collection': [{'value': 30}, None, {'value': 40}]})
-        self.assertEqual(len(model.np_model_collection), 3)
+        self.assertEqual(len(model.np_model_collection), 2)
         self.assertEqual(model.np_model_collection[0].value, 30)
-        self.assertIsNone(model.np_model_collection[1])
-        self.assertEqual(model.np_model_collection[2].value, 40)
+        self.assertEqual(model.np_model_collection[1].value, 40)
+        
+        model.update_from_json({'p_model_ncollection': [{'value': 30}, None, {'value': 40}], 'np_model_ncollection': [{'value': 50}, None, {'value': 60}]})
+        self.assertEqual(len(model.p_model_ncollection), 3)
+        self.assertEqual(model.p_model_ncollection[0].value, 30)
+        self.assertIsNone(model.p_model_ncollection[1])
+        self.assertEqual(model.p_model_ncollection[2].value, 40)
+        self.assertEqual(len(model.np_model_ncollection), 3)
+        self.assertEqual(model.np_model_ncollection[0].value, 50)
+        self.assertIsNone(model.np_model_ncollection[1])
+        self.assertEqual(model.np_model_ncollection[2].value, 60)
 
-        model.update_from_json({'np_model_collection': [None]})
-        self.assertEqual(len(model.np_model_collection), 1)
-        self.assertIsNone(model.np_model_collection[0])
+        model.update_from_json({'p_model_ncollection': [None], 'np_model_ncollection': [None]})
+        self.assertEqual(len(model.p_model_ncollection), 1)
+        self.assertIsNone(model.p_model_ncollection[0])
+        self.assertEqual(len(model.np_model_ncollection), 1)
+        self.assertIsNone(model.np_model_ncollection[0])
 
-        model.update_from_json({'p_model_collection': [], 'np_model_collection': []})
+        model.update_from_json({'p_model_collection': [], 'p_model_ncollection': []})
         self.assertEqual(len(model.p_model_collection), 0)
-        self.assertEqual(len(model.np_model_collection), 0)
+        self.assertEqual(len(model.p_model_ncollection), 0)
 
         self.assertRaises(TypeError, lambda: model.update_from_json({'p_model_collection': None})) # non nullable model collection should not accept None
+        self.assertRaises(TypeError, lambda: model.update_from_json({'p_model_ncollection': None})) # non nullable model collection should not accept None
         
         model.update_from_json({'np_model_collection': None}) # nullable model collection should accept None
+        model.update_from_json({'np_model_ncollection': None}) # nullable model collection should accept None
         self.assertIsNone(model.np_model_collection)
+        self.assertIsNone(model.np_model_ncollection)
         
         
 
@@ -181,10 +200,35 @@ class TestModelCollection(unittest.TestCase):
         self.assertEqual(model, [1, 2, 3])
     
     def test_nullable_int_list(self):
-        model: ModelCollection[Optional[int]] = ModelCollection(int)
+        model: ModelCollection[Optional[int]] = ModelCollection(Optional[int])
 
         model.update_from_json([1, None, 3])
         self.assertEqual(model, [1, None, 3])
+
+    def test_nullable_float_list_updates_none_with_int(self):
+        model: ModelCollection[Optional[float]] = ModelCollection(Optional[float])
+
+        model.update_from_json([1.5, None])
+        model.update_from_json([2.5, 3])
+
+        self.assertEqual(model, [2.5, 3.0])
+        self.assertIsInstance(model[1], float)
+
+    def test_non_nullable_list_rejects_none_items(self):
+        model: ModelCollection[float] = ModelCollection(float)
+
+        model.update_from_json([1.5])
+        self.assertRaises(TypeError, lambda: model.update_from_json([None]))
+
+    def test_scalar_list_coerces_convertible_values(self):
+        model: ModelCollection[int] = ModelCollection(int)
+
+        model.update_from_json(["1"])
+        model.update_from_json(["2", 3.9])
+
+        self.assertEqual(model, [2, 3])
+        self.assertIsInstance(model[0], int)
+        self.assertIsInstance(model[1], int)
     
     def test_model_object_list(self):
         model: ModelCollection[Heater] = ModelCollection(Heater)
@@ -204,7 +248,7 @@ class TestModelCollection(unittest.TestCase):
         self.assertEqual(model[0].current, 30)
     
     def test_nullable_model_object_list(self):
-        model: ModelCollection[Optional[Heater]] = ModelCollection(Heater)
+        model: ModelCollection[Optional[Heater]] = ModelCollection(Optional[Heater])
 
         patch: list[JSONElement] = [{"current": 10}, None, {"current": 20}]
         model.update_from_json(patch)

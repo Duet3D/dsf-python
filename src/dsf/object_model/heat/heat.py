@@ -30,7 +30,7 @@ class Heat(ModelObject):
     cold_retract_temperature = model_prop("cold_retract_temperature", float, 90)
 
     # List of configured Heaters
-    heaters = model_prop("heaters", ModelCollection[Optional[Heater]], ModelCollection(Heater))
+    heaters = model_prop("heaters", ModelCollection[Optional[Heater]], ModelCollection(Optional[Heater]))
 
     def __init__(self):
         super().__init__()

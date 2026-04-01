@@ -15,10 +15,10 @@ class BuildObject(ModelObject):
     name = nullable_model_prop("name", str)
 
     # X coordinates of the build object (in mm or null if not found)
-    x = model_prop("x", ModelCollection[Optional[float]], ModelCollection(float))
+    x = model_prop("x", ModelCollection[Optional[float]], ModelCollection(Optional[float]))
 
     # Y coordinates of the build object (in mm or null if not found)
-    y = model_prop("y", ModelCollection[Optional[float]], ModelCollection(float))
+    y = model_prop("y", ModelCollection[Optional[float]], ModelCollection(Optional[float]))
 
     def __init__(self):
         super().__init__()

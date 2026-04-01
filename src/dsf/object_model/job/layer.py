@@ -21,7 +21,7 @@ class Layer(ModelObject):
     height = model_prop("height", float, 0.0)
 
     # Last heater temperatures during this layer (in C or null if unknown)
-    temperatures = model_prop("temperatures", ModelCollection[Optional[float]], ModelCollection(float))
+    temperatures = model_prop("temperatures", ModelCollection[Optional[float]], ModelCollection(Optional[float]))
 
     def __init__(self):
         super().__init__()

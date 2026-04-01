@@ -23,7 +23,7 @@ class State(ModelObject):
     current_tool = model_prop('current_tool', int, -1)
     deferred_power_down = nullable_model_prop('deferred_power_down', bool)
     display_message = model_prop('display_message', str, "")
-    gp_out = model_prop('gp_out', ModelCollection[Optional[GpOutputPort]], ModelCollection(GpOutputPort))
+    gp_out = model_prop('gp_out', ModelCollection[Optional[GpOutputPort]], ModelCollection(Optional[GpOutputPort]))
     laser_pwm = nullable_model_prop('laser_pwm', float)
     log_file = nullable_model_prop('log_file', str)
     log_level = model_prop('log_level', LogLevel, LogLevel.Off)
