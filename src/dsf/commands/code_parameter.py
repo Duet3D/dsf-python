@@ -154,8 +154,27 @@ class CodeParameter(json.JSONEncoder):
                 pass
         raise Exception(f"Cannot convert {self.letter} parameter to DriverId (value {self.string_value})")
 
+    def _parse_expression_array(self) -> list[float]:
+        """Parse expression-based arrays like {0, 255, 128} into a list of floats."""
+        if not self.is_expression:
+            raise Exception(
+                f"Cannot parse expression array: {self.letter} is not an expression (value {self.string_value})"
+            )
+        # Strip braces and split by comma
+        content = self.string_value[1:-1].strip()  # Remove { }
+        if not content:
+            return []
+        elements = [elem.strip() for elem in content.split(",")]
+        try:
+            # Try to parse as floats first, then convert to ints if needed
+            return [float(elem) for elem in elements if elem]
+        except ValueError as e:
+            raise Exception(
+                f"Cannot parse expression array: failed to convert elements to numbers in {self.letter} (value {self.string_value})"
+            ) from e
+
     def as_float_array(self) -> list[float]:
-        """Conversion to float array"""
+        """Conversion to float array. Supports colon-separated (C0.5:1.0) and expression formats (C{0.5, 1.0})."""
         try:
             parsed_value: object = self.__parsed_value
             if isinstance(parsed_value, list):
@@ -165,12 +184,14 @@ class CodeParameter(json.JSONEncoder):
                 return [parsed_value]
             if isinstance(parsed_value, int):
                 return [float(parsed_value)]
+            if self.is_expression:
+                return self._parse_expression_array()
         except:  # noqa
             pass
         raise Exception(f"Cannot convert {self.letter} parameter to float array (value {self.string_value})")
 
     def as_int_array(self) -> list[int]:
-        """Conversion to int array"""
+        """Conversion to int array. Supports colon-separated (C0:255:128) and expression formats (C{0, 255, 128})."""
         try:
             parsed_value: object = self.__parsed_value
             if isinstance(parsed_value, list):
@@ -183,9 +204,12 @@ class CodeParameter(json.JSONEncoder):
                 return [parsed_value]
             if isinstance(parsed_value, DriverId):
                 return [int(parsed_value.as_int())]
+            if self.is_expression:
+                float_array = self._parse_expression_array()
+                return [int(value) for value in float_array]
         except:  # noqa
             pass
-        raise Exception(f"Cannot convert {self.letter} parameter to float array (value {self.string_value})")
+        raise Exception(f"Cannot convert {self.letter} parameter to int array (value {self.string_value})")
 
     def as_driver_id_array(self) -> list[DriverId]:
         try:
