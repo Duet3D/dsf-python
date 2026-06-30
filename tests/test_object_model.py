@@ -336,6 +336,17 @@ class Model(unittest.TestCase):
     def tearDown(self):
         pass
 
+    def test_instance_defaults_are_isolated(self):
+        m1 = ObjectModel()
+        m2 = ObjectModel()
+
+        self.assertIsNot(m1.plugins, m2.plugins)
+        self.assertIsNot(m1.sensors.filament_monitors, m2.sensors.filament_monitors)
+
+        m1.update_from_json('{"sbc": {}}')
+        m2.update_from_json('{"sbc": {}}')
+        self.assertIsNot(m1.sbc.dsf.user_sessions, m2.sbc.dsf.user_sessions)
+
     def test_boards(self):
         model = ObjectModel()
 

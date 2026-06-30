@@ -1,3 +1,4 @@
+import copy
 from datetime import datetime
 from typing import Optional, Protocol, TypeVar, Union, Callable, cast, get_origin, overload
 
@@ -67,16 +68,19 @@ def model_prop(name: str, model_type: type[T], default: Optional[T] = None) -> T
     STORAGE_NAME = '_' + name
     runtime_model_type = cast(type[object], get_origin(model_type) or model_type)
 
-    # For mutable types (ModelObject, ModelCollection, ModelDictionary), always create per-instance.
-    # For immutable scalar defaults, the scalar value is safe to share.
+    # Mutable model defaults must never be shared between instances.
+    _mutable_model_default = issubclass(runtime_model_type, (ModelObject, ModelCollection, ModelDictionary))
     _scalar_default: Optional[T] = default
-    _use_factory = default is None and issubclass(runtime_model_type, (ModelObject, ModelCollection, ModelDictionary))
 
-    if not _use_factory and default is None:
+    if not _mutable_model_default and default is None:
         _scalar_default = model_type()
 
     def _make_default() -> T:
-        return model_type() if _use_factory else cast(T, _scalar_default)
+        if _mutable_model_default:
+            if default is None:
+                return model_type()
+            return cast(T, copy.deepcopy(default))
+        return cast(T, _scalar_default)
 
     @property
     def prop(self: object) -> T:
