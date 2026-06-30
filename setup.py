@@ -19,13 +19,10 @@ setuptools.setup(
         "Topic :: Software Development :: Libraries",
         "License :: OSI Approved :: GNU Lesser General Public License v3 (LGPLv3)",
         "Programming Language :: Python :: 3",
-        "Programming Language :: Python :: 3.7",
-        "Programming Language :: Python :: 3.8",
-        "Programming Language :: Python :: 3.9",
-        "Programming Language :: Python :: 3.10",
         "Programming Language :: Python :: 3.11",
         "Programming Language :: Python :: 3.12",
         "Programming Language :: Python :: 3.13",
+        "Programming Language :: Python :: 3.14",
         "Programming Language :: Python :: 3 :: Only",
     ],
     install_requires=[
@@ -34,7 +31,7 @@ setuptools.setup(
     keywords="Duet3D, DuetSoftwareFramework, DSF, dsf-python",
     package_dir={"": "src"},
     packages=setuptools.find_packages(where="src"),
-    python_requires=">=3.7, <4",
+    python_requires=">=3.11, <4",
     extras_require={
         "dev": [
             "sphinx",
