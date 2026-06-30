@@ -1532,7 +1532,7 @@
                 "ssid": null,
                 "state": "disabled",
                 "subnet": null,
-                "type": "lan",
+                "type": "ethernet",
                 "wifiCountry": null
             },
             {

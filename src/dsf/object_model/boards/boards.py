@@ -38,9 +38,6 @@ class Board(ModelObject):
     # Accelerometer of this board or None if unknown
     accelerometer = nullable_model_prop('accelerometer', Accelerometer)
 
-    # Filename of the bootloader binary or null if unknown
-    bootloader_file_name = nullable_model_prop('bootloader_file_name', str)
-
     # CAN address of this board or None if not applicable
     can_address = nullable_model_prop('can_address', int)
 

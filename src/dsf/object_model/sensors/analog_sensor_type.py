@@ -22,9 +22,6 @@ class AnalogSensorType(str, Enum):
     # Linear analog sensor
     LinearAnalog = "linearanalog"
 
-    # DHT11 sensor
-    DHT11 = "dht11"
-
     # DHT21 sensor
     DHT21 = "dht21"
 
@@ -43,11 +40,26 @@ class AnalogSensorType(str, Enum):
     # BME280 humidity sensor
     BME280Humidity = "bmehumidity"
 
-    # Current loop sensor
-    CurrentLoop = "currentlooppyro"
+    # BME68x temperature sensor
+    BME68x = "bme68x"
 
-    # ADS131 channel 0
-    ADS131Chan0 = "ads131.chan0"
+    # BME68x pressure sensor
+    BME68xPressure = "bme68xpressure"
+
+    # BME68x humidity sensor
+    BME68xHumidity = "bme68xhumidity"
+
+    # BME68x gas resistance sensor
+    BME68xGas = "bme68xgas"
+
+    # Current loop sensor
+    CurrentLoop = "currentloop"
+
+    # ADS131 channel 0 (unipolar)
+    ADS131Chan0Unipolar = "ads131.chan0.u"
+    
+    # ADS131 channel 0 (bipolar)
+    ADS131Chan0Bipolar = "ads131.chan0.b"
     
     # ADS131 channel 1
     ADS131Chan1 = "ads131.chan1"

@@ -2,7 +2,7 @@ from .compatibility import Compatibility
 from .distance_unit import DistanceUnit
 from .input_channel_state import InputChannelState
 from ..model_object import ModelObject
-from ..utils import model_prop
+from ..utils import model_prop, nullable_model_prop
 from ...commands.code_channel import CodeChannel
 
 
@@ -18,6 +18,9 @@ class InputChannel(ModelObject):
 
     # Emulation used on this channel
     compatibility = model_prop("compatibility", Compatibility, Compatibility.RepRapFirmware)
+
+    # Name of the file being executed or null if none
+    current_file = nullable_model_prop("current_file", str)
 
     # Whether inches are being used instead of mm
     distance_unit = model_prop("distance_unit", DistanceUnit, DistanceUnit.mm)

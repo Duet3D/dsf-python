@@ -1,5 +1,6 @@
 from .http_endpoint import HttpEndpoint
 from .user_sessions import UserSession
+from .communication_method import CommunicationMethod
 from ...model_collection import ModelCollection
 from ...model_object import ModelObject
 from ...utils import model_prop
@@ -9,6 +10,10 @@ class DSF(ModelObject):
     """Information about Duet Software Framework"""
 
     build_date_time = model_prop('build_date_time', str, "")
+
+    # Communication method used to talk to the firmware
+    communication_method = model_prop('communication_method', CommunicationMethod, CommunicationMethod.SPI)
+
     http_endpoints = model_prop('http_endpoints', ModelCollection[HttpEndpoint], ModelCollection(HttpEndpoint))
     is64bit = model_prop('is64bit', bool, False)
     plugin_support = model_prop('plugin_support', bool, False)

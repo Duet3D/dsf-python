@@ -18,7 +18,7 @@ class Kinematics(ModelObject):
         self._segmentation = None
 
     @staticmethod
-    def get_kinematics_type(name: KinematicsName):
+    def get_kinematics_type(name: KinematicsName | str):
         from .core_kinematics import CoreKinematics
         from .delta_kinematics import DeltaKinematics
         from .hangprinter_kinematics import HangprinterKinematics
@@ -30,7 +30,7 @@ class Kinematics(ModelObject):
         :returns: Required type
         """
         if isinstance(name, str):
-            name = KinematicsName(name)
+            name = KinematicsName(name.lower().replace(' ', ''))
         elif not isinstance(name, KinematicsName):
             raise TypeError(f'{__name__} must be KinematicsName. Got {type(name)}: {name}')
 
@@ -57,10 +57,13 @@ class Kinematics(ModelObject):
 
     def _update_from_json(self, **kwargs):
         """Override ObjectModel._update_from_json to return the Kinematics type matching the given name"""
-        if 'name' in kwargs and self.name != KinematicsName(kwargs.get('name')):
-            kinematic_type = self.get_kinematics_type(kwargs.get('name'))
-            new_kinematic = kinematic_type.update_from_json(kwargs)
-            return new_kinematic
+        if 'name' in kwargs:
+            kwargs['name'] = KinematicsName(kwargs.get('name').lower().replace(' ', ''))
+
+            if self.name != kwargs.get('name'):
+                kinematic_type = self.get_kinematics_type(kwargs.get('name'))
+                new_kinematic = kinematic_type.update_from_json(kwargs)
+                return new_kinematic
 
         super(Kinematics, self)._update_from_json(**kwargs)
         return self

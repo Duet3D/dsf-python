@@ -25,5 +25,5 @@ class HttpEndpointType(str, Enum):
     # HTTP OPTIONS request
     OPTIONS = "OPTIONS"
 
-    # WebSocket request. This has not been implemented yet, but it is reserved for future usage
-    WebSocket = "WebSocket"
+    # WebSocket request for bidirection communication with a custom endpoint
+    WebSocket = "webSocket"

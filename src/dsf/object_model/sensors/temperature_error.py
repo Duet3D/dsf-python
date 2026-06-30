@@ -58,5 +58,17 @@ class TemperatureError(str, Enum):
     # Bad VSSA detected
     badVssa = "badVssa"
 
+    # Sensor reading too low
+    readingTooLow = "readingTooLow"
+
+    # Sensor reading too high
+    readingTooHigh = "readingTooHigh"
+
+    # Ambient reading too low (for composite sensors that read ambient temperature to calculate object temperature)
+    ambientReadingTooLow = "ambientReadingTooLow"
+
+    # Ambient reading too high (for composite sensors that read ambient temperature to calculate object temperature)
+    ambientReadingTooHigh = "ambientReadingTooHigh"
+
     # Unknown error
     unknownError = "unknownError"

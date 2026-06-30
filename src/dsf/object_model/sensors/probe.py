@@ -8,8 +8,6 @@ from ..utils import model_prop, nullable_model_prop
 class Probe(ModelObject):
     """Information about a configured probe"""
 
-    calib_a = nullable_model_prop('calib_a', float)
-    calib_b = nullable_model_prop('calib_b', float)
     calibration_temperature = model_prop('calibration_temperature', float, 0)
     deployed_by_user = model_prop('deployed_by_user', bool, False)
     disables_heaters = model_prop('disables_heaters', bool, False)

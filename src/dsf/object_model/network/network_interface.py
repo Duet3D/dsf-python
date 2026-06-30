@@ -32,10 +32,6 @@ class NetworkInterface(ModelObject):
     # Physical address of the network adapter or null if unknown
     mac = nullable_model_prop('mac', str)
 
-    # Number of reconnect attempts or null if unknown
-    # This is only reported by ESP-base boards in standalone mode
-    num_reconnects = nullable_model_prop('num_reconnects', int)
-
     # Received signal strength indicator of the WiFi adapter (only WiFi, in dBm, or null if unknown)
     rssi = nullable_model_prop('rssi', int)
 

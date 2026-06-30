@@ -5,7 +5,7 @@ class NetworkInterfaceType(str, Enum):
     """Supported types of network interfaces"""
 
     # Wired network interface
-    lan = "lan"
+    ethernet = "ethernet"
 
     # Wireless network interface
     wifi = "wifi"

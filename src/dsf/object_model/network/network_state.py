@@ -10,6 +10,9 @@ class NetworkState(str, Enum):
     # Network enabled but not started yet
     enabled = "enabled"
 
+    # Tried to start the network but initialisation failed
+    initFailed = "initFailed"
+
     # Starting up (used by Wi-Fi networking in standalone mode)
     starting1 = "starting1"
 

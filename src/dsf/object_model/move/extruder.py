@@ -1,5 +1,6 @@
 from .driver_id import DriverId
 from .extruder_non_linear import ExtruderNonlinear
+from .extruder_pressure_advance import ExtruderPressureAdvance
 from .microstepping import MicroStepping
 from ..model_object import ModelObject
 from ..utils import nullable_model_prop, model_prop
@@ -47,8 +48,8 @@ class Extruder(ModelObject):
     # Extruder position (in mm)
     position = model_prop("position", float, 0.0)
 
-    # Pressure advance
-    pressure_advance = model_prop("pressure_advance", float, 0.0)
+    # Pressure advance parameters (see M572)
+    press_adv = model_prop('press_adv', ExtruderPressureAdvance)
 
     # Motor jerk during the current print only (in mm/s)
     printing_jerk = model_prop("printing_jerk", float, 15.0)

@@ -11,9 +11,6 @@ class HeaterModelPID(ModelObject):
     # Integral value of the PID regulator
     i = model_prop("i", float, 0)
 
-    # Indicates if custom PID values are used
-    overridden = model_prop("overridden", bool, False)
-
     # Proportional value of the PID regulator
     p = model_prop("p", float, 0)
 

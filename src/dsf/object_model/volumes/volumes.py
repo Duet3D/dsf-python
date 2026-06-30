@@ -17,8 +17,8 @@ class Volume(ModelObject):
     # Name of this volume
     name = nullable_model_prop('name', str)
     
-    # Number of currently open files or null if unknown
-    open_files = nullable_model_prop('open_files', int)
+    # Whether any file is open on this volume or null if unknown
+    open_files = nullable_model_prop('open_files', bool)
     
     # Total size of this volume (in bytes or null)
     partition_size = nullable_model_prop('partition_size', int)

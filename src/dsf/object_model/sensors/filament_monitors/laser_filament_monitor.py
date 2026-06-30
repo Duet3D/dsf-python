@@ -7,17 +7,14 @@ from ...utils import model_prop, nullable_model_prop
 class LaserFilamentMonitorCalibrated(ModelObject):
     """Calibrated properties of a laser filament monitor"""
 
-    # Calibration factor of this sensor
-    calibration_factor = model_prop("calibration_factor", float, 0)
-
     # Maximum percentage (0..1 or greater)
     percent_max = model_prop("percent_max", float, 0)
 
     # Minimum percentage (0..1)
     percent_min = model_prop("percent_min", float, 0)
 
-    # Calibrated sensivity
-    sensivity = model_prop("sensivity", float, 0)
+    # Calibrated sensitivity
+    sensitivity = model_prop("sensitivity", float, 0)
 
     # Total extruded distance (in mm)
     total_distance = model_prop("total_distance", float, 0)
@@ -31,6 +28,9 @@ class LaserFilamentMonitorConfigured(ModelObject):
 
     # Whether all moves and not only printing moves are supposed to be checked
     all_moves = model_prop("all_moves", bool, False)
+
+    # Calibration factor of this sensor
+    calibration_factor = model_prop("calibration_factor", float, 0)
 
     # Maximum percentage (0..1 or greater)
     percent_max = model_prop("percent_max", float, 0)
@@ -53,9 +53,6 @@ class LaserFilamentMonitor(Duet3DFilamentMonitor):
 
     # Configured properties of this filament monitor
     configured = model_prop('configured', LaserFilamentMonitorConfigured, LaserFilamentMonitorConfigured())
-
-    # Indicates if a filament is present
-    filament_present = nullable_model_prop('filament_present', bool)
 
     def __init__(self):
         super(LaserFilamentMonitor, self).__init__(FilamentMonitorType.Laser)

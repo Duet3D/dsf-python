@@ -414,7 +414,7 @@ class Model(unittest.TestCase):
         from src.dsf.object_model.move.kinematics import CoreKinematics, DeltaKinematics, KinematicsName
 
         model = ObjectModel()
-        json_patch = '{"move": {"kinematics": {"name": "linearDelta","deltaRadius": 123}}}'
+        json_patch = '{"move": {"kinematics": {"name": "delta","deltaRadius": 123}}}'
         model.update_from_json(json_patch)
 
         self.assertIsInstance(model.move.kinematics, DeltaKinematics)
@@ -428,7 +428,7 @@ class Model(unittest.TestCase):
         self.assertEqual(model.move.kinematics.name, KinematicsName.coreXY)
 
         # Switch to linear delta (eg: M669 K3)
-        json_patch = '{"move":{"kinematics":{"deltaRadius":105.6,"homedHeight":240,"printRadius":80,"towers":[{"angleCorrection":0,"diagonal":215,"endstopAdjustment":0,"xPos":-91.452,"yPos":-52.8},{"angleCorrection":0,"diagonal":215,"endstopAdjustment":0,"xPos":91.452,"yPos":-52.8},{"angleCorrection":0,"diagonal":215,"endstopAdjustment":0,"xPos":0,"yPos":105.6}],"xTilt":0,"yTilt":0,"name":"linearDelta","segmentation":null}}}'
+        json_patch = '{"move":{"kinematics":{"deltaRadius":105.6,"homedHeight":240,"printRadius":80,"towers":[{"angleCorrection":0,"diagonal":215,"endstopAdjustment":0,"xPos":-91.452,"yPos":-52.8},{"angleCorrection":0,"diagonal":215,"endstopAdjustment":0,"xPos":91.452,"yPos":-52.8},{"angleCorrection":0,"diagonal":215,"endstopAdjustment":0,"xPos":0,"yPos":105.6}],"xTilt":0,"yTilt":0,"name":"delta","segmentation":null}}}'
         model.update_from_json(json_patch)
         self.assertIsInstance(model.move.kinematics, DeltaKinematics)
         self.assertEqual(model.move.kinematics.name, KinematicsName.linearDelta)
