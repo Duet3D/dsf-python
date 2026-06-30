@@ -5,7 +5,7 @@ class CommunicationMethod(str, Enum):
     """Supported communication methods"""
 
     # SPI link adapter
-    SPI = "SPI"
+    SPI = "spi"
 
     # USB link adapter
-    USB = "USB"
+    USB = "usb"
