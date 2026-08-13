@@ -376,6 +376,44 @@ class Model(unittest.TestCase):
         self.assertEqual(len(model.sbc.dsf.http_endpoints), 2)
         self.assertEqual(model.sbc.dsf.http_endpoints[1].endpoint_type, HttpEndpointType.POST)
 
+    def test_inputs(self):
+        from src.dsf.object_model.inputs import InputChannelState
+        from src.dsf.commands.code_channel import CodeChannel
+
+        model = ObjectModel()
+        self.assertEqual(len(model.inputs), 0)
+
+        # RRF reports null for input channels that are not available
+        json_patch = '{"inputs":[{"active":true,"axesRelative":false,"compatibility":"RepRapFirmware","distanceUnit":"mm","drivesRelative":true,"feedRate":50,"inMacro":false,"lineNumber":0,"name":"HTTP","stackDepth":0,"state":"idle","volumetric":false},null,{"active":true,"axesRelative":false,"compatibility":"RepRapFirmware","distanceUnit":"mm","drivesRelative":true,"feedRate":50,"inMacro":false,"lineNumber":42,"name":"File","stackDepth":0,"state":"idle","volumetric":false},null]}'
+        model.update_from_json(json_patch)
+
+        self.assertEqual(len(model.inputs), 4)
+        self.assertIsInstance(model.inputs[0], InputChannel)
+        self.assertIsNone(model.inputs[1])
+        self.assertIsInstance(model.inputs[2], InputChannel)
+        self.assertIsNone(model.inputs[3])
+        self.assertEqual(model.inputs[0].name, CodeChannel.HTTP)
+        self.assertEqual(model.inputs[2].name, CodeChannel.File)
+        self.assertEqual(model.inputs[2].line_number, 42)
+
+        # Existing channels are updated in place, not replaced
+        first_channel = model.inputs[0]
+        model.update_from_json('{"inputs":[{"state":"executing"},null,{"lineNumber":43},null]}')
+        self.assertIs(model.inputs[0], first_channel)
+        self.assertEqual(model.inputs[0].state, InputChannelState.executing)
+        self.assertEqual(model.inputs[2].line_number, 43)
+
+        # A channel may become null, and a previously null one may become a channel
+        model.update_from_json('{"inputs":[null,{"name":"Telnet"},null,null]}')
+        self.assertIsNone(model.inputs[0])
+        self.assertIsInstance(model.inputs[1], InputChannel)
+        self.assertEqual(model.inputs[1].name, CodeChannel.Telnet)
+        self.assertIsNone(model.inputs[2])
+
+        # Helper properties still work
+        self.assertEqual(model.inputs.total, len(model.inputs.valid_channels))
+        self.assertNotIn(CodeChannel.Unknown, model.inputs.valid_channels)
+
     @staticmethod
     def test_job():
         model = ObjectModel()
