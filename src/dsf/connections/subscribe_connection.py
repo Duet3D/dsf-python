@@ -1,7 +1,7 @@
 import json
 from dataclasses import dataclass
 from threading import Lock
-from typing import Any, Callable, Sequence, List
+from typing import Any, Callable, Protocol, Sequence, List, cast
 
 from .base_connection import BaseConnection
 from .init_messages import client_init_messages
@@ -13,10 +13,17 @@ from ..utils import JSONObj
 _MISSING = object()
 
 
+class KeySubscriptionCallback(Protocol):
+    """Callback invoked for a subscribed object model key"""
+
+    def __call__(self, *, key: str, data: Any, indices: tuple[int, ...] | None) -> None:
+        ...
+
+
 @dataclass(frozen=True)
 class _ObjectModelCallbackSubscription:
     keys: tuple[str, ...]
-    callback: Callable[..., None]
+    callback: KeySubscriptionCallback
 
 
 class SubscribeConnection(BaseConnection):
@@ -104,7 +111,7 @@ class SubscribeConnection(BaseConnection):
     def subscribe_to_keys(
         self,
         keys: Sequence[str],
-        callback: Callable[..., None],
+        callback: KeySubscriptionCallback,
     ) -> Callable[[], None]:
         """
         Register a callback for one or more dot-delimited object model key paths.
@@ -195,9 +202,10 @@ class SubscribeConnection(BaseConnection):
             return cls._walk_key_path(current_value[part], next_parts, indexes)
 
         if isinstance(current_value, list):
+            items = cast(list[Any], current_value)
             if part == "^":
                 matches: list[tuple[tuple[int, ...], Any]] = []
-                for index, item in enumerate(current_value):
+                for index, item in enumerate(items):
                     if item is None:
                         continue
                     matches.extend(cls._walk_key_path(item, next_parts, indexes + (index,)))
@@ -207,9 +215,9 @@ class SubscribeConnection(BaseConnection):
                 index = int(part)
             except ValueError:
                 return []
-            if index < 0 or index >= len(current_value):
+            if index < 0 or index >= len(items):
                 return []
-            item = current_value[index]
+            item = items[index]
             if item is None:
                 return []
             return cls._walk_key_path(item, next_parts, indexes)
@@ -218,7 +226,7 @@ class SubscribeConnection(BaseConnection):
 
     @staticmethod
     def _invoke_callback(
-        callback: Callable[..., None],
+        callback: KeySubscriptionCallback,
         *,
         key: str,
         data: Any,

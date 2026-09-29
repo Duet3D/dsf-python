@@ -1,4 +1,4 @@
-from typing import Any, Optional, Self, TYPE_CHECKING
+from typing import Any, Optional, Self, TYPE_CHECKING, cast
 
 from .model_type import ModelType
 from ..utils import JSONObj
@@ -24,8 +24,6 @@ class ModelDictionary(ModelType[JSONObj], dict[str, Any]):
         self._null_deletes_keys = null_deletes_keys
 
         if value is not None:
-            if not isinstance(value, dict):
-                raise TypeError(f"value must be of type dict or None. Got {type(value)}: {value}")
             for k, v in value.items():
                 self[k] = v
 
@@ -43,7 +41,7 @@ class ModelDictionary(ModelType[JSONObj], dict[str, Any]):
             if not isinstance(value, dict):
                 raise TypeError(f"Value for key '{key}' must be of type dict to update the model object. Got {type(value)}: {value}")
             new_item = self._item_constructor()
-            return super().__setitem__(key, new_item.update_from_json(value))
+            return super().__setitem__(key, new_item.update_from_json(cast(JSONObj, value)))
         elif is_model_object(current_item):
             return super().__setitem__(key, current_item.update_from_json(value))
 

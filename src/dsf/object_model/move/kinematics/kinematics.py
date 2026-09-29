@@ -28,10 +28,7 @@ class Kinematics(ModelObject):
         :param name: Kinematics name
         :returns: Required type
         """
-        if isinstance(name, str):
-            name = KinematicsName(name.lower().replace(' ', ''))
-        elif not isinstance(name, KinematicsName):
-            raise TypeError(f'{__name__} must be KinematicsName. Got {type(name)}: {name}')
+        name = KinematicsName(name.lower().replace(' ', ''))
 
         if name in [
             KinematicsName.cartesian,

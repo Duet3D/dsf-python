@@ -6,6 +6,7 @@ import socket
 import tempfile
 import time
 import json
+from typing import cast
 
 from tests.utils import check_json
 from src.dsf import PROTOCOL_VERSION
@@ -185,9 +186,7 @@ class TestSubscribeObjectModel(unittest.TestCase):
 
             unsubscribe = subscribe_connection.subscribe_to_keys(
                 ["boards", "heat.heaters.0.current", "state.upTime"],
-                lambda **kwargs: callback_changes.append(
-                    (kwargs["key"], kwargs["data"], kwargs["indices"])
-                ),
+                lambda key, data, indices: callback_changes.append((key, data, indices)),
             )
 
             self.assertTrue(
@@ -200,9 +199,9 @@ class TestSubscribeObjectModel(unittest.TestCase):
             self.assertIn(("heat.heaters.0.current", 16.22, None), callback_changes)
             self.assertIn(("state.upTime", 3658, None), callback_changes)
             self.assertIn(("boards", unittest.mock.ANY, None), callback_changes)
-            boards_data = next(data for key, data, indices in callback_changes if key == "boards")
-            assert isinstance(boards_data, list)
-            self.assertEqual(len(boards_data), 7)
+            boards_data = next(data for key, data, _ in callback_changes if key == "boards")
+            self.assertIsInstance(boards_data, list)
+            self.assertEqual(len(cast(list[object], boards_data)), 7)
 
             unsubscribe()
         finally:
@@ -223,9 +222,7 @@ class TestSubscribeObjectModel(unittest.TestCase):
 
             unsubscribe = subscribe_connection.subscribe_to_keys(
                 ["heat.heaters.^.current", "sensors.analog.^.lastReading"],
-                lambda **kwargs: callback_changes.append(
-                    (kwargs["key"], kwargs["data"], kwargs["indices"])
-                ),
+                lambda key, data, indices: callback_changes.append((key, data, indices)),
             )
 
             self.assertTrue(

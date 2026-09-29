@@ -3,20 +3,24 @@ __version__ = "3.7.0-beta.1"
 import json
 import os
 
-# Default socket file path
-SOCKET_FILE: str = "/run/dsf/dcs.sock"
 
-# Try to read socket file path from config
-config_path = "/opt/dsf/conf/config.json"
-if os.path.exists(config_path):
-    try:
-        with open(config_path, 'r') as f:
-            config = json.load(f)
-            socket_dir = config.get("SocketDirectory", "/run/dsf")
-            socket_file = config.get("SocketFile", "dcs.sock")
-            SOCKET_FILE = os.path.join(socket_dir, socket_file)
-    except (json.JSONDecodeError, IOError):
-        pass  # Use default if config file is invalid or inaccessible
+def _read_socket_file() -> str:
+    """Read the socket file path from the DSF config, falling back to the default path"""
+    config_path = "/opt/dsf/conf/config.json"
+    if os.path.exists(config_path):
+        try:
+            with open(config_path, 'r') as f:
+                config = json.load(f)
+                socket_dir: str = config.get("SocketDirectory", "/run/dsf")
+                socket_file: str = config.get("SocketFile", "dcs.sock")
+                return os.path.join(socket_dir, socket_file)
+        except (json.JSONDecodeError, IOError):
+            pass  # Use default if config file is invalid or inaccessible
+    return "/run/dsf/dcs.sock"
+
+
+# Socket file path
+SOCKET_FILE = _read_socket_file()
 
 # allowed connection per unix server
 DEFAULT_BACKLOG = 4

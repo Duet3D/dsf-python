@@ -35,10 +35,7 @@ class FilamentMonitor(ModelObject):
         from .pulsed_filament_monitor import PulsedFilamentMonitor
         from .rotating_magnet_filament_monitor import RotatingMagnetFilamentMonitor
 
-        if isinstance(type_, str):
-            type_ = FilamentMonitorType(type_)
-        elif not isinstance(type_, FilamentMonitorType):
-            raise TypeError(f"type must be of type FilamentMonitorType. Got {type(type_)}: {type_}")
+        type_ = FilamentMonitorType(type_)
 
         if type_ == FilamentMonitorType.Laser:
             return LaserFilamentMonitor()

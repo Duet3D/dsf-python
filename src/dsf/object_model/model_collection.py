@@ -40,10 +40,8 @@ class ModelCollection(ModelType[list[JSONElement]], Generic[T], list[T]):
 
         if isinstance(resolved_constructor, type):
             self._item_constructor: Callable[..., T] = cast(Callable[..., T], resolved_constructor)
-        elif isinstance(self._runtime_model_type, type):
-            self._item_constructor = cast(Callable[..., T], self._runtime_model_type)
         else:
-            self._item_constructor = cast(Callable[..., T], object)
+            self._item_constructor = cast(Callable[..., T], self._runtime_model_type)
 
         if value is not None:
             self[:] = []
@@ -102,7 +100,8 @@ class ModelCollection(ModelType[list[JSONElement]], Generic[T], list[T]):
         """
         from .utils import is_model_object
 
-        if not isinstance(data, list):
+        # Nested JSON can reach this without type checking, so validate at runtime
+        if not isinstance(data, list):  # pyright: ignore[reportUnnecessaryIsInstance]
             raise Exception(f"Invalid JSON element type for model collection {type(data)}.")
 
         # Remove deleted items

@@ -1,11 +1,12 @@
 import json
 import unittest
+from typing import Any
 
 from src.dsf.commands import generic, object_model
 from src.dsf.connections.init_messages import client_init_messages
 
 
-def serialize(obj: object) -> dict:
+def serialize(obj: object) -> dict[str, Any]:
     return json.loads(json.dumps(obj, default=lambda o: o.__dict__))
 
 

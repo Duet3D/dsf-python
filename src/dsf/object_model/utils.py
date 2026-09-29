@@ -82,7 +82,7 @@ def model_prop(name: str, model_type: type[T], default: Optional[T] = None) -> T
         if _mutable_model_default:
             if default is None:
                 return model_type()
-            return cast(T, copy.deepcopy(default))
+            return copy.deepcopy(default)
         return cast(T, _scalar_default)
 
     def getter(self: object) -> T:

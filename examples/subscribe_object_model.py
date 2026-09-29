@@ -19,8 +19,9 @@ def on_status_changed(*, key: str, data: str, indices: Optional[tuple[int, ...]]
     print("Machine status changed to", data)
 
 
-def on_heater_temperature_changed(*, key: str, data: float, indices: tuple[int, ...]) -> None:
-    # indices holds the list indexes matched by each ^ wildcard in the key
+def on_heater_temperature_changed(*, key: str, data: float, indices: tuple[int, ...] | None) -> None:
+    # indices holds the list indexes matched by each ^ wildcard in the key (None if the key has no wildcard)
+    assert indices is not None
     print(f"Heater {indices[0]} is now at {data}C")
 
 

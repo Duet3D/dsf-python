@@ -1,7 +1,7 @@
 import json
 import unittest
 
-from typing import Optional
+from typing import Optional, cast
 
 from src.dsf.object_model import *
 from src.dsf.object_model.utils import is_model_object, JSONElement, JSONObj, model_prop, nullable_model_prop
@@ -585,20 +585,22 @@ class Model(unittest.TestCase):
             json_data = json.load(fp)
         model = ObjectModel.from_json(json_data)
 
-        def recursive_compare(obj1, obj2):
+        def recursive_compare(obj1: object, obj2: object) -> None:
             if isinstance(obj1, dict):
                 self.assertIsInstance(obj2, dict)
-                self.assertEqual(set(obj1.keys()), set(obj2.keys()))
-                for key in obj1:
-                    recursive_compare(obj1[key], obj2[key])
+                dict1, dict2 = cast(dict[str, object], obj1), cast(dict[str, object], obj2)
+                self.assertEqual(set(dict1.keys()), set(dict2.keys()))
+                for key in dict1:
+                    recursive_compare(dict1[key], dict2[key])
             elif isinstance(obj1, list):
                 self.assertIsInstance(obj2, list)
-                self.assertEqual(len(obj1), len(obj2))
-                for item1, item2 in zip(obj1, obj2):
+                list1, list2 = cast(list[object], obj1), cast(list[object], obj2)
+                self.assertEqual(len(list1), len(list2))
+                for item1, item2 in zip(list1, list2):
                     recursive_compare(item1, item2)
             elif isinstance(obj1, ModelObject):
                 self.assertIsInstance(obj2, ModelObject)
-                recursive_compare(obj1.__dict__, obj2.__dict__)
+                recursive_compare(vars(obj1), vars(obj2))
             else:
                 self.assertEqual(obj1, obj2)
 
