@@ -61,7 +61,8 @@ class InputShaping(ModelObject):
     # Frequency (in Hz)
     frequency = model_prop("frequency", float, 40.0)
 
-    # Minimum fraction of the original acceleration or feed rate to which the acceleration or feed rate may be reduced in order to apply input shaping
+    # Minimum fraction of the original acceleration or feed rate to which the acceleration or feed rate
+    # may be reduced in order to apply input shaping
     reduction_limit = model_prop("reduction_limit", float, 0.25)
 
     # Configured input shaping type

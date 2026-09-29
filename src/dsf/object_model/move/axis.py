@@ -31,7 +31,7 @@ class AxisLetter(str, Enum):
     i = "i"
     j = "j"
     k = "k"
-    l = "l"
+    l = "l"  # noqa: E741
     m = "m"
     n = "n"
     o = "o"

@@ -132,7 +132,10 @@ class ExpansionBoard(Board):
 
 
 class Boards(ModelCollection[Board]):
-    """List of connected boards. The first board is the mainboard, every other one is an expansion board connected over CAN"""
+    """
+    List of connected boards.
+    The first board is the mainboard, every other one is an expansion board connected over CAN
+    """
 
     def __init__(self, value: Optional[List[Board]] = None):
         super(Boards, self).__init__(Board, value)

@@ -38,7 +38,8 @@ def _set_model_prop(
     elif isinstance(value, dict):  # Update from JSON
         if not isinstance(current_value, (ModelObject, ModelDictionary)):
             raise TypeError(
-                f"{instance.__class__.__name__}.{name} must be of type ModelObject or ModelDictionary to update from a dict."
+                f"{instance.__class__.__name__}.{name} must be of type ModelObject or ModelDictionary"
+                f" to update from a dict."
                 f" Got {type(current_value).__name__}: {current_value}"
             )
         current_value.update_from_json(cast(JSONObj, value))
@@ -55,14 +56,16 @@ def _set_model_prop(
             setattr(instance, name, parsed_date)
         except ValueError:
             raise TypeError(
-                f"{instance.__class__.__name__}.{name} must be a valid ISO format datetime string to update from JSON. Got: {value}"
+                f"{instance.__class__.__name__}.{name} must be a valid ISO format datetime string to update from JSON."
+                f" Got: {value}"
             )
     elif isinstance(value, (str, int, float, bool)):
         converter = cast(Callable[[object], object], runtime_type)
         setattr(instance, name, converter(value))
     else:
         raise TypeError(
-            f"{instance.__class__.__name__}.{name} must be of type {runtime_type} or a compatible JSON element to update from."
+            f"{instance.__class__.__name__}.{name} must be of type {runtime_type}"
+            f" or a compatible JSON element to update from."
             f" Got {type(value).__name__}: {value}"
         )
 
@@ -72,7 +75,8 @@ def model_prop(name: str, model_type: type[T], default: Optional[T] = None) -> T
     Wrap a none nullable model object property so that type checks can be performed during update
     :param name: Property of the derived class
     :param model_type: Constructor for creating new elements
-    :param default: Default value of type to use if not set during update from JSON, if None then the default constructor of the model is used
+    :param default: Default value of type to use if not set during update from JSON,
+        if None then the default constructor of the model is used
     :return:
     """
 
@@ -138,7 +142,8 @@ def nullable_model_prop(
             model_type()  # validate that the default constructor works
         except Exception:
             raise TypeError(
-                f"Default constructor failed for type {model_type_name}. Provide a constructor function to create default values for the property {name}."
+                f"Default constructor failed for type {model_type_name}."
+                f" Provide a constructor function to create default values for the property {name}."
             )
         _factory: Callable[[], Optional[T]] = model_type
     else:

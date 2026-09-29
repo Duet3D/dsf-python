@@ -201,7 +201,7 @@ class HttpEndpointUnixSocket:
                 raise OSError(errno.EADDRINUSE, msg) from None
             else:
                 raise
-        except:
+        except BaseException:
             sock.close()
             raise
 

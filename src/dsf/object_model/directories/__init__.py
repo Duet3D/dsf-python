@@ -1,3 +1,3 @@
-from .directories import *
+from .directories import Directories
 
 __all__ = ["Directories"]

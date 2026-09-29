@@ -63,7 +63,8 @@ class ModelCollection(ModelType[list[JSONElement]], Generic[T], list[T]):
                     ref_item = self._create_item(index)
                     if not is_model_object(ref_item):
                         raise TypeError(
-                            f"Item constructor for ModelCollection must inherit from type ModelType to update from a dict."
+                            f"Item constructor for ModelCollection must inherit from type ModelType"
+                            f" to update from a dict."
                             f" Got {type(ref_item).__name__}: {ref_item}"
                         )
                     # if issubclass(self._item_constructor, ModelType[T]):
@@ -143,7 +144,8 @@ class ModelCollection(ModelType[list[JSONElement]], Generic[T], list[T]):
                         self[i] = cast(T, ref_item.update_from_json(new_item_data))
                     else:
                         self[i] = self._coerce_item_value(new_item_data)
-            # Use the `update_from_json` method of the current item if it's a model object, otherwise replace it with the new data
+            # Use the `update_from_json` method of the current item if it's a model object,
+            # otherwise replace it with the new data
             elif is_model_object(current_item):
                 self[i] = cast(T, current_item.update_from_json(new_item_data))
             else:

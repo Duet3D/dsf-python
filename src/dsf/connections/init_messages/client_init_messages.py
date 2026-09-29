@@ -98,7 +98,8 @@ def subscribe_init_message(
             The style of a filter is similar to XPath. For example, if you want to monitor only the current heater
             temperatures, you can use the filter expression "heat/heaters[*]/current". Wildcards are supported either
             for full names or indices. To get updates for an entire namespace, the ** wildcard can be used
-            for example heat/** for everything heat-related), however it can be only used at the end of a filter expression.
+            for example heat/** for everything heat-related), however it can be only used at the end of a filter
+            expression.
             Defaults to [].
         verbose (bool): whether object model fields flagged as verbose are required.
         obsolete (bool): whether object model fields flagged as obsolete are required.

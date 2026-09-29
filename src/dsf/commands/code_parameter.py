@@ -170,7 +170,8 @@ class CodeParameter(json.JSONEncoder):
             return [float(elem) for elem in elements if elem]
         except ValueError as e:
             raise Exception(
-                f"Cannot parse expression array: failed to convert elements to numbers in {self.letter} (value {self.string_value})"
+                f"Cannot parse expression array: failed to convert elements to numbers in {self.letter}"
+                f" (value {self.string_value})"
             ) from e
 
     def as_float_array(self) -> list[float]:
