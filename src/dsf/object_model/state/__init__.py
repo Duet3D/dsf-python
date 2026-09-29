@@ -8,4 +8,14 @@ from .startup_error import StartupError
 from .state import State
 
 
-__all__ = ['BeepRequest', 'GpOutputPort', 'LogLevel', 'MachineStatus', 'MessageBox', 'MessageBoxMode', 'RestorePoint', 'StartupError', 'State']
+__all__ = [
+    'BeepRequest',
+    'GpOutputPort',
+    'LogLevel',
+    'MachineStatus',
+    'MessageBox',
+    'MessageBoxMode',
+    'RestorePoint',
+    'StartupError',
+    'State',
+]

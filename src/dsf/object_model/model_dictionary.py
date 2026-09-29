@@ -13,7 +13,12 @@ class ModelDictionary(ModelType[JSONObj], dict[str, Any]):
     Useful for updating model object items from JSON data (patches)
     """
 
-    def __init__(self, null_deletes_keys: bool, item_constructor: Optional[type["ModelObject"]] = None, value: Optional[dict[str, Any]] = None):
+    def __init__(
+        self,
+        null_deletes_keys: bool,
+        item_constructor: Optional[type["ModelObject"]] = None,
+        value: Optional[dict[str, Any]] = None,
+    ):
         """
         :param null_deletes_keys: Whether setting null to items effectively deletes them
         :param item_constructor: Item constructor type to use for type-checking
@@ -39,7 +44,8 @@ class ModelDictionary(ModelType[JSONObj], dict[str, Any]):
         current_item = self.get(key)
         if current_item is None and self._item_constructor:
             if not isinstance(value, dict):
-                raise TypeError(f"Value for key '{key}' must be of type dict to update the model object. Got {type(value)}: {value}")
+                raise TypeError(f"Value for key '{key}' must be of type dict to update the model object."
+                                f" Got {type(value)}: {value}")
             new_item = self._item_constructor()
             return super().__setitem__(key, new_item.update_from_json(cast(JSONObj, value)))
         elif is_model_object(current_item):

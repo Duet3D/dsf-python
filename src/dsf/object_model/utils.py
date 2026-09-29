@@ -33,7 +33,9 @@ def is_model_object(o: object) -> TypeGuard[ModelType[Any]]:
     return isinstance(o, ModelObject) or isinstance(o, ModelCollection) or isinstance(o, ModelDictionary)
 
 
-def _set_model_prop(instance: object, name: str, runtime_type: type[object], current_value: T, value: Union[T, JSONElement]) -> None:
+def _set_model_prop(
+    instance: object, name: str, runtime_type: type[object], current_value: T, value: Union[T, JSONElement]
+) -> None:
     if value is None and isinstance(current_value, ModelDictionary):  # DSF sends null to clear a dictionary
         current_value.update_from_json(None)
     elif isinstance(value, dict):  # Update from JSON
@@ -109,7 +111,10 @@ def model_prop(name: str, model_type: type[T], default: Optional[T] = None) -> T
 
     return cast(TypedReadableProperty[T], property(getter, setter))
 
-def nullable_model_prop(name: str, model_type: type[T], constructor: Optional[Callable[[], Optional[T]]] = None) -> TypedReadableProperty[Optional[T]]:
+
+def nullable_model_prop(
+    name: str, model_type: type[T], constructor: Optional[Callable[[], Optional[T]]] = None
+) -> TypedReadableProperty[Optional[T]]:
     """
     Wrap a nullable model object property so that type checks can be performed during update
     :param name: Property of the derived class

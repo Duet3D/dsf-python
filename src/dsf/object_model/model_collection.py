@@ -13,7 +13,12 @@ class ModelCollection(ModelType[list[JSONElement]], Generic[T], list[T]):
     Useful for updating model object items from JSON data (patches)
     """
     
-    def __init__(self, item_constructor: type[T] | object, value: Optional[Sequence[T | JSONElement]] = None, allow_none: bool = False) -> None:
+    def __init__(
+        self,
+        item_constructor: type[T] | object,
+        value: Optional[Sequence[T | JSONElement]] = None,
+        allow_none: bool = False,
+    ) -> None:
         """
         :param item_constructor: Item constructor type that items must derive from
         :param value: Value used to initialize the list from
