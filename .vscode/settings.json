@@ -8,6 +8,5 @@
         "-p",
         "test_*.py"
     ],
-    "debugpy.debugJustMyCode": false,
-    "python.analysis.typeCheckingMode": "strict"
+    "debugpy.debugJustMyCode": false
 }

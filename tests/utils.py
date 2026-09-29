@@ -1,7 +1,8 @@
 import json
+from typing import Mapping
 
 
-def check_json(expected_dict: dict[str, object], json_str: str) -> None:
+def check_json(expected_dict: Mapping[str, object], json_str: str) -> None:
     try:
         json_obj = json.loads(json_str)
     except json.JSONDecodeError:

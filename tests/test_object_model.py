@@ -116,7 +116,7 @@ class TestModelObject(unittest.TestCase):
         model.update_from_json(patch)
 
         self.assertEqual(model.p_model.value, 10)
-        self.assertIsNotNone(model.np_model)
+        assert model.np_model is not None
         self.assertEqual(model.np_model.value, 20)
 
         model.update_from_json({'np_model': None})
@@ -138,11 +138,12 @@ class TestModelObject(unittest.TestCase):
         }
 
         model.update_from_json(patch)
+        assert model.np_model_collection is not None
+        assert model.np_model_ncollection is not None
         self.assertEqual(len(model.p_model_collection), 1)
         self.assertIsNotNone(model.p_model_ncollection)
         self.assertEqual(len(model.p_model_ncollection), 2)
         self.assertEqual(len(model.np_model_collection), 1)
-        self.assertIsNotNone(model.np_model_ncollection)
         self.assertEqual(len(model.np_model_ncollection), 2)
 
         self.assertIsNotNone(model.p_model_collection[0])
@@ -159,13 +160,17 @@ class TestModelObject(unittest.TestCase):
         
         model.update_from_json({'p_model_ncollection': [{'value': 30}, None, {'value': 40}], 'np_model_ncollection': [{'value': 50}, None, {'value': 60}]})
         self.assertEqual(len(model.p_model_ncollection), 3)
-        self.assertEqual(model.p_model_ncollection[0].value, 30)
-        self.assertIsNone(model.p_model_ncollection[1])
-        self.assertEqual(model.p_model_ncollection[2].value, 40)
+        p_first, p_second, p_third = model.p_model_ncollection
+        assert p_first is not None and p_third is not None
+        self.assertEqual(p_first.value, 30)
+        self.assertIsNone(p_second)
+        self.assertEqual(p_third.value, 40)
         self.assertEqual(len(model.np_model_ncollection), 3)
-        self.assertEqual(model.np_model_ncollection[0].value, 50)
-        self.assertIsNone(model.np_model_ncollection[1])
-        self.assertEqual(model.np_model_ncollection[2].value, 60)
+        np_first, np_second, np_third = model.np_model_ncollection
+        assert np_first is not None and np_third is not None
+        self.assertEqual(np_first.value, 50)
+        self.assertIsNone(np_second)
+        self.assertEqual(np_third.value, 60)
 
         model.update_from_json({'p_model_ncollection': [None], 'np_model_ncollection': [None]})
         self.assertEqual(len(model.p_model_ncollection), 1)
@@ -257,8 +262,10 @@ class TestModelCollection(unittest.TestCase):
         self.assertTrue(is_model_object(model[0]))
         self.assertIsNone(model[1])
         self.assertTrue(is_model_object(model[2]))
-        self.assertEqual(model[0].current, 10)
-        self.assertEqual(model[2].current, 20)
+        first, _, third = model
+        assert first is not None and third is not None
+        self.assertEqual(first.current, 10)
+        self.assertEqual(third.current, 20)
 
         patch = [None, {}]
         model.update_from_json(patch)
@@ -346,6 +353,7 @@ class Model(unittest.TestCase):
 
         m1.update_from_json('{"sbc": {}}')
         m2.update_from_json('{"sbc": {}}')
+        assert m1.sbc is not None and m2.sbc is not None
         self.assertIsNot(m1.sbc.dsf.user_sessions, m2.sbc.dsf.user_sessions)
 
     def test_boards(self):
@@ -358,6 +366,7 @@ class Model(unittest.TestCase):
         json_patch = '{"boards":[{"vIn":{"current":42.5}}]}'
         model.update_from_json(json_patch)
         # Check if the value has been modified
+        assert model.boards[0].v_in is not None
         self.assertEqual(model.boards[0].v_in.current, 42.5)
         # Check if other values has not been altered
         self.assertEqual(model.boards[0].v_in.min, 19.3)
@@ -368,17 +377,19 @@ class Model(unittest.TestCase):
         model.update_from_json('{"boards": [{"name": "Duet 3 MB6HC", "firmwareName": "RepRapFirmware", "maxHeaters": 32},'
                                ' {"canAddress": 1, "name": "Duet 3 EXP3HC", "state": "timedOut", "timeout": 15}]}')
         self.assertIsInstance(model.boards, Boards)
-        self.assertIsInstance(model.boards[0], MainBoard)
-        self.assertIsInstance(model.boards[1], ExpansionBoard)
-        self.assertEqual(model.boards[0].firmware_name, "RepRapFirmware")
-        self.assertEqual(model.boards[0].max_heaters, 32)
-        self.assertEqual(model.boards[1].state, BoardState.timedOut)
-        self.assertEqual(model.boards[1].timeout, 15)
+        main_board, expansion_board = model.boards
+        assert isinstance(main_board, MainBoard)
+        assert isinstance(expansion_board, ExpansionBoard)
+        self.assertEqual(main_board.firmware_name, "RepRapFirmware")
+        self.assertEqual(main_board.max_heaters, 32)
+        self.assertEqual(expansion_board.state, BoardState.timedOut)
+        self.assertEqual(expansion_board.timeout, 15)
 
         # Boards added by a later patch are typed by their position as well
         model.update_from_json('{"boards": [{}, {}, {"canAddress": 2}]}')
-        self.assertIsInstance(model.boards[2], ExpansionBoard)
-        self.assertEqual(model.boards[2].timeout, 10)
+        new_board = model.boards[2]
+        assert isinstance(new_board, ExpansionBoard)
+        self.assertEqual(new_board.timeout, 10)
 
     def test_sensors_accelerometers_and_load_cell(self):
         model = ObjectModel()
@@ -388,14 +399,15 @@ class Model(unittest.TestCase):
                                ' "preload": 50, "preloadWindow": [10, 100]}}]}}')
         self.assertIsNone(model.sensors.accelerometers[0])
         accelerometer = model.sensors.accelerometers[1]
-        self.assertIsInstance(accelerometer, Accelerometer)
+        assert isinstance(accelerometer, Accelerometer)
         self.assertEqual(accelerometer.port, "121.spi.cs0")
         self.assertEqual(accelerometer.resolution, 16)
         self.assertEqual(accelerometer.sampling_rate, 1344)
 
         probe = model.sensors.probes[0]
+        assert probe is not None
         self.assertEqual(probe.type, ProbeType.LoadCell)
-        self.assertIsInstance(probe.load_cell, ProbeLoadCell)
+        assert isinstance(probe.load_cell, ProbeLoadCell)
         self.assertEqual(probe.load_cell.force, 12.5)
         self.assertEqual(list(probe.load_cell.preload_window), [10.0, 100.0])
 
@@ -417,7 +429,9 @@ class Model(unittest.TestCase):
         self.assertEqual(model.move.shaping.type, InputShapingType.ei2)
         self.assertEqual(model.move.motion_systems[0].printing_acceleration, 3000)
         self.assertEqual(list(model.move.motion_systems[0].user_position), [1.0, 2.0, 3.0])
+        assert model.job.build is not None
         self.assertTrue(model.job.build.objects[0].cancelled)
+        assert model.sbc is not None and model.sbc.upgrade is not None
         self.assertEqual(model.sbc.upgrade.message, "Installing packages")
         self.assertEqual(model.sbc.upgrade.progress, 0.5)
 
@@ -488,6 +502,7 @@ class Model(unittest.TestCase):
         self.assertEqual(model.move.shaping.type, InputShapingType.ei2)
         self.assertEqual(model.plugins['TestPlugin'].id, "TestPlugin")
         self.assertEqual(model.plugins['TestPlugin'].license, "MIT")
+        assert model.state.message_box is not None
         self.assertEqual(model.state.message_box.max, 10.5)
         self.assertEqual(model.state.message_box.min, -1.5)
 
@@ -510,6 +525,7 @@ class Model(unittest.TestCase):
 
         json_patch = '{"sbc":{"dsf":{"httpEndpoints":[{"endpointType":"GET","namespace":"ExecOnMcode","path":"getCmdList","isUploadRequest":false,"unixSocket":"/run/dsf/ExecOnMcode/getCmdList-GET.sock"}]}}}'
         model.update_from_json(json_patch)
+        assert model.sbc is not None
         self.assertEqual(len(model.sbc.dsf.http_endpoints), 1)
         self.assertEqual(model.sbc.dsf.http_endpoints[0].endpoint_type, HttpEndpointType.GET)
 
@@ -530,26 +546,28 @@ class Model(unittest.TestCase):
         model.update_from_json(json_patch)
 
         self.assertEqual(len(model.inputs), 4)
-        self.assertIsInstance(model.inputs[0], InputChannel)
-        self.assertIsNone(model.inputs[1])
-        self.assertIsInstance(model.inputs[2], InputChannel)
-        self.assertIsNone(model.inputs[3])
-        self.assertEqual(model.inputs[0].name, CodeChannel.HTTP)
-        self.assertEqual(model.inputs[2].name, CodeChannel.File)
-        self.assertEqual(model.inputs[2].line_number, 42)
+        first_channel, second_channel, third_channel, fourth_channel = model.inputs
+        assert isinstance(first_channel, InputChannel)
+        self.assertIsNone(second_channel)
+        assert isinstance(third_channel, InputChannel)
+        self.assertIsNone(fourth_channel)
+        self.assertEqual(first_channel.name, CodeChannel.HTTP)
+        self.assertEqual(third_channel.name, CodeChannel.File)
+        self.assertEqual(third_channel.line_number, 42)
 
         # Existing channels are updated in place, not replaced
-        first_channel = model.inputs[0]
         model.update_from_json('{"inputs":[{"state":"executing"},null,{"lineNumber":43},null]}')
         self.assertIs(model.inputs[0], first_channel)
-        self.assertEqual(model.inputs[0].state, InputChannelState.executing)
-        self.assertEqual(model.inputs[2].line_number, 43)
+        self.assertIs(model.inputs[2], third_channel)
+        self.assertEqual(first_channel.state, InputChannelState.executing)
+        self.assertEqual(third_channel.line_number, 43)
 
         # A channel may become null, and a previously null one may become a channel
         model.update_from_json('{"inputs":[null,{"name":"Telnet"},null,null]}')
         self.assertIsNone(model.inputs[0])
-        self.assertIsInstance(model.inputs[1], InputChannel)
-        self.assertEqual(model.inputs[1].name, CodeChannel.Telnet)
+        second_channel = model.inputs[1]
+        assert isinstance(second_channel, InputChannel)
+        self.assertEqual(second_channel.name, CodeChannel.Telnet)
         self.assertIsNone(model.inputs[2])
 
         # Helper properties still work
@@ -608,7 +626,7 @@ class Model(unittest.TestCase):
         json_patch = '{"move": {"kinematics": {"name": "delta","deltaRadius": 123}}}'
         model.update_from_json(json_patch)
 
-        self.assertIsInstance(model.move.kinematics, DeltaKinematics)
+        assert isinstance(model.move.kinematics, DeltaKinematics)
         self.assertEqual(model.move.kinematics.name, KinematicsName.linearDelta)
         self.assertEqual(model.move.kinematics.delta_radius, 123)
 
@@ -621,7 +639,7 @@ class Model(unittest.TestCase):
         # Switch to linear delta (eg: M669 K3)
         json_patch = '{"move":{"kinematics":{"deltaRadius":105.6,"homedHeight":240,"printRadius":80,"towers":[{"angleCorrection":0,"diagonal":215,"endstopAdjustment":0,"xPos":-91.452,"yPos":-52.8},{"angleCorrection":0,"diagonal":215,"endstopAdjustment":0,"xPos":91.452,"yPos":-52.8},{"angleCorrection":0,"diagonal":215,"endstopAdjustment":0,"xPos":0,"yPos":105.6}],"xTilt":0,"yTilt":0,"name":"delta","segmentation":null}}}'
         model.update_from_json(json_patch)
-        self.assertIsInstance(model.move.kinematics, DeltaKinematics)
+        assert isinstance(model.move.kinematics, DeltaKinematics)
         self.assertEqual(model.move.kinematics.name, KinematicsName.linearDelta)
         self.assertEqual(model.move.kinematics.delta_radius, 105.6)
 
@@ -658,21 +676,29 @@ class Model(unittest.TestCase):
         json_patch = '{"sensors":{"filamentMonitors":[{"enabled":true,"status":"ok","type":"simple"}]}}'
         model.update_from_json(json_patch)
         self.assertEqual(len(model.sensors.filament_monitors), 1)
-        self.assertEqual(model.sensors.filament_monitors[0].type, FilamentMonitorType.Simple)
+        filament_monitor = model.sensors.filament_monitors[0]
+        assert filament_monitor is not None
+        self.assertEqual(filament_monitor.type, FilamentMonitorType.Simple)
 
         # Change filament monitor to Pulsed (rg: M591 D0 P7 C"io2.in" S1)
         json_patch = '{"sensors":{"filamentMonitors":[{"calibrated":null,"configured":{"mmPerPulse":1,"percentMax":160,"percentMin":60,"sampleDistance":5},"enabled":true,"status":"ok","type":"pulsed"}]}}'
         model.update_from_json(json_patch)
         self.assertEqual(len(model.sensors.filament_monitors), 1)
-        self.assertEqual(model.sensors.filament_monitors[0].type, FilamentMonitorType.Pulsed)
+        filament_monitor = model.sensors.filament_monitors[0]
+        assert filament_monitor is not None
+        self.assertEqual(filament_monitor.type, FilamentMonitorType.Pulsed)
 
     def test_sensors_filament_monitor_rc2_fields(self):
+        from src.dsf.object_model.sensors.filament_monitors import RotatingMagnetFilamentMonitor
+
         model = ObjectModel()
         model.update_from_json('{"sensors":{"filamentMonitors":[{"type":"rotatingMagnet","filamentPresent":true,"agc":120,'
                                '"calibrated":{"mmPerRev":28.8,"percentMax":110,"percentMin":90,"totalDistance":100}}]}}')
         monitor = model.sensors.filament_monitors[0]
+        assert isinstance(monitor, RotatingMagnetFilamentMonitor)
         self.assertTrue(monitor.filament_present)
         self.assertEqual(monitor.agc, 120)
+        assert monitor.calibrated is not None
         self.assertEqual(monitor.calibrated.mm_per_rev, 28.8)
 
     def test_user_sessions(self):
@@ -682,6 +708,7 @@ class Model(unittest.TestCase):
         json_patch = '{"sbc": {}}'
         model.update_from_json(json_patch)
 
+        assert model.sbc is not None
         self.assertEqual(len(model.sbc.dsf.user_sessions), 0)
 
         json_patch = '{"sbc":{"dsf":{"userSessions":[{"accessLevel":"readWrite","id":2,"origin":"::ffff:192.168.1.200","originId":-1,"sessionType":"http"}]}}}'

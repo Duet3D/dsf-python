@@ -201,6 +201,7 @@ class TestSubscribeObjectModel(unittest.TestCase):
             self.assertIn(("state.upTime", 3658, None), callback_changes)
             self.assertIn(("boards", unittest.mock.ANY, None), callback_changes)
             boards_data = next(data for key, data, indices in callback_changes if key == "boards")
+            assert isinstance(boards_data, list)
             self.assertEqual(len(boards_data), 7)
 
             unsubscribe()
