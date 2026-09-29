@@ -7,15 +7,14 @@ from .restore_point import RestorePoint
 from .startup_error import StartupError
 from .state import State
 
-
 __all__ = [
-    'BeepRequest',
-    'GpOutputPort',
-    'LogLevel',
-    'MachineStatus',
-    'MessageBox',
-    'MessageBoxMode',
-    'RestorePoint',
-    'StartupError',
-    'State',
+    "BeepRequest",
+    "GpOutputPort",
+    "LogLevel",
+    "MachineStatus",
+    "MessageBox",
+    "MessageBoxMode",
+    "RestorePoint",
+    "StartupError",
+    "State",
 ]

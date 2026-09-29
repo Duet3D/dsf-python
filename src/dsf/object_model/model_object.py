@@ -9,7 +9,7 @@ from ..utils import preserve_builtin, camel_to_snake, snake_to_camel, JSONElemen
 class FloatJSON(float):
     # Remove trailing zeros from float numbers
     def __repr__(self) -> str:
-        return f'{self:g}'
+        return f"{self:g}"
 
 
 _encoder = cast(Any, json.encoder)
@@ -38,7 +38,7 @@ class ModelObject(ModelType[Union[JSONObj, str]]):
         if isinstance(obj, datetime):
             return obj.isoformat()
         if isinstance(obj, float):
-            return f'{obj:g}'
+            return f"{obj:g}"
         if isinstance(obj, SbcPermissions):
             return obj.name
         if isinstance(obj, DriverId):
@@ -46,7 +46,7 @@ class ModelObject(ModelType[Union[JSONObj, str]]):
 
         # Convert snake_case class attributes into CamelCase JSON style
         # also convert back 'globals' to 'global'
-        return {snake_to_camel(str(k) if k != '_globals' else '_global'): v for k, v in obj.__dict__.items()}
+        return {snake_to_camel(str(k) if k != "_globals" else "_global"): v for k, v in obj.__dict__.items()}
 
     def _update_from_json(self: TModelObject, **kwargs: JSONElement) -> TModelObject:
         """Update this instance from a given JSON element
@@ -58,13 +58,14 @@ class ModelObject(ModelType[Union[JSONObj, str]]):
         # Get the class writeable properties including from inherited classes
         # (the ones which have a setter -> fset property object attribute)
         cls_dict = {attr: getattr(self.__class__, attr) for attr in dir(self.__class__)}
-        writeable_properties = [attr for attr, value in cls_dict.items()
-                                if isinstance(value, property) and value.fset is not None]
+        writeable_properties = [
+            attr for attr, value in cls_dict.items() if isinstance(value, property) and value.fset is not None
+        ]
         instance_attributes = vars(self)
         for json_key, json_value in kwargs.items():
             # Convert JSON attributes from CamelCase to snake_case to satisfy python PEP8 naming
             # Remove trailing underscore set by preserve_builtin()
-            json_key_snake = camel_to_snake(json_key.rstrip('_'))
+            json_key_snake = camel_to_snake(json_key.rstrip("_"))
             # Write public attributes by using their setter property
             if json_key_snake in writeable_properties:
                 attr = getattr(self, json_key_snake)
@@ -102,4 +103,3 @@ class ModelObject(ModelType[Union[JSONObj, str]]):
     def to_json(self) -> str:
         """Serialize this instance of this class into a JSON dictionary"""
         return self.__str__()
-

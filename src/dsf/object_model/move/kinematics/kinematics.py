@@ -29,7 +29,7 @@ class Kinematics(ModelObject):
         from .polar_kinematics import PolarKinematics
         from .scara_kinematics import ScaraKinematics
 
-        name = KinematicsName(name.lower().replace(' ', ''))
+        name = KinematicsName(name.lower().replace(" ", ""))
 
         if name in [
             KinematicsName.cartesian,
@@ -37,7 +37,7 @@ class Kinematics(ModelObject):
             KinematicsName.coreXYU,
             KinematicsName.coreXYUV,
             KinematicsName.coreXZ,
-            KinematicsName.markForged
+            KinematicsName.markForged,
         ]:
             return CoreKinematics(name)
         elif name == KinematicsName.linearDelta:
@@ -54,10 +54,10 @@ class Kinematics(ModelObject):
 
     def _update_from_json(self, **kwargs: JSONElement) -> "Kinematics":
         """Override ObjectModel._update_from_json to return the Kinematics type matching the given name"""
-        name = kwargs.get('name')
+        name = kwargs.get("name")
         if isinstance(name, str):
-            kinematics_name = KinematicsName(name.lower().replace(' ', ''))
-            kwargs['name'] = kinematics_name
+            kinematics_name = KinematicsName(name.lower().replace(" ", ""))
+            kwargs["name"] = kinematics_name
 
             if self.name != kinematics_name:
                 return self.get_kinematics_type(kinematics_name).update_from_json(kwargs)

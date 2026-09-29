@@ -30,7 +30,7 @@ class ClosedLoopPositionError(ModelObject):
 
 class DriverClosedLoop(ModelObject):
     """This represents information about closed-loop tuning"""
-    
+
     # Current fraction of the configured motor current used
     current_fraction = model_prop("current_fraction", ClosedLoopCurrentFraction)
 

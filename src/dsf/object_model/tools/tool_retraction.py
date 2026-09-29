@@ -21,4 +21,4 @@ class ToolRetraction(ModelObject):
     z_hop = model_prop("z_hop", float, 0)
 
     def __init__(self):
-        super().__init__()        
+        super().__init__()

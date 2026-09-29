@@ -28,7 +28,7 @@ class Model(unittest.TestCase):
         self.assertEqual(c.filePosition, None)
         self.assertEqual(c.indent, 0)
         self.assertEqual(c.channel, CodeChannel.HTTP)
-        self.assertEqual(c.command, 'Code')
+        self.assertEqual(c.command, "Code")
 
     def test_code_keyword(self):
         json_str = '{"sourceConnection":33,"result":null,"type":"K","channel":"HTTP","lineNumber":null,"indent":0,"keyword":9,"keywordArgument":"test","majorNumber":null,"minorNumber":null,"flags":2048,"comment":null,"filePosition":null,"length":12,"parameters":[],"command":"Code"}'

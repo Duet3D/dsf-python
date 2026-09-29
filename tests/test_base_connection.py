@@ -18,7 +18,7 @@ class TestBaseConnection(unittest.TestCase):
         connection.input = '{"key"'
         connection.socket = Mock(spec=socket.socket)
 
-        with patch('src.dsf.connections.base_connection.select.select', return_value=([], [], [])):
+        with patch("src.dsf.connections.base_connection.select.select", return_value=([], [], [])):
             self.assertFalse(connection.has_data_available())
 
     def test_has_data_available_returns_true_when_socket_is_readable(self):
@@ -26,7 +26,7 @@ class TestBaseConnection(unittest.TestCase):
         connection.socket = Mock(spec=socket.socket)
 
         with patch(
-            'src.dsf.connections.base_connection.select.select',
+            "src.dsf.connections.base_connection.select.select",
             return_value=([connection.socket], [], []),
         ):
             self.assertTrue(connection.has_data_available())
@@ -54,5 +54,5 @@ class TestBaseConnection(unittest.TestCase):
             self.assertLess(time.monotonic() - start, 5)
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     unittest.main()

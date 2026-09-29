@@ -18,6 +18,7 @@ from DuetSoftwareFramework.
     You should have received a copy of the GNU Lesser General Public License
     along with this program.  If not, see <https://www.gnu.org/licenses/>.
 """
+
 from typing import Generic, TypeVar
 
 from ..utils import JSONObj, JSONElement
@@ -27,13 +28,16 @@ TResult = TypeVar("TResult")
 
 class BaseResponse:
     """Base class for every response to a command request."""
+
     success: bool
 
     def __init__(self, success: bool):
         self.success = success
 
+
 class Response(BaseResponse, Generic[TResult]):
     """Response of a Command"""
+
     result: TResult
 
     def __init__(self, result: TResult):
@@ -43,6 +47,7 @@ class Response(BaseResponse, Generic[TResult]):
 
 class ErrorResponse(BaseResponse):
     """Response indicating a runtime exception during the internal processing of a command"""
+
     error_type: str
     error_message: str
 

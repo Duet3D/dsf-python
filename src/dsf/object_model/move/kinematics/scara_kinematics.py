@@ -35,4 +35,3 @@ class ScaraKinematics(ZLeadscrewKinematics):
 
     def __init__(self, name: KinematicsName):
         super(ScaraKinematics, self).__init__(name)
-

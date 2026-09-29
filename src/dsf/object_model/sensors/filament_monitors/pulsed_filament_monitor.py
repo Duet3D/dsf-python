@@ -46,13 +46,13 @@ class PulsedFilamentMonitor(FilamentMonitor):
     """Information about a pulsed filament monitor"""
 
     # Calibrated properties of this filament monitor
-    calibrated = nullable_model_prop('calibrated', PulsedFilamentMonitorCalibrated)
+    calibrated = nullable_model_prop("calibrated", PulsedFilamentMonitorCalibrated)
 
     # Configured properties of this filament monitor
-    configured = model_prop('configured', PulsedFilamentMonitorConfigured, PulsedFilamentMonitorConfigured())
+    configured = model_prop("configured", PulsedFilamentMonitorConfigured, PulsedFilamentMonitorConfigured())
 
     # Position of the sensor (in mm)
-    position = model_prop('position', float)
+    position = model_prop("position", float)
 
     def __init__(self):
         super(PulsedFilamentMonitor, self).__init__(FilamentMonitorType.Pulsed)

@@ -144,10 +144,7 @@ class BaseCommandConnection(BaseConnection):
         return res.result
 
     def perform_simple_code(
-        self,
-        cde: str,
-        channel: CodeChannel = CodeChannel.DEFAULT_CHANNEL,
-        async_exec: bool = False
+        self, cde: str, channel: CodeChannel = CodeChannel.DEFAULT_CHANNEL, async_exec: bool = False
     ) -> str:
         """Execute an arbitrary G/M/T-code in text form
 
@@ -171,9 +168,7 @@ class BaseCommandConnection(BaseConnection):
 
     def remove_http_endpoint(self, endpoint_type: HttpEndpointType, namespace: str, path: str):
         """Remove an existing HTTP endpoint"""
-        res = self.perform_command(
-            commands.http_endpoints.remove_http_endpoint(endpoint_type, namespace, path)
-        )
+        res = self.perform_command(commands.http_endpoints.remove_http_endpoint(endpoint_type, namespace, path))
         return res.result
 
     def remove_user_session(self, session_id: int):
@@ -267,7 +262,5 @@ class BaseCommandConnection(BaseConnection):
         log_level: LogLevel,
     ):
         """Write an arbitrary message"""
-        res = self.perform_command(
-            commands.generic.write_message(message_type, message, output_message, log_level)
-        )
+        res = self.perform_command(commands.generic.write_message(message_type, message, output_message, log_level))
         return res.result

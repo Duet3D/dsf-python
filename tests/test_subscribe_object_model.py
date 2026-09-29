@@ -74,7 +74,7 @@ class TestSubscribeObjectModel(unittest.TestCase):
                         "mode": "Subscribe",
                         "version": PROTOCOL_VERSION,
                         "subscriptionMode": "Patch",
-                        "filters": []
+                        "filters": [],
                     }
                     check_json(expected_setup, setup_msg.decode())
 
@@ -91,14 +91,15 @@ class TestSubscribeObjectModel(unittest.TestCase):
 
                     for model_file in model_updates:
                         # Send model data
-                        with open(model_file, 'r') as f:
+                        with open(model_file, "r") as f:
                             update_data = json.load(f)
                         conn.sendall(json.dumps(update_data).encode())
 
                         # Verify acknowledge response
                         ack = conn.recv(1024)
-                        self.assertEqual(ack, self.acknowledge_response,
-                                         f"Expected acknowledge command, received: {ack.decode()}")
+                        self.assertEqual(
+                            ack, self.acknowledge_response, f"Expected acknowledge command, received: {ack.decode()}"
+                        )
 
                     # Keep the connection open until the client closes it, like DCS does
                     conn.settimeout(5)

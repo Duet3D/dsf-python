@@ -44,8 +44,10 @@ class ModelDictionary(ModelType[JSONObj], dict[str, Any]):
         current_item = self.get(key)
         if current_item is None and self._item_constructor:
             if not isinstance(value, dict):
-                raise TypeError(f"Value for key '{key}' must be of type dict to update the model object."
-                                f" Got {type(value)}: {value}")
+                raise TypeError(
+                    f"Value for key '{key}' must be of type dict to update the model object."
+                    f" Got {type(value)}: {value}"
+                )
             new_item = self._item_constructor()
             return super().__setitem__(key, new_item.update_from_json(cast(JSONObj, value)))
         elif is_model_object(current_item):

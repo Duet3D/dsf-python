@@ -21,7 +21,13 @@ class DriverId(ModelObject):
     board: int
     port: int
 
-    def __init__(self, as_str: Optional[str] = None, as_int: Optional[int] = None, board: Optional[int] = None, port: Optional[int] = None):
+    def __init__(
+        self,
+        as_str: Optional[str] = None,
+        as_int: Optional[int] = None,
+        board: Optional[int] = None,
+        port: Optional[int] = None,
+    ):
         super().__init__()
 
         self.board = board if board is not None else 0
@@ -67,7 +73,7 @@ class DriverId(ModelObject):
     def update_from_json(self, data: JSONObj | str) -> Self:
         if not isinstance(data, str):
             raise TypeError(f"DriverId must be updated from a string. Got {type(data).__name__}: {data}")
-        matches = re.search(r'(\d+)\.(\d+)', data)
+        matches = re.search(r"(\d+)\.(\d+)", data)
         if matches:
             self.board = int(matches.group(1))
             self.port = int(matches.group(2))
@@ -75,4 +81,3 @@ class DriverId(ModelObject):
             self.board = 0
             self.port = int(data)
         return self
-

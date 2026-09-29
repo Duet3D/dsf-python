@@ -1,12 +1,12 @@
 """
 codeparameter contains all classes and methods dealing with deserialized code parameters.
 """
+
 import json
 from typing import Self, TypeAlias, TypedDict, cast, Optional
 
 from ..exceptions import CodeParserException
 from ..object_model.move.driver_id import DriverId
-
 
 CodeParameterScalar: TypeAlias = str | int | float | DriverId
 CodeParameterArray: TypeAlias = list[int] | list[float] | list[DriverId]

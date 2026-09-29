@@ -8,18 +8,15 @@ from .model_dictionary import ModelDictionary
 from .model_type import ModelType
 from ..utils import JSONObj, JSONElement
 
-
 _TProperty = TypeVar("_TProperty", covariant=True)
 
 
 class TypedReadableProperty(Protocol[_TProperty]):
     @overload
-    def __get__(self, obj: None, objtype: Optional[type[object]] = None) -> "TypedReadableProperty[_TProperty]":
-        ...
+    def __get__(self, obj: None, objtype: Optional[type[object]] = None) -> "TypedReadableProperty[_TProperty]": ...
 
     @overload
-    def __get__(self, obj: object, objtype: Optional[type[object]] = None) -> _TProperty:
-        ...
+    def __get__(self, obj: object, objtype: Optional[type[object]] = None) -> _TProperty: ...
 
 
 T = TypeVar("T")
@@ -40,26 +37,35 @@ def _set_model_prop(
         current_value.update_from_json(None)
     elif isinstance(value, dict):  # Update from JSON
         if not isinstance(current_value, (ModelObject, ModelDictionary)):
-            raise TypeError(f"{instance.__class__.__name__}.{name} must be of type ModelObject or ModelDictionary to update from a dict."
-                            f" Got {type(current_value).__name__}: {current_value}")
+            raise TypeError(
+                f"{instance.__class__.__name__}.{name} must be of type ModelObject or ModelDictionary to update from a dict."
+                f" Got {type(current_value).__name__}: {current_value}"
+            )
         current_value.update_from_json(cast(JSONObj, value))
     elif isinstance(value, list):
         if not isinstance(current_value, ModelCollection):
-            raise TypeError(f"{instance.__class__.__name__}.{name} must be of type ModelCollection to update from a list."
-                            f" Got {type(current_value).__name__}: {current_value}")
+            raise TypeError(
+                f"{instance.__class__.__name__}.{name} must be of type ModelCollection to update from a list."
+                f" Got {type(current_value).__name__}: {current_value}"
+            )
         current_value.update_from_json(cast(list[JSONElement], value))
     elif runtime_type is datetime and isinstance(value, str):
         try:
             parsed_date = datetime.fromisoformat(value)
             setattr(instance, name, parsed_date)
         except ValueError:
-            raise TypeError(f"{instance.__class__.__name__}.{name} must be a valid ISO format datetime string to update from JSON. Got: {value}")
+            raise TypeError(
+                f"{instance.__class__.__name__}.{name} must be a valid ISO format datetime string to update from JSON. Got: {value}"
+            )
     elif isinstance(value, (str, int, float, bool)):
         converter = cast(Callable[[object], object], runtime_type)
         setattr(instance, name, converter(value))
     else:
-        raise TypeError(f"{instance.__class__.__name__}.{name} must be of type {runtime_type} or a compatible JSON element to update from."
-                        f" Got {type(value).__name__}: {value}")
+        raise TypeError(
+            f"{instance.__class__.__name__}.{name} must be of type {runtime_type} or a compatible JSON element to update from."
+            f" Got {type(value).__name__}: {value}"
+        )
+
 
 def model_prop(name: str, model_type: type[T], default: Optional[T] = None) -> TypedReadableProperty[T]:
     """
@@ -70,7 +76,7 @@ def model_prop(name: str, model_type: type[T], default: Optional[T] = None) -> T
     :return:
     """
 
-    STORAGE_NAME = '_' + name
+    STORAGE_NAME = "_" + name
     runtime_model_type = cast(type[object], get_origin(model_type) or model_type)
 
     # Mutable model defaults must never be shared between instances.
@@ -105,7 +111,7 @@ def model_prop(name: str, model_type: type[T], default: Optional[T] = None) -> T
         if isinstance(value, runtime_model_type):
             setattr(self, STORAGE_NAME, value)
             return
-        
+
         current_value = get_or_create_value()
         _set_model_prop(self, STORAGE_NAME, runtime_model_type, current_value, value)
 
@@ -123,7 +129,7 @@ def nullable_model_prop(
     :return: TypedReadableProperty[Optional[T]]
     """
 
-    STORAGE_NAME = '_' + name
+    STORAGE_NAME = "_" + name
     runtime_model_type = cast(type[object], get_origin(model_type) or model_type)
     model_type_name = getattr(runtime_model_type, "__name__", str(model_type))
 
@@ -131,7 +137,9 @@ def nullable_model_prop(
         try:
             model_type()  # validate that the default constructor works
         except Exception:
-            raise TypeError(f"Default constructor failed for type {model_type_name}. Provide a constructor function to create default values for the property {name}.")
+            raise TypeError(
+                f"Default constructor failed for type {model_type_name}. Provide a constructor function to create default values for the property {name}."
+            )
         _factory: Callable[[], Optional[T]] = model_type
     else:
         _factory = constructor

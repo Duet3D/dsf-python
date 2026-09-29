@@ -11,3 +11,6 @@ include = ["src", "tests", "examples"]
 extraPaths = ["src"]
 pythonVersion = "3.11"
 typeCheckingMode = "strict"
+
+[tool.black]
+line-length = 120

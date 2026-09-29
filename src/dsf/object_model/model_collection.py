@@ -3,7 +3,7 @@ from typing import Callable, Generic, Sequence, TypeVar, Union, Optional, get_or
 from ..utils import JSONElement
 from .model_type import ModelType
 
-T = TypeVar('T')
+T = TypeVar("T")
 # T = TypeVar('T', bound=Union[JSONElement, "ModelCollection[Any]", ModelDictionary, ModelObject])
 
 
@@ -12,7 +12,7 @@ class ModelCollection(ModelType[list[JSONElement]], Generic[T], list[T]):
     Class for storing model object items in a list
     Useful for updating model object items from JSON data (patches)
     """
-    
+
     def __init__(
         self,
         item_constructor: type[T] | object,
@@ -30,10 +30,12 @@ class ModelCollection(ModelType[list[JSONElement]], Generic[T], list[T]):
         self._declared_item_constructor = item_constructor
         item_origin = get_origin(item_constructor)
         item_args = get_args(item_constructor)
-        self._allow_none = allow_none or (item_origin in (Union, getattr(__import__('types'), 'UnionType', Union)) and type(None) in item_args)
+        self._allow_none = allow_none or (
+            item_origin in (Union, getattr(__import__("types"), "UnionType", Union)) and type(None) in item_args
+        )
 
         resolved_constructor: object = item_constructor
-        if item_origin in (Union, getattr(__import__('types'), 'UnionType', Union)):
+        if item_origin in (Union, getattr(__import__("types"), "UnionType", Union)):
             non_none_args = [arg for arg in item_args if arg is not type(None)]
             if len(non_none_args) == 1:
                 resolved_constructor = non_none_args[0]
@@ -50,7 +52,7 @@ class ModelCollection(ModelType[list[JSONElement]], Generic[T], list[T]):
 
         if value is not None:
             self[:] = []
-            for (index, item) in enumerate(value):
+            for index, item in enumerate(value):
                 if item is None:
                     self.append(self._coerce_item_value(item))
                     continue
@@ -60,8 +62,10 @@ class ModelCollection(ModelType[list[JSONElement]], Generic[T], list[T]):
                 else:
                     ref_item = self._create_item(index)
                     if not is_model_object(ref_item):
-                        raise TypeError(f"Item constructor for ModelCollection must inherit from type ModelType to update from a dict."
-                                        f" Got {type(ref_item).__name__}: {ref_item}")
+                        raise TypeError(
+                            f"Item constructor for ModelCollection must inherit from type ModelType to update from a dict."
+                            f" Got {type(ref_item).__name__}: {ref_item}"
+                        )
                     # if issubclass(self._item_constructor, ModelType[T]):
                     ref_item.update_from_json(item)
 
@@ -90,14 +94,16 @@ class ModelCollection(ModelType[list[JSONElement]], Generic[T], list[T]):
             try:
                 return self._item_constructor(value)
             except (TypeError, ValueError, KeyError):
-                raise ValueError(f"Invalid enum value {value} for collection of type {self._runtime_model_type.__name__}")
+                raise ValueError(
+                    f"Invalid enum value {value} for collection of type {self._runtime_model_type.__name__}"
+                )
 
         try:
             return self._item_constructor(value)
         except (TypeError, ValueError):
             return cast(T, value)
 
-    def update_from_json(self, data: list[JSONElement]) -> 'ModelCollection[T]':
+    def update_from_json(self, data: list[JSONElement]) -> "ModelCollection[T]":
         """
         Update this instance from the given data
         :param json_element: JSON data to upgrade this instance from
@@ -110,13 +116,13 @@ class ModelCollection(ModelType[list[JSONElement]], Generic[T], list[T]):
             raise Exception(f"Invalid JSON element type for model collection {type(data)}.")
 
         # Remove deleted items
-        self[:] = self[:len(data)]
+        self[:] = self[: len(data)]
 
         # Update existing items
         for i in range(0, min(len(self), len(data))):
             current_item = self[i]
             new_item_data = data[i]
-            
+
             # If the new item data is null, set the current item to null (even if it was a model object before)
             if new_item_data is None and self._allow_none:
                 self[i] = cast(T, None)
@@ -161,6 +167,5 @@ class ModelCollection(ModelType[list[JSONElement]], Generic[T], list[T]):
                     self.append(cast(T, ref_item.update_from_json(item_to_add)))
                 else:
                     self.append(self._coerce_item_value(item_to_add))
-
 
         return self

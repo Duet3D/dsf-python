@@ -48,7 +48,7 @@ class FilamentMonitor(ModelObject):
 
     def _update_from_json(self, **kwargs: JSONElement) -> "FilamentMonitor":
         """Override ObjectModel._update_from_json to return the FilamentMonitorType type matching the given type"""
-        type_ = kwargs.get('type_')
+        type_ = kwargs.get("type_")
         if isinstance(type_, str) and self.type != FilamentMonitorType(type_):
             return self.get_filament_monitor(type_).update_from_json(kwargs)
 

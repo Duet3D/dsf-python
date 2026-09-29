@@ -2,5 +2,4 @@ from .plugins import Plugin
 from .plugin_manifest import PluginManifest
 from .sbc_permissions import SbcPermissions
 
-
-__all__ = ['Plugin', 'PluginManifest', 'SbcPermissions']
+__all__ = ["Plugin", "PluginManifest", "SbcPermissions"]

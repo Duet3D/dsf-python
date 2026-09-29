@@ -6,6 +6,7 @@ from .current_move import CurrentMove
 from .move_rotation import MoveRotation
 from ..state.restore_point import RestorePoint
 
+
 class MotionSystem(ModelObject):
     """Information about a motion system"""
 

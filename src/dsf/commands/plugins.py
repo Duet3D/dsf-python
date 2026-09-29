@@ -34,9 +34,7 @@ def set_plugin_data(plugin: str, key: str, value: object):
         raise ValueError("plugin must not be empty")
     if not key:
         raise ValueError("key must not be empty")
-    return BaseCommand(
-        "SetPluginData", **{"plugin": plugin, "key": key, "value": value}
-    )
+    return BaseCommand("SetPluginData", **{"plugin": plugin, "key": key, "value": value})
 
 
 def start_plugin(plugin: str, save_state: bool = True):

@@ -5,6 +5,7 @@ from ..utils import JSONElement
 T = TypeVar("T", bound=JSONElement, contravariant=True)
 TModelValue: TypeAlias = "ModelType[T]"
 
+
 @runtime_checkable
 class ModelType(Protocol[T]):
     @classmethod

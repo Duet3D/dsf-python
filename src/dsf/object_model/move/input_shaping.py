@@ -44,7 +44,7 @@ class InputShapingType(str, Enum):
 
 
 class InputShaping(ModelObject):
-    """Parameters describing input shaping """
+    """Parameters describing input shaping"""
 
     # Amplitudes of the input shaper
     amplitudes = model_prop("amplitudes", ModelCollection[float], ModelCollection(float))

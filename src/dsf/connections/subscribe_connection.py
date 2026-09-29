@@ -9,15 +9,13 @@ from .. import commands, SOCKET_FILE
 from ..object_model import ObjectModel
 from ..utils import JSONObj
 
-
 _MISSING = object()
 
 
 class KeySubscriptionCallback(Protocol):
     """Callback invoked for a subscribed object model key"""
 
-    def __call__(self, *, key: str, data: Any, indices: tuple[int, ...] | None) -> None:
-        ...
+    def __call__(self, *, key: str, data: Any, indices: tuple[int, ...] | None) -> None: ...
 
 
 @dataclass(frozen=True)
@@ -74,13 +72,16 @@ class SubscribeConnection(BaseConnection):
         Later calls apply every queued patch without blocking, update the
         cached object model, and run any registered key callbacks synchronously.
         """
-        if (self.subscription_mode == client_init_messages.SubscriptionMode.FULL or not self._initial_object_model_received):
+        if (
+            self.subscription_mode == client_init_messages.SubscriptionMode.FULL
+            or not self._initial_object_model_received
+        ):
             self._object_model = self.receive(ObjectModel)
             self._initial_object_model_received = True
             self.send(commands.model_subscription.acknowledge())
             return self._object_model
         else:
-            while (self.has_data_available()):
+            while self.has_data_available():
                 patch_json = self.get_object_model_patch()
                 patch_data = json.loads(patch_json)
                 self._object_model.update_from_json(patch_data)
@@ -178,10 +179,7 @@ class SubscribeConnection(BaseConnection):
         key: str,
     ) -> list[tuple[tuple[int, ...] | None, Any]]:
         matches = cls._walk_key_path(patch_data, key.split("."), ())
-        return [
-            (indexes if indexes else None, value)
-            for indexes, value in matches
-        ]
+        return [(indexes if indexes else None, value) for indexes, value in matches]
 
     @classmethod
     def _walk_key_path(

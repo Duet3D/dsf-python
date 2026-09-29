@@ -29,7 +29,7 @@ class ServerInitMessage:
     """
 
     @classmethod
-    def from_json(cls, data: JSONObj) -> 'ServerInitMessage':
+    def from_json(cls, data: JSONObj) -> "ServerInitMessage":
         """Deserialize a dictionary coming from JSON into an instance of this class"""
         version = data.get("version")
         id = data.get("id")

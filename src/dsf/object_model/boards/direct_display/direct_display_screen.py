@@ -8,20 +8,20 @@ class DirectDisplayScreen(ModelObject):
     """Class providing information about a connected display screen"""
 
     # Number of colour bits
-    colour_bits = model_prop("colour_bits",int, 1)
-    
+    colour_bits = model_prop("colour_bits", int, 1)
+
     # Display type
     controller = model_prop("controller", DirectDisplayController, DirectDisplayController.ST7920)
-    
+
     # Height of the display screen in pixels
-    height = model_prop("height",int, 64)
-    
+    height = model_prop("height", int, 64)
+
     # SPI frequency of the display (in Hz)
-    spi_freq = model_prop("spi_freq",int, 0)
-    
+    spi_freq = model_prop("spi_freq", int, 0)
+
     # Width of the display screen in pixels
-    width = model_prop("width",int, 128)
-    
+    width = model_prop("width", int, 128)
+
     def __init__(self, controller: DirectDisplayController = DirectDisplayController.ST7920):
         super().__init__()
 
@@ -43,8 +43,8 @@ class DirectDisplayScreen(ModelObject):
     def _update_from_json(self, **kwargs: JSONElement):
         """Override ObjectModel._update_from_json
         to return the DirectDisplayScreen type matching the given controller"""
-        if 'controller' in kwargs:
-            controller = DirectDisplayController(kwargs.get('controller'))
+        if "controller" in kwargs:
+            controller = DirectDisplayController(kwargs.get("controller"))
             if controller != self.controller:
                 required_type = self.get_direct_display_screen_type(controller)
                 new_direct_display_screen = required_type.update_from_json(kwargs)

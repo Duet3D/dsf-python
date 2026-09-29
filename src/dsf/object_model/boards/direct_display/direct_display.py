@@ -9,10 +9,10 @@ class DirectDisplay(ModelObject):
     """Class providing information about a connected direct-connect display"""
 
     # Encoder of this screen or null if none
-    encoder = nullable_model_prop('encoder', DirectDisplayEncoder)
-    
+    encoder = nullable_model_prop("encoder", DirectDisplayEncoder)
+
     # Screen information
-    screen = model_prop('screen', DirectDisplayScreen, DirectDisplayScreen())
+    screen = model_prop("screen", DirectDisplayScreen, DirectDisplayScreen())
 
     def __init__(self):
         super(DirectDisplay, self).__init__()

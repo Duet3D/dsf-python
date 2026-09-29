@@ -12,4 +12,6 @@ def check_json(expected_dict: Mapping[str, object], json_str: str) -> None:
         if key not in json_obj:
             raise AssertionError(f"Key '{key}' not found in JSON {json_str}")
         if json_obj[key] != expected_value:
-            raise AssertionError(f"Value for key '{key}' does not match. Expected: {expected_value}, Found: {json_obj[key]}")
+            raise AssertionError(
+                f"Value for key '{key}' does not match. Expected: {expected_value}, Found: {json_obj[key]}"
+            )

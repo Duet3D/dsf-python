@@ -33,5 +33,5 @@ class TestSocketFile(unittest.TestCase):
         self.assertEqual(_read_socket_file(self.config_path), "/run/dsf/dcs.sock")
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     unittest.main()

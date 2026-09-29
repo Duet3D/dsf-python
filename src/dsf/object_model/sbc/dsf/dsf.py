@@ -9,17 +9,17 @@ from ...utils import model_prop
 class DSF(ModelObject):
     """Information about Duet Software Framework"""
 
-    build_date_time = model_prop('build_date_time', str, "")
+    build_date_time = model_prop("build_date_time", str, "")
 
     # Communication method used to talk to the firmware
-    communication_method = model_prop('communication_method', CommunicationMethod, CommunicationMethod.SPI)
+    communication_method = model_prop("communication_method", CommunicationMethod, CommunicationMethod.SPI)
 
-    http_endpoints = model_prop('http_endpoints', ModelCollection[HttpEndpoint], ModelCollection(HttpEndpoint))
-    is64bit = model_prop('is64bit', bool, False)
-    plugin_support = model_prop('plugin_support', bool, False)
-    root_plugin_support = model_prop('root_plugin_support', bool, False)
-    user_sessions = model_prop('user_sessions', ModelCollection[UserSession], ModelCollection(UserSession))
-    version = model_prop('version', str, "")
+    http_endpoints = model_prop("http_endpoints", ModelCollection[HttpEndpoint], ModelCollection(HttpEndpoint))
+    is64bit = model_prop("is64bit", bool, False)
+    plugin_support = model_prop("plugin_support", bool, False)
+    root_plugin_support = model_prop("root_plugin_support", bool, False)
+    user_sessions = model_prop("user_sessions", ModelCollection[UserSession], ModelCollection(UserSession))
+    version = model_prop("version", str, "")
 
     def __init__(self):
         super().__init__()

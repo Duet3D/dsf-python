@@ -1,5 +1,6 @@
 from typing import Any
 
+
 class BaseCommand:
     """Base class of a command."""
 

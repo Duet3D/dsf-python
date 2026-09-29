@@ -8,7 +8,7 @@ def _read_socket_file(config_path: str = "/opt/dsf/conf/config.json") -> str:
     """Read the socket file path from the DSF config, falling back to the default path"""
     if os.path.exists(config_path):
         try:
-            with open(config_path, 'r') as f:
+            with open(config_path, "r") as f:
                 config = json.load(f)
                 socket_dir: str = config.get("SocketDirectory", "/run/dsf")
                 socket_file: str = config.get("SocketFile", "dcs.sock")
@@ -29,5 +29,4 @@ PROTOCOL_VERSION = 13
 
 from . import commands, connections, http, object_model
 
-
-__all__ = ['SOCKET_FILE', 'DEFAULT_BACKLOG', 'PROTOCOL_VERSION', 'commands', 'connections', 'http', 'object_model']
+__all__ = ["SOCKET_FILE", "DEFAULT_BACKLOG", "PROTOCOL_VERSION", "commands", "connections", "http", "object_model"]

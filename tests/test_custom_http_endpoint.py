@@ -14,7 +14,7 @@ from src.dsf.object_model import HttpEndpointType
 
 async def respond_something(http_endpoint_connection: HttpEndpointConnection):
     r = await http_endpoint_connection.read_request()
-    if (len(r.body) > 0):
+    if len(r.body) > 0:
         data = json.loads(r.body)
         print(data)
     await http_endpoint_connection.send_response(200, "so happy you asked for it!", HttpResponseType.PlainText)
@@ -60,13 +60,14 @@ class TestCustomHttpEndpoint(unittest.TestCase):
 
         http_endpoint_msg = conn.recv(1024)
         self.assertEqual(
-            json.loads(http_endpoint_msg.decode()), {
+            json.loads(http_endpoint_msg.decode()),
+            {
                 "command": "AddHttpEndpoint",
                 "endpointType": "GET",
                 "namespace": "custom",
                 "path": "getIt",
-                "isUploadRequest": False
-            }
+                "isUploadRequest": False,
+            },
         )
 
         conn.sendall('{"result":"/var/run/dsf/custom/getIt-GET.sock","success":true}'.encode())

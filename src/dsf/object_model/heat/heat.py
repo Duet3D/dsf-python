@@ -21,7 +21,9 @@ class Heat(ModelObject):
     chamber_heaters = model_prop("chamber_heaters", ModelCollection[int], ModelCollection(int))
 
     # List of configured chamber heaters (indices), grouped by chamber (first dimension)
-    chamber_heater_mapping = model_prop("chamber_heater_mapping", ModelCollection[list[int]], ModelCollection(list[int]))
+    chamber_heater_mapping = model_prop(
+        "chamber_heater_mapping", ModelCollection[list[int]], ModelCollection(list[int])
+    )
 
     # Minimum required temperature for extrusion moves (in C)
     cold_extrude_temperature = model_prop("cold_extrude_temperature", float, 160)

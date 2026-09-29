@@ -15,8 +15,7 @@ from ..utils import JSONElement
 
 class _JSONDeserializable(Protocol):
     @classmethod
-    def from_json(cls, data: Any) -> Self:
-        ...
+    def from_json(cls, data: Any) -> Self: ...
 
 
 TDeserializable = TypeVar("TDeserializable", bound=_JSONDeserializable)
@@ -98,9 +97,7 @@ class BaseConnection:
         if response.error_type == "TaskCanceledException":
             raise TaskCanceledException(response.error_message)
 
-        raise InternalServerException(
-            command, response.error_type, response.error_message
-        )
+        raise InternalServerException(command, response.error_type, response.error_message)
 
     def send(self, msg: object):
         """Serialize an arbitrary object into JSON and send it to the server plus NL"""

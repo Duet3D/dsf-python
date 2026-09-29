@@ -5,5 +5,17 @@ from .driver import Driver
 from .driver_closed_loop import DriverClosedLoop, ClosedLoopCurrentFraction, ClosedLoopPositionError
 from .min_max_current import MinMaxCurrent
 
-__all__ = ['Board', 'Boards', 'BoardState', 'ExpansionBoard', 'MainBoard', 'BoardClosedLoop', 'DirectDisplay', 'Driver',
-           'DriverClosedLoop', 'ClosedLoopCurrentFraction', 'ClosedLoopPositionError', 'MinMaxCurrent']
+__all__ = [
+    "Board",
+    "Boards",
+    "BoardState",
+    "ExpansionBoard",
+    "MainBoard",
+    "BoardClosedLoop",
+    "DirectDisplay",
+    "Driver",
+    "DriverClosedLoop",
+    "ClosedLoopCurrentFraction",
+    "ClosedLoopPositionError",
+    "MinMaxCurrent",
+]

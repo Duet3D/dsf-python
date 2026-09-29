@@ -13,6 +13,6 @@ class ExtruderPressureAdvance(ModelObject):
 
     # K1 coeffient
     k1 = model_prop("k1", float, 0.0)
-    
+
     def __init__(self):
         super().__init__()

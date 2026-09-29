@@ -49,13 +49,13 @@ class RotatingMagnetFilamentMonitor(Duet3DFilamentMonitor):
     """Information about a rotating magnet filament monitor"""
 
     # AGC reading of this filament monitor (None if unknown)
-    agc = nullable_model_prop('agc', int)
+    agc = nullable_model_prop("agc", int)
 
     # Calibrated properties of this filament monitor
-    calibrated = nullable_model_prop('calibrated', RotatingMagnetFilamentMonitorCalibrated)
+    calibrated = nullable_model_prop("calibrated", RotatingMagnetFilamentMonitorCalibrated)
 
     # Configured properties of this filament monitor
-    configured = model_prop('configured', RotatingMagnetFilamentMonitorConfigured)
+    configured = model_prop("configured", RotatingMagnetFilamentMonitorConfigured)
 
     def __init__(self):
         super(RotatingMagnetFilamentMonitor, self).__init__(FilamentMonitorType.RotatingMagnet)

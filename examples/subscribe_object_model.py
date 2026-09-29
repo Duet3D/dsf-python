@@ -38,7 +38,9 @@ def subscribe() -> None:
         print("Machine status is", object_model.state.status.value)
 
         # Register callbacks for the keys we are interested in, ^ matches any list index
-        unsubscribe_status: Callable[[], None] = subscribe_connection.subscribe_to_keys(["state.status"], on_status_changed)
+        unsubscribe_status: Callable[[], None] = subscribe_connection.subscribe_to_keys(
+            ["state.status"], on_status_changed
+        )
         subscribe_connection.subscribe_to_keys(["heat.heaters.^.current"], on_heater_temperature_changed)
 
         for _ in range(20):

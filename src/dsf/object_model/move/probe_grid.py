@@ -7,7 +7,7 @@ class ProbeGrid(ModelObject):
     """Information about the configured probe grid (see M557)"""
 
     # Axis letters of this heightmap
-    axes = model_prop("axes", ModelCollection[str], ModelCollection(str, ['X', 'Y']))
+    axes = model_prop("axes", ModelCollection[str], ModelCollection(str, ["X", "Y"]))
 
     # End coordinates of the heightmap
     maxs = model_prop("maxs", ModelCollection[float], ModelCollection(float, [-1.0, -1.0]))
