@@ -19,9 +19,9 @@ class TestSubscribeObjectModel(unittest.TestCase):
     """Test suite for the object model subscription example."""
 
     @staticmethod
-    def _wait_for_data_available(subscribe_connection: SubscribeConnection, timeout: float = 1.0) -> bool:
-        deadline = time.time() + timeout
-        while time.time() < deadline:
+    def _wait_for_data_available(subscribe_connection: SubscribeConnection, timeout: float = 5.0) -> bool:
+        deadline = time.monotonic() + timeout
+        while time.monotonic() < deadline:
             if subscribe_connection.has_data_available():
                 return True
             time.sleep(0.01)
@@ -99,6 +99,10 @@ class TestSubscribeObjectModel(unittest.TestCase):
                         ack = conn.recv(1024)
                         self.assertEqual(ack, self.acknowledge_response,
                                          f"Expected acknowledge command, received: {ack.decode()}")
+
+                    # Keep the connection open until the client closes it, like DCS does
+                    conn.settimeout(5)
+                    self.assertEqual(conn.recv(1024), b"", "Expected the client to close the connection")
 
             self.dcs_passed.set()  # Test completed successfully
 

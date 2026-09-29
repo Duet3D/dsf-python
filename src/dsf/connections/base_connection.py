@@ -155,16 +155,15 @@ class BaseConnection:
                 # Refill the buffer and check again
                 BUFF_SIZE = 4096  # 4 KiB
                 data = b""
-                part = b""
                 while True:
                     try:
                         part = self.socket.recv(BUFF_SIZE)
-                        data += part
                     except socket.timeout:
-                        pass
-                    except Exception as e:
-                        raise e
-                    # either 0 or end of data
+                        break
+                    if not part:
+                        raise ConnectionError("Connection closed by the server")
+                    data += part
+                    # end of the currently available data
                     if len(part) < BUFF_SIZE:
                         break
 

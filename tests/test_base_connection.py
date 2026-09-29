@@ -1,4 +1,5 @@
 import socket
+import time
 import unittest
 from unittest.mock import Mock, patch
 
@@ -29,6 +30,28 @@ class TestBaseConnection(unittest.TestCase):
             return_value=([connection.socket], [], []),
         ):
             self.assertTrue(connection.has_data_available())
+
+    def test_receive_json_returns_first_complete_object_and_buffers_the_rest(self):
+        connection = BaseConnection()
+        client, server = socket.socketpair()
+        with client, server:
+            connection.socket = client
+            server.sendall(b'{"key":1}{"key"')
+
+            self.assertEqual(connection.receive_json(), '{"key":1}')
+            self.assertEqual(connection.input, '{"key"')
+
+    def test_receive_json_raises_when_server_closes_connection(self):
+        connection = BaseConnection(timeout=30)
+        client, server = socket.socketpair()
+        with client:
+            connection.socket = client
+            server.close()
+
+            start = time.monotonic()
+            self.assertRaises(ConnectionError, connection.receive_json)
+            # Must fail immediately instead of waiting for the timeout
+            self.assertLess(time.monotonic() - start, 5)
 
 
 if __name__ == '__main__':
