@@ -3,6 +3,7 @@ import os
 from typing import Optional
 
 from .base_connection import BaseConnection
+from .exceptions import InternalServerException
 from .. import commands, DEFAULT_BACKLOG
 from ..commands import code
 from ..commands.code_channel import CodeChannel
@@ -72,12 +73,15 @@ class BaseCommandConnection(BaseConnection):
         """Wait for all pending codes of the given channel to finish"""
         return self.perform_command(commands.generic.flush(channel))
 
-    def get_file_info(self, file_name: str, read_thumbnail_content: bool = False):
+    def get_file_info(self, file_name: str, read_thumbnail_content: bool = False) -> GCodeFileInfo:
         """Parse a G-code file and returns file information about it"""
-        res = self.perform_command(commands.files.get_file_info(file_name, read_thumbnail_content), GCodeFileInfo)
+        command = commands.files.get_file_info(file_name, read_thumbnail_content)
+        res = self.perform_command(command, GCodeFileInfo)
+        if res.result is None:
+            raise InternalServerException(command, "InvalidResponseType", "Expected file info, got null")
         return res.result
 
-    def get_object_model(self, filters: list[str] = []):
+    def get_object_model(self, filters: list[str] = []) -> ObjectModel:
         """
         Retrieve the full object model of the machine.
         :param filters: Optional object model key paths to retrieve.
@@ -85,7 +89,10 @@ class BaseCommandConnection(BaseConnection):
                         property is left at its default value. There is no way to tell those apart from values that are
                         genuinely unset.
         """
-        res = self.perform_command(commands.object_model.get_object_model(filters), ObjectModel)
+        command = commands.object_model.get_object_model(filters)
+        res = self.perform_command(command, ObjectModel)
+        if res.result is None:
+            raise InternalServerException(command, "InvalidResponseType", "Expected object model, got null")
         return res.result
 
     def get_serialized_object_model(self):
@@ -129,8 +136,9 @@ class BaseCommandConnection(BaseConnection):
         res = self.perform_command(commands.object_model.patch_object_model(key, patch))
         return res.result
 
-    def perform_code(self, cde: code.Code):
-        """Execute an arbitrary pre-parsed code"""
+    def perform_code(self, cde: code.Code) -> Optional[Message]:
+        """Execute an arbitrary pre-parsed code
+        :returns: The code result or None if there is none"""
         res = self.perform_command(cde, Message)
         return res.result
 
@@ -139,7 +147,7 @@ class BaseCommandConnection(BaseConnection):
         cde: str,
         channel: CodeChannel = CodeChannel.DEFAULT_CHANNEL,
         async_exec: bool = False
-    ):
+    ) -> str:
         """Execute an arbitrary G/M/T-code in text form
         :param cde: Code to parse and execute
         :param channel: Destination channel
@@ -148,6 +156,8 @@ class BaseCommandConnection(BaseConnection):
         :returns: The result as a string if async_exec is not set (default)
         """
         res = self.perform_command(commands.generic.simple_code(cde, channel, async_exec))
+        if not isinstance(res.result, str):
+            raise TypeError(f"Unexpected result type for SimpleCode command: {type(res.result)}")
         return res.result
 
     def reload_plugin(self, plugin: str):

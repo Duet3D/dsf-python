@@ -181,7 +181,7 @@ Examples
 
 The project includes examples for the major workflows:
 
-- ``examples/send_simple_code.py``
+- ``examples/send_commands.py``
 - ``examples/subscribe_object_model.py``
 - ``examples/custom_m_codes.py``
 - ``examples/custom_http_endpoint.py``

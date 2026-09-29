@@ -18,8 +18,11 @@ from DuetSoftwareFramework.
     You should have received a copy of the GNU Lesser General Public License
     along with this program.  If not, see <https://www.gnu.org/licenses/>.
 """
+from typing import Generic, TypeVar
+
 from ..utils import JSONObj, JSONElement
-from ..object_model.model_object import ModelObject
+
+TResult = TypeVar("TResult")
 
 
 class BaseResponse:
@@ -29,11 +32,11 @@ class BaseResponse:
     def __init__(self, success: bool):
         self.success = success
 
-class Response(BaseResponse):
+class Response(BaseResponse, Generic[TResult]):
     """Response of a Command"""
-    result: JSONElement | ModelObject
+    result: TResult
 
-    def __init__(self, result: JSONElement = None):
+    def __init__(self, result: TResult):
         super().__init__(True)
         self.result = result
 
@@ -49,12 +52,10 @@ class ErrorResponse(BaseResponse):
         self.error_message = error_message
 
 
-def decode_response(obj: JSONObj) -> Response | ErrorResponse:
+def decode_response(obj: JSONObj) -> Response[JSONElement] | ErrorResponse:
     """Deserialization helper to convert a response to the appropriate type"""
     if obj["success"]:
-        if "result" in obj:
-            return Response(obj["result"])
-        return Response()
+        return Response(obj.get("result"))
 
     error_type = obj.get("errorType")
     if not isinstance(error_type, str):

@@ -2,7 +2,7 @@ import json
 import select
 import socket
 import time
-from typing import Optional
+from typing import Optional, overload
 
 from .exceptions import IncompatibleVersionException, InternalServerException, TaskCanceledException
 from .init_messages import client_init_messages, server_init_message
@@ -10,6 +10,7 @@ from ..commands import responses
 from ..commands.responses import Response, ErrorResponse
 from ..commands.base_command import BaseCommand
 from ..object_model.model_object import TModelObject
+from ..utils import JSONElement
 
 class BaseConnection:
     """
@@ -53,19 +54,35 @@ class BaseConnection:
             self.socket.close()
             self.socket = None
 
-    def perform_command(self, command: BaseCommand, cls: Optional[type[TModelObject]] = None) -> Response:
-        """Perform an arbitrary command"""
+    @overload
+    def perform_command(self, command: BaseCommand, cls: None = None) -> Response[JSONElement]: ...
+
+    @overload
+    def perform_command(self, command: BaseCommand, cls: type[TModelObject]) -> Response[Optional[TModelObject]]: ...
+
+    def perform_command(
+        self, command: BaseCommand, cls: Optional[type[TModelObject]] = None
+    ) -> Response[JSONElement] | Response[Optional[TModelObject]]:
+        """
+        Perform an arbitrary command
+        :param command: Command to perform
+        :param cls: Optional model class to deserialize the result into.
+                    The result is None if the server did not return one
+        """
         self.send(command)
 
         response = self.receive_response()
         if isinstance(response, Response):
-            if cls is not None and response.result is not None:
+            if cls is None:
+                return response
+            result: Optional[TModelObject] = None
+            if response.result is not None:
                 if not isinstance(response.result, dict):
                     raise InternalServerException(
                         command, "InvalidResponseType", f"Expected result type JSONObj, got {type(response.result)}"
                     )
-                response.result = cls.from_json(response.result)
-            return response
+                result = cls.from_json(response.result)
+            return Response[Optional[TModelObject]](result)
 
         if response.error_type == "TaskCanceledException":
             raise TaskCanceledException(response.error_message)

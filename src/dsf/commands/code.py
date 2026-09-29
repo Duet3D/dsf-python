@@ -1,4 +1,4 @@
-from typing import Callable, Optional, cast
+from typing import Callable, Optional, cast, overload
 
 from .base_command import BaseCommand
 from .code_channel import CodeChannel
@@ -88,6 +88,12 @@ class Code(BaseCommand):
     def is_from_file_channel(self) -> bool:
         """Check if this code is from a file channel"""
         return self.channel is CodeChannel.File or self.channel is CodeChannel.File2
+
+    @overload
+    def parameter(self, letter: str, default: None = None) -> Optional[CodeParameter]: ...  # type: ignore[misc]
+
+    @overload
+    def parameter(self, letter: str, default: object) -> CodeParameter: ...
 
     def parameter(self, letter: str, default: Optional[object] = None) -> Optional[CodeParameter]:
         """Retrieve the parameter whose letter equals c or generate a default parameter"""

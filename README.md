@@ -236,10 +236,10 @@ See `examples/custom_http_endpoint.py` for a practical example.
 
 The `examples/` directory demonstrates the main workflows supported by the library.
 
-- `send_simple_code.py`: send G-code over a command connection
-- `subscribe_object_model.py`: subscribe to object model updates
-- `custom_m_codes.py`: intercept and implement custom M-codes
-- `custom_http_endpoint.py`: serve a custom HTTP endpoint through DSF
+- `send_commands.py`: run G-codes, evaluate expressions, read the object model, write messages and handle errors with a `CommandConnection`
+- `subscribe_object_model.py`: keep a filtered object model up-to-date and react to changes with key callbacks
+- `custom_m_codes.py`: implement custom M-codes with an `InterceptConnection`, read code parameters and run codes from the interceptor
+- `custom_http_endpoint.py`: serve custom GET and POST endpoints with plain text and JSON responses
 
 ## API Reference
 
