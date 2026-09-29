@@ -424,6 +424,75 @@ class Model(unittest.TestCase):
         model.update_from_json('{"move": {"shaping": {"type": "eI3"}}}')
         self.assertEqual(model.move.shaping.type, InputShapingType.ei3)
 
+    def test_global(self):
+        # "global" is a Python keyword so the JSON key is exposed as ObjectModel.globals
+        with open('tests/object_model/model_full.json') as fp:
+            json_data = json.load(fp)
+        model = ObjectModel.from_json(json_data)
+        self.assertEqual(dict(model.globals), json_data['global'])
+        self.assertEqual(model.globals['daemonTick'], 250)
+        self.assertEqual(model.globals['nozzleDiameters'], [0.6, 0.4])
+        self.assertIsNone(model.globals['ret'])
+
+        # Serialization converts "globals" back to "global"
+        serialized = json.loads(model.to_json())
+        self.assertIn('global', serialized)
+        self.assertNotIn('globals', serialized)
+        self.assertEqual(serialized['global'], json_data['global'])
+
+        # Patch updates, adds and nulls variables (null does not delete global variables)
+        model.update_from_json('{"global":{"daemonTick":500,"newVar":"hello","debug":null}}')
+        self.assertEqual(model.globals['daemonTick'], 500)
+        self.assertEqual(model.globals['newVar'], "hello")
+        self.assertIn('debug', model.globals)
+        self.assertIsNone(model.globals['debug'])
+        self.assertEqual(model.globals['lastTool'], -1)
+
+        # Global variable names matching reserved keys are kept untouched
+        model.update_from_json('{"global":{"type":1,"global":2}}')
+        self.assertEqual(model.globals['type'], 1)
+        self.assertEqual(model.globals['global'], 2)
+        self.assertNotIn('type_', model.globals)
+
+        # Setting the whole object to null clears it
+        model.update_from_json('{"global":null}')
+        self.assertEqual(len(model.globals), 0)
+
+    def test_reserved_keys(self):
+        # JSON keys shadowing Python builtins get a trailing underscore while being unpacked
+        # (see preserve_builtin) and must still map to the correct properties
+        from src.dsf.object_model.job import ThumbnailInfoFormat
+        from src.dsf.object_model.move import InputShapingType
+
+        model = ObjectModel()
+        model.update_from_json(
+            '{"job":{"file":{"thumbnails":[{"format":"qoi","height":48,"width":48}]}},'
+            '"move":{"axes":[{"letter":"X","max":336,"min":-20.2}],"shaping":{"type":"ei2"}},'
+            '"plugins":{"TestPlugin":{"id":"TestPlugin","license":"MIT"}},'
+            '"state":{"messageBox":{"max":10.5,"min":-1.5,"message":"test"}}}')
+
+        self.assertEqual(model.job.file.thumbnails[0].format, ThumbnailInfoFormat.QOI)
+        self.assertEqual(model.move.axes[0].max, 336)
+        self.assertEqual(model.move.axes[0].min, -20.2)
+        self.assertEqual(model.move.shaping.type, InputShapingType.ei2)
+        self.assertEqual(model.plugins['TestPlugin'].id, "TestPlugin")
+        self.assertEqual(model.plugins['TestPlugin'].license, "MIT")
+        self.assertEqual(model.state.message_box.max, 10.5)
+        self.assertEqual(model.state.message_box.min, -1.5)
+
+        # Serialization uses the original JSON key names
+        serialized = json.loads(model.to_json())
+        self.assertEqual(serialized['job']['file']['thumbnails'][0]['format'], "qoi")
+        self.assertEqual(serialized['move']['axes'][0]['max'], 336)
+        self.assertEqual(serialized['move']['axes'][0]['min'], -20.2)
+        self.assertEqual(serialized['move']['shaping']['type'], "ei2")
+        self.assertEqual(serialized['plugins']['TestPlugin']['id'], "TestPlugin")
+        self.assertEqual(serialized['plugins']['TestPlugin']['license'], "MIT")
+        self.assertEqual(serialized['state']['messageBox']['max'], 10.5)
+        self.assertEqual(serialized['state']['messageBox']['min'], -1.5)
+        for key in ('format_', 'id_', 'license_', 'max_', 'min_', 'type_'):
+            self.assertNotIn(f'"{key}"', model.to_json())
+
     def test_http_endpoints(self):
         from src.dsf.object_model import HttpEndpointType
         model = ObjectModel()
