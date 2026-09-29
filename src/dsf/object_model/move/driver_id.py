@@ -1,9 +1,10 @@
 import re
 
-from typing import Optional
+from typing import Optional, Self
 
 from ..model_object import ModelObject
 from ...exceptions import CodeParserException
+from ...utils import JSONObj
 
 
 def is_driverId(value: object) -> bool:
@@ -53,26 +54,24 @@ class DriverId(ModelObject):
 
     def __str__(self, **kwargs: object):
         """Convert this instance to a string"""
-        return f"{self.port}" if self.board is None else f"{self.board}.{self.port}"
+        return f"{self.board}.{self.port}"
 
-    def __eq__(self, o):
+    def __eq__(self, o: object) -> bool:
         """Checks whether this instance is equal to another"""
-        if self is None:
-            return o is None
         return isinstance(o, DriverId) and self.board == o.board and self.port == o.port
 
-    def __ne__(self, o):
+    def __ne__(self, o: object) -> bool:
         return not self == o
 
-    def update_from_json(self, data):
-        if isinstance(data, str):
-            matches = re.search(r'(\d+)\.(\d+)', data)
-            if matches:
-                self.board = int(matches.group(1))
-                self.port = int(matches.group(2))
-            else:
-                self.board = None
-                self.port = int(data)
-            return self
-        return None
+    def update_from_json(self, data: JSONObj | str) -> Self:
+        if not isinstance(data, str):
+            raise TypeError(f"DriverId must be updated from a string. Got {type(data).__name__}: {data}")
+        matches = re.search(r'(\d+)\.(\d+)', data)
+        if matches:
+            self.board = int(matches.group(1))
+            self.port = int(matches.group(2))
+        else:
+            self.board = 0
+            self.port = int(data)
+        return self
 

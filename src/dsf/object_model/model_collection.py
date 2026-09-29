@@ -1,5 +1,5 @@
 from enum import Enum
-from typing import Callable, Generic, TypeVar, List, Union, Optional, get_origin, get_args, cast
+from typing import Callable, Generic, Sequence, TypeVar, Union, Optional, get_origin, get_args, cast
 from ..utils import JSONElement
 from .model_type import ModelType
 
@@ -13,7 +13,7 @@ class ModelCollection(ModelType[list[JSONElement]], Generic[T], list[T]):
     Useful for updating model object items from JSON data (patches)
     """
     
-    def __init__(self, item_constructor: type[T] | object, value: Optional[List[T]] = None, allow_none: bool = False) -> None:
+    def __init__(self, item_constructor: type[T] | object, value: Optional[Sequence[T | JSONElement]] = None, allow_none: bool = False) -> None:
         """
         :param item_constructor: Item constructor type that items must derive from
         :param value: Value used to initialize the list from

@@ -3,6 +3,7 @@ from typing import Optional
 from .model_collection import ModelCollection
 from .model_dictionary import ModelDictionary
 from .model_object import ModelObject
+from ..utils import JSONElement
 from .boards import Boards
 from .directories import Directories
 from .fans import Fan
@@ -53,10 +54,13 @@ class ObjectModel(ModelObject):
     def __init__(self):
         super(ObjectModel, self).__init__()
 
-    def _update_from_json(self, **kwargs) -> 'ObjectModel':
+    def _update_from_json(self, **kwargs: JSONElement) -> 'ObjectModel':
         super(ObjectModel, self)._update_from_json(**kwargs)
 
         # "global" is a reserved keyword in Python, so it is converted to "globals"
         if 'global_' in kwargs:
-            self.globals.update_from_json(kwargs.get('global_'))
+            global_ = kwargs['global_']
+            if global_ is not None and not isinstance(global_, dict):
+                raise TypeError(f"global must be a dict or None. Got {type(global_).__name__}: {global_}")
+            self.globals.update_from_json(global_)
         return self

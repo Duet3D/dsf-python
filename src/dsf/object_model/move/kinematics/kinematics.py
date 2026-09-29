@@ -2,6 +2,7 @@ from .kinematics_name import KinematicsName
 from ..move_segmentation import MoveSegmentation
 from ...model_object import ModelObject
 from ...utils import model_prop, nullable_model_prop
+from ....utils import JSONElement
 
 
 class Kinematics(ModelObject):
@@ -16,7 +17,7 @@ class Kinematics(ModelObject):
         self._segmentation = None
 
     @staticmethod
-    def get_kinematics_type(name: KinematicsName | str):
+    def get_kinematics_type(name: KinematicsName | str) -> "Kinematics":
         from .core_kinematics import CoreKinematics
         from .delta_kinematics import DeltaKinematics
         from .hangprinter_kinematics import HangprinterKinematics
@@ -51,17 +52,17 @@ class Kinematics(ModelObject):
             return ScaraKinematics(name)
         elif name == KinematicsName.polar:
             return PolarKinematics()
-        return name
+        return Kinematics(name)
 
-    def _update_from_json(self, **kwargs):
+    def _update_from_json(self, **kwargs: JSONElement) -> "Kinematics":
         """Override ObjectModel._update_from_json to return the Kinematics type matching the given name"""
-        if 'name' in kwargs:
-            kwargs['name'] = KinematicsName(kwargs.get('name').lower().replace(' ', ''))
+        name = kwargs.get('name')
+        if isinstance(name, str):
+            kinematics_name = KinematicsName(name.lower().replace(' ', ''))
+            kwargs['name'] = kinematics_name
 
-            if self.name != kwargs.get('name'):
-                kinematic_type = self.get_kinematics_type(kwargs.get('name'))
-                new_kinematic = kinematic_type.update_from_json(kwargs)
-                return new_kinematic
+            if self.name != kinematics_name:
+                return self.get_kinematics_type(kinematics_name).update_from_json(kwargs)
 
         super(Kinematics, self)._update_from_json(**kwargs)
         return self
