@@ -25,3 +25,6 @@ DEFAULT_BACKLOG = 4
 PROTOCOL_VERSION = 13
 
 from . import commands, connections, http, object_model
+
+
+__all__ = ['SOCKET_FILE', 'DEFAULT_BACKLOG', 'PROTOCOL_VERSION', 'commands', 'connections', 'http', 'object_model']

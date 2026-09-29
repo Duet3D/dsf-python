@@ -14,3 +14,6 @@ __all_ = ['Duet3DFilamentMonitor', 'FilamentMonitor', 'FilamentMonitorStatus', '
           'PulsedFilamentMonitor', 'PulsedFilamentMonitorCalibrated', 'PulsedFilamentMonitorConfigured',
           'RotatingMagnetFilamentMonitor', 'RotatingMagnetFilamentMonitorCalibrated',
           'RotatingMagnetFilamentMonitorConfigured']
+
+
+__all__ = ['Duet3DFilamentMonitor', 'FilamentMonitor', 'FilamentMonitorStatus', 'FilamentMonitorType', 'LaserFilamentMonitor', 'LaserFilamentMonitorCalibrated', 'LaserFilamentMonitorConfigured', 'PulsedFilamentMonitor', 'PulsedFilamentMonitorCalibrated', 'PulsedFilamentMonitorConfigured', 'RotatingMagnetFilamentMonitor', 'RotatingMagnetFilamentMonitorCalibrated', 'RotatingMagnetFilamentMonitorConfigured']

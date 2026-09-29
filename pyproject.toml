@@ -10,4 +10,4 @@ include = ["src", "tests", "examples"]
 # Examples import the package as `dsf`, tests import it as `src.dsf`
 extraPaths = ["src"]
 pythonVersion = "3.11"
-typeCheckingMode = "standard"
+typeCheckingMode = "strict"
