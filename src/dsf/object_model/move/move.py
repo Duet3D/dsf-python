@@ -1,5 +1,3 @@
-from typing import List
-
 from .axis import Axis
 from .current_move import CurrentMove
 from .extruder import Extruder

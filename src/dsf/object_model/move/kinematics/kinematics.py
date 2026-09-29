@@ -1,5 +1,3 @@
-from typing import Union
-
 from .kinematics_name import KinematicsName
 from ..move_segmentation import MoveSegmentation
 from ...model_object import ModelObject

@@ -1,17 +1,12 @@
 import unittest
-from unittest.mock import patch
 import threading
 import os
-import pathlib
 import socket
 import tempfile
-import time
-import importlib.util
 import json
 
 from src.dsf import PROTOCOL_VERSION
 from src.dsf.connections import CommandConnection
-from tests.utils import check_json
 
 
 class TestSendSimpleCode(unittest.TestCase):

@@ -1,5 +1,4 @@
 from enum import Enum
-from typing import List, Optional
 
 from .driver_id import DriverId
 from .microstepping import MicroStepping

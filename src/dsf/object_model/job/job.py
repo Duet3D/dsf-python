@@ -1,5 +1,3 @@
-from typing import List, Union
-
 from .build import Build
 from .gcode_fileinfo import GCodeFileInfo
 from .layer import Layer

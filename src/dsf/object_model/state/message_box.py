@@ -1,5 +1,4 @@
 from enum import IntEnum
-from typing import List, Union
 from ..model_object import ModelObject
 from ..model_collection import ModelCollection
 from ..utils import model_prop, nullable_model_prop

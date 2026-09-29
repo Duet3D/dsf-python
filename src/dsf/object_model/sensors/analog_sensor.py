@@ -1,5 +1,3 @@
-from typing import Union
-
 from .analog_sensor_type import AnalogSensorType
 from .temperature_error import TemperatureError
 from ..model_object import ModelObject

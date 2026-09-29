@@ -19,7 +19,7 @@ serverinitmessage holds everything relevant to the first message received from t
 """
 
 from ... import PROTOCOL_VERSION
-from ...utils import preserve_builtin, JSONObj
+from ...utils import JSONObj
 
 
 class ServerInitMessage:

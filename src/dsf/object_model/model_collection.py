@@ -1,9 +1,7 @@
 from enum import Enum
-from typing import Callable, Generic, TypeVar, List, Dict, Any, Union, Optional, get_origin, get_args, cast
+from typing import Callable, Generic, TypeVar, List, Union, Optional, get_origin, get_args, cast
 from ..utils import JSONElement
 from .model_type import ModelType
-from .model_dictionary import ModelDictionary
-from .model_object import ModelObject
 
 T = TypeVar('T')
 # T = TypeVar('T', bound=Union[JSONElement, "ModelCollection[Any]", ModelDictionary, ModelObject])

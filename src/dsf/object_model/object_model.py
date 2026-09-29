@@ -1,4 +1,4 @@
-from typing import List, Optional
+from typing import Optional
 
 from .model_collection import ModelCollection
 from .model_dictionary import ModelDictionary

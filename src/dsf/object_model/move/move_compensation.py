@@ -1,5 +1,4 @@
 from enum import Enum
-from typing import Union
 
 from .move_calibration import MoveDeviations
 from .probe_grid import ProbeGrid

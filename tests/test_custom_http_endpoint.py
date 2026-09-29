@@ -1,13 +1,10 @@
 import threading
 import os
-import pathlib
 import socket
 import time
-import importlib.util
 import unittest
 import json
 import tempfile
-import requests
 
 from src.dsf import PROTOCOL_VERSION
 from src.dsf.connections import CommandConnection

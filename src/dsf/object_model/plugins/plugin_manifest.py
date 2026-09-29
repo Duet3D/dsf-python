@@ -1,5 +1,4 @@
 import re
-from typing import List, Union
 
 from .sbc_permissions import SbcPermissions
 from ..model_object import ModelObject

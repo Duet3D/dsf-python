@@ -1,5 +1,3 @@
-from typing import List
-
 from .kinematics import Kinematics
 from .kinematics_name import KinematicsName
 from ...utils import model_prop

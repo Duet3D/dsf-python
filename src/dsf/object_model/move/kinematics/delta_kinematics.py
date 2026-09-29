@@ -1,5 +1,3 @@
-from typing import List
-
 from .delta_tower import DeltaTower
 from .kinematics import Kinematics
 from .kinematics_name import KinematicsName

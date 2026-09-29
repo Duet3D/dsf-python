@@ -1,12 +1,9 @@
-from typing import List, Union
-
 from .network_interface_type import NetworkInterfaceType
 from .network_protocol import NetworkProtocol
 from .network_state import NetworkState
 from ..model_object import ModelObject
 from ..model_collection import ModelCollection
 from ..utils import nullable_model_prop, model_prop
-from ...utils import deprecated
 
 
 class NetworkInterface(ModelObject):

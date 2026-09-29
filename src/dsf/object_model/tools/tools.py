@@ -1,11 +1,8 @@
-from typing import List
-
 from .tool_state import ToolState
 from .tool_retraction import ToolRetraction
 from ..model_object import ModelObject
 from ..model_collection import ModelCollection
 from ..utils import model_prop, nullable_model_prop
-from ...utils import deprecated
 
 
 class Tool(ModelObject):

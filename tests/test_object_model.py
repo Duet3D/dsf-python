@@ -7,11 +7,12 @@ from src.dsf.object_model import *
 from src.dsf.object_model.utils import is_model_object, JSONElement, JSONObj, model_prop, nullable_model_prop
 from src.dsf.object_model.object_model import ModelCollection, ModelDictionary, ModelObject
 
+class SubModel(ModelObject):
+    value = model_prop("value", int, 0)
+
+
 class TestModelObject(unittest.TestCase):
     class Dummy(ModelObject):
-        class SubModel(ModelObject):
-            value = model_prop("value", int, 0)
-
         p_int = model_prop("p_int", int, 1)
         np_int = nullable_model_prop("np_int", int)
 
@@ -26,8 +27,8 @@ class TestModelObject(unittest.TestCase):
 
         p_model_collection = model_prop("p_model_collection", ModelCollection[SubModel], ModelCollection(SubModel))
         p_model_ncollection = model_prop("p_model_ncollection", ModelCollection[Optional[SubModel]], ModelCollection(Optional[SubModel]))
-        np_model_collection = nullable_model_prop("np_model_collection", ModelCollection[SubModel], lambda sub_model=SubModel: ModelCollection(sub_model))
-        np_model_ncollection = nullable_model_prop("np_model_ncollection", ModelCollection[Optional[SubModel]], lambda sub_model=SubModel: ModelCollection(Optional[sub_model]))
+        np_model_collection = nullable_model_prop("np_model_collection", ModelCollection[SubModel], lambda: ModelCollection(SubModel))
+        np_model_ncollection = nullable_model_prop("np_model_ncollection", ModelCollection[Optional[SubModel]], lambda: ModelCollection(Optional[SubModel]))
         
     def setUp(self):
         pass

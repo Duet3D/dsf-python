@@ -1,18 +1,13 @@
 import threading
 import os
-import pathlib
 import socket
-import time
-import importlib.util
 import json
 import unittest
 import tempfile
-from unittest.mock import patch
 
 from src.dsf import PROTOCOL_VERSION
 from src.dsf.connections import InterceptConnection, InterceptionMode
 from src.dsf.commands.code import CodeType
-from src.dsf.object_model import MessageType
 
 
 class TestCustomMCodes(unittest.TestCase):

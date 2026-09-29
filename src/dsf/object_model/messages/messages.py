@@ -1,4 +1,3 @@
-import dateutil.parser as dp
 from datetime import datetime
 from enum import IntEnum
 

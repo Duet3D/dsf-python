@@ -1,14 +1,11 @@
 import unittest
-from unittest.mock import patch
+import unittest.mock
 import threading
 import os
-import pathlib
 import socket
 import tempfile
 import time
-import importlib.util
 import json
-from typing import Union, Dict
 
 from tests.utils import check_json
 from src.dsf import PROTOCOL_VERSION

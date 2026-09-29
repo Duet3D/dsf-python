@@ -1,5 +1,3 @@
-from typing import List
-
 from ..model_collection import ModelCollection
 from ..model_object import ModelObject
 from ..utils import model_prop
