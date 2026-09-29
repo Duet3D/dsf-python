@@ -1,10 +1,11 @@
 import copy
 from datetime import datetime
-from typing import Optional, Protocol, TypeVar, Union, Callable, cast, get_origin, overload
+from typing import Any, Optional, Protocol, TypeVar, TypeGuard, Union, Callable, cast, get_origin, overload
 
 from .model_object import ModelObject
 from .model_collection import ModelCollection
 from .model_dictionary import ModelDictionary
+from .model_type import ModelType
 from ..utils import JSONObj, JSONElement
 
 
@@ -24,7 +25,7 @@ class TypedReadableProperty(Protocol[_TProperty]):
 T = TypeVar("T")
 
 
-def is_model_object(o: object) -> bool:
+def is_model_object(o: object) -> TypeGuard[ModelType[Any]]:
     from .model_object import ModelObject
     from .model_collection import ModelCollection
     from .model_dictionary import ModelDictionary
@@ -32,9 +33,9 @@ def is_model_object(o: object) -> bool:
     return isinstance(o, ModelObject) or isinstance(o, ModelCollection) or isinstance(o, ModelDictionary)
 
 
-def _set_model_prop(instance: object, name: str, runtime_type: type[JSONElement | datetime], current_value: T, value: Union[T, JSONElement]):
+def _set_model_prop(instance: object, name: str, runtime_type: type[object], current_value: T, value: Union[T, JSONElement]) -> None:
     if value is None and isinstance(current_value, ModelDictionary):  # DSF sends null to clear a dictionary
-        current_value.update_from_json(cast(JSONObj, None))
+        current_value.update_from_json(None)
     elif isinstance(value, dict):  # Update from JSON
         if not isinstance(current_value, (ModelObject, ModelDictionary)):
             raise TypeError(f"{instance.__class__.__name__}.{name} must be of type ModelObject or ModelDictionary to update from a dict."
@@ -52,8 +53,8 @@ def _set_model_prop(instance: object, name: str, runtime_type: type[JSONElement 
         except ValueError:
             raise TypeError(f"{instance.__class__.__name__}.{name} must be a valid ISO format datetime string to update from JSON. Got: {value}")
     elif isinstance(value, (str, int, float, bool)):
-        value = runtime_type(value) # ignore type
-        setattr(instance, name, value)
+        converter = cast(Callable[[object], object], runtime_type)
+        setattr(instance, name, converter(value))
     else:
         raise TypeError(f"{instance.__class__.__name__}.{name} must be of type {runtime_type} or a compatible JSON element to update from."
                         f" Got {type(value).__name__}: {value}")
@@ -84,16 +85,14 @@ def model_prop(name: str, model_type: type[T], default: Optional[T] = None) -> T
             return cast(T, copy.deepcopy(default))
         return cast(T, _scalar_default)
 
-    @property
-    def prop(self: object) -> T:
+    def getter(self: object) -> T:
         v = getattr(self, STORAGE_NAME, None)
         if v is None:
             v = _make_default()
             setattr(self, STORAGE_NAME, v)
         return v
 
-    @prop.setter
-    def prop(self: object, value: Union[T, JSONElement]) -> None:
+    def setter(self: object, value: Union[T, JSONElement]) -> None:
         def get_or_create_value() -> T:
             current_value: Optional[T] = getattr(self, STORAGE_NAME, None)
             if current_value is None:
@@ -108,9 +107,9 @@ def model_prop(name: str, model_type: type[T], default: Optional[T] = None) -> T
         current_value = get_or_create_value()
         _set_model_prop(self, STORAGE_NAME, runtime_model_type, current_value, value)
 
-    return cast(TypedReadableProperty[T], prop)
+    return cast(TypedReadableProperty[T], property(getter, setter))
 
-def nullable_model_prop(name: str, model_type: type[T], constructor: Optional[Callable[[], T]] = None) -> TypedReadableProperty[Optional[T]]:
+def nullable_model_prop(name: str, model_type: type[T], constructor: Optional[Callable[[], Optional[T]]] = None) -> TypedReadableProperty[Optional[T]]:
     """
     Wrap a nullable model object property so that type checks can be performed during update
     :param name: Property of the derived class
@@ -132,12 +131,10 @@ def nullable_model_prop(name: str, model_type: type[T], constructor: Optional[Ca
     else:
         _factory = constructor
 
-    @property
-    def prop(self: object) -> Optional[T]:
+    def getter(self: object) -> Optional[T]:
         return getattr(self, STORAGE_NAME, None)
 
-    @prop.setter
-    def prop(self: object, value: Union[T, JSONElement, None]) -> None:
+    def setter(self: object, value: Union[T, JSONElement, None]) -> None:
         def get_or_create_value() -> Optional[T]:
             v = getattr(self, STORAGE_NAME, None)
             if v is None:
@@ -153,4 +150,4 @@ def nullable_model_prop(name: str, model_type: type[T], constructor: Optional[Ca
         current_value = get_or_create_value()
         _set_model_prop(self, STORAGE_NAME, runtime_model_type, current_value, value)
 
-    return cast(TypedReadableProperty[Optional[T]], prop)
+    return cast(TypedReadableProperty[Optional[T]], property(getter, setter))

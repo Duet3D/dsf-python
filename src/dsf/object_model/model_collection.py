@@ -1,5 +1,5 @@
 from enum import Enum
-from typing import Generic, TypeVar, List, Dict, Any, Union, Optional, get_origin, get_args, cast
+from typing import Callable, Generic, TypeVar, List, Dict, Any, Union, Optional, get_origin, get_args, cast
 from ..utils import JSONElement
 from .model_type import ModelType
 from .model_dictionary import ModelDictionary
@@ -41,11 +41,11 @@ class ModelCollection(ModelType[list[JSONElement]], Generic[T], list[T]):
             self._runtime_model_type = cast(type[object], item_origin or item_constructor)
 
         if isinstance(resolved_constructor, type):
-            self._item_constructor: type[T] = cast(type[T], resolved_constructor)
+            self._item_constructor: Callable[..., T] = cast(Callable[..., T], resolved_constructor)
         elif isinstance(self._runtime_model_type, type):
-            self._item_constructor = cast(type[T], self._runtime_model_type)
+            self._item_constructor = cast(Callable[..., T], self._runtime_model_type)
         else:
-            self._item_constructor = cast(type[T], object)
+            self._item_constructor = cast(Callable[..., T], object)
 
         if value is not None:
             self[:] = []
@@ -55,7 +55,7 @@ class ModelCollection(ModelType[list[JSONElement]], Generic[T], list[T]):
                     continue
 
                 if isinstance(item, self._runtime_model_type):
-                    self.append(item)
+                    self.append(cast(T, item))
                 else:
                     ref_item = self._create_item(index)
                     if not is_model_object(ref_item):
@@ -64,7 +64,7 @@ class ModelCollection(ModelType[list[JSONElement]], Generic[T], list[T]):
                     # if issubclass(self._item_constructor, ModelType[T]):
                     ref_item.update_from_json(item)
 
-                    self.append(ref_item)
+                    self.append(cast(T, ref_item))
 
     @classmethod
     def from_json(cls, data: list[JSONElement]):
@@ -117,7 +117,7 @@ class ModelCollection(ModelType[list[JSONElement]], Generic[T], list[T]):
             
             # If the new item data is null, set the current item to null (even if it was a model object before)
             if new_item_data is None and self._allow_none:
-                self[i] = None
+                self[i] = cast(T, None)
                 continue
 
             # If the current item is null then we need to create a new item
@@ -132,12 +132,12 @@ class ModelCollection(ModelType[list[JSONElement]], Generic[T], list[T]):
                         ref_item = None
 
                     if ref_item is not None and is_model_object(ref_item):
-                        self[i] = cast(T, cast(ModelType[JSONElement], ref_item).update_from_json(new_item_data))
+                        self[i] = cast(T, ref_item.update_from_json(new_item_data))
                     else:
                         self[i] = self._coerce_item_value(new_item_data)
             # Use the `update_from_json` method of the current item if it's a model object, otherwise replace it with the new data
             elif is_model_object(current_item):
-                self[i] = cast(T, cast(ModelType[JSONElement], current_item).update_from_json(new_item_data))
+                self[i] = cast(T, current_item.update_from_json(new_item_data))
             else:
                 self[i] = self._coerce_item_value(new_item_data)
 
@@ -149,14 +149,14 @@ class ModelCollection(ModelType[list[JSONElement]], Generic[T], list[T]):
             elif isinstance(item_to_add, self._runtime_model_type):
                 self.append(cast(T, item_to_add))
             else:
-                ref_item: Optional[T] = None
+                ref_item = None
                 try:
                     ref_item = self._create_item(i)
                 except TypeError:
                     ref_item = None
 
                 if ref_item is not None and is_model_object(ref_item):
-                    self.append(cast(ModelType[JSONElement], ref_item).update_from_json(item_to_add))
+                    self.append(cast(T, ref_item.update_from_json(item_to_add)))
                 else:
                     self.append(self._coerce_item_value(item_to_add))
 

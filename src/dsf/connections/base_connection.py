@@ -2,7 +2,7 @@ import json
 import select
 import socket
 import time
-from typing import Optional, overload
+from typing import Any, Optional, Protocol, Self, TypeVar, overload
 
 from .exceptions import IncompatibleVersionException, InternalServerException, TaskCanceledException
 from .init_messages import client_init_messages, server_init_message
@@ -11,6 +11,16 @@ from ..commands.responses import Response, ErrorResponse
 from ..commands.base_command import BaseCommand
 from ..object_model.model_object import TModelObject
 from ..utils import JSONElement
+
+
+class _JSONDeserializable(Protocol):
+    @classmethod
+    def from_json(cls, data: Any) -> Self:
+        ...
+
+
+TDeserializable = TypeVar("TDeserializable", bound=_JSONDeserializable)
+
 
 class BaseConnection:
     """
@@ -22,7 +32,7 @@ class BaseConnection:
         self.debug = debug
         self.timeout = timeout
         self.socket: Optional[socket.socket] = None
-        self.id = None
+        self.id: Optional[int] = None
         self.input = ""
 
     def _connect(self, init_message: client_init_messages.ClientInitMessage, socket_file: str):
@@ -100,7 +110,7 @@ class BaseConnection:
         if self.socket:
             self.socket.sendall(json_string.encode("utf8"))
 
-    def receive(self, cls: type[TModelObject]) -> TModelObject:
+    def receive(self, cls: type[TDeserializable]) -> TDeserializable:
         """Receive a deserialized object from the server"""
         json_string = self.receive_json()
         return cls.from_json(json.loads(json_string))

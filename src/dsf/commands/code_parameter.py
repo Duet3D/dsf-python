@@ -196,10 +196,10 @@ class CodeParameter(json.JSONEncoder):
             parsed_value: object = self.__parsed_value
             if isinstance(parsed_value, list):
                 if isinstance(parsed_value[0], DriverId):
-                    values = cast(list[DriverId], parsed_value)
-                    return [int(value.as_int()) for value in values]
-                values = cast(list[int] | list[float], parsed_value)
-                return [int(value) for value in values]
+                    driver_ids = cast(list[DriverId], parsed_value)
+                    return [int(driver_id.as_int()) for driver_id in driver_ids]
+                numbers = cast(list[int] | list[float], parsed_value)
+                return [int(value) for value in numbers]
             if isinstance(parsed_value, int):
                 return [parsed_value]
             if isinstance(parsed_value, DriverId):

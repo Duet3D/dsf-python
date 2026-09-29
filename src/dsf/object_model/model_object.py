@@ -3,7 +3,7 @@ from datetime import datetime
 from typing import TypeVar, Any, Union, cast
 
 from .model_type import ModelType
-from ..utils import preserve_builtin, camel_to_snake, snake_to_camel, JSONObj
+from ..utils import preserve_builtin, camel_to_snake, snake_to_camel, JSONElement, JSONObj
 
 
 class FloatJSON(float):
@@ -48,7 +48,7 @@ class ModelObject(ModelType[Union[JSONObj, str]]):
         # also convert back 'globals' to 'global'
         return {snake_to_camel(str(k) if k != '_globals' else '_global'): v for k, v in obj.__dict__.items()}
 
-    def _update_from_json(self: TModelObject, **kwargs: object) -> TModelObject:
+    def _update_from_json(self: TModelObject, **kwargs: JSONElement) -> TModelObject:
         """Update this instance from a given JSON element
         This method iterate over all writeable properties to update them.
         It means classes with get-only properties should override this method in order to update them.

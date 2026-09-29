@@ -29,34 +29,34 @@ def _matches_type(value: Any, expected_type: Any) -> bool:
         if len(args) != 2:
             return True
         key_type, val_type = args
-        typed_value = cast(dict[Any, Any], value)
-        return all(_matches_type(k, key_type) and _matches_type(v, val_type) for k, v in typed_value.items())
+        typed_dict = cast(dict[Any, Any], value)
+        return all(_matches_type(k, key_type) and _matches_type(v, val_type) for k, v in typed_dict.items())
 
     if origin is list:
         if not isinstance(value, list):
             return False
         if len(args) != 1:
             return True
-        typed_value = cast(list[Any], value)
-        return all(_matches_type(item, args[0]) for item in typed_value)
+        typed_list = cast(list[Any], value)
+        return all(_matches_type(item, args[0]) for item in typed_list)
 
     if origin is tuple:
         if not isinstance(value, tuple):
             return False
-        typed_value = cast(tuple[Any, ...], value)
+        typed_tuple = cast(tuple[Any, ...], value)
         if len(args) == 2 and args[1] is Ellipsis:
-            return all(_matches_type(item, args[0]) for item in typed_value)
-        if len(args) != len(typed_value):
+            return all(_matches_type(item, args[0]) for item in typed_tuple)
+        if len(args) != len(typed_tuple):
             return False
-        return all(_matches_type(item, item_type) for item, item_type in zip(typed_value, args))
+        return all(_matches_type(item, item_type) for item, item_type in zip(typed_tuple, args))
 
     if origin is set:
         if not isinstance(value, set):
             return False
         if len(args) != 1:
             return True
-        typed_value = cast(set[Any], value)
-        return all(_matches_type(item, args[0]) for item in typed_value)
+        typed_set = cast(set[Any], value)
+        return all(_matches_type(item, args[0]) for item in typed_set)
 
     try:
         return isinstance(value, expected_type)
