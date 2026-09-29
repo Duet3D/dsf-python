@@ -151,12 +151,11 @@ class HttpEndpointUnixSocket:
 
     def close(self):
         """Close the socket connection"""
-        if self._loop is not None:
-            # TODO: this enables correctly ending the loop. Why?
-            self._loop.set_debug(True)
+        if self._loop is not None and not self._loop.is_closed():
+            # The loop runs in the executor thread so it must be stopped in a thread-safe way
             if self._server is not None:
-                self._server.close()
-            self._loop.stop()
+                self._loop.call_soon_threadsafe(self._server.close)
+            self._loop.call_soon_threadsafe(self._loop.stop)
         self.event_loop.cancel()
         self.executor.shutdown(wait=False)
         try:
