@@ -65,6 +65,7 @@ class BaseConnection:
     ) -> Response[JSONElement] | Response[Optional[TModelObject]]:
         """
         Perform an arbitrary command
+
         :param command: Command to perform
         :param cls: Optional model class to deserialize the result into.
                     The result is None if the server did not return one

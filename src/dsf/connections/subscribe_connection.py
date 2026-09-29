@@ -24,6 +24,7 @@ class SubscribeConnection(BaseConnection):
     Connection class for subscribing to model updates
 
     Constructor arguments:
+
     :param subscription_mode: Mode of the subscription
     :param filter_str: Delimited filter expression. Obsolete: Use filter_list instead.
     :param filter_list: Filter expressions
@@ -63,7 +64,7 @@ class SubscribeConnection(BaseConnection):
         Return the current object model as a deserialized ObjectModel instance.
 
         In SubscriptionMode.PATCH, the first call receives the full object model.
-        Later calls consume at most one queued patch without blocking, update the
+        Later calls apply every queued patch without blocking, update the
         cached object model, and run any registered key callbacks synchronously.
         """
         if (self.subscription_mode == client_init_messages.SubscriptionMode.FULL or not self._initial_object_model_received):

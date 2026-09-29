@@ -1,39 +1,34 @@
-.. dsf documentation master file, created by
-   sphinx-quickstart on Sun Mar 28 21:52:22 2021.
-   You can adapt this file completely to your liking, but it should at least
-   contain the root `toctree` directive.
+dsf-python
+==========
 
-Welcome to dsf's documentation!
-====================================
+``dsf-python`` is a Python client for the `Duet Software Framework <https://github.com/Duet3D/DuetSoftwareFramework>`_
+(DSF) control server. It talks to DSF over its UNIX socket and provides:
 
-.. toctree::
-   :maxdepth: 3
-   :caption: Contents:
+- ``dsf.connections``: connections for sending commands, subscribing to the object model and intercepting codes
+- ``dsf.object_model``: the DSF object model as typed Python classes
+- ``dsf.http``: custom HTTP and WebSocket endpoints served through DSF
+- ``dsf.commands``: low-level builders for every DSF command
 
-Overview
-========
+It follows the C# ``DuetAPIClient`` closely, but uses Python naming. See :ref:`differences` before porting
+C# code or reading the DSF docs.
 
-`dsf-python` is the Python client library for the Duet Software Framework control
-server. It provides:
+.. contents::
+   :local:
+   :depth: 2
 
-- connection classes for DSF sockets
-- typed object model classes
-- command builders for low-level DSF operations
-- helpers for custom HTTP and WebSocket endpoints
+Installation
+------------
 
-The main public modules are:
+.. code-block:: bash
 
-- ``dsf``: package entry point, protocol constants, and default socket discovery
-- ``dsf.connections``: command, subscription, and interception connections
-- ``dsf.commands``: low-level DSF command payload builders
-- ``dsf.object_model``: typed object model classes and enums
-- ``dsf.http``: HTTP endpoint helpers for DSF plugins
+   python3 -m pip install dsf-python
 
-Getting Started
-===============
+Python 3.11 or newer is required. Your script must run on the machine that runs DSF, as a user that can
+access the DSF socket (usually the ``dsf`` user). The socket path is read from ``/opt/dsf/conf/config.json``
+and falls back to ``/run/dsf/dcs.sock``.
 
-Run A Simple Command
---------------------
+Quick Start
+-----------
 
 .. code-block:: python
 
@@ -41,169 +36,220 @@ Run A Simple Command
 
    connection = CommandConnection()
    connection.connect()
+   try:
+       print(connection.perform_simple_code("M115"))
 
-   response = connection.perform_simple_code("M115")
-   print(response.result)
+       object_model = connection.get_object_model()
+       print(object_model.state.status.value)
+       print(object_model.state.up_time)       # "upTime" in DSF
+   finally:
+       connection.close()
 
-   connection.close()
+Connections
+-----------
 
-Read The Object Model Once
---------------------------
+========================== =============================================================================================
+Connection                 Use it to
+========================== =============================================================================================
+``CommandConnection``      Run codes, evaluate expressions, read the object model, manage plugins, files and HTTP endpoints
+``SubscribeConnection``    Keep a local copy of the object model up to date and react to changes
+``InterceptConnection``    Handle custom M-codes, or inspect codes before or after DSF processes them
+========================== =============================================================================================
 
-.. code-block:: python
-
-   from dsf.connections import CommandConnection
-
-   connection = CommandConnection()
-   connection.connect()
-
-   object_model = connection.get_object_model()
-   print(object_model.state.status)
-   print(object_model.move.axes[0].letter)
-
-   connection.close()
-
-Connection Types
-================
-
-CommandConnection
------------------
-
-Use ``CommandConnection`` for request-response workflows such as:
-
-- sending G-code
-- requesting the full object model
-- interacting with files, plugins, packages, and user sessions
+Every connection is configured in its constructor, opened with ``connect()`` and closed with ``close()``.
+Errors reported by DSF are raised as ``InternalServerException`` (with ``error_type`` and ``error_message``),
+or as ``TaskCanceledException`` if DSF cancelled the request.
 
 SubscribeConnection
--------------------
+^^^^^^^^^^^^^^^^^^^
 
-Use ``SubscribeConnection`` to receive streamed object model updates.
+- In ``SubscriptionMode.PATCH``, the first ``get_object_model()`` call blocks until the full model arrives.
+  Later calls do not block: they apply every queued patch to the cached model and return it.
+- In ``SubscriptionMode.FULL``, every call blocks until the next full object model arrives.
+- ``subscribe_to_keys()`` callbacks run synchronously inside ``get_object_model()``, only in patch mode, and
+  receive the keyword arguments ``key``, ``data`` (the raw JSON value from the patch) and ``indices`` (the list
+  indexes matched by ``^``, or ``None``). Register them after the first ``get_object_model()`` call.
+  The return value removes the callback again.
 
-- ``SubscriptionMode.FULL`` sends a full object model for every update
-- ``SubscriptionMode.PATCH`` sends partial JSON fragments for each update
-
-In patch mode, the first ``get_object_model()`` call reads the full model. Later
-calls reuse an internal cached model and apply one queued patch if available.
-
-
-Callbacks For Specific Keys
-===========================
-
-``SubscribeConnection.subscribe_to_keys()`` registers a callback for one or more
-dot-delimited object model key paths. Call ``get_object_model()`` once first, then
-register the callback to receive matching values synchronously from later patch
-updates processed by ``get_object_model()``.
-
-Callbacks always receive these keyword arguments:
-
-- ``key``: the subscribed key path that matched
-- ``data``: the changed value found at that key path
-- ``indices``: a tuple of matched wildcard indexes or ``None``
-
-Use ``^`` in list positions to match any changed list item.
-
-.. code-block:: python
-
-   from dsf.connections import SubscribeConnection, SubscriptionMode
-
-   def handle_changes(*, key, data, indices):
-      print(key, data, indices)
-
-   subscription = SubscribeConnection(SubscriptionMode.PATCH)
-   subscription.connect()
-   subscription.get_object_model()
-   subscription.subscribe_to_keys(
-      ["heat.heaters.0.current", "state.upTime"],
-      handle_changes,
-   )
-
-   while True:
-      object_model = subscription.get_object_model()
-
-.. code-block:: python
-
-   def handle_any_heater(*, key, data, indices):
-      print(key, indices, data)
-
-   subscription.subscribe_to_keys(
-      ["heat.heaters.^.current"],
-      handle_any_heater,
-   )
+See :ref:`example-subscribe`.
 
 InterceptConnection
--------------------
+^^^^^^^^^^^^^^^^^^^
 
-Use ``InterceptConnection`` when a Python component needs to intercept or handle
-G/M/T-code traffic. This is the connection type used by custom M-code handlers and
-other DSF plugin workflows.
+Every intercepted code must be answered with ``resolve_code()``, ``ignore_code()`` or ``cancel_code()``.
+``InterceptConnection`` also has all ``CommandConnection`` methods, so it can run other codes while a code
+is intercepted, e.g. ``perform_simple_code("M117 hi", code.channel)``.
 
-Object Model
-============
+See :ref:`example-m-codes`.
 
-The ``dsf.object_model`` package mirrors the DSF object model in typed Python classes.
-It lets applications work with structured attributes instead of raw JSON dictionaries.
+Custom HTTP Endpoints
+^^^^^^^^^^^^^^^^^^^^^
 
-.. code-block:: python
+``CommandConnection.add_http_endpoint()`` registers ``/machine/{namespace}/{path}`` with DSF and returns an
+``HttpEndpointUnixSocket``. Pass an ``async`` handler to ``set_endpoint_handler()``. It receives an
+``HttpEndpointConnection`` for each request. Call ``remove_http_endpoint()`` and then ``close()`` the socket
+when finished.
 
-   print(object_model.boards[0].name)
-   print(object_model.state.up_time)
-   print(object_model.move.axes[0].letter)
+See :ref:`example-http`.
 
-Object model instances can also be updated from JSON fragments:
+.. _differences:
+
+Differences From The DSF API
+----------------------------
+
+Naming
+^^^^^^
+
+Python attributes and methods are ``snake_case``. **Anything passed to DSF as a string stays in DSF's**
+**camelCase format**, because DSF interprets it and not this library.
+
+.. list-table::
+   :header-rows: 1
+
+   * -
+     - DSF / C#
+     - dsf-python
+   * - Object model properties
+     - ``state.upTime``, ``move.axes[0].userPosition``
+     - ``state.up_time``, ``move.axes[0].user_position``
+   * - Uppercase acronyms
+     - ``move.skew.tanXY``
+     - ``move.skew.tan_XY`` (acronyms stay uppercase)
+   * - Global variables
+     - ``global``
+     - ``globals`` (``global`` is a Python keyword)
+   * - Names shadowing builtins (``type``, ``id``, ``min``, ``max``, ``format``, ``license``)
+     - ``axis.max``
+     - ``axis.max`` (unchanged)
+   * - Methods
+     - ``PerformSimpleCodeAsync()``
+     - ``perform_simple_code()``
+   * - Intercepted ``Code`` attributes
+     - ``MajorNumber``, ``KeywordArgument``
+     - ``majorNumber``, ``keywordArgument`` (**camelCase, as in the JSON**)
+   * - ``CodeParameter`` attributes
+     - ``StringValue``, ``IsString``
+     - ``string_value``, ``is_string``
+   * - HTTP request fields
+     - ``SessionId``, ``ContentType``
+     - ``session_id``, ``content_type``
+   * - Error responses
+     - ``errorType``, ``errorMessage``
+     - ``error_type``, ``error_message``
+   * - Enum members
+     - ``MessageType.Success``
+     - Not normalised: ``MessageType.Success``, ``MachineStatus.idle``, ``SubscriptionMode.PATCH``,
+       ``HttpEndpointType.GET``. Values match the DSF JSON.
+
+These strings keep DSF naming:
+
+.. list-table::
+   :header-rows: 1
+
+   * - Where
+     - Format
+     - Example
+   * - ``SubscribeConnection(filter_list=...)``
+     - ``/``-separated, ``[*]`` for any list item, ``**`` for everything below
+     - ``"heat/heaters[*]/current"``, ``"move/**"``
+   * - ``CommandConnection.get_object_model(filters)``
+     - ``.``-separated key paths
+     - ``["state", "move.axes"]``
+   * - ``SubscribeConnection.subscribe_to_keys(keys)``
+     - ``.``-separated, list indexes as numbers, ``^`` for any list item
+     - ``"heat.heaters.^.current"``, ``"move.axes.2.userPosition"``
+   * - ``evaluate_expression()``, ``query_object_model()``, G-code
+     - RepRapFirmware expressions
+     - ``"state.upTime"``, ``"move.axes[0].homed"``
+
+``ObjectModel.update_from_json()`` and ``from_json()`` take DSF JSON (camelCase), and ``to_json()`` writes it back:
 
 .. code-block:: python
 
    object_model.update_from_json({"state": {"upTime": 1234}})
+   object_model.state.up_time    # 1234
+   object_model.to_json()        # '{..."state": {..."upTime": 1234...}...}'
 
-Commands
-========
+Behaviour
+^^^^^^^^^
 
-The ``dsf.commands`` package contains the low-level request builders used by the
-connection classes. Most applications will call higher-level connection methods,
-but the command modules are available when direct control over a DSF request is needed.
-
-Custom HTTP Endpoints
-=====================
-
-The ``dsf.http`` module provides helpers for custom HTTP and WebSocket endpoints
-implemented in Python.
-
-Important types include:
-
-- ``HttpEndpointUnixSocket``
-- ``HttpEndpointConnection``
-- ``ReceivedHttpRequest``
-- ``HttpResponseType``
+- **Synchronous.** Connection methods block and have no ``Async`` suffix or ``CancellationToken``.
+  Only HTTP endpoint handlers are ``async`` coroutines.
+- **Configuration in the constructor.** Options passed to C# ``ConnectAsync()`` (mode, filters, channels,
+  ``verbose``, ...) are constructor arguments. ``connect()`` takes only an optional socket path.
+- **Patches are applied for you.** ``SubscribeConnection.get_object_model()`` keeps an internal model up to
+  date in patch mode. In C#, you apply patches from ``GetObjectModelPatchAsync()`` yourself.
+  ``get_object_model_patch()`` and ``get_serialized_object_model()`` still return raw JSON if you need it.
+- **Key callbacks** (``subscribe_to_keys()``) are specific to dsf-python.
+- **Return values.** ``perform_simple_code()`` returns the reply as a string. ``evaluate_expression()`` and the
+  lower-level methods return a ``Response`` whose value is in ``.result``.
+- **Interception.** ``resolve_code()`` takes a ``MessageType`` and an optional string, not a ``Message``.
+  There is no ``rewrite_code()``. ``flush()`` takes a channel instead of flushing the intercepted code's channel.
+- **HTTP endpoints.** Handlers are registered with ``set_endpoint_handler()`` instead of an event.
+  ``add_http_endpoint()`` returns an ``HttpEndpointUnixSocket``, which must be closed after
+  ``remove_http_endpoint()``.
 
 Examples
-========
+--------
 
-The project includes examples for the major workflows:
+The examples are also in the
+`examples directory <https://github.com/Duet3D/dsf-python/tree/HEAD/examples>`_ on GitHub.
 
-- ``examples/send_commands.py``
-- ``examples/subscribe_object_model.py``
-- ``examples/custom_m_codes.py``
-- ``examples/custom_http_endpoint.py``
+Send Commands
+^^^^^^^^^^^^^
+
+Run codes, evaluate expressions, read part of the object model, write messages and handle errors.
+
+.. literalinclude:: ../../examples/send_commands.py
+   :language: python
+
+.. _example-subscribe:
+
+Subscribe To The Object Model
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+Filtered patch subscription and key callbacks with and without ``^``.
+
+.. literalinclude:: ../../examples/subscribe_object_model.py
+   :language: python
+
+.. _example-m-codes:
+
+Custom M-Codes
+^^^^^^^^^^^^^^
+
+Custom M-codes, reading parameters and running codes from an interceptor.
+
+.. literalinclude:: ../../examples/custom_m_codes.py
+   :language: python
+
+.. _example-http:
+
+Custom HTTP Endpoints
+^^^^^^^^^^^^^^^^^^^^^
+
+GET and POST endpoints with plain text and JSON responses.
+
+.. literalinclude:: ../../examples/custom_http_endpoint.py
+   :language: python
 
 API Reference
-=============
+-------------
 
-.. automodule:: dsf
-   :members:
 .. automodule:: dsf.connections
-   :members:
-.. automodule:: dsf.commands
-   :members:
+   :imported-members:
+
 .. automodule:: dsf.object_model
-   :members:
+   :imported-members:
+
 .. automodule:: dsf.http
-   :members:
 
+.. automodule:: dsf.commands.code
 
-Indices and tables
-==================
+.. automodule:: dsf.commands.code_parameter
+
+Indices
+-------
 
 * :ref:`genindex`
 * :ref:`modindex`
-* :ref:`search`

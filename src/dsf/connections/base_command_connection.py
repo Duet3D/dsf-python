@@ -84,6 +84,7 @@ class BaseCommandConnection(BaseConnection):
     def get_object_model(self, filters: list[str] = []) -> ObjectModel:
         """
         Retrieve the full object model of the machine.
+
         :param filters: Optional object model key paths to retrieve.
                         If any key paths are given, the returned instance holds only the requested parts and every other
                         property is left at its default value. There is no way to tell those apart from values that are
@@ -149,6 +150,7 @@ class BaseCommandConnection(BaseConnection):
         async_exec: bool = False
     ) -> str:
         """Execute an arbitrary G/M/T-code in text form
+
         :param cde: Code to parse and execute
         :param channel: Destination channel
         :param async_exec: Whether this code may be executed asynchronously.
@@ -175,7 +177,7 @@ class BaseCommandConnection(BaseConnection):
         return res.result
 
     def remove_user_session(self, session_id: int):
-        """Remove an existing HTTP endpoint"""
+        """Remove an existing user session"""
         res = self.perform_command(commands.user_sessions.remove_user_session(session_id))
         return res.result
 
