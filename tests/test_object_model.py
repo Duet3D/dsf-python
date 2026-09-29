@@ -424,6 +424,16 @@ class Model(unittest.TestCase):
         model.update_from_json('{"move": {"shaping": {"type": "eI3"}}}')
         self.assertEqual(model.move.shaping.type, InputShapingType.ei3)
 
+    def test_null_clears_dictionary(self):
+        # DSF sends null for a dictionary that has been cleared, e.g. job.file.customInfo when a job ends
+        model = ObjectModel()
+        model.update_from_json({"job": {"file": {"customInfo": {"material": "PETG"}}}})
+        self.assertEqual(dict(model.job.file.custom_info), {"material": "PETG"})
+        custom_info = model.job.file.custom_info
+        model.update_from_json({"job": {"file": {"customInfo": None}}})
+        self.assertIs(model.job.file.custom_info, custom_info)
+        self.assertEqual(dict(model.job.file.custom_info), {})
+
     def test_global(self):
         # "global" is a Python keyword so the JSON key is exposed as ObjectModel.globals
         with open('tests/object_model/model_full.json') as fp:

@@ -33,7 +33,9 @@ def is_model_object(o: object) -> bool:
 
 
 def _set_model_prop(instance: object, name: str, runtime_type: type[JSONElement | datetime], current_value: T, value: Union[T, JSONElement]):
-    if isinstance(value, dict):  # Update from JSON
+    if value is None and isinstance(current_value, ModelDictionary):  # DSF sends null to clear a dictionary
+        current_value.update_from_json(cast(JSONObj, None))
+    elif isinstance(value, dict):  # Update from JSON
         if not isinstance(current_value, (ModelObject, ModelDictionary)):
             raise TypeError(f"{instance.__class__.__name__}.{name} must be of type ModelObject or ModelDictionary to update from a dict."
                             f" Got {type(current_value).__name__}: {current_value}")
