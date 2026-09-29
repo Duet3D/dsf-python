@@ -6,3 +6,4 @@ bump2version
 stdeb
 requests
 pyright[nodejs]==1.1.414
+black==26.5.1
