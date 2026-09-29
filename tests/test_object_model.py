@@ -3,9 +3,12 @@ import unittest
 
 from typing import Optional, cast
 
-from src.dsf.object_model import *
+from src.dsf.object_model import (
+    Accelerometer, Boards, BoardState, DriverId, ExpansionBoard, Heater, InputChannel, MainBoard, ObjectModel, Plugin,
+    ProbeLoadCell, ProbeType)
 from src.dsf.object_model.utils import is_model_object, JSONElement, JSONObj, model_prop, nullable_model_prop
 from src.dsf.object_model.object_model import ModelCollection, ModelDictionary, ModelObject
+
 
 class SubModel(ModelObject):
     value = model_prop("value", int, 0)
@@ -27,8 +30,10 @@ class TestModelObject(unittest.TestCase):
 
         p_model_collection = model_prop("p_model_collection", ModelCollection[SubModel], ModelCollection(SubModel))
         p_model_ncollection = model_prop("p_model_ncollection", ModelCollection[Optional[SubModel]], ModelCollection(Optional[SubModel]))
-        np_model_collection = nullable_model_prop("np_model_collection", ModelCollection[SubModel], lambda: ModelCollection(SubModel))
-        np_model_ncollection = nullable_model_prop("np_model_ncollection", ModelCollection[Optional[SubModel]], lambda: ModelCollection(Optional[SubModel]))
+        np_model_collection = nullable_model_prop(
+            "np_model_collection", ModelCollection[SubModel], lambda: ModelCollection(SubModel))
+        np_model_ncollection = nullable_model_prop(
+            "np_model_ncollection", ModelCollection[Optional[SubModel]], lambda: ModelCollection(Optional[SubModel]))
         
     def setUp(self):
         pass
@@ -283,6 +288,17 @@ class TestModelDictionary(unittest.TestCase):
     def tearDown(self):
         pass
 
+    def test_from_json(self):
+        model = ModelDictionary.from_json({"key1": 1, "key2": {"nested": "dict"}})
+        self.assertIsInstance(model, ModelDictionary)
+        self.assertEqual(dict(model), {"key1": 1, "key2": {"nested": "dict"}})
+
+        # Keys matching Python builtins are kept as-is
+        self.assertEqual(dict(ModelDictionary.from_json({"type": 1})), {"type": 1})
+
+        # null creates an empty dictionary
+        self.assertEqual(len(ModelDictionary.from_json(None)), 0)
+
     def test_generic_dict(self):
         model = ModelDictionary(False)
 
@@ -334,6 +350,39 @@ class TestModelDictionary(unittest.TestCase):
         self.assertNotIn("item1", model)
 
         self.assertRaises(TypeError, lambda: model.update_from_json({"item1": 1})) # can't update a model object with a non-dict value
+
+
+class TestDriverId(unittest.TestCase):
+    def test_defaults(self):
+        driver = DriverId()
+        self.assertEqual((driver.board, driver.port), (0, 0))
+        self.assertEqual(driver.as_int(), 0)
+        self.assertEqual(str(driver), "0.0")
+
+    def test_constructors(self):
+        self.assertEqual(DriverId(as_str="3"), DriverId(board=0, port=3))
+        self.assertEqual(DriverId(as_str="1.2"), DriverId(board=1, port=2))
+        self.assertEqual(DriverId(as_int=(1 << 16) | 2), DriverId(board=1, port=2))
+        self.assertEqual(DriverId(board=1, port=2).as_int(), (1 << 16) | 2)
+
+    def test_update_from_json(self):
+        driver = DriverId(board=5, port=5)
+        self.assertIs(driver.update_from_json("1.2"), driver)
+        self.assertEqual((driver.board, driver.port), (1, 2))
+
+        # A port-only string refers to the main board
+        driver.update_from_json("3")
+        self.assertEqual((driver.board, driver.port), (0, 3))
+        self.assertEqual(driver.as_int(), 3)
+        self.assertEqual(str(driver), "0.3")
+
+        self.assertRaises(TypeError, lambda: driver.update_from_json({"board": 1, "port": 2}))
+
+    def test_equality_and_hash(self):
+        self.assertEqual(DriverId(board=1, port=2), DriverId(as_str="1.2"))
+        self.assertNotEqual(DriverId(board=1, port=2), DriverId(board=2, port=1))
+        self.assertNotEqual(DriverId(board=1, port=2), "1.2")
+        self.assertEqual(len({DriverId(board=1, port=2), DriverId(as_str="1.2"), DriverId(board=0, port=2)}), 2)
 
 
 class Model(unittest.TestCase):
@@ -483,6 +532,10 @@ class Model(unittest.TestCase):
         model.update_from_json('{"global":null}')
         self.assertEqual(len(model.globals), 0)
 
+        # Anything other than an object or null is rejected
+        self.assertRaises(TypeError, lambda: model.update_from_json('{"global":[1, 2]}'))
+        self.assertRaises(TypeError, lambda: model.update_from_json('{"global":5}'))
+
     def test_reserved_keys(self):
         # JSON keys shadowing Python builtins get a trailing underscore while being unpacked
         # (see preserve_builtin) and must still map to the correct properties
@@ -622,7 +675,7 @@ class Model(unittest.TestCase):
         self.assertEqual(len(model.messages), 0)
 
     def test_move_kinematics(self):
-        from src.dsf.object_model.move.kinematics import CoreKinematics, DeltaKinematics, KinematicsName
+        from src.dsf.object_model.move.kinematics import CoreKinematics, DeltaKinematics, Kinematics, KinematicsName
 
         model = ObjectModel()
         json_patch = '{"move": {"kinematics": {"name": "delta","deltaRadius": 123}}}'
@@ -644,6 +697,38 @@ class Model(unittest.TestCase):
         assert isinstance(model.move.kinematics, DeltaKinematics)
         self.assertEqual(model.move.kinematics.name, KinematicsName.linearDelta)
         self.assertEqual(model.move.kinematics.delta_radius, 105.6)
+
+        # Kinematics without a dedicated class use the base type (eg: M669 K0 on an unconfigured machine)
+        model.update_from_json('{"move":{"kinematics":{"name":"unknown"}}}')
+        self.assertIs(type(model.move.kinematics), Kinematics)
+        self.assertEqual(model.move.kinematics.name, KinematicsName.unknown)
+
+    def test_get_kinematics_type(self):
+        from src.dsf.object_model.move.kinematics import (
+            CoreKinematics, DeltaKinematics, HangprinterKinematics, Kinematics, KinematicsName, PolarKinematics,
+            ScaraKinematics)
+
+        expected_types = {
+            KinematicsName.cartesian: CoreKinematics,
+            KinematicsName.coreXY: CoreKinematics,
+            KinematicsName.markForged: CoreKinematics,
+            KinematicsName.linearDelta: DeltaKinematics,
+            KinematicsName.rotaryDelta: Kinematics,
+            KinematicsName.hangprinter: HangprinterKinematics,
+            KinematicsName.fiveBarScara: ScaraKinematics,
+            KinematicsName.scara: ScaraKinematics,
+            KinematicsName.polar: PolarKinematics,
+            KinematicsName.unknown: Kinematics,
+        }
+        for name, expected_type in expected_types.items():
+            kinematics = Kinematics.get_kinematics_type(name)
+            self.assertIs(type(kinematics), expected_type, name)
+            self.assertEqual(kinematics.name, name)
+
+        # Names reported by RRF are normalized
+        self.assertIs(type(Kinematics.get_kinematics_type("Core XY")), CoreKinematics)
+        self.assertEqual(Kinematics.get_kinematics_type("Rotary Delta").name, KinematicsName.rotaryDelta)
+        self.assertRaises(ValueError, lambda: Kinematics.get_kinematics_type("not a kinematics"))
 
     def test_plugins(self):
         model = ObjectModel()
@@ -689,6 +774,27 @@ class Model(unittest.TestCase):
         filament_monitor = model.sensors.filament_monitors[0]
         assert filament_monitor is not None
         self.assertEqual(filament_monitor.type, FilamentMonitorType.Pulsed)
+
+    def test_get_filament_monitor(self):
+        from src.dsf.object_model.sensors.filament_monitors import (
+            FilamentMonitor, FilamentMonitorType, LaserFilamentMonitor, PulsedFilamentMonitor,
+            RotatingMagnetFilamentMonitor)
+
+        expected_types = {
+            FilamentMonitorType.Laser: LaserFilamentMonitor,
+            FilamentMonitorType.Pulsed: PulsedFilamentMonitor,
+            FilamentMonitorType.RotatingMagnet: RotatingMagnetFilamentMonitor,
+            FilamentMonitorType.Simple: FilamentMonitor,
+            FilamentMonitorType.Unknown: FilamentMonitor,
+        }
+        for monitor_type, expected_type in expected_types.items():
+            # Both the enum and its JSON string value are accepted
+            for type_ in (monitor_type, monitor_type.value):
+                monitor = FilamentMonitor.get_filament_monitor(type_)
+                self.assertIs(type(monitor), expected_type, type_)
+                self.assertEqual(monitor.type, monitor_type)
+
+        self.assertRaises(ValueError, lambda: FilamentMonitor.get_filament_monitor("not a monitor"))
 
     def test_sensors_filament_monitor_rc2_fields(self):
         from src.dsf.object_model.sensors.filament_monitors import RotatingMagnetFilamentMonitor

@@ -4,9 +4,8 @@ import json
 import os
 
 
-def _read_socket_file() -> str:
+def _read_socket_file(config_path: str = "/opt/dsf/conf/config.json") -> str:
     """Read the socket file path from the DSF config, falling back to the default path"""
-    config_path = "/opt/dsf/conf/config.json"
     if os.path.exists(config_path):
         try:
             with open(config_path, 'r') as f:

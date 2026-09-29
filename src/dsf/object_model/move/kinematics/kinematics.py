@@ -18,16 +18,17 @@ class Kinematics(ModelObject):
 
     @staticmethod
     def get_kinematics_type(name: KinematicsName | str) -> "Kinematics":
-        from .core_kinematics import CoreKinematics
-        from .delta_kinematics import DeltaKinematics
-        from .hangprinter_kinematics import HangprinterKinematics
-        from .polar_kinematics import PolarKinematics
-        from .scara_kinematics import ScaraKinematics
         """
         Figure out the required type for the given kinematics name
         :param name: Kinematics name
         :returns: Required type
         """
+        from .core_kinematics import CoreKinematics
+        from .delta_kinematics import DeltaKinematics
+        from .hangprinter_kinematics import HangprinterKinematics
+        from .polar_kinematics import PolarKinematics
+        from .scara_kinematics import ScaraKinematics
+
         name = KinematicsName(name.lower().replace(' ', ''))
 
         if name in [
