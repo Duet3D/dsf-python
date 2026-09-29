@@ -28,6 +28,7 @@ setuptools.setup(
     keywords="Duet3D, DuetSoftwareFramework, DSF, dsf-python",
     package_dir={"": "src"},
     packages=setuptools.find_packages(where="src"),
+    package_data={"dsf": ["py.typed"]},
     python_requires=">=3.11, <4",
     extras_require={
         "dev": [
