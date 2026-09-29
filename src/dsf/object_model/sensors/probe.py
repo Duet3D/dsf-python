@@ -1,4 +1,5 @@
 from .probe_type import ProbeType
+from .probe_load_cell import ProbeLoadCell
 from .probe_touch_mode import ProbeTouchMode
 from ..model_object import ModelObject
 from ..model_collection import ModelCollection
@@ -11,9 +12,12 @@ class Probe(ModelObject):
     calibration_temperature = model_prop('calibration_temperature', float, 0)
     deployed_by_user = model_prop('deployed_by_user', bool, False)
     disables_heaters = model_prop('disables_heaters', bool, False)
+    # Obsolete: use dive_heights instead
+    dive_height = model_prop('dive_height', float, 0)
     dive_heights = model_prop('dive_heights', ModelCollection[float], ModelCollection(float, [0.0, 0.0]))
     is_calibrated = nullable_model_prop('is_calibrated', bool)
     last_stop_height = model_prop('last_stop_height', float, 0)
+    load_cell = nullable_model_prop('load_cell', ProbeLoadCell)
     max_probe_count = model_prop('max_probe_count', int, 1)
     measured_height = nullable_model_prop('measured_height', float)
     offsets = model_prop('offsets', ModelCollection[float], ModelCollection(float, [0.0, 0.0]))

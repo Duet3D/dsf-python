@@ -2,14 +2,21 @@ from .filament_monitor_enable_type import FilamentMonitorEnableMode
 from .filament_monitor_status import FilamentMonitorStatus
 from .filament_monitor_type import FilamentMonitorType
 from ...model_object import ModelObject
-from ...utils import model_prop
+from ...utils import model_prop, nullable_model_prop
 
 
 class FilamentMonitor(ModelObject):
     """Information about a filament monitor"""
 
+    # Whether this filament monitor is enabled
+    # Obsolete: use enable_mode instead
+    enabled = model_prop("enabled", bool, False)
+
     # Enable mode of this filament monitor
     enable_mode = model_prop("enable_mode", FilamentMonitorEnableMode, FilamentMonitorEnableMode.Disabled)
+
+    # Indicates if filament is present in this filament monitor (None if unknown)
+    filament_present = nullable_model_prop("filament_present", bool)
 
     # Last reported status of this filament monitor
     status = model_prop("status", FilamentMonitorStatus, FilamentMonitorStatus.NoDataReceived)

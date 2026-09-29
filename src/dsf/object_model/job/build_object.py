@@ -9,7 +9,7 @@ class BuildObject(ModelObject):
     """Information about a detected build object"""
 
     # Indicates if this build object is cancelled
-    canceled = model_prop("canceled", bool, False)
+    cancelled = model_prop("cancelled", bool, False)
 
     # Name of the build object (if any)
     name = nullable_model_prop("name", str)

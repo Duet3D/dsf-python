@@ -15,6 +15,7 @@ class RestorePoint(ModelObject):
     extruder_pos = model_prop('extruder_pos', float, 0)
     fan_pwm = model_prop('fan_pwm', float, 0)
     feed_rate = model_prop('feed_rate', float, 0)
+    g_command_number = model_prop('g_command_number', int, -1)
     io_bits = nullable_model_prop('io_bits', int)
     laser_pwm = nullable_model_prop('laser_pwm', float)
     tool_number = model_prop('tool_number', int, -1)

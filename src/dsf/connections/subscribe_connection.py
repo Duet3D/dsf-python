@@ -28,6 +28,9 @@ class SubscribeConnection(BaseConnection):
     :param filter_str: Delimited filter expression. Obsolete: Use filter_list instead.
     :param filter_list: Filter expressions
     :param debug: Whether debugging output is turned on for this connection
+    :param verbose: Whether object model fields flagged as verbose are required. Verbose fields are only kept up-to-date
+                    while at least one subscriber asks for them, so this must be set for the lifetime of the connection
+    :param obsolete: Whether object model fields flagged as obsolete are required
     """
 
     def __init__(
@@ -35,10 +38,14 @@ class SubscribeConnection(BaseConnection):
         subscription_mode: client_init_messages.SubscriptionMode,
         filter_list: List[str] = [],
         debug: bool = False,
+        verbose: bool = False,
+        obsolete: bool = False,
     ):
         super().__init__(debug)
         self.subscription_mode = subscription_mode
         self.filter_list = filter_list
+        self.verbose = verbose
+        self.obsolete = obsolete
         self._object_model = ObjectModel()
         self._initial_object_model_received = False
         self._key_subscriptions: list[_ObjectModelCallbackSubscription] = []
@@ -47,7 +54,7 @@ class SubscribeConnection(BaseConnection):
     def connect(self, socket_file: str = SOCKET_FILE):
         """Establishes a connection to the given UNIX socket file"""
         sim = client_init_messages.subscribe_init_message(
-            self.subscription_mode, self.filter_list
+            self.subscription_mode, self.filter_list, self.verbose, self.obsolete
         )
         return super()._connect(sim, socket_file)
 

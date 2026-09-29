@@ -7,8 +7,8 @@ from ...utils import model_prop, nullable_model_prop
 class RotatingMagnetFilamentMonitorCalibrated(ModelObject):
     """Calibrated properties of a rotating magnet filament monitor"""
 
-    # Extruded distance per pulse (in mm)
-    mm_per_pulse = model_prop("mm_per_pulse", float, 0)
+    # Extruded distance per revolution (in mm)
+    mm_per_rev = model_prop("mm_per_rev", float, 0)
 
     # Maximum percentage (0..1 or greater)
     percent_max = model_prop("percent_max", float, 0)
@@ -47,6 +47,9 @@ class RotatingMagnetFilamentMonitorConfigured(ModelObject):
 
 class RotatingMagnetFilamentMonitor(Duet3DFilamentMonitor):
     """Information about a rotating magnet filament monitor"""
+
+    # AGC reading of this filament monitor (None if unknown)
+    agc = nullable_model_prop('agc', int)
 
     # Calibrated properties of this filament monitor
     calibrated = nullable_model_prop('calibrated', RotatingMagnetFilamentMonitorCalibrated)

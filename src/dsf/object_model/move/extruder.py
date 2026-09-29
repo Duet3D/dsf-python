@@ -43,13 +43,17 @@ class Extruder(ModelObject):
     percent_stst_current = nullable_model_prop("percent_stst_current", int)
 
     # Whether or not the extruder is currently using phase stepping
-    phase_stepping = nullable_model_prop("phase_stepping", bool)
+    phase_step = nullable_model_prop("phase_step", bool)
 
     # Extruder position (in mm)
     position = model_prop("position", float, 0.0)
 
     # Pressure advance parameters (see M572)
     press_adv = model_prop('press_adv', ExtruderPressureAdvance)
+
+    # Pressure advance
+    # Obsolete: use press_adv.k0 instead
+    pressure_advance = model_prop('pressure_advance', float, 0)
 
     # Motor jerk during the current print only (in mm/s)
     printing_jerk = model_prop("printing_jerk", float, 15.0)

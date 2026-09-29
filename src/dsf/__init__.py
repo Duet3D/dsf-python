@@ -22,6 +22,6 @@ if os.path.exists(config_path):
 DEFAULT_BACKLOG = 4
 
 # DSF protocol version
-PROTOCOL_VERSION = 12
+PROTOCOL_VERSION = 13
 
 from . import commands, connections, http, object_model

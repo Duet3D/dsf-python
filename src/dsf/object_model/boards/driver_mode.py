@@ -19,5 +19,8 @@ class DriverMode(int, Enum):
     # Field-oriented control (direct)
     direct = 4,
 
+    # Assisted open loop
+    assistedOpen = 5,
+
     # Driver mode is unknown
-    unknown = 5
+    unknown = 6

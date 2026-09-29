@@ -1,4 +1,4 @@
-from .boards import Board, BoardState
+from .boards import Board, Boards, BoardState, ExpansionBoard, MainBoard
 from .directories import Directories
 from .fans import Fan
 from .heat import Heat, Heater, HeaterState
@@ -11,9 +11,9 @@ from .move import DriverId, Move
 from .network import Network, NetworkInterface, NetworkInterfaceType, NetworkProtocol, NetworkState
 from .object_model import ObjectModel
 from .plugins import Plugin, PluginManifest, SbcPermissions
-from .sbc import CPU, Memory, SBC
+from .sbc import CPU, Memory, SBC, Upgrade
 from .sbc.dsf import AccessLevel, HttpEndpoint, HttpEndpointType, SessionType, UserSession
-from .sensors import AnalogSensor, AnalogSensorType, Endstop, EndstopType, GpInputPort, Probe, ProbeType, Sensors
+from .sensors import Accelerometer, AnalogSensor, AnalogSensorType, Endstop, EndstopType, GpInputPort, Probe, ProbeLoadCell, ProbeType, Sensors
 from .spindles import Spindle, SpindleState
 from .state import LogLevel, MachineStatus, MessageBox, MessageBoxMode, State
 from .tools import Tool, ToolState

@@ -2,6 +2,7 @@ from datetime import datetime
 
 from .cpu import CPU
 from .memory import Memory
+from .upgrade import Upgrade
 from .dsf.dsf import DSF
 from ..model_object import ModelObject
 from ..utils import model_prop, nullable_model_prop
@@ -18,6 +19,7 @@ class SBC(ModelObject):
     memory = model_prop('memory', Memory)
     model = nullable_model_prop('model', str)
     serial = nullable_model_prop('serial', str)
+    upgrade = nullable_model_prop('upgrade', Upgrade)
     uptime = nullable_model_prop('uptime', float)
 
     def __init__(self):

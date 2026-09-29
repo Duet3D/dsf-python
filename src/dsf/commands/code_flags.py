@@ -53,3 +53,6 @@ class CodeFlags(IntEnum):
 
     # Code has been processed internally (if this is set the internal execution of a code is skipped)
     IsInternallyProcessed = 4096
+
+    # Indicates if this code has an explicit line number (e.g. N1 G1 X10)
+    HasExplicitLineNumber = 8192

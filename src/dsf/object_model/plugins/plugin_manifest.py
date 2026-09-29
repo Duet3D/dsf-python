@@ -50,6 +50,9 @@ class PluginManifest(ModelObject):
     # Command-line arguments for the executable
     sbc_executable_arguments = nullable_model_prop('sbc_executable_arguments', str)
 
+    # List of other filenames in the dsf directory that should be executable
+    sbc_extra_executables = model_prop('sbc_extra_executables', ModelCollection[str], ModelCollection(str))
+
     # Automatically restart the SBC process when terminated
     sbc_auto_restart = model_prop('sbc_auto_restart', bool, False)
     

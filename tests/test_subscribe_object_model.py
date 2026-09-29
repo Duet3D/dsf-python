@@ -13,6 +13,7 @@ from typing import Union, Dict
 from tests.utils import check_json
 from src.dsf import PROTOCOL_VERSION
 from src.dsf.connections import SubscribeConnection, SubscriptionMode
+from src.dsf.object_model.boards import ExpansionBoard, MainBoard
 from src.dsf.utils import JSONObj
 
 
@@ -130,7 +131,8 @@ class TestSubscribeObjectModel(unittest.TestCase):
             self.assertIsNotNone(cl)
             if cl is not None:
                 self.assertEqual(cl.position_error.max, 0.085)
-        om.boards[0].accelerometer
+        self.assertIsInstance(om.boards[0], MainBoard)
+        self.assertIsInstance(om.boards[3], ExpansionBoard)
 
         # # Get heat patch
         # update = subscribe_connection.get_object_model_patch()

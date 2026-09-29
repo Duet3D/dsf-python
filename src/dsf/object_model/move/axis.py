@@ -102,7 +102,7 @@ class Axis(ModelObject):
     percent_stst_current = nullable_model_prop("percent_stst_current", int)
 
     # Whether or not the axis is currently using phase stepping
-    phase_stepping = nullable_model_prop("phase_stepping", bool)
+    phase_step = nullable_model_prop("phase_step", bool)
 
     # Motor jerk during the current print only (in mm/s)
     printing_jerk = model_prop("printing_jerk", float, 15.0)

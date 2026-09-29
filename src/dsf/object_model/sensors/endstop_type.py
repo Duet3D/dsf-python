@@ -16,5 +16,8 @@ class EndstopType(str, Enum):
     # Motor stall detection stops individual drives when triggered
     MotorStallIndividual = "motorStallIndividual"
 
+    # Encoder position error stops all the drives when triggered
+    MotorStallEncoder = "motorStallEncoder"
+
     # Unknown
     Unknown = "unknown"

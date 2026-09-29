@@ -63,13 +63,15 @@ def invalidate_channel(channel: CodeChannel):
     return BaseCommand("InvalidateChannel", **{"channel": channel})
 
 
-def set_update_status(updating: bool):
+def set_update_status(updating: bool, message: str = "", progress: Optional[float] = None):
     """
     Override the current status as reported by the object model when performing a software update.
 
     :param updating: Whether an update is now in progress
+    :param message: Description of the current update step, only used if updating is true
+    :param progress: Progress of the current update step (0..1) or None if indeterminate, only used if updating is true
     """
-    return BaseCommand("SetUpdateStatus", **{"updating": updating})
+    return BaseCommand("SetUpdateStatus", **{"updating": updating, "message": message, "progress": progress})
 
 
 def simple_code(code: str, channel: CodeChannel = CodeChannel.DEFAULT_CHANNEL, async_exec: bool = False):

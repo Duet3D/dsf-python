@@ -53,6 +53,9 @@ class Move(ModelObject):
     # Limit axis positions by their minima and maxima
     limit_axes = model_prop('limit_axes', bool, True)
 
+    # Minimum allowed movement speed (in mm/min)
+    min_speed = model_prop('min_speed', float, 30)
+
     # Indicates if standard moves are forbidden if the corresponding axis is not homed
     no_moves_before_homing = model_prop('no_moves_before_homing', bool, True)
 
@@ -78,10 +81,11 @@ class Move(ModelObject):
 
     # Maximum acceleration allowed while travelling (in mm/s^2)
     # deprecated, use motion_systems[].travel_acceleration instead
-    travel_acceleration = model_prop('travel_acceleration', float, 0)
+    travel_acceleration = model_prop('travel_acceleration', float, 10000)
 
-    # Indicates if third-order S-curve acceleration is enabled
-    s_curve_acceleration = model_prop('s_curve_acceleration', bool, False)
+    # Indicates if third-order S-curve acceleration is enabled.
+    # Only present in builds that support S-curve acceleration
+    using_S_curve = model_prop('using_S_curve', bool, False)
 
     # Virtual total extruder position
     # deprecated, use motion_systems[].virtual_e_pos instead

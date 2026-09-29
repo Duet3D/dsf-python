@@ -362,6 +362,68 @@ class Model(unittest.TestCase):
         self.assertEqual(model.boards[0].v_in.min, 19.3)
         self.assertEqual(model.boards[0].v_in.max, 19.4)
 
+    def test_boards_main_and_expansion(self):
+        model = ObjectModel()
+        model.update_from_json('{"boards": [{"name": "Duet 3 MB6HC", "firmwareName": "RepRapFirmware", "maxHeaters": 32},'
+                               ' {"canAddress": 1, "name": "Duet 3 EXP3HC", "state": "timedOut", "timeout": 15}]}')
+        self.assertIsInstance(model.boards, Boards)
+        self.assertIsInstance(model.boards[0], MainBoard)
+        self.assertIsInstance(model.boards[1], ExpansionBoard)
+        self.assertEqual(model.boards[0].firmware_name, "RepRapFirmware")
+        self.assertEqual(model.boards[0].max_heaters, 32)
+        self.assertEqual(model.boards[1].state, BoardState.timedOut)
+        self.assertEqual(model.boards[1].timeout, 15)
+
+        # Boards added by a later patch are typed by their position as well
+        model.update_from_json('{"boards": [{}, {}, {"canAddress": 2}]}')
+        self.assertIsInstance(model.boards[2], ExpansionBoard)
+        self.assertEqual(model.boards[2].timeout, 10)
+
+    def test_sensors_accelerometers_and_load_cell(self):
+        model = ObjectModel()
+        model.update_from_json('{"sensors": {"accelerometers": [null, {"orientation": 25, "port": "121.spi.cs0",'
+                               ' "resolution": 16, "samplingRate": 1344}],'
+                               ' "probes": [{"type": 12, "loadCell": {"force": 12.5, "gramsPerCount": 0.01,'
+                               ' "preload": 50, "preloadWindow": [10, 100]}}]}}')
+        self.assertIsNone(model.sensors.accelerometers[0])
+        accelerometer = model.sensors.accelerometers[1]
+        self.assertIsInstance(accelerometer, Accelerometer)
+        self.assertEqual(accelerometer.port, "121.spi.cs0")
+        self.assertEqual(accelerometer.resolution, 16)
+        self.assertEqual(accelerometer.sampling_rate, 1344)
+
+        probe = model.sensors.probes[0]
+        self.assertEqual(probe.type, ProbeType.LoadCell)
+        self.assertIsInstance(probe.load_cell, ProbeLoadCell)
+        self.assertEqual(probe.load_cell.force, 12.5)
+        self.assertEqual(list(probe.load_cell.preload_window), [10.0, 100.0])
+
+    def test_rc2_fields(self):
+        from src.dsf.object_model.move.input_shaping import InputShapingType
+
+        model = ObjectModel()
+        model.update_from_json('{"limits": {"reportedAxes": 9},'
+                               ' "move": {"minSpeed": 60, "usingSCurve": true, "currentMove": {"filePosition": 1234},'
+                               ' "axes": [{"phaseStep": true}], "shaping": {"type": "ei2"},'
+                               ' "motionSystems": [{"printingAcceleration": 3000, "userPosition": [1, 2, 3]}]},'
+                               ' "job": {"build": {"objects": [{"cancelled": true}]}},'
+                               ' "sbc": {"upgrade": {"message": "Installing packages", "progress": 0.5}}}')
+        self.assertEqual(model.limits.reported_axes, 9)
+        self.assertEqual(model.move.min_speed, 60)
+        self.assertTrue(model.move.using_S_curve)
+        self.assertEqual(model.move.current_move.file_position, 1234)
+        self.assertTrue(model.move.axes[0].phase_step)
+        self.assertEqual(model.move.shaping.type, InputShapingType.ei2)
+        self.assertEqual(model.move.motion_systems[0].printing_acceleration, 3000)
+        self.assertEqual(list(model.move.motion_systems[0].user_position), [1.0, 2.0, 3.0])
+        self.assertTrue(model.job.build.objects[0].cancelled)
+        self.assertEqual(model.sbc.upgrade.message, "Installing packages")
+        self.assertEqual(model.sbc.upgrade.progress, 0.5)
+
+        # Input shaping types reported by older DSF versions are still accepted
+        model.update_from_json('{"move": {"shaping": {"type": "eI3"}}}')
+        self.assertEqual(model.move.shaping.type, InputShapingType.ei3)
+
     def test_http_endpoints(self):
         from src.dsf.object_model import HttpEndpointType
         model = ObjectModel()
@@ -523,6 +585,15 @@ class Model(unittest.TestCase):
         model.update_from_json(json_patch)
         self.assertEqual(len(model.sensors.filament_monitors), 1)
         self.assertEqual(model.sensors.filament_monitors[0].type, FilamentMonitorType.Pulsed)
+
+    def test_sensors_filament_monitor_rc2_fields(self):
+        model = ObjectModel()
+        model.update_from_json('{"sensors":{"filamentMonitors":[{"type":"rotatingMagnet","filamentPresent":true,"agc":120,'
+                               '"calibrated":{"mmPerRev":28.8,"percentMax":110,"percentMin":90,"totalDistance":100}}]}}')
+        monitor = model.sensors.filament_monitors[0]
+        self.assertTrue(monitor.filament_present)
+        self.assertEqual(monitor.agc, 120)
+        self.assertEqual(monitor.calibrated.mm_per_rev, 28.8)
 
     def test_user_sessions(self):
         from src.dsf.object_model import AccessLevel, SessionType

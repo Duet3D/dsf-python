@@ -167,6 +167,7 @@ class Code(BaseCommand):
             KeywordType.Set: "set",
             KeywordType.Echo: "echo",
             KeywordType.Global: "global",
+            KeywordType.Skip: "skip",
         }.get(self.keyword)
 
     def is_flag_set(self, flag: CodeFlags) -> bool:

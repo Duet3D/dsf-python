@@ -73,5 +73,8 @@ class AnalogSensorType(str, Enum):
     # Stepper driver sensors on the DueX expansion board
     DriversDuex = "driversduex"
 
+    # Sensor on a CAN-connected expansion board
+    Remote = "remote"
+
     # Unknown temperature sensor
     Unknown = "unknown"

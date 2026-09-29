@@ -77,9 +77,15 @@ class BaseCommandConnection(BaseConnection):
         res = self.perform_command(commands.files.get_file_info(file_name, read_thumbnail_content), GCodeFileInfo)
         return res.result
 
-    def get_object_model(self):
-        """Retrieve the full object model of the machine."""
-        res = self.perform_command(commands.object_model.get_object_model(), ObjectModel)
+    def get_object_model(self, filters: list[str] = []):
+        """
+        Retrieve the full object model of the machine.
+        :param filters: Optional object model key paths to retrieve.
+                        If any key paths are given, the returned instance holds only the requested parts and every other
+                        property is left at its default value. There is no way to tell those apart from values that are
+                        genuinely unset.
+        """
+        res = self.perform_command(commands.object_model.get_object_model(filters), ObjectModel)
         return res.result
 
     def get_serialized_object_model(self):
@@ -105,12 +111,16 @@ class BaseCommandConnection(BaseConnection):
         :param channel: Code channel to invalidate"""
         return self.perform_command(commands.generic.invalidate_channel(channel))
 
-    def lock_object_model(self):
+    def query_object_model(self, key: str = "", flags: str = ""):
         """
-        Lock the machine model for read/write access.
-        It is MANDATORY to call unlock_object_model when write access has finished
+        Query the object model using a key and flags, returning a formatted JSON response
+        compatible with the M409 response format without going through the code execution pipeline
+        :param key: Object model key path to query (e.g. "heat", "move.axes", "" for root)
+        :param flags: RRF-compatible flags string controlling response content (see M409 F parameter)
+        :returns: M409-compatible JSON response
         """
-        return self.perform_command(commands.object_model.lock_object_model())
+        res = self.perform_command(commands.object_model.query_object_model(key, flags))
+        return res.result
 
     def patch_object_model(self, key: str, patch: str):
         """
@@ -172,21 +182,26 @@ class BaseCommandConnection(BaseConnection):
         res = self.perform_command(commands.object_model.set_network_protocol(protocol, enabled))
         return res.result
 
-    def set_object_model(self, path: str, value: str):
+    def set_wifi_country(self, country_code: Optional[str] = None):
         """
-        Set a given property to a certain value.
-        Make sure to lock the object model before calling this
+        Set the WiFi country code. This is a global setting on Linux, so it is applied to every WiFi interface in the object model
+        :param country_code: New WiFi country code, or null to clear it
         """
-        return self.perform_command(commands.object_model.set_object_model(path, value))
+        return self.perform_command(commands.object_model.set_wifi_country(country_code))
 
     def set_plugin_data(self, plugin: str, key: str, value: object):
         """Set custom plugin data in the object model"""
         res = self.perform_command(commands.plugins.set_plugin_data(plugin, key, value))
         return res.result
 
-    def set_update_status(self, is_updating: bool):
-        """Override the current machin staeus if a software update is in progress"""
-        res = self.perform_command(commands.generic.set_update_status(is_updating))
+    def set_update_status(self, is_updating: bool, message: str = "", progress: Optional[float] = None):
+        """
+        Override the current machine status if a software update is in progress
+        :param is_updating: Whether an update is now in progress
+        :param message: Description of the current update step, only used if is_updating is true
+        :param progress: Progress of the current update step (0..1) or None if indeterminate, only used if is_updating is true
+        """
+        res = self.perform_command(commands.generic.set_update_status(is_updating, message, progress))
         return res.result
 
     def start_plugin(self, plugin: str, save_state: bool = True):
@@ -231,10 +246,6 @@ class BaseCommandConnection(BaseConnection):
         """
         res = self.perform_command(commands.packages.uninstall_system_package(package))
         return res.result
-
-    def unlock_object_model(self):
-        """Unlock the object model again"""
-        return self.perform_command(commands.object_model.unlock_object_model())
 
     def write_message(
         self,

@@ -49,7 +49,7 @@ class ModelCollection(ModelType[list[JSONElement]], Generic[T], list[T]):
 
         if value is not None:
             self[:] = []
-            for (_, item) in enumerate(value):
+            for (index, item) in enumerate(value):
                 if item is None:
                     self.append(self._coerce_item_value(item))
                     continue
@@ -57,7 +57,7 @@ class ModelCollection(ModelType[list[JSONElement]], Generic[T], list[T]):
                 if isinstance(item, self._runtime_model_type):
                     self.append(item)
                 else:
-                    ref_item = self._item_constructor()
+                    ref_item = self._create_item(index)
                     if not is_model_object(ref_item):
                         raise TypeError(f"Item constructor for ModelCollection must inherit from type ModelType to update from a dict."
                                         f" Got {type(ref_item).__name__}: {ref_item}")
@@ -69,6 +69,14 @@ class ModelCollection(ModelType[list[JSONElement]], Generic[T], list[T]):
     @classmethod
     def from_json(cls, data: list[JSONElement]):
         raise RuntimeError("from_json is not supported for ModelCollection. Use the constructor instead.")
+
+    def _create_item(self, index: int) -> T:
+        """
+        Create a new item for the given index. Override this in derived classes if the item type depends on its position
+        :param index: Index of the item to create
+        :return: New item instance
+        """
+        return self._item_constructor()
 
     def _coerce_item_value(self, value: JSONElement) -> T:
         """Coerce scalar/enum values using the declared item constructor when possible."""
@@ -119,7 +127,7 @@ class ModelCollection(ModelType[list[JSONElement]], Generic[T], list[T]):
                 else:
                     ref_item: Optional[T] = None
                     try:
-                        ref_item = self._item_constructor()
+                        ref_item = self._create_item(i)
                     except TypeError:
                         ref_item = None
 
@@ -143,7 +151,7 @@ class ModelCollection(ModelType[list[JSONElement]], Generic[T], list[T]):
             else:
                 ref_item: Optional[T] = None
                 try:
-                    ref_item = self._item_constructor()
+                    ref_item = self._create_item(i)
                 except TypeError:
                     ref_item = None
 

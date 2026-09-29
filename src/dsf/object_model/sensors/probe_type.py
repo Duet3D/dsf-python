@@ -37,5 +37,11 @@ class ProbeType(IntEnum):
     # Z motor stall detection
     ZMotorStall = 10
 
-    # Scanning Z Probe
+    # Analog scanning probe
+    ScanningAnalog = 11
+
+    # Deprecated alias of ScanningAnalog
     ScanningZProbe = 11
+
+    # Load cell probe measuring the contact force
+    LoadCell = 12

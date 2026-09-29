@@ -85,7 +85,7 @@ def command_init_message() -> ClientInitMessage:
     return ClientInitMessage(ConnectionMode.COMMAND)
 
 
-def subscribe_init_message(subscription_mode: SubscriptionMode, filter_list: List[str] = []) -> ClientInitMessage:
+def subscribe_init_message(subscription_mode: SubscriptionMode, filter_list: List[str] = [], verbose: bool = False, obsolete: bool = False) -> ClientInitMessage:
     """_summary_
 
     Args:
@@ -96,6 +96,8 @@ def subscribe_init_message(subscription_mode: SubscriptionMode, filter_list: Lis
             for full names or indices. To get updates for an entire namespace, the ** wildcard can be used 
             for example heat/** for everything heat-related), however it can be only used at the end of a filter expression.
             Defaults to [].
+        verbose (bool): whether object model fields flagged as verbose are required.
+        obsolete (bool): whether object model fields flagged as obsolete are required.
 
     Returns:
         ClientInitMessage: The initialized client message for subscription
@@ -105,5 +107,7 @@ def subscribe_init_message(subscription_mode: SubscriptionMode, filter_list: Lis
         **{
             "subscriptionMode": subscription_mode,
             "filters": filter_list,
+            "verbose": verbose,
+            "obsolete": obsolete,
         },
     )

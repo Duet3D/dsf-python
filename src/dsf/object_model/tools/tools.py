@@ -15,6 +15,8 @@ class Tool(ModelObject):
     axes = model_prop('axes', ModelCollection[list[int]], ModelCollection(list[int]))
     extruders = model_prop('extruders', ModelCollection[int], ModelCollection(int))
     fans = model_prop('fans', ModelCollection[int], ModelCollection(int))
+    # Obsolete: use feed_forward_pwm instead
+    feed_forward = model_prop('feed_forward', ModelCollection[float], ModelCollection(float))
     feed_forward_advance = nullable_model_prop('feed_forward_advance', float)
     feed_forward_pwm = model_prop('feed_forward_pwm', ModelCollection[float], ModelCollection(float))
     feed_forward_temp = model_prop('feed_forward_temp', ModelCollection[float], ModelCollection(float))

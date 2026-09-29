@@ -39,8 +39,10 @@ class Limits(ModelObject):
     monitors_per_heater = nullable_model_prop("monitors_per_heater", int)
     # Maximum number of output ports per heater or null if unknown
     ports_per_heater = nullable_model_prop("ports_per_heater", int)
-    # Maximum number of axes reported when the move key is requested
-    reported_move_axes = nullable_model_prop("reported_move_axes", int)
+    # Maximum number of axes reported when the move key is requested.
+    # If the number of reported axes is greater than or equal to this value, a client
+    # may need to request move.axes explicitly in order to get the full move.axes array
+    reported_axes = nullable_model_prop("reported_axes", int)
     # Maximum number of restore points or null if unknown
     restore_points = nullable_model_prop("restore_points", int)
     # Maximum number of sensors or null if unknown
@@ -81,6 +83,7 @@ class Limits(ModelObject):
         self._led_strips = None
         self._monitors_per_heater = None
         self._ports_per_heater = None
+        self._reported_axes = None
         self._restore_points = None
         self._sensors = None
         self._spindles = None

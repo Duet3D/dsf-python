@@ -3,7 +3,7 @@ from typing import List, Optional
 from .model_collection import ModelCollection
 from .model_dictionary import ModelDictionary
 from .model_object import ModelObject
-from .boards import Board
+from .boards import Boards
 from .directories import Directories
 from .fans import Fan
 from .heat import Heat
@@ -29,7 +29,7 @@ class ObjectModel(ModelObject):
 
     # Information about the SBC which Duet Software Framework is running on.
     # This is None if the system is operating in standalone mode
-    boards = model_prop('boards', ModelCollection[Board], ModelCollection(Board))
+    boards = model_prop('boards', Boards, Boards())
     directories = model_prop('directories', Directories)
     fans = model_prop('fans', ModelCollection[Optional[Fan]], ModelCollection(Optional[Fan]))
     globals = model_prop('globals', ModelDictionary, ModelDictionary(False))

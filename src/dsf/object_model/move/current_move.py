@@ -20,6 +20,9 @@ class CurrentMove(ModelObject):
     # Current extrusion rate (in mm/s)
     extrusion_rate = model_prop("extrusion_rate", float, 0.0)
 
+    # Position in the job file of the move being executed (in bytes or None)
+    file_position = nullable_model_prop("file_position", int)
+
     # Laser PWM of the current move (0..1) or null if not applicable
     laser_pwm = nullable_model_prop("laser_pwm", float)
 
@@ -36,6 +39,7 @@ class CurrentMove(ModelObject):
         self._distance = 0.0
         self._duration = 0.0
         self._extrusion_rate = 0.0
+        self._file_position = None
         self._laser_pwm = None
         self._requested_speed = 0.0
         self._top_speed = 0.0

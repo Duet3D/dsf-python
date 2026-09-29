@@ -25,7 +25,7 @@ class MotionSystem(ModelObject):
     previous_tool = model_prop("previous_tool", int, -1)
 
     # Maximum acceleration allowed while printing (in mm/s^2)
-    max_print_acceleration = model_prop("max_print_acceleration", float, 10000.0)
+    printing_acceleration = model_prop("printing_acceleration", float, 10000.0)
 
     # List of restore points
     restore_points = model_prop("restore_points", ModelCollection[RestorePoint], ModelCollection(RestorePoint))
@@ -40,7 +40,7 @@ class MotionSystem(ModelObject):
     travel_acceleration = model_prop("travel_acceleration", float, 10000.0)
 
     # User coordinates of the motion system
-    user_coordinates = model_prop("user_coordinates", ModelCollection[float], ModelCollection(float))
+    user_position = model_prop("user_position", ModelCollection[float], ModelCollection(float))
 
     # Virtual tool extruder position
     virtual_e_pos = model_prop("virtual_e_pos", float, 0.0)

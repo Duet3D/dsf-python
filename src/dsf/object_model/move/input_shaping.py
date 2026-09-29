@@ -26,13 +26,22 @@ class InputShapingType(str, Enum):
     zvddd = "zvddd"
 
     # EI2 (2-hump)
-    ei2 = "eI2"
+    ei2 = "ei2"
 
     # EI3 (3-hump)
-    ei3 = "eI3"
+    ei3 = "ei3"
 
     # Custom
     custom = "custom"
+
+    @classmethod
+    def _missing_(cls, value: object):
+        # DSF versions prior to 3.7 serialized EI2/EI3 as "eI2"/"eI3"
+        if isinstance(value, str):
+            for member in cls:
+                if member.value == value.lower():
+                    return member
+        return None
 
 
 class InputShaping(ModelObject):

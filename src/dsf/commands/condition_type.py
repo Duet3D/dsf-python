@@ -39,3 +39,6 @@ class KeywordType(IntEnum):
 
     # Global operation
     Global = 11
+
+    # Skip the rest of the current line (no-op)
+    Skip = 12

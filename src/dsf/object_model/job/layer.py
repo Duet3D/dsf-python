@@ -11,6 +11,10 @@ class Layer(ModelObject):
     # Duration of the layer (in s)
     duration = model_prop("duration", float, 0.0)
 
+    # Actual amount of filament extruded during this layer (in mm)
+    # Obsolete: use filament_usage instead
+    filament = model_prop("filament", ModelCollection[float], ModelCollection(float))
+
     # Amount of total filament extruded during this layer (in mm)
     filament_usage = model_prop("filament_usage", float, 0.0)
 

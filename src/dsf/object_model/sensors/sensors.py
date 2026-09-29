@@ -1,5 +1,6 @@
 from typing import Optional
 
+from .accelerometer import Accelerometer
 from .analog_sensor import AnalogSensor
 from .endstop import Endstop
 from .filament_monitors import FilamentMonitor
@@ -12,6 +13,9 @@ from ..utils import model_prop
 
 class Sensors(ModelObject):
     """Information about sensors"""
+
+    # List of configured accelerometers, indexed by their M955/M956 P number
+    accelerometers = model_prop("accelerometers", ModelCollection[Optional[Accelerometer]], ModelCollection(Optional[Accelerometer]))
 
     # List of analog sensors
     analog = model_prop("analog", ModelCollection[Optional[AnalogSensor]], ModelCollection(Optional[AnalogSensor]))
