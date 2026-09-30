@@ -152,13 +152,16 @@ class BaseConnection:
                 # Refill the buffer and check again
                 BUFF_SIZE = 4096  # 4 KiB
                 data = b""
+                closed = False
                 while True:
                     try:
                         part = self.socket.recv(BUFF_SIZE)
                     except socket.timeout:
                         break
                     if not part:
-                        raise ConnectionError("Connection closed by the server")
+                        # Parse what was already received before reporting the closed connection
+                        closed = True
+                        break
                     data += part
                     # end of the currently available data
                     if len(part) < BUFF_SIZE:
@@ -173,6 +176,8 @@ class BaseConnection:
                     # Limit to the first full JSON object
                     json_string = json_string[:end_index]
                     found = True
+                elif closed:
+                    raise ConnectionError("Connection closed by the server")
 
         if self.debug:
             print("recv:", json_string)
