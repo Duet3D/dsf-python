@@ -5,6 +5,7 @@ import warnings
 from types import UnionType
 from typing import Any, Optional, Callable, TypeVar, TypeAlias, Union, get_args, get_origin, cast, overload
 
+
 # We don't want our deprecations to be ignored by default, so create our own type.
 class DeprecatedWarning(UserWarning):
     pass
@@ -29,34 +30,34 @@ def _matches_type(value: Any, expected_type: Any) -> bool:
         if len(args) != 2:
             return True
         key_type, val_type = args
-        typed_value = cast(dict[Any, Any], value)
-        return all(_matches_type(k, key_type) and _matches_type(v, val_type) for k, v in typed_value.items())
+        typed_dict = cast(dict[Any, Any], value)
+        return all(_matches_type(k, key_type) and _matches_type(v, val_type) for k, v in typed_dict.items())
 
     if origin is list:
         if not isinstance(value, list):
             return False
         if len(args) != 1:
             return True
-        typed_value = cast(list[Any], value)
-        return all(_matches_type(item, args[0]) for item in typed_value)
+        typed_list = cast(list[Any], value)
+        return all(_matches_type(item, args[0]) for item in typed_list)
 
     if origin is tuple:
         if not isinstance(value, tuple):
             return False
-        typed_value = cast(tuple[Any, ...], value)
+        typed_tuple = cast(tuple[Any, ...], value)
         if len(args) == 2 and args[1] is Ellipsis:
-            return all(_matches_type(item, args[0]) for item in typed_value)
-        if len(args) != len(typed_value):
+            return all(_matches_type(item, args[0]) for item in typed_tuple)
+        if len(args) != len(typed_tuple):
             return False
-        return all(_matches_type(item, item_type) for item, item_type in zip(typed_value, args))
+        return all(_matches_type(item, item_type) for item, item_type in zip(typed_tuple, args))
 
     if origin is set:
         if not isinstance(value, set):
             return False
         if len(args) != 1:
             return True
-        typed_value = cast(set[Any], value)
-        return all(_matches_type(item, args[0]) for item in typed_value)
+        typed_set = cast(set[Any], value)
+        return all(_matches_type(item, args[0]) for item in typed_set)
 
     try:
         return isinstance(value, expected_type)
@@ -86,29 +87,36 @@ def camel_to_snake(s: str, keep_acronyms: bool = True) -> str:
     :param keep_acronyms: Wheter acronyms should be kept uppercase or not
     :returns: The string in snake_case format"""
     # Added a look-behind (?!^) so initials like SBC are not getting snake-cased
-    snake = re.sub(r'((?<=[a-z])[A-Z0-9]|(?!^)[A-Z0-9](?=[a-z]))', r'_\1', s)
-    return '_'.join(w if w.isupper() else w.lower() for w in snake.split('_')) if keep_acronyms else snake.lower()
+    snake = re.sub(r"((?<=[a-z])[A-Z0-9]|(?!^)[A-Z0-9](?=[a-z]))", r"_\1", s)
+    return "_".join(w if w.isupper() else w.lower() for w in snake.split("_")) if keep_acronyms else snake.lower()
 
 
-F = TypeVar('F', bound=Callable[..., Any])
+F = TypeVar("F", bound=Callable[..., Any])
 
 
 def deprecated(instructions: str) -> Callable[[F], F]:
     """Flags a function/method as deprecated.
     :param instructions: A human-friendly string of instructions
     """
+
     def decorator(func: F) -> F:
         """This is a decorator which can be used to mark functions as deprecated.
         It will result in a warning being emitted when the function is used."""
+
         def deprecated_func(*args: Any, **kwargs: Any) -> Any:
             # Do not show DeprecatedWarning on ObjectModel update (function called by update_from_json)
             frame = inspect.currentframe()
             if frame is not None and frame.f_back is not None:
-                if frame.f_back.f_code.co_name not in ['_update_from_json', 'update_from_json']:
-                    warnings.warn(f"Call to deprecated function {func.__name__}(). {instructions}",
-                                  DeprecatedWarning, stacklevel=2)
+                if frame.f_back.f_code.co_name not in ["_update_from_json", "update_from_json"]:
+                    warnings.warn(
+                        f"Call to deprecated function {func.__name__}(). {instructions}",
+                        DeprecatedWarning,
+                        stacklevel=2,
+                    )
             return func(*args, **kwargs)
+
         return deprecated_func  # type: ignore[return-value]
+
     return decorator  # type: ignore[return-value]
 
 
@@ -118,7 +126,7 @@ def preserve_builtin(data: Optional[JSONObj]) -> JSONObj:
     to avoid name shadowing. e.g: type => type_"""
     if data is None:
         return {}
-    reserved_keys = ['format', 'global', 'id', 'license', 'max', 'min', 'None', 'type']
+    reserved_keys = ["format", "global", "id", "license", "max", "min", "None", "type"]
     return {f"{k}_" if k in reserved_keys else k: v for k, v in data.items()}
 
 
@@ -128,5 +136,5 @@ def snake_to_camel(s: str, first_lower: bool = True, keep_acronyms: bool = True)
     :param first_lower: Wheter the first character is returned as lower case or not
     :param keep_acronyms: Wheter acronyms should be kept uppercase or not
     :returns: The string in CamelCase format"""
-    res = ''.join(w if w.isupper() and keep_acronyms else w.title() for w in s.split('_'))
-    return f'{res[0].lower()}{res[1:]}' if first_lower and len(res) else res
+    res = "".join(w if w.isupper() and keep_acronyms else w.title() for w in s.split("_"))
+    return f"{res[0].lower()}{res[1:]}" if first_lower and len(res) else res

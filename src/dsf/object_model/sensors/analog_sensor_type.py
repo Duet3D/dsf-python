@@ -57,10 +57,10 @@ class AnalogSensorType(str, Enum):
 
     # ADS131 channel 0 (unipolar)
     ADS131Chan0Unipolar = "ads131.chan0.u"
-    
+
     # ADS131 channel 0 (bipolar)
     ADS131Chan0Bipolar = "ads131.chan0.b"
-    
+
     # ADS131 channel 1
     ADS131Chan1 = "ads131.chan1"
 

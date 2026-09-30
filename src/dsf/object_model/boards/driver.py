@@ -8,10 +8,10 @@ class Driver(ModelObject):
     """Information about a driver"""
 
     # Closed-loop settings (if applicable)
-    closed_loop = nullable_model_prop('closed_loop', DriverClosedLoop)
+    closed_loop = nullable_model_prop("closed_loop", DriverClosedLoop)
 
     # Configured (M569) settings of this driver
-    config = model_prop('config', DriverConfig)
+    config = model_prop("config", DriverConfig)
 
     # Driver status register value
     status = model_prop("status", int)

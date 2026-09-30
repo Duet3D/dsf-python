@@ -1,5 +1,3 @@
-from typing import Union
-
 from ..model_object import ModelObject
 from ..utils import nullable_model_prop
 

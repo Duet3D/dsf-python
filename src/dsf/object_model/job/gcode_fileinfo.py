@@ -1,5 +1,4 @@
 from datetime import datetime
-from typing import List, Union
 
 from .thumbnail_info import ThumbnailInfo
 from ..model_collection import ModelCollection

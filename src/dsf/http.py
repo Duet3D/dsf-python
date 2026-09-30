@@ -14,6 +14,7 @@ from .utils import JSONObj, get_typed_value
 
 HttpCallback: TypeAlias = Callable[["HttpEndpointConnection"], Coroutine[Any, Any, None]]
 
+
 class HttpResponseType(str, Enum):
     """Enumeration of supported HTTP responses"""
 
@@ -43,7 +44,9 @@ class ReceivedHttpRequest:
             body=body,
         )
 
-    def __init__(self, sessionId: int, queries: dict[str, str], headers: dict[str, str], contentType: Optional[str], body: str):
+    def __init__(
+        self, sessionId: int, queries: dict[str, str], headers: dict[str, str], contentType: Optional[str], body: str
+    ):
         self.session_id = sessionId
         self.queries = queries
         self.headers = headers
@@ -54,7 +57,9 @@ class ReceivedHttpRequest:
 class HttpEndpointConnection:
     """Connection class for dealing with requests received from a custom HTTP endpoint"""
 
-    def __init__(self, reader: asyncio.StreamReader, writer: asyncio.StreamWriter, is_websocket: bool, debug: bool = False):
+    def __init__(
+        self, reader: asyncio.StreamReader, writer: asyncio.StreamWriter, is_websocket: bool, debug: bool = False
+    ):
         """Constructor for a new connection dealing with a single HTTP endpoint request"""
         self.reader = reader
         self.writer = writer
@@ -172,7 +177,7 @@ class HttpEndpointUnixSocket:
         sock = socket.socket(socket.AF_UNIX, socket.SOCK_STREAM)
 
         # Check for abstract socket. `str` and `bytes` paths are supported.
-        if path[0] not in (0, '\x00'):
+        if path[0] not in (0, "\x00"):
             try:
                 if stat.S_ISSOCK(os.stat(path).st_mode):
                     os.remove(path)
@@ -192,11 +197,11 @@ class HttpEndpointUnixSocket:
             if exc.errno == errno.EADDRINUSE:
                 # Let's improve the error message by adding
                 # with what exact address it occurs.
-                msg = f'Address {path!r} is already in use'
+                msg = f"Address {path!r} is already in use"
                 raise OSError(errno.EADDRINUSE, msg) from None
             else:
                 raise
-        except:
+        except BaseException:
             sock.close()
             raise
 
@@ -208,9 +213,7 @@ class HttpEndpointUnixSocket:
             asyncio.set_event_loop(self._loop)
             sock = self._create_socket(self.socket_file)
             self._server = self._loop.run_until_complete(
-                asyncio.start_unix_server(
-                    self.handle_connection, sock=sock, backlog=self.backlog
-                )
+                asyncio.start_unix_server(self.handle_connection, sock=sock, backlog=self.backlog)
             )
             self._loop.run_forever()
         finally:

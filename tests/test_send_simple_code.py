@@ -1,17 +1,12 @@
 import unittest
-from unittest.mock import patch
 import threading
 import os
-import pathlib
 import socket
 import tempfile
-import time
-import importlib.util
 import json
 
 from src.dsf import PROTOCOL_VERSION
 from src.dsf.connections import CommandConnection
-from tests.utils import check_json
 
 
 class TestSendSimpleCode(unittest.TestCase):
@@ -69,11 +64,13 @@ class TestSendSimpleCode(unittest.TestCase):
                 cmd_msg = conn.recv(1024)
                 expected_cmd = {
                     "command": "SimpleCode",
-                    "code": "echo \"Hello world!\"",
-                    "channel": "SBC", "executeAsynchronously": False
+                    "code": 'echo "Hello world!"',
+                    "channel": "SBC",
+                    "executeAsynchronously": False,
                 }
-                self.assertEqual(json.loads(cmd_msg.decode()), expected_cmd,
-                                 f"Incorrect command message: {cmd_msg.decode()}")
+                self.assertEqual(
+                    json.loads(cmd_msg.decode()), expected_cmd, f"Incorrect command message: {cmd_msg.decode()}"
+                )
 
                 # Send success response for the command
                 conn.sendall('{"result":"Hello world!", "success":true}'.encode())
@@ -91,7 +88,7 @@ class TestSendSimpleCode(unittest.TestCase):
 
         # res = command_connection.set_plugin_data("ExecOnMcode", "test", "1")
         # Perform a simple command and wait for its output
-        res = command_connection.perform_simple_code("echo \"Hello world!\"")
+        res = command_connection.perform_simple_code('echo "Hello world!"')
         self.assertEqual(res, "Hello world!")
         command_connection.close()
 

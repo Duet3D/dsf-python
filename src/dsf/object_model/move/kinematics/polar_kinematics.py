@@ -11,7 +11,7 @@ class PolarKinematics(Kinematics):
     # Homed radius (in mm)
     radius_homed = model_prop("radius_homed", float, 0.0)
 
-    #Maximum radius (in mm)
+    # Maximum radius (in mm)
     radius_max = model_prop("radius_max", float, 0.0)
 
     # Minimum radius (in mm)
@@ -26,4 +26,3 @@ class PolarKinematics(Kinematics):
     def __init__(self):
         super(PolarKinematics, self).__init__()
         self._name = KinematicsName.polar
-

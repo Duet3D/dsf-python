@@ -1,5 +1,4 @@
 from enum import Enum
-from typing import List, Optional
 
 from .driver_id import DriverId
 from .microstepping import MicroStepping
@@ -11,43 +10,43 @@ from ..utils import model_prop, nullable_model_prop
 class AxisLetter(str, Enum):
     """List of supported axis letters"""
 
-    X = 'X'
-    Y = 'Y'
-    Z = 'Z'
-    U = 'U'
-    V = 'V'
-    W = 'W'
-    A = 'A'
-    B = 'B'
-    C = 'C'
-    D = 'D'
-    a = 'a'
-    b = 'b'
-    c = 'c'
-    d = 'd'
-    e = 'e'
-    f = 'f'
-    g = 'g'
-    h = 'h'
-    i = 'i'
-    j = 'j'
-    k = 'k'
-    l = 'l'
-    m = 'm'
-    n = 'n'
-    o = 'o'
-    p = 'p'
-    q = 'q'
-    r = 'r'
-    s = 's'
-    t = 't'
-    u = 'u'
-    v = 'v'
-    w = 'w'
-    x = 'x'
-    y = 'y'
-    z = 'z'
-    none = ''
+    X = "X"
+    Y = "Y"
+    Z = "Z"
+    U = "U"
+    V = "V"
+    W = "W"
+    A = "A"
+    B = "B"
+    C = "C"
+    D = "D"
+    a = "a"
+    b = "b"
+    c = "c"
+    d = "d"
+    e = "e"
+    f = "f"
+    g = "g"
+    h = "h"
+    i = "i"
+    j = "j"
+    k = "k"
+    l = "l"  # noqa: E741
+    m = "m"
+    n = "n"
+    o = "o"
+    p = "p"
+    q = "q"
+    r = "r"
+    s = "s"
+    t = "t"
+    u = "u"
+    v = "v"
+    w = "w"
+    x = "x"
+    y = "y"
+    z = "z"
+    none = ""
 
 
 class Axis(ModelObject):

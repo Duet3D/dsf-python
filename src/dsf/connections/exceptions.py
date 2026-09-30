@@ -1,5 +1,6 @@
 from ..commands.base_command import BaseCommand
 
+
 class IncompatibleVersionException(Exception):
     """Exception raised if the API version of the client is incompatible to the server"""
 

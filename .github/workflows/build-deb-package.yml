@@ -34,7 +34,6 @@ jobs:
         python3 -m pip install --upgrade pip
         pip3 install setuptools
         pip3 install stdeb
-        pip3 install python-dateutil
         pip3 install wheel
     - name: Clean up previous builds
       run: rm -rf deb_dist/ || true

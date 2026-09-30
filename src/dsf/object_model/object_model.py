@@ -1,8 +1,9 @@
-from typing import List, Optional
+from typing import Optional
 
 from .model_collection import ModelCollection
 from .model_dictionary import ModelDictionary
 from .model_object import ModelObject
+from ..utils import JSONElement
 from .boards import Boards
 from .directories import Directories
 from .fans import Fan
@@ -29,34 +30,36 @@ class ObjectModel(ModelObject):
 
     # Information about the SBC which Duet Software Framework is running on.
     # This is None if the system is operating in standalone mode
-    boards = model_prop('boards', Boards, Boards())
-    directories = model_prop('directories', Directories)
-    fans = model_prop('fans', ModelCollection[Optional[Fan]], ModelCollection(Optional[Fan]))
-    globals = model_prop('globals', ModelDictionary, ModelDictionary(False))
-    heat = model_prop('heat', Heat)
-    inputs = model_prop('inputs', Inputs)
-    job = model_prop('job', Job)
-    led_strips = model_prop('led_strips', ModelCollection[LedStrip], ModelCollection(LedStrip))
-    limits = model_prop('limits', Limits)
-    messages = model_prop('messages', ModelCollection[Message], ModelCollection(Message))
-    move = model_prop('move', Move)
-    network = model_prop('network', Network)
-    plugins = model_prop('plugins', ModelDictionary, ModelDictionary(True, Plugin))
-    sbc = nullable_model_prop('sbc', SBC)
-    sensors = model_prop('sensors', Sensors)
-    spindles = model_prop('spindles', ModelCollection[Optional[Spindle]], ModelCollection(Optional[Spindle]))
-    state = model_prop('state', State)
-    tools = model_prop('tools', ModelCollection[Optional[Tool]], ModelCollection(Optional[Tool]))
-    volumes = model_prop('volumes', ModelCollection[Volume], ModelCollection(Volume))
-
+    boards = model_prop("boards", Boards, Boards())
+    directories = model_prop("directories", Directories)
+    fans = model_prop("fans", ModelCollection[Optional[Fan]], ModelCollection(Optional[Fan]))
+    globals = model_prop("globals", ModelDictionary, ModelDictionary(False))
+    heat = model_prop("heat", Heat)
+    inputs = model_prop("inputs", Inputs)
+    job = model_prop("job", Job)
+    led_strips = model_prop("led_strips", ModelCollection[LedStrip], ModelCollection(LedStrip))
+    limits = model_prop("limits", Limits)
+    messages = model_prop("messages", ModelCollection[Message], ModelCollection(Message))
+    move = model_prop("move", Move)
+    network = model_prop("network", Network)
+    plugins = model_prop("plugins", ModelDictionary, ModelDictionary(True, Plugin))
+    sbc = nullable_model_prop("sbc", SBC)
+    sensors = model_prop("sensors", Sensors)
+    spindles = model_prop("spindles", ModelCollection[Optional[Spindle]], ModelCollection(Optional[Spindle]))
+    state = model_prop("state", State)
+    tools = model_prop("tools", ModelCollection[Optional[Tool]], ModelCollection(Optional[Tool]))
+    volumes = model_prop("volumes", ModelCollection[Volume], ModelCollection(Volume))
 
     def __init__(self):
         super(ObjectModel, self).__init__()
 
-    def _update_from_json(self, **kwargs) -> 'ObjectModel':
+    def _update_from_json(self, **kwargs: JSONElement) -> "ObjectModel":
         super(ObjectModel, self)._update_from_json(**kwargs)
 
         # "global" is a reserved keyword in Python, so it is converted to "globals"
-        if 'global_' in kwargs:
-            self.globals.update_from_json(kwargs.get('global_'))
+        if "global_" in kwargs:
+            global_ = kwargs["global_"]
+            if global_ is not None and not isinstance(global_, dict):
+                raise TypeError(f"global must be a dict or None. Got {type(global_).__name__}: {global_}")
+            self.globals.update_from_json(global_)
         return self

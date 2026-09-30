@@ -144,10 +144,7 @@ class BaseCommandConnection(BaseConnection):
         return res.result
 
     def perform_simple_code(
-        self,
-        cde: str,
-        channel: CodeChannel = CodeChannel.DEFAULT_CHANNEL,
-        async_exec: bool = False
+        self, cde: str, channel: CodeChannel = CodeChannel.DEFAULT_CHANNEL, async_exec: bool = False
     ) -> str:
         """Execute an arbitrary G/M/T-code in text form
 
@@ -171,9 +168,7 @@ class BaseCommandConnection(BaseConnection):
 
     def remove_http_endpoint(self, endpoint_type: HttpEndpointType, namespace: str, path: str):
         """Remove an existing HTTP endpoint"""
-        res = self.perform_command(
-            commands.http_endpoints.remove_http_endpoint(endpoint_type, namespace, path)
-        )
+        res = self.perform_command(commands.http_endpoints.remove_http_endpoint(endpoint_type, namespace, path))
         return res.result
 
     def remove_user_session(self, session_id: int):
@@ -196,7 +191,8 @@ class BaseCommandConnection(BaseConnection):
 
     def set_wifi_country(self, country_code: Optional[str] = None):
         """
-        Set the WiFi country code. This is a global setting on Linux, so it is applied to every WiFi interface in the object model
+        Set the WiFi country code. This is a global setting on Linux, so it is applied to every WiFi interface
+        in the object model
         :param country_code: New WiFi country code, or null to clear it
         """
         return self.perform_command(commands.object_model.set_wifi_country(country_code))
@@ -211,7 +207,8 @@ class BaseCommandConnection(BaseConnection):
         Override the current machine status if a software update is in progress
         :param is_updating: Whether an update is now in progress
         :param message: Description of the current update step, only used if is_updating is true
-        :param progress: Progress of the current update step (0..1) or None if indeterminate, only used if is_updating is true
+        :param progress: Progress of the current update step (0..1) or None if indeterminate,
+            only used if is_updating is true
         """
         res = self.perform_command(commands.generic.set_update_status(is_updating, message, progress))
         return res.result
@@ -267,7 +264,5 @@ class BaseCommandConnection(BaseConnection):
         log_level: LogLevel,
     ):
         """Write an arbitrary message"""
-        res = self.perform_command(
-            commands.generic.write_message(message_type, message, output_message, log_level)
-        )
+        res = self.perform_command(commands.generic.write_message(message_type, message, output_message, log_level))
         return res.result

@@ -15,7 +15,9 @@ class Sensors(ModelObject):
     """Information about sensors"""
 
     # List of configured accelerometers, indexed by their M955/M956 P number
-    accelerometers = model_prop("accelerometers", ModelCollection[Optional[Accelerometer]], ModelCollection(Optional[Accelerometer]))
+    accelerometers = model_prop(
+        "accelerometers", ModelCollection[Optional[Accelerometer]], ModelCollection(Optional[Accelerometer])
+    )
 
     # List of analog sensors
     analog = model_prop("analog", ModelCollection[Optional[AnalogSensor]], ModelCollection(Optional[AnalogSensor]))
@@ -24,7 +26,9 @@ class Sensors(ModelObject):
     endstops = model_prop("endstops", ModelCollection[Optional[Endstop]], ModelCollection(Optional[Endstop]))
 
     # List of configured filament monitors
-    filament_monitors = model_prop("filament_monitors", ModelCollection[Optional[FilamentMonitor]], ModelCollection(Optional[FilamentMonitor]))
+    filament_monitors = model_prop(
+        "filament_monitors", ModelCollection[Optional[FilamentMonitor]], ModelCollection(Optional[FilamentMonitor])
+    )
 
     # List of general-purpose input ports
     gp_in = model_prop("gp_in", ModelCollection[Optional[GpInputPort]], ModelCollection(Optional[GpInputPort]))

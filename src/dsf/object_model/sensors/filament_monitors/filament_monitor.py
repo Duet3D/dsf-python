@@ -3,6 +3,7 @@ from .filament_monitor_status import FilamentMonitorStatus
 from .filament_monitor_type import FilamentMonitorType
 from ...model_object import ModelObject
 from ...utils import model_prop, nullable_model_prop
+from ....utils import JSONElement
 
 
 class FilamentMonitor(ModelObject):
@@ -29,15 +30,12 @@ class FilamentMonitor(ModelObject):
         self.type = type_
 
     @staticmethod
-    def get_filament_monitor(type_: FilamentMonitorType):
+    def get_filament_monitor(type_: FilamentMonitorType | str) -> "FilamentMonitor":
         from .laser_filament_monitor import LaserFilamentMonitor
         from .pulsed_filament_monitor import PulsedFilamentMonitor
         from .rotating_magnet_filament_monitor import RotatingMagnetFilamentMonitor
 
-        if isinstance(type_, str):
-            type_ = FilamentMonitorType(type_)
-        elif not isinstance(type_, FilamentMonitorType):
-            raise TypeError(f"type must be of type FilamentMonitorType. Got {type(type_)}: {type_}")
+        type_ = FilamentMonitorType(type_)
 
         if type_ == FilamentMonitorType.Laser:
             return LaserFilamentMonitor()
@@ -48,12 +46,11 @@ class FilamentMonitor(ModelObject):
         else:
             return FilamentMonitor(type_)
 
-    def _update_from_json(self, **kwargs):
+    def _update_from_json(self, **kwargs: JSONElement) -> "FilamentMonitor":
         """Override ObjectModel._update_from_json to return the FilamentMonitorType type matching the given type"""
-        if 'type_' in kwargs and self.type != FilamentMonitorType(kwargs.get('type_')):
-            required_type = self.get_filament_monitor(kwargs.get('type_'))
-            new_filament_monitor = required_type.update_from_json(kwargs)
-            return new_filament_monitor
+        type_ = kwargs.get("type_")
+        if isinstance(type_, str) and self.type != FilamentMonitorType(type_):
+            return self.get_filament_monitor(type_).update_from_json(kwargs)
 
         super(FilamentMonitor, self)._update_from_json(**kwargs)
         return self

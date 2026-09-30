@@ -19,7 +19,7 @@ serverinitmessage holds everything relevant to the first message received from t
 """
 
 from ... import PROTOCOL_VERSION
-from ...utils import preserve_builtin, JSONObj
+from ...utils import JSONObj
 
 
 class ServerInitMessage:
@@ -29,7 +29,7 @@ class ServerInitMessage:
     """
 
     @classmethod
-    def from_json(cls, data: JSONObj) -> 'ServerInitMessage':
+    def from_json(cls, data: JSONObj) -> "ServerInitMessage":
         """Deserialize a dictionary coming from JSON into an instance of this class"""
         version = data.get("version")
         id = data.get("id")

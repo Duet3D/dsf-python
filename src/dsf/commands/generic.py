@@ -48,8 +48,9 @@ def flush(channel: CodeChannel, sync_file_streams: bool = False, if_executing: b
 
     :returns: true if the flush request is successful
     """
-    return BaseCommand("Flush",
-                       **{"channel": channel, "syncFileStreams": sync_file_streams, "ifExecuting": if_executing})
+    return BaseCommand(
+        "Flush", **{"channel": channel, "syncFileStreams": sync_file_streams, "ifExecuting": if_executing}
+    )
 
 
 def invalidate_channel(channel: CodeChannel):

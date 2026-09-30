@@ -13,11 +13,11 @@ setuptools.setup(
     url="https://github.com/Duet3D/dsf-python",
     author="Duet3D Ltd.",
     author_email="pkg@duet3d.com",
+    license="LGPL-3.0-or-later",
     classifiers=[
         "Development Status :: 5 - Production/Stable",
         "Intended Audience :: Developers",
         "Topic :: Software Development :: Libraries",
-        "License :: OSI Approved :: GNU Lesser General Public License v3 (LGPLv3)",
         "Programming Language :: Python :: 3",
         "Programming Language :: Python :: 3.11",
         "Programming Language :: Python :: 3.12",
@@ -25,12 +25,10 @@ setuptools.setup(
         "Programming Language :: Python :: 3.14",
         "Programming Language :: Python :: 3 :: Only",
     ],
-    install_requires=[
-        'python-dateutil',
-    ],
     keywords="Duet3D, DuetSoftwareFramework, DSF, dsf-python",
     package_dir={"": "src"},
     packages=setuptools.find_packages(where="src"),
+    package_data={"dsf": ["py.typed"]},
     python_requires=">=3.11, <4",
     extras_require={
         "dev": [

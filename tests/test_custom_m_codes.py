@@ -1,18 +1,13 @@
 import threading
 import os
-import pathlib
 import socket
-import time
-import importlib.util
 import json
 import unittest
 import tempfile
-from unittest.mock import patch
 
 from src.dsf import PROTOCOL_VERSION
 from src.dsf.connections import InterceptConnection, InterceptionMode
 from src.dsf.commands.code import CodeType
-from src.dsf.object_model import MessageType
 
 
 class TestCustomMCodes(unittest.TestCase):
@@ -51,52 +46,55 @@ class TestCustomMCodes(unittest.TestCase):
         setup_msg = conn.recv(1024)
         self.assertIn(b'"mode":"Intercept"', setup_msg)
         self.assertIn(b'"interceptionMode":"Pre"', setup_msg)
-        
+
         conn.sendall(b'{"success":true}')
-        
+
         # Send M1234 code
         conn.sendall(
             b"{"
-            b'"connection":{"id":12,"apiVersion":' + str(PROTOCOL_VERSION).encode() + b',"isConnected":true},"sourceConnection":12,'
+            b'"connection":{"id":12,"apiVersion":'
+            + str(PROTOCOL_VERSION).encode()
+            + b',"isConnected":true},"sourceConnection":12,'
             b'"result":null,"type":"M","channel":"HTTP","lineNumber":null,"indent":0,"keyword":0,'
             b'"keywordArgument":null,"majorNumber":1234,"minorNumber":null,"flags":2048,"comment":null,'
             b'"filePosition":null,"length":6,"parameters":[],"command":"Code"'
             b"}"
         )
-        
+
         # Process responses more flexibly
         response1 = json.loads(conn.recv(1024))
         # Either a Flush or Resolve command is acceptable based on implementation
         self.assertIn("command", response1)
-        
+
         # Send appropriate response based on what was received
         if response1.get("command") == "Flush":
             conn.sendall(b'{"result":true,"success":true}')
             # After Flush, there should be a Resolve
             response2 = json.loads(conn.recv(1024))
             self.assertEqual(response2.get("command"), "Resolve")
-        
+
         # Send M5678 code
         conn.sendall(
             b"{"
-            b'"connection":{"id":12,"apiVersion":' + str(PROTOCOL_VERSION).encode() + b',"isConnected":true},"sourceConnection":12,'
+            b'"connection":{"id":12,"apiVersion":'
+            + str(PROTOCOL_VERSION).encode()
+            + b',"isConnected":true},"sourceConnection":12,'
             b'"result":null,"type":"M","channel":"HTTP","lineNumber":null,"indent":0,"keyword":0,'
             b'"keywordArgument":null,"majorNumber":5678,"minorNumber":null,"flags":2048,"comment":null,'
             b'"filePosition":null,"length":6,"parameters":[],"command":"Code"'
             b"}"
         )
-        
+
         # Expect a response for M5678
         response3 = json.loads(conn.recv(1024))
         self.assertIn("command", response3)
-        
+
         conn.close()
         self.dcs_passed.set()  # indicate that all asserts passed and the mock_dcs is shutting down
 
     def test_custom_m_codes(self):
         filters = ["M1234", "M5678"]
-        intercept_connection = InterceptConnection(
-            InterceptionMode.PRE, filters=filters, debug=True, timeout=3)
+        intercept_connection = InterceptConnection(InterceptionMode.PRE, filters=filters, debug=True, timeout=3)
         intercept_connection.connect(self.mock_dcs_socket_file)
         while True:
             # Wait for a code to arrive

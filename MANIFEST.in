@@ -1,4 +1,5 @@
 include LICENSE
 include README.md
 include setup.py
+include src/dsf/py.typed
 reverse-include examples/*.py

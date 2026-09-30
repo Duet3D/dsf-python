@@ -5,22 +5,22 @@ class DriverMode(int, Enum):
     """State of a channel"""
 
     # Constant off-time chopper
-    constantOffTime = 0,
+    constantOffTime = (0,)
 
     # Random off-time chopper
-    randomOffTime = 1,
+    randomOffTime = (1,)
 
     # SpreadCycle
-    spreadCycle = 2,
+    spreadCycle = (2,)
 
     # StealthChop (includes stealthChop2)
-    stealthChop = 3,
+    stealthChop = (3,)
 
     # Field-oriented control (direct)
-    direct = 4,
+    direct = (4,)
 
     # Assisted open loop
-    assistedOpen = 5,
+    assistedOpen = (5,)
 
     # Driver mode is unknown
     unknown = 6

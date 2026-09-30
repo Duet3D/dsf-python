@@ -1,7 +1,7 @@
 import json
 from dataclasses import dataclass
 from threading import Lock
-from typing import Any, Callable, Sequence, List
+from typing import Any, Callable, Protocol, Sequence, List, cast
 
 from .base_connection import BaseConnection
 from .init_messages import client_init_messages
@@ -9,14 +9,19 @@ from .. import commands, SOCKET_FILE
 from ..object_model import ObjectModel
 from ..utils import JSONObj
 
-
 _MISSING = object()
+
+
+class KeySubscriptionCallback(Protocol):
+    """Callback invoked for a subscribed object model key"""
+
+    def __call__(self, *, key: str, data: Any, indices: tuple[int, ...] | None) -> None: ...
 
 
 @dataclass(frozen=True)
 class _ObjectModelCallbackSubscription:
     keys: tuple[str, ...]
-    callback: Callable[..., None]
+    callback: KeySubscriptionCallback
 
 
 class SubscribeConnection(BaseConnection):
@@ -67,13 +72,16 @@ class SubscribeConnection(BaseConnection):
         Later calls apply every queued patch without blocking, update the
         cached object model, and run any registered key callbacks synchronously.
         """
-        if (self.subscription_mode == client_init_messages.SubscriptionMode.FULL or not self._initial_object_model_received):
+        if (
+            self.subscription_mode == client_init_messages.SubscriptionMode.FULL
+            or not self._initial_object_model_received
+        ):
             self._object_model = self.receive(ObjectModel)
             self._initial_object_model_received = True
             self.send(commands.model_subscription.acknowledge())
             return self._object_model
         else:
-            while (self.has_data_available()):
+            while self.has_data_available():
                 patch_json = self.get_object_model_patch()
                 patch_data = json.loads(patch_json)
                 self._object_model.update_from_json(patch_data)
@@ -104,7 +112,7 @@ class SubscribeConnection(BaseConnection):
     def subscribe_to_keys(
         self,
         keys: Sequence[str],
-        callback: Callable[..., None],
+        callback: KeySubscriptionCallback,
     ) -> Callable[[], None]:
         """
         Register a callback for one or more dot-delimited object model key paths.
@@ -171,10 +179,7 @@ class SubscribeConnection(BaseConnection):
         key: str,
     ) -> list[tuple[tuple[int, ...] | None, Any]]:
         matches = cls._walk_key_path(patch_data, key.split("."), ())
-        return [
-            (indexes if indexes else None, value)
-            for indexes, value in matches
-        ]
+        return [(indexes if indexes else None, value) for indexes, value in matches]
 
     @classmethod
     def _walk_key_path(
@@ -195,9 +200,10 @@ class SubscribeConnection(BaseConnection):
             return cls._walk_key_path(current_value[part], next_parts, indexes)
 
         if isinstance(current_value, list):
+            items = cast(list[Any], current_value)
             if part == "^":
                 matches: list[tuple[tuple[int, ...], Any]] = []
-                for index, item in enumerate(current_value):
+                for index, item in enumerate(items):
                     if item is None:
                         continue
                     matches.extend(cls._walk_key_path(item, next_parts, indexes + (index,)))
@@ -207,9 +213,9 @@ class SubscribeConnection(BaseConnection):
                 index = int(part)
             except ValueError:
                 return []
-            if index < 0 or index >= len(current_value):
+            if index < 0 or index >= len(items):
                 return []
-            item = current_value[index]
+            item = items[index]
             if item is None:
                 return []
             return cls._walk_key_path(item, next_parts, indexes)
@@ -218,7 +224,7 @@ class SubscribeConnection(BaseConnection):
 
     @staticmethod
     def _invoke_callback(
-        callback: Callable[..., None],
+        callback: KeySubscriptionCallback,
         *,
         key: str,
         data: Any,

@@ -42,43 +42,43 @@ class Board(ModelObject):
     """
 
     # CAN address of this board or None if not applicable
-    can_address = nullable_model_prop('can_address', int)
+    can_address = nullable_model_prop("can_address", int)
 
     # Drivers of this board
-    drivers = nullable_model_prop('drivers', ModelCollection[Driver], lambda: ModelCollection(Driver))
+    drivers = nullable_model_prop("drivers", ModelCollection[Driver], lambda: ModelCollection(Driver))
 
     # Date of the firmware build
-    firmware_date = model_prop('firmware_date', str, "")
+    firmware_date = model_prop("firmware_date", str, "")
 
     # Filename of the firmware binary
-    firmware_file_name = model_prop('firmware_file_name', str, "")
+    firmware_file_name = model_prop("firmware_file_name", str, "")
 
     # Version of the firmware build
-    firmware_version = model_prop('firmware_version', str, "")
+    firmware_version = model_prop("firmware_version", str, "")
 
     # Amount of free RAM on this board (in bytes or null if unknown)
-    free_ram = nullable_model_prop('free_ram', int)
+    free_ram = nullable_model_prop("free_ram", int)
 
     # Maximum number of motors this board can drive
-    max_motors = model_prop('max_motors', int)
+    max_motors = model_prop("max_motors", int)
 
     # Minimum, maximum, and current temperatures of the MCU or None if unknown
-    mcu_temp = nullable_model_prop('mcu_temp', MinMaxCurrent)
+    mcu_temp = nullable_model_prop("mcu_temp", MinMaxCurrent)
 
     # Full name of the board
-    name = model_prop('name', str, "")
+    name = model_prop("name", str, "")
 
     # Short name of the board
-    short_name = model_prop('short_name', str, "")
+    short_name = model_prop("short_name", str, "")
 
     # Unique identifier of the board or None if unknown
-    unique_id = nullable_model_prop('unique_id', str)
+    unique_id = nullable_model_prop("unique_id", str)
 
     # Minimum, maximum, and current voltages on the 12V rail or None if unknown
-    v_12 = nullable_model_prop('v_12', MinMaxCurrent)
+    v_12 = nullable_model_prop("v_12", MinMaxCurrent)
 
     # Minimum, maximum, and current voltages on the input rail or None if unknown
-    v_in = nullable_model_prop('v_in', MinMaxCurrent)
+    v_in = nullable_model_prop("v_in", MinMaxCurrent)
 
     def __init__(self):
         super(Board, self).__init__()
@@ -88,25 +88,25 @@ class MainBoard(Board):
     """Information about the mainboard, which is always the first item of the boards list"""
 
     # Details about a connected display or None if none is connected
-    direct_display = nullable_model_prop('direct_display', DirectDisplay)
+    direct_display = nullable_model_prop("direct_display", DirectDisplay)
 
     # Name of the firmware build
-    firmware_name = model_prop('firmware_name', str, "")
+    firmware_name = model_prop("firmware_name", str, "")
 
     # Filename of the IAP binary that is used for updates from the SBC or None if unsupported
-    iap_file_name_SBC = nullable_model_prop('iap_file_name_SBC', str)
+    iap_file_name_SBC = nullable_model_prop("iap_file_name_SBC", str)
 
     # Filename of the IAP binary that is used for updates from the SD card or None if unsupported
-    iap_file_name_SD = nullable_model_prop('iap_file_name_SD', str)
+    iap_file_name_SD = nullable_model_prop("iap_file_name_SD", str)
 
     # Maximum number of heaters this board can control
-    max_heaters = model_prop('max_heaters', int)
+    max_heaters = model_prop("max_heaters", int)
 
     # Indicates if this board supports external displays
-    supports_direct_display = model_prop('supports_direct_display', bool, False)
+    supports_direct_display = model_prop("supports_direct_display", bool, False)
 
     # Filename of the on-board WiFi chip or None if not present
-    wifi_firmware_file_name = nullable_model_prop('wifi_firmware_file_name', str)
+    wifi_firmware_file_name = nullable_model_prop("wifi_firmware_file_name", str)
 
     def __init__(self):
         super(MainBoard, self).__init__()
@@ -116,23 +116,26 @@ class ExpansionBoard(Board):
     """Information about an expansion board connected over CAN"""
 
     # Closed loop data of this board or None if unknown
-    closed_loop = nullable_model_prop('closed_loop', BoardClosedLoop)
+    closed_loop = nullable_model_prop("closed_loop", BoardClosedLoop)
 
     # Information about an inductive sensor or None if not present
-    inductive_sensor = nullable_model_prop('inductive_sensor', InductiveSensor)
+    inductive_sensor = nullable_model_prop("inductive_sensor", InductiveSensor)
 
     # State of this board
-    state = model_prop('state', BoardState, BoardState.unknown)
+    state = model_prop("state", BoardState, BoardState.unknown)
 
     # Connection timeout of this board (in s)
-    timeout = model_prop('timeout', int, 10)
+    timeout = model_prop("timeout", int, 10)
 
     def __init__(self):
         super(ExpansionBoard, self).__init__()
 
 
 class Boards(ModelCollection[Board]):
-    """List of connected boards. The first board is the mainboard, every other one is an expansion board connected over CAN"""
+    """
+    List of connected boards.
+    The first board is the mainboard, every other one is an expansion board connected over CAN
+    """
 
     def __init__(self, value: Optional[List[Board]] = None):
         super(Boards, self).__init__(Board, value)

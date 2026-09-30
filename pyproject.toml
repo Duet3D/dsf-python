@@ -4,3 +4,13 @@ requires = [
     "wheel"
 ]
 build-backend = "setuptools.build_meta"
+
+[tool.pyright]
+include = ["src", "tests", "examples"]
+# Examples import the package as `dsf`, tests import it as `src.dsf`
+extraPaths = ["src"]
+pythonVersion = "3.11"
+typeCheckingMode = "strict"
+
+[tool.black]
+line-length = 120

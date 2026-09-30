@@ -55,7 +55,8 @@ def sync_object_model():
 
 def set_wifi_country(country_code: Optional[str] = None):
     """
-    Set the WiFi country code. This is a global setting on Linux, so it is applied to every WiFi interface in the object model
+    Set the WiFi country code. This is a global setting on Linux, so it is applied to every WiFi interface
+    in the object model
     :param country_code: New WiFi country code, or null to clear it
     """
     return BaseCommand("SetWifiCountry", **{"countryCode": country_code})

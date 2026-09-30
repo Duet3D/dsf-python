@@ -1,14 +1,12 @@
 import unittest
-from unittest.mock import patch
+import unittest.mock
 import threading
 import os
-import pathlib
 import socket
 import tempfile
 import time
-import importlib.util
 import json
-from typing import Union, Dict
+from typing import cast
 
 from tests.utils import check_json
 from src.dsf import PROTOCOL_VERSION
@@ -21,9 +19,9 @@ class TestSubscribeObjectModel(unittest.TestCase):
     """Test suite for the object model subscription example."""
 
     @staticmethod
-    def _wait_for_data_available(subscribe_connection: SubscribeConnection, timeout: float = 1.0) -> bool:
-        deadline = time.time() + timeout
-        while time.time() < deadline:
+    def _wait_for_data_available(subscribe_connection: SubscribeConnection, timeout: float = 5.0) -> bool:
+        deadline = time.monotonic() + timeout
+        while time.monotonic() < deadline:
             if subscribe_connection.has_data_available():
                 return True
             time.sleep(0.01)
@@ -76,7 +74,7 @@ class TestSubscribeObjectModel(unittest.TestCase):
                         "mode": "Subscribe",
                         "version": PROTOCOL_VERSION,
                         "subscriptionMode": "Patch",
-                        "filters": []
+                        "filters": [],
                     }
                     check_json(expected_setup, setup_msg.decode())
 
@@ -93,14 +91,19 @@ class TestSubscribeObjectModel(unittest.TestCase):
 
                     for model_file in model_updates:
                         # Send model data
-                        with open(model_file, 'r') as f:
+                        with open(model_file, "r") as f:
                             update_data = json.load(f)
                         conn.sendall(json.dumps(update_data).encode())
 
                         # Verify acknowledge response
                         ack = conn.recv(1024)
-                        self.assertEqual(ack, self.acknowledge_response,
-                                         f"Expected acknowledge command, received: {ack.decode()}")
+                        self.assertEqual(
+                            ack, self.acknowledge_response, f"Expected acknowledge command, received: {ack.decode()}"
+                        )
+
+                    # Keep the connection open until the client closes it, like DCS does
+                    conn.settimeout(5)
+                    self.assertEqual(conn.recv(1024), b"", "Expected the client to close the connection")
 
             self.dcs_passed.set()  # Test completed successfully
 
@@ -188,9 +191,7 @@ class TestSubscribeObjectModel(unittest.TestCase):
 
             unsubscribe = subscribe_connection.subscribe_to_keys(
                 ["boards", "heat.heaters.0.current", "state.upTime"],
-                lambda **kwargs: callback_changes.append(
-                    (kwargs["key"], kwargs["data"], kwargs["indices"])
-                ),
+                lambda key, data, indices: callback_changes.append((key, data, indices)),
             )
 
             self.assertTrue(
@@ -203,8 +204,9 @@ class TestSubscribeObjectModel(unittest.TestCase):
             self.assertIn(("heat.heaters.0.current", 16.22, None), callback_changes)
             self.assertIn(("state.upTime", 3658, None), callback_changes)
             self.assertIn(("boards", unittest.mock.ANY, None), callback_changes)
-            boards_data = next(data for key, data, indices in callback_changes if key == "boards")
-            self.assertEqual(len(boards_data), 7)
+            boards_data = next(data for key, data, _ in callback_changes if key == "boards")
+            self.assertIsInstance(boards_data, list)
+            self.assertEqual(len(cast(list[object], boards_data)), 7)
 
             unsubscribe()
         finally:
@@ -225,9 +227,7 @@ class TestSubscribeObjectModel(unittest.TestCase):
 
             unsubscribe = subscribe_connection.subscribe_to_keys(
                 ["heat.heaters.^.current", "sensors.analog.^.lastReading"],
-                lambda **kwargs: callback_changes.append(
-                    (kwargs["key"], kwargs["data"], kwargs["indices"])
-                ),
+                lambda key, data, indices: callback_changes.append((key, data, indices)),
             )
 
             self.assertTrue(

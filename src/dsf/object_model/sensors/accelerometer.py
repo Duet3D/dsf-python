@@ -9,13 +9,15 @@ class Accelerometer(ModelObject):
     """
 
     # Orientation of the accelerometer
-    # See https://docs.duet3d.com/en/Duet3D_hardware/Accessories/Duet3D_Accelerometer#orientation for a list of orientations
+    # See the following page for a list of orientations:
+    # https://docs.duet3d.com/en/Duet3D_hardware/Accessories/Duet3D_Accelerometer#orientation
     orientation = model_prop("orientation", int, 20)
 
     # Number of collected data points in the last run or 0 if it failed
     points = model_prop("points", int)
 
-    # Port name(s) the accelerometer is connected to as passed to M955 C, including the CAN address prefix on expansion boards
+    # Port name(s) the accelerometer is connected to as passed to M955 C,
+    # including the CAN address prefix on expansion boards
     port = model_prop("port", str, "")
 
     # Resolution the accelerometer is programmed for (in bits) or 0 if unknown

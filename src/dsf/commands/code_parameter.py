@@ -1,12 +1,12 @@
 """
 codeparameter contains all classes and methods dealing with deserialized code parameters.
 """
+
 import json
 from typing import Self, TypeAlias, TypedDict, cast, Optional
 
 from ..exceptions import CodeParserException
 from ..object_model.move.driver_id import DriverId
-
 
 CodeParameterScalar: TypeAlias = str | int | float | DriverId
 CodeParameterArray: TypeAlias = list[int] | list[float] | list[DriverId]
@@ -170,7 +170,8 @@ class CodeParameter(json.JSONEncoder):
             return [float(elem) for elem in elements if elem]
         except ValueError as e:
             raise Exception(
-                f"Cannot parse expression array: failed to convert elements to numbers in {self.letter} (value {self.string_value})"
+                f"Cannot parse expression array: failed to convert elements to numbers in {self.letter}"
+                f" (value {self.string_value})"
             ) from e
 
     def as_float_array(self) -> list[float]:
@@ -196,10 +197,10 @@ class CodeParameter(json.JSONEncoder):
             parsed_value: object = self.__parsed_value
             if isinstance(parsed_value, list):
                 if isinstance(parsed_value[0], DriverId):
-                    values = cast(list[DriverId], parsed_value)
-                    return [int(value.as_int()) for value in values]
-                values = cast(list[int] | list[float], parsed_value)
-                return [int(value) for value in values]
+                    driver_ids = cast(list[DriverId], parsed_value)
+                    return [int(driver_id.as_int()) for driver_id in driver_ids]
+                numbers = cast(list[int] | list[float], parsed_value)
+                return [int(value) for value in numbers]
             if isinstance(parsed_value, int):
                 return [parsed_value]
             if isinstance(parsed_value, DriverId):

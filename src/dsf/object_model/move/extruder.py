@@ -16,7 +16,7 @@ class Extruder(ModelObject):
     current = model_prop("current", int, 0)
 
     # Assigned driver
-    driver = nullable_model_prop('driver', DriverId)
+    driver = nullable_model_prop("driver", DriverId)
 
     # Extrusion factor to use (0..1 or greater)
     factor = model_prop("factor", float, 1.0)
@@ -49,11 +49,11 @@ class Extruder(ModelObject):
     position = model_prop("position", float, 0.0)
 
     # Pressure advance parameters (see M572)
-    press_adv = model_prop('press_adv', ExtruderPressureAdvance)
+    press_adv = model_prop("press_adv", ExtruderPressureAdvance)
 
     # Pressure advance
     # Obsolete: use press_adv.k0 instead
-    pressure_advance = model_prop('pressure_advance', float, 0)
+    pressure_advance = model_prop("pressure_advance", float, 0)
 
     # Motor jerk during the current print only (in mm/s)
     printing_jerk = model_prop("printing_jerk", float, 15.0)

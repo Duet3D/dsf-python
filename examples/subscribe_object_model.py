@@ -19,8 +19,9 @@ def on_status_changed(*, key: str, data: str, indices: Optional[tuple[int, ...]]
     print("Machine status changed to", data)
 
 
-def on_heater_temperature_changed(*, key: str, data: float, indices: tuple[int, ...]) -> None:
-    # indices holds the list indexes matched by each ^ wildcard in the key
+def on_heater_temperature_changed(*, key: str, data: float, indices: tuple[int, ...] | None) -> None:
+    # indices holds the list indexes matched by each ^ wildcard in the key (None if the key has no wildcard)
+    assert indices is not None
     print(f"Heater {indices[0]} is now at {data}C")
 
 
@@ -37,7 +38,9 @@ def subscribe() -> None:
         print("Machine status is", object_model.state.status.value)
 
         # Register callbacks for the keys we are interested in, ^ matches any list index
-        unsubscribe_status: Callable[[], None] = subscribe_connection.subscribe_to_keys(["state.status"], on_status_changed)
+        unsubscribe_status: Callable[[], None] = subscribe_connection.subscribe_to_keys(
+            ["state.status"], on_status_changed
+        )
         subscribe_connection.subscribe_to_keys(["heat.heaters.^.current"], on_heater_temperature_changed)
 
         for _ in range(20):

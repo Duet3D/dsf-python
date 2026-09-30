@@ -49,10 +49,10 @@ class LaserFilamentMonitor(Duet3DFilamentMonitor):
     """Information about a laser filament monitor"""
 
     # Calibrated properties of this filament monitor
-    calibrated = nullable_model_prop('calibrated', LaserFilamentMonitorCalibrated)
+    calibrated = nullable_model_prop("calibrated", LaserFilamentMonitorCalibrated)
 
     # Configured properties of this filament monitor
-    configured = model_prop('configured', LaserFilamentMonitorConfigured, LaserFilamentMonitorConfigured())
+    configured = model_prop("configured", LaserFilamentMonitorConfigured, LaserFilamentMonitorConfigured())
 
     def __init__(self):
         super(LaserFilamentMonitor, self).__init__(FilamentMonitorType.Laser)
