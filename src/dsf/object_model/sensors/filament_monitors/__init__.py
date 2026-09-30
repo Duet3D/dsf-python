@@ -14,7 +14,6 @@ from .rotating_magnet_filament_monitor import (
     RotatingMagnetFilamentMonitorConfigured,
 )
 
-
 __all__ = [
     "Duet3DFilamentMonitor",
     "FilamentMonitor",
