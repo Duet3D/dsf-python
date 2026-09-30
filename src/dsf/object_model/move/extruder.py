@@ -52,7 +52,7 @@ class Extruder(ModelObject):
     press_adv = model_prop("press_adv", ExtruderPressureAdvance)
 
     # Pressure advance
-    # Obsolete: use press_adv.k0 instead
+    # Obsolete: use press_adv.k_0 instead
     pressure_advance = model_prop("pressure_advance", float, 0)
 
     # Motor jerk during the current print only (in mm/s)

@@ -17,6 +17,7 @@ from src.dsf.object_model import (
     ProbeLoadCell,
     ProbeType,
 )
+from src.dsf.object_model.move.kinematics import ZLeadscrewKinematics
 from src.dsf.object_model.utils import is_model_object, JSONElement, JSONObj, model_prop, nullable_model_prop
 from src.dsf.object_model.object_model import ModelCollection, ModelDictionary, ModelObject
 
@@ -529,6 +530,41 @@ class Model(unittest.TestCase):
         # Input shaping types reported by older DSF versions are still accepted
         model.update_from_json('{"move": {"shaping": {"type": "eI3"}}}')
         self.assertEqual(model.move.shaping.type, InputShapingType.ei3)
+
+    def test_keys_with_digits_and_single_letters(self):
+        # Property names must match camel_to_snake of their JSON key, e.g. is64Bit -> is_64_bit
+        model = ObjectModel()
+        model.update_from_json(
+            '{"job": {"build": {"m486Names": true, "m486Numbers": true}},'
+            ' "move": {"virtualEPos": 12.5, "motionSystems": [{"virtualEPos": 7.5}],'
+            ' "extruders": [{"pressAdv": {"k0": 0.05, "k1": 0.1}}],'
+            ' "kinematics": {"name": "coreXY", "tiltCorrection": {"screwX": [10, 20], "screwY": [30, 40]}}},'
+            ' "sbc": {"dsf": {"is64Bit": true}}}'
+        )
+        build = model.job.build
+        assert build is not None
+        self.assertTrue(build.m_486_names)
+        self.assertTrue(build.m_486_numbers)
+        self.assertEqual(model.move.virtual_E_pos, 12.5)
+        self.assertEqual(model.move.motion_systems[0].virtual_E_pos, 7.5)
+        press_adv = model.move.extruders[0].press_adv
+        self.assertEqual(press_adv.k_0, 0.05)
+        self.assertEqual(press_adv.k_1, 0.1)
+        kinematics = model.move.kinematics
+        assert isinstance(kinematics, ZLeadscrewKinematics)
+        tilt_correction = kinematics.tilt_correction
+        self.assertEqual(list(tilt_correction.screw_X), [10.0, 20.0])
+        self.assertEqual(list(tilt_correction.screw_Y), [30.0, 40.0])
+        assert model.sbc is not None
+        self.assertTrue(model.sbc.dsf.is_64_bit)
+
+        # And they serialize back to the same keys
+        data = json.loads(model.to_json())
+        self.assertTrue(data["job"]["build"]["m486Names"])
+        self.assertEqual(data["move"]["extruders"][0]["pressAdv"]["k0"], 0.05)
+        self.assertEqual(data["move"]["kinematics"]["tiltCorrection"]["screwX"], [10, 20])
+        self.assertEqual(data["move"]["virtualEPos"], 12.5)
+        self.assertTrue(data["sbc"]["dsf"]["is64Bit"])
 
     def test_null_clears_dictionary(self):
         # DSF sends null for a dictionary that has been cleared, e.g. job.file.customInfo when a job ends

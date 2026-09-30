@@ -86,8 +86,8 @@ class Move(ModelObject):
     using_S_curve = model_prop("using_S_curve", bool, False)
 
     # Virtual total extruder position
-    # deprecated, use motion_systems[].virtual_e_pos instead
-    virtual_e_pos = model_prop("virtual_e_pos", float, 0)
+    # deprecated, use motion_systems[].virtual_E_pos instead
+    virtual_E_pos = model_prop("virtual_E_pos", float, 0)
 
     # Index of the currently selected workplace
     # deprecated, use motion_systems[].workplace_number instead

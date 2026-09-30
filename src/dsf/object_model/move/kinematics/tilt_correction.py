@@ -19,10 +19,10 @@ class TiltCorrection(ModelObject):
     screw_pitch = model_prop("screw_pitch", float, 0.0)
 
     # X positions of the leadscrews (in mm)
-    screw_x = model_prop("screw_x", ModelCollection[float], ModelCollection(float, []))
+    screw_X = model_prop("screw_X", ModelCollection[float], ModelCollection(float, []))
 
     # Y positions of the leadscrews (in mm)
-    screw_y = model_prop("screw_y", ModelCollection[float], ModelCollection(float, []))
+    screw_Y = model_prop("screw_Y", ModelCollection[float], ModelCollection(float, []))
 
     def __init__(self):
         super().__init__()
