@@ -17,6 +17,7 @@ from src.dsf.object_model import (
     ProbeLoadCell,
     ProbeType,
 )
+from src.dsf.object_model.move import Axis
 from src.dsf.object_model.move.kinematics import ZLeadscrewKinematics
 from src.dsf.object_model.utils import is_model_object, JSONElement, JSONObj, model_prop, nullable_model_prop
 from src.dsf.object_model.object_model import ModelCollection, ModelDictionary, ModelObject
@@ -573,6 +574,15 @@ class Model(unittest.TestCase):
         self.assertEqual(json.loads(model.to_json())["move"]["axes"][0]["max"], 1234567.25)
         self.assertEqual(json.dumps(1234567.25), "1234567.25")
 
+    def test_serialize_unset_properties(self):
+        # Every property is serialized, including defaults that are only created when first read
+        # and nullable properties that have never been set
+        axis = json.loads(Axis().to_json())
+        self.assertEqual(axis["min"], 0)
+        self.assertEqual(axis["drivers"], [])
+        self.assertIn("userPosition", axis)
+        self.assertIsNone(axis["userPosition"])
+
     def test_null_clears_dictionary(self):
         # DSF sends null for a dictionary that has been cleared, e.g. job.file.customInfo when a job ends
         model = ObjectModel()
@@ -740,12 +750,16 @@ class Model(unittest.TestCase):
                     recursive_compare(item1, item2)
             elif isinstance(obj1, ModelObject):
                 self.assertIsInstance(obj2, ModelObject)
-                recursive_compare(vars(obj1), vars(obj2))
+                # Compare the property values, unset properties are not stored
+                names = [name for name in dir(type(obj1)) if isinstance(getattr(type(obj1), name), property)]
+                recursive_compare(
+                    {name: getattr(obj1, name) for name in names}, {name: getattr(obj2, name) for name in names}
+                )
             else:
                 self.assertEqual(obj1, obj2)
 
         model2 = ObjectModel().update_from_json(str(model))
-        recursive_compare(model.__dict__, model2.__dict__)
+        recursive_compare(model, model2)
 
     def test_messages(self):
         from src.dsf.object_model.messages import MessageType
