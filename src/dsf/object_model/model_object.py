@@ -5,19 +5,18 @@ from typing import TypeVar, Any, Union, cast
 from .model_type import ModelType
 from ..utils import preserve_builtin, camel_to_snake, snake_to_camel, JSONElement, JSONObj
 
-
-class FloatJSON(float):
-    # Remove trailing zeros from float numbers
-    def __repr__(self) -> str:
-        return f"{self:g}"
-
-
-_encoder = cast(Any, json.encoder)
-_encoder.c_make_encoder = None
-_encoder.float = FloatJSON
-
-
 TModelObject = TypeVar("TModelObject", bound="ModelObject")
+
+# Property names of each model class including inherited ones, see _get_property_names()
+_property_names: dict[type["ModelObject"], list[str]] = {}
+
+
+def _get_property_names(cls: type["ModelObject"]) -> list[str]:
+    names = _property_names.get(cls)
+    if names is None:
+        names = [name for name in dir(cls) if isinstance(getattr(cls, name), property)]
+        _property_names[cls] = names
+    return names
 
 
 class ModelObject(ModelType[Union[JSONObj, str]]):
@@ -37,16 +36,21 @@ class ModelObject(ModelType[Union[JSONObj, str]]):
 
         if isinstance(obj, datetime):
             return obj.isoformat()
-        if isinstance(obj, float):
-            return f"{obj:g}"
         if isinstance(obj, SbcPermissions):
             return obj.name
         if isinstance(obj, DriverId):
             return str(obj)
+        if isinstance(obj, ModelObject):
+            # Serialize every property like DSF does, including defaults that are only created when first read
+            # and nullable properties that have never been set.
+            # Convert snake_case properties into camelCase JSON style, also convert back 'globals' to 'global'
+            return {
+                "global" if name == "globals" else snake_to_camel(name): getattr(obj, name)
+                for name in _get_property_names(type(obj))
+            }
 
         # Convert snake_case class attributes into CamelCase JSON style
-        # also convert back 'globals' to 'global'
-        return {snake_to_camel(str(k) if k != "_globals" else "_global"): v for k, v in obj.__dict__.items()}
+        return {snake_to_camel(str(k)): v for k, v in obj.__dict__.items()}
 
     def _update_from_json(self: TModelObject, **kwargs: JSONElement) -> TModelObject:
         """Update this instance from a given JSON element

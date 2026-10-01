@@ -10,10 +10,10 @@ class ExtruderPressureAdvance(ModelObject):
     d = nullable_model_prop("d", float)
 
     # K0 coefficient
-    k0 = model_prop("k0", float, 0.0)
+    k_0 = model_prop("k_0", float, 0.0)
 
     # K1 coeffient
-    k1 = model_prop("k1", float, 0.0)
+    k_1 = model_prop("k_1", float, 0.0)
 
     def __init__(self):
         super().__init__()

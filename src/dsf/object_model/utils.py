@@ -123,13 +123,17 @@ def model_prop(name: str, model_type: type[T], default: Optional[T] = None) -> T
 
 
 def nullable_model_prop(
-    name: str, model_type: type[T], constructor: Optional[Callable[[], Optional[T]]] = None
+    name: str,
+    model_type: type[T],
+    constructor: Optional[Callable[[], Optional[T]]] = None,
+    default: Optional[T] = None,
 ) -> TypedReadableProperty[Optional[T]]:
     """
     Wrap a nullable model object property so that type checks can be performed during update
     :param name: Property of the derived class
     :param model_type: Constructor for creating new elements
     :param constructor: Optional constructor for creating new elements
+    :param default: Default value, copied for every instance
     :return: TypedReadableProperty[Optional[T]]
     """
 
@@ -150,7 +154,10 @@ def nullable_model_prop(
         _factory = constructor
 
     def getter(self: object) -> Optional[T]:
-        return getattr(self, STORAGE_NAME, None)
+        if not hasattr(self, STORAGE_NAME):
+            # Copy the default so model objects are not shared between instances
+            setattr(self, STORAGE_NAME, copy.deepcopy(default))
+        return getattr(self, STORAGE_NAME)
 
     def setter(self: object, value: Union[T, JSONElement, None]) -> None:
         def get_or_create_value() -> Optional[T]:

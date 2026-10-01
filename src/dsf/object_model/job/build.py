@@ -11,10 +11,10 @@ class Build(ModelObject):
     current_object = model_prop("current_object", int, -1)
 
     # Whether M486 names are being used
-    m486_names = model_prop("m486_names", bool, False)
+    m_486_names = model_prop("m_486_names", bool, False)
 
     # Whether M486 numbers are being used
-    m486_numbers = model_prop("m486_numbers", bool, False)
+    m_486_numbers = model_prop("m_486_numbers", bool, False)
 
     # List of detected build objects
     objects = model_prop("objects", ModelCollection[BuildObject], ModelCollection(BuildObject))

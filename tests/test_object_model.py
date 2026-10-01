@@ -16,7 +16,11 @@ from src.dsf.object_model import (
     Plugin,
     ProbeLoadCell,
     ProbeType,
+    Spindle,
 )
+from src.dsf.object_model.boards.direct_display import DirectDisplay
+from src.dsf.object_model.move import Axis
+from src.dsf.object_model.move.kinematics import ZLeadscrewKinematics
 from src.dsf.object_model.utils import is_model_object, JSONElement, JSONObj, model_prop, nullable_model_prop
 from src.dsf.object_model.object_model import ModelCollection, ModelDictionary, ModelObject
 
@@ -530,6 +534,94 @@ class Model(unittest.TestCase):
         model.update_from_json('{"move": {"shaping": {"type": "eI3"}}}')
         self.assertEqual(model.move.shaping.type, InputShapingType.ei3)
 
+    def test_keys_with_digits_and_single_letters(self):
+        # Property names must match camel_to_snake of their JSON key, e.g. is64Bit -> is_64_bit
+        model = ObjectModel()
+        model.update_from_json(
+            '{"job": {"build": {"m486Names": true, "m486Numbers": true}},'
+            ' "move": {"virtualEPos": 12.5, "motionSystems": [{"virtualEPos": 7.5}],'
+            ' "extruders": [{"pressAdv": {"k0": 0.05, "k1": 0.1}}],'
+            ' "kinematics": {"name": "coreXY", "tiltCorrection": {"screwX": [10, 20], "screwY": [30, 40]}}},'
+            ' "sbc": {"dsf": {"is64Bit": true}}}'
+        )
+        build = model.job.build
+        assert build is not None
+        self.assertTrue(build.m_486_names)
+        self.assertTrue(build.m_486_numbers)
+        self.assertEqual(model.move.virtual_E_pos, 12.5)
+        self.assertEqual(model.move.motion_systems[0].virtual_E_pos, 7.5)
+        press_adv = model.move.extruders[0].press_adv
+        self.assertEqual(press_adv.k_0, 0.05)
+        self.assertEqual(press_adv.k_1, 0.1)
+        kinematics = model.move.kinematics
+        assert isinstance(kinematics, ZLeadscrewKinematics)
+        tilt_correction = kinematics.tilt_correction
+        self.assertEqual(list(tilt_correction.screw_X), [10.0, 20.0])
+        self.assertEqual(list(tilt_correction.screw_Y), [30.0, 40.0])
+        assert model.sbc is not None
+        self.assertTrue(model.sbc.dsf.is_64_bit)
+
+        # And they serialize back to the same keys
+        data = json.loads(model.to_json())
+        self.assertTrue(data["job"]["build"]["m486Names"])
+        self.assertEqual(data["move"]["extruders"][0]["pressAdv"]["k0"], 0.05)
+        self.assertEqual(data["move"]["kinematics"]["tiltCorrection"]["screwX"], [10, 20])
+        self.assertEqual(data["move"]["virtualEPos"], 12.5)
+        self.assertTrue(data["sbc"]["dsf"]["is64Bit"])
+
+    def test_float_precision(self):
+        # Floats keep their full precision and the json module is not changed for other users
+        model = ObjectModel()
+        model.update_from_json({"move": {"axes": [{"max": 1234567.25}]}})
+        self.assertEqual(json.loads(model.to_json())["move"]["axes"][0]["max"], 1234567.25)
+        self.assertEqual(json.dumps(1234567.25), "1234567.25")
+
+    def test_serialize_unset_properties(self):
+        # Every property is serialized, including defaults that are only created when first read
+        # and nullable properties that have never been set
+        axis = json.loads(Axis().to_json())
+        self.assertEqual(axis["min"], 0)
+        self.assertEqual(axis["drivers"], [])
+        self.assertIn("userPosition", axis)
+        self.assertIsNone(axis["userPosition"])
+
+    def test_nullable_defaults(self):
+        # Nullable properties may have a default, which can still be set to null
+        spindle = Spindle()
+        self.assertEqual(spindle.max, 10000)
+        spindle.update_from_json({"max": None})
+        self.assertIsNone(spindle.max)
+
+        # Model object defaults are not shared between instances
+        self.assertIsNot(DirectDisplay().encoder, DirectDisplay().encoder)
+
+    def test_direct_display_screen(self):
+        from src.dsf.object_model.boards.direct_display import (
+            DirectDisplayController,
+            DirectDisplayScreen,
+            DirectDisplayScreenST7567,
+        )
+
+        display = DirectDisplay()
+        screen = display.screen
+        self.assertEqual(screen.controller, DirectDisplayController.ST7920)
+
+        # Controllers without a dedicated class update the existing screen
+        display.update_from_json({"screen": {"controller": "ILI9488", "width": 480}})
+        self.assertIs(display.screen, screen)
+        self.assertEqual(display.screen.controller, DirectDisplayController.ILI9488)
+        self.assertEqual(display.screen.width, 480)
+
+        # Controllers with a dedicated class replace the screen
+        display.update_from_json({"screen": {"controller": "ST7567", "contrast": 40}})
+        st7567_screen = display.screen
+        assert isinstance(st7567_screen, DirectDisplayScreenST7567)
+        self.assertEqual(st7567_screen.contrast, 40)
+
+        display.update_from_json({"screen": {"controller": "ILI9488"}})
+        self.assertIs(type(display.screen), DirectDisplayScreen)
+        self.assertEqual(display.screen.controller, DirectDisplayController.ILI9488)
+
     def test_null_clears_dictionary(self):
         # DSF sends null for a dictionary that has been cleared, e.g. job.file.customInfo when a job ends
         model = ObjectModel()
@@ -636,7 +728,27 @@ class Model(unittest.TestCase):
         from src.dsf.commands.code_channel import CodeChannel
 
         model = ObjectModel()
-        self.assertEqual(len(model.inputs), 0)
+        # Like DSF, there is one input channel per code channel by default, the index being the code channel
+        self.assertEqual(
+            [channel.name if channel else None for channel in model.inputs],
+            [
+                CodeChannel.HTTP,
+                CodeChannel.Telnet,
+                CodeChannel.File,
+                CodeChannel.USB,
+                CodeChannel.Aux,
+                CodeChannel.Trigger,
+                CodeChannel.Queue,
+                CodeChannel.LCD,
+                CodeChannel.SBC,
+                CodeChannel.Daemon,
+                CodeChannel.Aux2,
+                CodeChannel.Autopause,
+                CodeChannel.File2,
+                CodeChannel.Queue2,
+                CodeChannel.USB2,
+            ],
+        )
 
         # RRF reports null for input channels that are not available
         json_patch = '{"inputs":[{"active":true,"axesRelative":false,"compatibility":"RepRapFirmware","distanceUnit":"mm","drivesRelative":true,"feedRate":50,"inMacro":false,"lineNumber":0,"name":"HTTP","stackDepth":0,"state":"idle","volumetric":false},null,{"active":true,"axesRelative":false,"compatibility":"RepRapFirmware","distanceUnit":"mm","drivesRelative":true,"feedRate":50,"inMacro":false,"lineNumber":42,"name":"File","stackDepth":0,"state":"idle","volumetric":false},null]}'
@@ -697,12 +809,16 @@ class Model(unittest.TestCase):
                     recursive_compare(item1, item2)
             elif isinstance(obj1, ModelObject):
                 self.assertIsInstance(obj2, ModelObject)
-                recursive_compare(vars(obj1), vars(obj2))
+                # Compare the property values, unset properties are not stored
+                names = [name for name in dir(type(obj1)) if isinstance(getattr(type(obj1), name), property)]
+                recursive_compare(
+                    {name: getattr(obj1, name) for name in names}, {name: getattr(obj2, name) for name in names}
+                )
             else:
                 self.assertEqual(obj1, obj2)
 
         model2 = ObjectModel().update_from_json(str(model))
-        recursive_compare(model.__dict__, model2.__dict__)
+        recursive_compare(model, model2)
 
     def test_messages(self):
         from src.dsf.object_model.messages import MessageType
@@ -714,8 +830,20 @@ class Model(unittest.TestCase):
         self.assertEqual(str(model.messages[0].time), "2022-12-31 16:42:22.805893+00:00")
         self.assertEqual(model.messages[0].type, MessageType.Success)
 
-        json_patch = '{"messages":[]}'
-        model.update_from_json(json_patch)
+        # Like DSF, messages from later updates are added because DSF only sends new messages
+        messages = model.messages
+        model.update_from_json('{"messages":[]}')
+        self.assertEqual(len(model.messages), 1)
+        model.update_from_json('{"messages":[{"content":"Done","time":"2022-12-31T16:56:22","type":2}]}')
+        self.assertIs(model.messages, messages)
+        self.assertEqual(
+            [message.content for message in model.messages],
+            ["File 0:/gcodes/Veil_Token.gcode will print in 0h 14m plus heating time", "Done"],
+        )
+        self.assertEqual(model.messages[1].type, MessageType.Error)
+
+        # Messages are only removed by the client once processed
+        model.messages.clear()
         self.assertEqual(len(model.messages), 0)
 
     def test_move_kinematics(self):
@@ -775,10 +903,16 @@ class Model(unittest.TestCase):
             self.assertIs(type(kinematics), expected_type, name)
             self.assertEqual(kinematics.name, name)
 
-        # Names reported by RRF are normalized
-        self.assertIs(type(Kinematics.get_kinematics_type("Core XY")), CoreKinematics)
+        # Like DSF, names are case-insensitive, aliases are accepted and other names are unknown
+        self.assertIs(type(Kinematics.get_kinematics_type("COREXY")), CoreKinematics)
         self.assertEqual(Kinematics.get_kinematics_type("Rotary Delta").name, KinematicsName.rotaryDelta)
-        self.assertRaises(ValueError, lambda: Kinematics.get_kinematics_type("not a kinematics"))
+        self.assertEqual(Kinematics.get_kinematics_type("rotarydelta").name, KinematicsName.rotaryDelta)
+        self.assertIs(type(Kinematics.get_kinematics_type("lineardelta")), DeltaKinematics)
+        self.assertIs(type(Kinematics.get_kinematics_type("not a kinematics")), Kinematics)
+        self.assertEqual(Kinematics.get_kinematics_type("not a kinematics").name, KinematicsName.unknown)
+
+        # Names are written like DSF does
+        self.assertEqual(json.loads(Kinematics.get_kinematics_type("rotarydelta").to_json())["name"], "Rotary delta")
 
     def test_plugins(self):
         model = ObjectModel()

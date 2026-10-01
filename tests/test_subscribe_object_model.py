@@ -11,6 +11,7 @@ from typing import cast
 from tests.utils import check_json
 from src.dsf import PROTOCOL_VERSION
 from src.dsf.connections import SubscribeConnection, SubscriptionMode
+from src.dsf.object_model import ObjectModel
 from src.dsf.object_model.boards import ExpansionBoard, MainBoard
 from src.dsf.utils import JSONObj
 
@@ -264,6 +265,57 @@ class TestSubscribeObjectModel(unittest.TestCase):
 
         self.server_thread.join(timeout=5)
         self.assertTrue(self.dcs_passed.is_set(), "The mock DCS did not complete successfully")
+
+
+class TestSubscribeMessages(unittest.TestCase):
+    """Messages of object model patches are added to the cached object model"""
+
+    @staticmethod
+    def _message(content: str) -> JSONObj:
+        return {"content": content, "time": "2024-01-02T03:04:05", "type": 0}
+
+    @staticmethod
+    def _connect(clear_messages: bool) -> SubscribeConnection:
+        """Create a connection that has received the initial object model"""
+        connection = SubscribeConnection(SubscriptionMode.PATCH, clear_messages=clear_messages)
+        with unittest.mock.patch.object(connection, "receive", return_value=ObjectModel()):
+            with unittest.mock.patch.object(connection, "send"):
+                connection.get_object_model()
+        return connection
+
+    @staticmethod
+    def _get_object_model(connection: SubscribeConnection, patches: list[JSONObj]) -> ObjectModel:
+        """Apply the given patches through get_object_model() as if DSF had sent them"""
+        queue = [json.dumps(patch) for patch in patches]
+        with unittest.mock.patch.object(connection, "has_data_available", side_effect=lambda: len(queue) > 0):
+            with unittest.mock.patch.object(connection, "get_object_model_patch", side_effect=lambda: queue.pop(0)):
+                return connection.get_object_model()
+
+    def test_messages(self):
+        connection = self._connect(clear_messages=True)
+
+        # Messages of every patch are kept, even if several patches are applied at once
+        model = self._get_object_model(
+            connection, [{"messages": [self._message("first")]}, {"messages": [self._message("second")]}]
+        )
+        self.assertEqual([message.content for message in model.messages], ["first", "second"])
+
+        # By default the messages of the previous call are removed
+        model = self._get_object_model(connection, [{"messages": [self._message("third")]}])
+        self.assertEqual([message.content for message in model.messages], ["third"])
+        model = self._get_object_model(connection, [])
+        self.assertEqual(len(model.messages), 0)
+
+    def test_keep_messages(self):
+        connection = self._connect(clear_messages=False)
+
+        # Messages are kept until they are cleared by the client
+        self._get_object_model(connection, [{"messages": [self._message("first")]}])
+        model = self._get_object_model(connection, [{"messages": [self._message("second")]}])
+        self.assertEqual([message.content for message in model.messages], ["first", "second"])
+        model.messages.clear()
+        model = self._get_object_model(connection, [{"messages": [self._message("third")]}])
+        self.assertEqual([message.content for message in model.messages], ["third"])
 
 
 if __name__ == "__main__":

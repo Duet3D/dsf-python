@@ -2,7 +2,7 @@ from ..model_object import ModelObject
 from ..utils import model_prop
 
 
-class MicroStepping(ModelObject):
+class Microstepping(ModelObject):
     """Microstepping configuration"""
 
     # Indicates if the stepper driver uses interpolation

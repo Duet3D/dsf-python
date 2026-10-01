@@ -214,3 +214,7 @@ pyrightconfig.json
 
 deb_dist
 *.tar.gz
+### .NET ###
+# Build output of scripts/generate_dsf_model
+scripts/generate_dsf_model/bin/
+scripts/generate_dsf_model/obj/

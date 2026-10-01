@@ -55,15 +55,8 @@ class InputShaping(ModelObject):
     # Input shaper delays (in s)
     delays = model_prop("delays", ModelCollection[float], ModelCollection(float))
 
-    # Input shaper durations (in s)
-    durations = model_prop("durations", ModelCollection[float], ModelCollection(float))
-
     # Frequency (in Hz)
     frequency = model_prop("frequency", float, 40.0)
-
-    # Minimum fraction of the original acceleration or feed rate to which the acceleration or feed rate
-    # may be reduced in order to apply input shaping
-    reduction_limit = model_prop("reduction_limit", float, 0.25)
 
     # Configured input shaping type
     type = model_prop("type", InputShapingType, InputShapingType.none)

@@ -6,7 +6,7 @@ from .inputs import InputChannel
 from .job import Job
 from .led_strips import LedStrip, LedStripType
 from .limits import Limits
-from .messages import Message, MessageType
+from .messages import Message, MessageCollection, MessageType
 from .move import DriverId, Move
 from .network import Network, NetworkInterface, NetworkInterfaceType, NetworkProtocol, NetworkState
 from .object_model import ObjectModel
@@ -47,6 +47,7 @@ __all__ = [
     "LedStripType",
     "Limits",
     "Message",
+    "MessageCollection",
     "MessageType",
     "DriverId",
     "Move",

@@ -31,24 +31,19 @@ class DirectDisplayScreen(ModelObject):
     def get_direct_display_screen_type(type_: DirectDisplayController):
         from .direct_display_screen_st7567 import DirectDisplayScreenST7567
 
-        if type_ == DirectDisplayController.ST7920:
-            return DirectDisplayScreen()
-        elif type_ == DirectDisplayController.ST7567:
+        if type_ == DirectDisplayController.ST7567:
             return DirectDisplayScreenST7567()
-        elif type_ == DirectDisplayController.ILI9488:
-            return DirectDisplayScreen()
-        else:
-            return DirectDisplayScreen(type_)
+        return DirectDisplayScreen(type_)
 
     def _update_from_json(self, **kwargs: JSONElement):
         """Override ObjectModel._update_from_json
         to return the DirectDisplayScreen type matching the given controller"""
         if "controller" in kwargs:
-            controller = DirectDisplayController(kwargs.get("controller"))
-            if controller != self.controller:
-                required_type = self.get_direct_display_screen_type(controller)
-                new_direct_display_screen = required_type.update_from_json(kwargs)
-                return new_direct_display_screen
+            required_type = self.get_direct_display_screen_type(DirectDisplayController(kwargs.get("controller")))
+            # Like DSF, only replace this screen if the controller needs a different class,
+            # e.g. switching from ST7920 to ILI9488 updates this screen
+            if type(required_type) is not type(self):
+                return required_type.update_from_json(kwargs)
 
         super(DirectDisplayScreen, self)._update_from_json(**kwargs)
         return self

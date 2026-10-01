@@ -23,13 +23,13 @@ class Spindle(ModelObject):
     idle_pwm = nullable_model_prop("idle_pwm", float)
 
     # Maximum RPM
-    max = nullable_model_prop("max", int)
+    max = nullable_model_prop("max", int, default=10000)
 
     # Maximum PWM value when turned on (0..1)
-    max_pwm = nullable_model_prop("max_pwm", float)
+    max_pwm = nullable_model_prop("max_pwm", float, default=1.0)
 
     # Minimum RPM when turned on
-    min = nullable_model_prop("min", int)
+    min = nullable_model_prop("min", int, default=60)
 
     # Minimum PWM value when turned on (0..1)
     min_pwm = nullable_model_prop("min_pwm", float)

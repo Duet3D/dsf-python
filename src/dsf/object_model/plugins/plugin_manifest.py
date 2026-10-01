@@ -59,7 +59,7 @@ class PluginManifest(ModelObject):
     sbc_notify_started = model_prop("sbc_notify_started", bool, False)
 
     # Defines if messages from stdout/stderr are output as generic messages
-    sbc_output_redirected = model_prop("sbc_output_redirected", bool, False)
+    sbc_output_redirected = model_prop("sbc_output_redirected", bool, True)
 
     # List of permissins required by the plugin executable running on the SBC
     sbc_permissions = model_prop("sbc_permissions", ModelCollection[SbcPermissions], ModelCollection(SbcPermissions))

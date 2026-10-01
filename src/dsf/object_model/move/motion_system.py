@@ -44,7 +44,7 @@ class MotionSystem(ModelObject):
     user_position = model_prop("user_position", ModelCollection[float], ModelCollection(float))
 
     # Virtual tool extruder position
-    virtual_e_pos = model_prop("virtual_e_pos", float, 0.0)
+    virtual_E_pos = model_prop("virtual_E_pos", float, 0.0)
 
     # Index of the currently selected workplace
     workplace_number = model_prop("workplace_number", int)
