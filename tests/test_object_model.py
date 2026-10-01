@@ -595,6 +595,33 @@ class Model(unittest.TestCase):
         # Model object defaults are not shared between instances
         self.assertIsNot(DirectDisplay().encoder, DirectDisplay().encoder)
 
+    def test_direct_display_screen(self):
+        from src.dsf.object_model.boards.direct_display import (
+            DirectDisplayController,
+            DirectDisplayScreen,
+            DirectDisplayScreenST7567,
+        )
+
+        display = DirectDisplay()
+        screen = display.screen
+        self.assertEqual(screen.controller, DirectDisplayController.ST7920)
+
+        # Controllers without a dedicated class update the existing screen
+        display.update_from_json({"screen": {"controller": "ILI9488", "width": 480}})
+        self.assertIs(display.screen, screen)
+        self.assertEqual(display.screen.controller, DirectDisplayController.ILI9488)
+        self.assertEqual(display.screen.width, 480)
+
+        # Controllers with a dedicated class replace the screen
+        display.update_from_json({"screen": {"controller": "ST7567", "contrast": 40}})
+        st7567_screen = display.screen
+        assert isinstance(st7567_screen, DirectDisplayScreenST7567)
+        self.assertEqual(st7567_screen.contrast, 40)
+
+        display.update_from_json({"screen": {"controller": "ILI9488"}})
+        self.assertIs(type(display.screen), DirectDisplayScreen)
+        self.assertEqual(display.screen.controller, DirectDisplayController.ILI9488)
+
     def test_null_clears_dictionary(self):
         # DSF sends null for a dictionary that has been cleared, e.g. job.file.customInfo when a job ends
         model = ObjectModel()
