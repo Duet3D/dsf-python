@@ -50,7 +50,7 @@ class InputShaping(ModelObject):
     amplitudes = model_prop("amplitudes", ModelCollection[float], ModelCollection(float))
 
     # Damping factor
-    damping = model_prop("damping", float, 0.05)
+    damping = model_prop("damping", float, 0.1)
 
     # Input shaper delays (in s)
     delays = model_prop("delays", ModelCollection[float], ModelCollection(float))
