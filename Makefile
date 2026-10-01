@@ -21,3 +21,12 @@ build_deb:
 	python3 setup.py --command-packages=stdeb.command bdist_deb
 	sed -i -E '/forced-upstream-version/ s/([0-9]+)\.([0-9]+)\.([0-9]+)~([a-z]+)\.([0-9]+)/\1.\2.\3-\4.\5/' setup.cfg
 	dpkg-deb -I deb_dist/*.deb
+
+#########################################
+# Regenerate the DSF object model test data from a DuetSoftwareFramework checkout (requires the .NET SDK)
+# `make generate_dsf_model DSF_PATH=../DuetSoftwareFramework`
+#########################################
+DSF_PATH ?= ../DuetSoftwareFramework
+
+generate_dsf_model:
+	dotnet run --project scripts/generate_dsf_model -p:DsfPath=$(abspath $(DSF_PATH)) -- tests/object_model/dsf_model.json
