@@ -864,10 +864,16 @@ class Model(unittest.TestCase):
             self.assertIs(type(kinematics), expected_type, name)
             self.assertEqual(kinematics.name, name)
 
-        # Names reported by RRF are normalized
-        self.assertIs(type(Kinematics.get_kinematics_type("Core XY")), CoreKinematics)
+        # Like DSF, names are case-insensitive, aliases are accepted and other names are unknown
+        self.assertIs(type(Kinematics.get_kinematics_type("COREXY")), CoreKinematics)
         self.assertEqual(Kinematics.get_kinematics_type("Rotary Delta").name, KinematicsName.rotaryDelta)
-        self.assertRaises(ValueError, lambda: Kinematics.get_kinematics_type("not a kinematics"))
+        self.assertEqual(Kinematics.get_kinematics_type("rotarydelta").name, KinematicsName.rotaryDelta)
+        self.assertIs(type(Kinematics.get_kinematics_type("lineardelta")), DeltaKinematics)
+        self.assertIs(type(Kinematics.get_kinematics_type("not a kinematics")), Kinematics)
+        self.assertEqual(Kinematics.get_kinematics_type("not a kinematics").name, KinematicsName.unknown)
+
+        # Names are written like DSF does
+        self.assertEqual(json.loads(Kinematics.get_kinematics_type("rotarydelta").to_json())["name"], "Rotary delta")
 
     def test_plugins(self):
         model = ObjectModel()

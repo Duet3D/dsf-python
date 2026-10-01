@@ -29,7 +29,7 @@ class Kinematics(ModelObject):
         from .polar_kinematics import PolarKinematics
         from .scara_kinematics import ScaraKinematics
 
-        name = KinematicsName(name.lower().replace(" ", ""))
+        name = KinematicsName(name)
 
         if name in [
             KinematicsName.cartesian,
@@ -56,7 +56,7 @@ class Kinematics(ModelObject):
         """Override ObjectModel._update_from_json to return the Kinematics type matching the given name"""
         name = kwargs.get("name")
         if isinstance(name, str):
-            kinematics_name = KinematicsName(name.lower().replace(" ", ""))
+            kinematics_name = KinematicsName(name)
             kwargs["name"] = kinematics_name
 
             if self.name != kinematics_name:
