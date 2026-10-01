@@ -13329,20 +13329,6 @@
     {
       "base": "DirectDisplayScreen",
       "json": {
-        "controller": "st7920"
-      },
-      "class": "DirectDisplayScreen",
-      "result": {
-        "colourBits": 1,
-        "controller": "ST7920",
-        "height": 64,
-        "spiFreq": 0,
-        "width": 128
-      }
-    },
-    {
-      "base": "DirectDisplayScreen",
-      "json": {
         "controller": "ST7567"
       },
       "class": "DirectDisplayScreenST7567",
@@ -13359,35 +13345,7 @@
     {
       "base": "DirectDisplayScreen",
       "json": {
-        "controller": "st7567"
-      },
-      "class": "DirectDisplayScreen",
-      "result": {
-        "colourBits": 1,
-        "controller": "ST7567",
-        "height": 64,
-        "spiFreq": 0,
-        "width": 128
-      }
-    },
-    {
-      "base": "DirectDisplayScreen",
-      "json": {
         "controller": "ILI9488"
-      },
-      "class": "DirectDisplayScreen",
-      "result": {
-        "colourBits": 1,
-        "controller": "ILI9488",
-        "height": 64,
-        "spiFreq": 0,
-        "width": 128
-      }
-    },
-    {
-      "base": "DirectDisplayScreen",
-      "json": {
-        "controller": "ili9488"
       },
       "class": "DirectDisplayScreen",
       "result": {
@@ -13491,20 +13449,6 @@
         "minPercentage": null,
         "position": 0,
         "totalExtrusion": 0,
-        "enabled": false,
-        "enableMode": 0,
-        "filamentPresent": null,
-        "status": "noDataReceived",
-        "type": "rotatingMagnet"
-      }
-    },
-    {
-      "base": "FilamentMonitor",
-      "json": {
-        "type": "rotatingmagnet"
-      },
-      "class": "FilamentMonitor",
-      "result": {
         "enabled": false,
         "enableMode": 0,
         "filamentPresent": null,
@@ -14425,5 +14369,9 @@
         "segmentation": null
       }
     }
+  ],
+  "runtimeDefaults": [
+    "DSF.version",
+    "Message.time"
   ]
 }

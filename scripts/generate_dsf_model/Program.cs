@@ -14,6 +14,7 @@
 //               and dictionary items that "values" has set to null
 //   patched:    the result of DSF updating a new instance from "values" and then from "nulls"
 // The "dynamic" list holds the class and JSON DSF produces for every discriminator value of dynamic model objects.
+// The "runtimeDefaults" list holds the properties left out of "default" because they depend on when or where DSF runs.
 // All JSON is written by DSF's own serializer (ObjectModelContext).
 
 using System.Collections;
@@ -40,6 +41,10 @@ Dictionary<Type, string> discriminators = new()
     [typeof(FilamentMonitor)] = "type",
     [typeof(Kinematics)] = "name"
 };
+
+// Dynamic model objects whose discriminator is deliberately read case-insensitively by DSF,
+// because the firmware reports some kinematics names capitalized
+HashSet<Type> caseInsensitiveDiscriminators = [typeof(Kinematics)];
 
 // Defaults that depend on when or where DSF runs rather than on the object model
 HashSet<string> runtimeDefaults =
@@ -131,7 +136,8 @@ JsonObject output = new()
 {
     ["dsfVersion"] = typeof(ObjectModel).Assembly.GetCustomAttribute<AssemblyInformationalVersionAttribute>()?.InformationalVersion,
     ["classes"] = classes,
-    ["dynamic"] = dynamic
+    ["dynamic"] = dynamic,
+    ["runtimeDefaults"] = new JsonArray([.. runtimeDefaults.Order(StringComparer.Ordinal).Select(name => JsonValue.Create(name))])
 };
 File.WriteAllText(args[0], output.ToJsonString(new JsonSerializerOptions(options) { WriteIndented = true }) + "\n");
 Console.WriteLine($"Wrote {classes.Count} classes and {dynamic.Count} dynamic cases to {args[0]}");
@@ -175,7 +181,7 @@ IEnumerable<Type> GetDynamicTypes(Type baseType) =>
 JsonPropertyInfo GetDiscriminatorProperty(Type baseType) =>
     options.GetTypeInfo(baseType).Properties.First(property => property.Name == discriminators[baseType]);
 
-// Every discriminator value as written by DSF, lower-cased as the firmware may report it, and an unknown one
+// Every discriminator value as written by DSF, lower-cased where the firmware may report it so, and an unknown one
 IEnumerable<JsonNode> GetDiscriminatorInputs(Type baseType, string discriminator)
 {
     Type discriminatorType = GetDiscriminatorProperty(baseType).PropertyType;
@@ -184,7 +190,7 @@ IEnumerable<JsonNode> GetDiscriminatorInputs(Type baseType, string discriminator
     {
         JsonNode node = JsonSerializer.SerializeToNode(value, discriminatorType, options)!;
         inputs.Add(node);
-        if (node.GetValueKind() == JsonValueKind.String)
+        if (caseInsensitiveDiscriminators.Contains(baseType) && node.GetValueKind() == JsonValueKind.String)
         {
             inputs.Add(JsonValue.Create(node.GetValue<string>().ToLowerInvariant()));
         }

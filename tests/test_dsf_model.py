@@ -22,6 +22,8 @@ with open("tests/object_model/dsf_model.json") as fp:
     DSF_MODEL: dict[str, Any] = json.load(fp)
 DSF_CLASSES: dict[str, dict[str, Any]] = DSF_MODEL["classes"]
 DSF_DYNAMIC: list[dict[str, Any]] = DSF_MODEL["dynamic"]
+# Properties left out of the DSF defaults because they depend on when or where DSF runs, as <class>.<JSON key>
+DSF_RUNTIME_DEFAULTS: set[str] = set(DSF_MODEL["runtimeDefaults"])
 
 T = TypeVar("T")
 
@@ -72,6 +74,26 @@ def _load(name: str, data: dict[str, Any]) -> ModelObject:
 
 def _to_json(model: ModelObject) -> object:
     return json.loads(model.to_json())
+
+
+def _remove_runtime_defaults(model: object, data: object) -> None:
+    """Remove the properties DSF leaves out of its defaults from the JSON written for the given model"""
+    if isinstance(model, ModelObject) and isinstance(data, dict):
+        items = cast(dict[str, object], data)
+        for name in _properties(type(model)):
+            key = _json_key(name)
+            if f"{type(model).__name__}.{key}" in DSF_RUNTIME_DEFAULTS:
+                items.pop(key, None)
+            elif key in items:
+                _remove_runtime_defaults(getattr(model, name), items[key])
+    elif isinstance(model, dict) and isinstance(data, dict):
+        items = cast(dict[str, object], data)
+        for key, value in cast(dict[str, object], model).items():
+            if key in items:
+                _remove_runtime_defaults(value, items[key])
+    elif isinstance(model, list) and isinstance(data, list):
+        for value, item in zip(cast(list[object], model), cast(list[object], data)):
+            _remove_runtime_defaults(value, item)
 
 
 def _differences(expected: object, actual: object, path: str) -> list[str]:
@@ -160,7 +182,9 @@ class TestDsfModel(unittest.TestCase):
             with self.subTest(dsf_class=name):
                 model = self._call("Creating the model", lambda: _create(name))
                 self._assert_class(model, name)
-                differences = _differences(dsf_class["default"], _to_json(model), name)
+                actual = _to_json(model)
+                _remove_runtime_defaults(model, actual)
+                differences = _differences(dsf_class["default"], actual, name)
                 self.assertEqual(differences, [], "Default values differ from DSF")
 
     def test_values(self):
