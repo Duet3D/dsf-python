@@ -4,7 +4,7 @@ from .driver_id import DriverId
 from .extruder import Extruder
 from .extruder_non_linear import ExtruderNonlinear
 from .input_shaping import InputShaping, InputShapingType
-from .microstepping import MicroStepping
+from .microstepping import Microstepping
 from .motors_idle_control import MotorsIdleControl
 from .move import Move
 from .move_calibration import MoveCalibration
@@ -25,7 +25,7 @@ __all__ = [
     "ExtruderNonlinear",
     "InputShaping",
     "InputShapingType",
-    "MicroStepping",
+    "Microstepping",
     "MotorsIdleControl",
     "Move",
     "MoveCalibration",

@@ -1,7 +1,7 @@
 from .driver_id import DriverId
 from .extruder_non_linear import ExtruderNonlinear
 from .extruder_pressure_advance import ExtruderPressureAdvance
-from .microstepping import MicroStepping
+from .microstepping import Microstepping
 from ..model_object import ModelObject
 from ..utils import nullable_model_prop, model_prop
 
@@ -31,7 +31,7 @@ class Extruder(ModelObject):
     jerk = model_prop("jerk", float, 15.0)
 
     # Microstepping configuration
-    microstepping = model_prop("microstepping", MicroStepping)
+    microstepping = model_prop("microstepping", Microstepping)
 
     # Nonlinear extrusion parameters (see M592)
     nonlinear = model_prop("nonlinear", ExtruderNonlinear)

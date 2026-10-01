@@ -1,7 +1,7 @@
 from enum import Enum
 
 from .driver_id import DriverId
-from .microstepping import MicroStepping
+from .microstepping import Microstepping
 from ..model_collection import ModelCollection
 from ..model_object import ModelObject
 from ..utils import model_prop, nullable_model_prop
@@ -86,7 +86,7 @@ class Axis(ModelObject):
     max_probed = model_prop("max_probed", bool, False)
 
     # Microstepping configuration
-    microstepping = model_prop("microstepping", MicroStepping)
+    microstepping = model_prop("microstepping", Microstepping)
 
     # Minimum travel of this axis (in mm)
     min = model_prop("min", float, 0.0)
