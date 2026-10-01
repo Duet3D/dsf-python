@@ -5,18 +5,6 @@ from typing import TypeVar, Any, Union, cast
 from .model_type import ModelType
 from ..utils import preserve_builtin, camel_to_snake, snake_to_camel, JSONElement, JSONObj
 
-
-class FloatJSON(float):
-    # Remove trailing zeros from float numbers
-    def __repr__(self) -> str:
-        return f"{self:g}"
-
-
-_encoder = cast(Any, json.encoder)
-_encoder.c_make_encoder = None
-_encoder.float = FloatJSON
-
-
 TModelObject = TypeVar("TModelObject", bound="ModelObject")
 
 
@@ -37,8 +25,6 @@ class ModelObject(ModelType[Union[JSONObj, str]]):
 
         if isinstance(obj, datetime):
             return obj.isoformat()
-        if isinstance(obj, float):
-            return f"{obj:g}"
         if isinstance(obj, SbcPermissions):
             return obj.name
         if isinstance(obj, DriverId):

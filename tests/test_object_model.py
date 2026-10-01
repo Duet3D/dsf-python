@@ -566,6 +566,13 @@ class Model(unittest.TestCase):
         self.assertEqual(data["move"]["virtualEPos"], 12.5)
         self.assertTrue(data["sbc"]["dsf"]["is64Bit"])
 
+    def test_float_precision(self):
+        # Floats keep their full precision and the json module is not changed for other users
+        model = ObjectModel()
+        model.update_from_json({"move": {"axes": [{"max": 1234567.25}]}})
+        self.assertEqual(json.loads(model.to_json())["move"]["axes"][0]["max"], 1234567.25)
+        self.assertEqual(json.dumps(1234567.25), "1234567.25")
+
     def test_null_clears_dictionary(self):
         # DSF sends null for a dictionary that has been cleared, e.g. job.file.customInfo when a job ends
         model = ObjectModel()
