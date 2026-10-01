@@ -70,6 +70,10 @@ SubscribeConnection
   receive the keyword arguments ``key``, ``data`` (the raw JSON value from the patch) and ``indices`` (the list
   indexes matched by ``^``, or ``None``). Register them after the first ``get_object_model()`` call.
   The return value removes the callback again.
+- DSF sends each message only once, so in patch mode ``object_model.messages`` collects the messages of every
+  applied patch. By default ``get_object_model()`` clears it first, so it holds only the messages received since
+  the previous call. With ``SubscribeConnection(..., clear_messages=False)`` messages are kept until you clear the
+  list.
 
 See :ref:`example-subscribe`.
 
@@ -181,6 +185,8 @@ Behaviour
   date in patch mode. In C#, you apply patches from ``GetObjectModelPatchAsync()`` yourself.
   ``get_object_model_patch()`` and ``get_serialized_object_model()`` still return raw JSON if you need it.
 - **Key callbacks** (``subscribe_to_keys()``) are specific to dsf-python.
+- **Messages are cleared for you.** In C#, messages pile up in ``Model.Messages`` until you clear them.
+  ``get_object_model()`` clears them at the start of each call unless ``clear_messages=False``.
 - **Return values.** ``perform_simple_code()`` returns the reply as a string. ``evaluate_expression()`` and the
   lower-level methods return a ``Response`` whose value is in ``.result``.
 - **Interception.** ``resolve_code()`` takes a ``MessageType`` and an optional string, not a ``Message``.

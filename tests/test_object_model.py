@@ -830,8 +830,20 @@ class Model(unittest.TestCase):
         self.assertEqual(str(model.messages[0].time), "2022-12-31 16:42:22.805893+00:00")
         self.assertEqual(model.messages[0].type, MessageType.Success)
 
-        json_patch = '{"messages":[]}'
-        model.update_from_json(json_patch)
+        # Like DSF, messages from later updates are added because DSF only sends new messages
+        messages = model.messages
+        model.update_from_json('{"messages":[]}')
+        self.assertEqual(len(model.messages), 1)
+        model.update_from_json('{"messages":[{"content":"Done","time":"2022-12-31T16:56:22","type":2}]}')
+        self.assertIs(model.messages, messages)
+        self.assertEqual(
+            [message.content for message in model.messages],
+            ["File 0:/gcodes/Veil_Token.gcode will print in 0h 14m plus heating time", "Done"],
+        )
+        self.assertEqual(model.messages[1].type, MessageType.Error)
+
+        # Messages are only removed by the client once processed
+        model.messages.clear()
         self.assertEqual(len(model.messages), 0)
 
     def test_move_kinematics(self):

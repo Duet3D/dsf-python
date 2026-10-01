@@ -12,7 +12,7 @@ from .inputs import Inputs
 from .job import Job
 from .led_strips import LedStrip
 from .limits import Limits
-from .messages import Message
+from .messages import MessageCollection
 from .move import Move
 from .network import Network
 from .plugins import Plugin
@@ -39,7 +39,7 @@ class ObjectModel(ModelObject):
     job = model_prop("job", Job)
     led_strips = model_prop("led_strips", ModelCollection[LedStrip], ModelCollection(LedStrip))
     limits = model_prop("limits", Limits)
-    messages = model_prop("messages", ModelCollection[Message], ModelCollection(Message))
+    messages = model_prop("messages", MessageCollection, MessageCollection())
     move = model_prop("move", Move)
     network = model_prop("network", Network)
     plugins = model_prop("plugins", ModelDictionary, ModelDictionary(True, Plugin))

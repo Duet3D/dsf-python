@@ -37,6 +37,10 @@ class SubscribeConnection(BaseConnection):
     :param verbose: Whether object model fields flagged as verbose are required. Verbose fields are only kept up-to-date
                     while at least one subscriber asks for them, so this must be set for the lifetime of the connection
     :param obsolete: Whether object model fields flagged as obsolete are required
+    :param clear_messages: Whether get_object_model() removes the messages of the previous call before applying
+                           patches, so that object_model.messages only holds the messages received since then.
+                           If False, clear object_model.messages once the messages have been processed
+                           to keep it from growing
     """
 
     def __init__(
@@ -46,12 +50,14 @@ class SubscribeConnection(BaseConnection):
         debug: bool = False,
         verbose: bool = False,
         obsolete: bool = False,
+        clear_messages: bool = True,
     ):
         super().__init__(debug)
         self.subscription_mode = subscription_mode
         self.filter_list = filter_list
         self.verbose = verbose
         self.obsolete = obsolete
+        self.clear_messages = clear_messages
         self._object_model = ObjectModel()
         self._initial_object_model_received = False
         self._key_subscriptions: list[_ObjectModelCallbackSubscription] = []
@@ -71,6 +77,9 @@ class SubscribeConnection(BaseConnection):
         In SubscriptionMode.PATCH, the first call receives the full object model.
         Later calls apply every queued patch without blocking, update the
         cached object model, and run any registered key callbacks synchronously.
+
+        DSF only sends each message once, so the messages of every patch are added to object_model.messages.
+        Unless clear_messages is False, the messages of the previous call are removed first.
         """
         if (
             self.subscription_mode == client_init_messages.SubscriptionMode.FULL
@@ -81,6 +90,8 @@ class SubscribeConnection(BaseConnection):
             self.send(commands.model_subscription.acknowledge())
             return self._object_model
         else:
+            if self.clear_messages:
+                self._object_model.messages.clear()
             while self.has_data_available():
                 patch_json = self.get_object_model_patch()
                 patch_data = json.loads(patch_json)
