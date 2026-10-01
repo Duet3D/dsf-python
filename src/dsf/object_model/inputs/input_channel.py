@@ -11,7 +11,7 @@ class InputChannel(ModelObject):
 
     # True if the input is in active mode i.e. executing commands for its assigned motion system,
     # false if it is assigned to a motion system other than the current one
-    active = model_prop("active", bool, False)
+    active = model_prop("active", bool, True)
 
     # Whether relative positioning is being used
     axes_relative = model_prop("axes_relative", bool, False)

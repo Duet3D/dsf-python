@@ -2,7 +2,7 @@ from .tool_state import ToolState
 from .tool_retraction import ToolRetraction
 from ..model_object import ModelObject
 from ..model_collection import ModelCollection
-from ..utils import model_prop, nullable_model_prop
+from ..utils import model_prop
 
 
 class Tool(ModelObject):
@@ -14,7 +14,7 @@ class Tool(ModelObject):
     fans = model_prop("fans", ModelCollection[int], ModelCollection(int))
     # Obsolete: use feed_forward_pwm instead
     feed_forward = model_prop("feed_forward", ModelCollection[float], ModelCollection(float))
-    feed_forward_advance = nullable_model_prop("feed_forward_advance", float)
+    feed_forward_advance = model_prop("feed_forward_advance", float, 0.0)
     feed_forward_pwm = model_prop("feed_forward_pwm", ModelCollection[float], ModelCollection(float))
     feed_forward_temp = model_prop("feed_forward_temp", ModelCollection[float], ModelCollection(float))
     filament_extruder = model_prop("filament_extruder", int, -1)

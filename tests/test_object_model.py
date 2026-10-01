@@ -16,7 +16,9 @@ from src.dsf.object_model import (
     Plugin,
     ProbeLoadCell,
     ProbeType,
+    Spindle,
 )
+from src.dsf.object_model.boards.direct_display import DirectDisplay
 from src.dsf.object_model.move import Axis
 from src.dsf.object_model.move.kinematics import ZLeadscrewKinematics
 from src.dsf.object_model.utils import is_model_object, JSONElement, JSONObj, model_prop, nullable_model_prop
@@ -583,6 +585,16 @@ class Model(unittest.TestCase):
         self.assertIn("userPosition", axis)
         self.assertIsNone(axis["userPosition"])
 
+    def test_nullable_defaults(self):
+        # Nullable properties may have a default, which can still be set to null
+        spindle = Spindle()
+        self.assertEqual(spindle.max, 10000)
+        spindle.update_from_json({"max": None})
+        self.assertIsNone(spindle.max)
+
+        # Model object defaults are not shared between instances
+        self.assertIsNot(DirectDisplay().encoder, DirectDisplay().encoder)
+
     def test_null_clears_dictionary(self):
         # DSF sends null for a dictionary that has been cleared, e.g. job.file.customInfo when a job ends
         model = ObjectModel()
@@ -689,7 +701,27 @@ class Model(unittest.TestCase):
         from src.dsf.commands.code_channel import CodeChannel
 
         model = ObjectModel()
-        self.assertEqual(len(model.inputs), 0)
+        # Like DSF, there is one input channel per code channel by default, the index being the code channel
+        self.assertEqual(
+            [channel.name if channel else None for channel in model.inputs],
+            [
+                CodeChannel.HTTP,
+                CodeChannel.Telnet,
+                CodeChannel.File,
+                CodeChannel.USB,
+                CodeChannel.Aux,
+                CodeChannel.Trigger,
+                CodeChannel.Queue,
+                CodeChannel.LCD,
+                CodeChannel.SBC,
+                CodeChannel.Daemon,
+                CodeChannel.Aux2,
+                CodeChannel.Autopause,
+                CodeChannel.File2,
+                CodeChannel.Queue2,
+                CodeChannel.USB2,
+            ],
+        )
 
         # RRF reports null for input channels that are not available
         json_patch = '{"inputs":[{"active":true,"axesRelative":false,"compatibility":"RepRapFirmware","distanceUnit":"mm","drivesRelative":true,"feedRate":50,"inMacro":false,"lineNumber":0,"name":"HTTP","stackDepth":0,"state":"idle","volumetric":false},null,{"active":true,"axesRelative":false,"compatibility":"RepRapFirmware","distanceUnit":"mm","drivesRelative":true,"feedRate":50,"inMacro":false,"lineNumber":42,"name":"File","stackDepth":0,"state":"idle","volumetric":false},null]}'

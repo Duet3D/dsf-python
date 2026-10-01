@@ -16,8 +16,6 @@ class CodeChannel(str, Enum):
     # Code channel for USB requests
     USB = "USB"
 
-    USB2 = "USB2"
-
     # Code channel for serial devices (e.g. PanelDue)
     Aux = "Aux"
 
@@ -47,6 +45,9 @@ class CodeChannel(str, Enum):
 
     # Code channel for the code queue that executes a couple of codes in-sync with moves of the primary print file
     Queue2 = "Queue2"
+
+    # Code channel for secondary USB requests
+    USB2 = "USB2"
 
     # Unknown code channel
     Unknown = "Unknown"

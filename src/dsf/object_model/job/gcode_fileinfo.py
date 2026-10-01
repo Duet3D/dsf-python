@@ -17,7 +17,7 @@ class GCodeFileInfo(ModelObject):
     filament = model_prop("filament", ModelCollection[float], ModelCollection(float))
 
     # The filename of the G-code file
-    file_name = nullable_model_prop("file_name", str)
+    file_name = model_prop("file_name", str, "")
 
     # Name of the application that generated this file
     generated_by = nullable_model_prop("generated_by", str)
@@ -41,7 +41,7 @@ class GCodeFileInfo(ModelObject):
     simulated_time = nullable_model_prop("simulated_time", int)
 
     # Size of the file
-    size = nullable_model_prop("size", int)
+    size = model_prop("size", int, 0)
 
     # Collection of thumbnails parsed from Gcode
     thumbnails = model_prop("thumbnails", ModelCollection[ThumbnailInfo], ModelCollection(ThumbnailInfo))

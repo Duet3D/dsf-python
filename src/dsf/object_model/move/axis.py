@@ -46,7 +46,7 @@ class AxisLetter(str, Enum):
     x = "x"
     y = "y"
     z = "z"
-    none = ""
+    none = "\x00"
 
 
 class Axis(ModelObject):

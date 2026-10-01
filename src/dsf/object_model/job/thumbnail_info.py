@@ -23,7 +23,7 @@ class ThumbnailInfo(ModelObject):
     data = nullable_model_prop("data", str)
 
     # Format of this thumbnail
-    format = model_prop("format", ThumbnailInfoFormat, ThumbnailInfoFormat.PNG)
+    format = model_prop("format", ThumbnailInfoFormat, ThumbnailInfoFormat.JPEG)
 
     # Height of this thumbnail
     height = model_prop("height", int, 0)

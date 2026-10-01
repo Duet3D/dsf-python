@@ -18,7 +18,7 @@ class DeltaKinematics(Kinematics):
     print_radius = model_prop("print_radius", float, 0.0)
 
     # Delta tower properties
-    towers = model_prop("towers", ModelCollection[DeltaTower], ModelCollection(DeltaTower, [{}, {}, {}]))
+    towers = model_prop("towers", ModelCollection[DeltaTower], ModelCollection(DeltaTower))
 
     # How much Z needs to be raised for each unit of movement in the +X direction
     x_tilt = model_prop("x_tilt", float, 0.0)
