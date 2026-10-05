@@ -39,8 +39,6 @@ UNIMPLEMENTED_ENUMS: set[str] = {
     "ModelPropertyFlags",
     "ModelPropertyKind",
     "ModelUpdateScope",
-    # Base directory of the ResolvePath command, which resolve_path() takes as the string DSF reads
-    "FileDirectory",
 }
 # dsf-python enums that have no DSF counterpart
 PYTHON_ONLY_ENUMS: set[str] = {
