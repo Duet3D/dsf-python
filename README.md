@@ -126,19 +126,14 @@ See [custom_http_endpoint.py](https://github.com/Duet3D/dsf-python/blob/HEAD/exa
 
 ### Naming
 
-Python attributes and methods are `snake_case`. **Anything passed to DSF as a string stays in DSF's
-`camelCase` format**, because DSF interprets it and not this library.
+Python attributes and methods are `snake_case`, e.g. `state.upTime` is `state.up_time` and
+`PerformSimpleCodeAsync()` is `perform_simple_code()`, with the exceptions below. **Anything passed to DSF
+as a string stays in DSF's `camelCase` format**, because DSF interprets it and not this library.
 
 | | DSF / C# | dsf-python |
 |---|---|---|
-| Object model properties | `state.upTime`, `move.axes[0].userPosition` | `state.up_time`, `move.axes[0].user_position` |
 | Uppercase acronyms | `move.skew.tanXY` | `move.skew.tan_XY` (acronyms stay uppercase) |
 | Global variables | `global` | `globals` (`global` is a Python keyword) |
-| Methods | `PerformSimpleCodeAsync()` | `perform_simple_code()` |
-| `Code` attributes | `MajorNumber`, `KeywordArgument` | `major_number`, `keyword_argument` (the camelCase names `majorNumber` etc. still work but are deprecated) |
-| `CodeParameter` attributes | `StringValue`, `IsString` | `string_value`, `is_string` |
-| HTTP request fields | `SessionId`, `ContentType` | `session_id`, `content_type` |
-| Error responses | `errorType`, `errorMessage` | `error_type`, `error_message` |
 | Enum members | `MessageType.Success` | Not normalised: `MessageType.Success`, `MachineStatus.idle`, `SubscriptionMode.PATCH`, `HttpEndpointType.GET`. Values match the DSF JSON. |
 
 These strings keep DSF naming:
