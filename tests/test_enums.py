@@ -1,12 +1,9 @@
 import enum
-import importlib
 import json
-import pkgutil
 import re
 import unittest
 import warnings
 
-import src.dsf as dsf
 from src.dsf.commands.code_channel import CodeChannel
 from src.dsf.commands.code_flags import CodeFlags
 from src.dsf.commands.code_type import CodeType
@@ -19,22 +16,13 @@ from src.dsf.object_model.move.kinematics.kinematics_name import KinematicsName
 from src.dsf.object_model.messages import MessageType
 from src.dsf.object_model.sensors.probe_type import ProbeType
 from src.dsf.utils import DeprecatedWarning
-
-
-def _enums() -> list[type[enum.Enum]]:
-    enums: list[type[enum.Enum]] = []
-    for module_info in pkgutil.walk_packages(dsf.__path__, f"{dsf.__name__}."):
-        module = importlib.import_module(module_info.name)
-        for value in vars(module).values():
-            if isinstance(value, type) and issubclass(value, enum.Enum) and value.__module__ == module.__name__:
-                enums.append(value)
-    return enums
+from tests.utils import get_enums
 
 
 class TestEnums(unittest.TestCase):
     def test_upper_snake_case(self):
         # Every member name is UPPER_SNAKE_CASE, except for the axis letters
-        for cls in _enums():
+        for cls in get_enums():
             if cls is AxisLetter:
                 continue
             for name, member in cls.__members__.items():

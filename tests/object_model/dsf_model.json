@@ -14315,5 +14315,2131 @@
   "runtimeDefaults": [
     "DSF.version",
     "Message.time"
-  ]
+  ],
+  "enums": {
+    "AccessLevel": {
+      "namespace": "DuetAPI.ObjectModel",
+      "flags": false,
+      "members": [
+        {
+          "name": "ReadOnly",
+          "value": 0,
+          "json": "readOnly"
+        },
+        {
+          "name": "ReadWrite",
+          "value": 1,
+          "json": "readWrite"
+        }
+      ]
+    },
+    "AnalogSensorType": {
+      "namespace": "DuetAPI.ObjectModel",
+      "flags": false,
+      "members": [
+        {
+          "name": "Thermistor",
+          "value": 0,
+          "json": "thermistor"
+        },
+        {
+          "name": "PT1000",
+          "value": 1,
+          "json": "pt1000"
+        },
+        {
+          "name": "MAX31865",
+          "value": 2,
+          "json": "rtdmax31865"
+        },
+        {
+          "name": "MAX31855",
+          "value": 3,
+          "json": "thermocouplemax31855"
+        },
+        {
+          "name": "MAX31856",
+          "value": 4,
+          "json": "thermocouplemax31856"
+        },
+        {
+          "name": "LinearAnalog",
+          "value": 5,
+          "json": "linearanalog"
+        },
+        {
+          "name": "DHT21",
+          "value": 6,
+          "json": "dht21"
+        },
+        {
+          "name": "DHT22",
+          "value": 7,
+          "json": "dht22"
+        },
+        {
+          "name": "DHTHumidity",
+          "value": 8,
+          "json": "dhthumidity"
+        },
+        {
+          "name": "BME280",
+          "value": 9,
+          "json": "bme280"
+        },
+        {
+          "name": "BME280Pressure",
+          "value": 10,
+          "json": "bmepressure"
+        },
+        {
+          "name": "BME280Humidity",
+          "value": 11,
+          "json": "bmehumidity"
+        },
+        {
+          "name": "BME68x",
+          "value": 12,
+          "json": "bme68x"
+        },
+        {
+          "name": "BME68xPressure",
+          "value": 13,
+          "json": "bme68xpressure"
+        },
+        {
+          "name": "BME68xHumidity",
+          "value": 14,
+          "json": "bme68xhumidity"
+        },
+        {
+          "name": "BME68xGas",
+          "value": 15,
+          "json": "bme68xgas"
+        },
+        {
+          "name": "CurrentLoop",
+          "value": 16,
+          "json": "currentloop"
+        },
+        {
+          "name": "ADS131Chan0Unipolar",
+          "value": 17,
+          "json": "ads131.chan0.u"
+        },
+        {
+          "name": "ADS131Chan0Bipolar",
+          "value": 18,
+          "json": "ads131.chan0.b"
+        },
+        {
+          "name": "ADS131Chan1",
+          "value": 19,
+          "json": "ads131.chan1"
+        },
+        {
+          "name": "McuTemp",
+          "value": 20,
+          "json": "mcutemp"
+        },
+        {
+          "name": "Drivers",
+          "value": 21,
+          "json": "drivers"
+        },
+        {
+          "name": "DriversDuex",
+          "value": 22,
+          "json": "driversduex"
+        },
+        {
+          "name": "Remote",
+          "value": 23,
+          "json": "remote"
+        },
+        {
+          "name": "Unknown",
+          "value": 24,
+          "json": "unknown"
+        }
+      ]
+    },
+    "BoardState": {
+      "namespace": "DuetAPI.ObjectModel",
+      "flags": false,
+      "members": [
+        {
+          "name": "Unknown",
+          "value": 0,
+          "json": "unknown"
+        },
+        {
+          "name": "Flashing",
+          "value": 1,
+          "json": "flashing"
+        },
+        {
+          "name": "FlashFailed",
+          "value": 2,
+          "json": "flashFailed"
+        },
+        {
+          "name": "Resetting",
+          "value": 3,
+          "json": "resetting"
+        },
+        {
+          "name": "Running",
+          "value": 4,
+          "json": "running"
+        },
+        {
+          "name": "TimedOut",
+          "value": 5,
+          "json": "timedOut"
+        }
+      ]
+    },
+    "CodeChannel": {
+      "namespace": "DuetAPI",
+      "flags": false,
+      "members": [
+        {
+          "name": "HTTP",
+          "value": 0,
+          "json": "HTTP"
+        },
+        {
+          "name": "Telnet",
+          "value": 1,
+          "json": "Telnet"
+        },
+        {
+          "name": "File",
+          "value": 2,
+          "json": "File"
+        },
+        {
+          "name": "USB",
+          "value": 3,
+          "json": "USB"
+        },
+        {
+          "name": "Aux",
+          "value": 4,
+          "json": "Aux"
+        },
+        {
+          "name": "Trigger",
+          "value": 5,
+          "json": "Trigger"
+        },
+        {
+          "name": "Queue",
+          "value": 6,
+          "json": "Queue"
+        },
+        {
+          "name": "LCD",
+          "value": 7,
+          "json": "LCD"
+        },
+        {
+          "name": "SBC",
+          "value": 8,
+          "json": "SBC"
+        },
+        {
+          "name": "Daemon",
+          "value": 9,
+          "json": "Daemon"
+        },
+        {
+          "name": "Aux2",
+          "value": 10,
+          "json": "Aux2"
+        },
+        {
+          "name": "Autopause",
+          "value": 11,
+          "json": "Autopause"
+        },
+        {
+          "name": "File2",
+          "value": 12,
+          "json": "File2"
+        },
+        {
+          "name": "Queue2",
+          "value": 13,
+          "json": "Queue2"
+        },
+        {
+          "name": "USB2",
+          "value": 14,
+          "json": "USB2"
+        },
+        {
+          "name": "Unknown",
+          "value": 15,
+          "json": "Unknown"
+        }
+      ]
+    },
+    "CodeFlags": {
+      "namespace": "DuetAPI.Commands",
+      "flags": true,
+      "members": [
+        {
+          "name": "None",
+          "value": 0,
+          "json": 0
+        },
+        {
+          "name": "Asynchronous",
+          "value": 1,
+          "json": 1
+        },
+        {
+          "name": "IsPreProcessed",
+          "value": 2,
+          "json": 2
+        },
+        {
+          "name": "IsInternallyProcessed",
+          "value": 4096,
+          "json": 4096
+        },
+        {
+          "name": "IsPostProcessed",
+          "value": 4,
+          "json": 4
+        },
+        {
+          "name": "IsFromMacro",
+          "value": 8,
+          "json": 8
+        },
+        {
+          "name": "IsNestedMacro",
+          "value": 16,
+          "json": 16
+        },
+        {
+          "name": "IsFromConfig",
+          "value": 32,
+          "json": 32
+        },
+        {
+          "name": "IsFromConfigOverride",
+          "value": 64,
+          "json": 64
+        },
+        {
+          "name": "EnforceAbsolutePosition",
+          "value": 128,
+          "json": 128
+        },
+        {
+          "name": "IsPrioritized",
+          "value": 256,
+          "json": 256
+        },
+        {
+          "name": "Unbuffered",
+          "value": 512,
+          "json": 512
+        },
+        {
+          "name": "IsFromFirmware",
+          "value": 1024,
+          "json": 1024
+        },
+        {
+          "name": "IsLastCode",
+          "value": 2048,
+          "json": 2048
+        },
+        {
+          "name": "HasExplicitLineNumber",
+          "value": 8192,
+          "json": 8192
+        }
+      ]
+    },
+    "CodeType": {
+      "namespace": "DuetAPI.Commands",
+      "flags": false,
+      "members": [
+        {
+          "name": "None",
+          "value": 0,
+          "json": ""
+        },
+        {
+          "name": "Comment",
+          "value": 81,
+          "json": "Q"
+        },
+        {
+          "name": "Keyword",
+          "value": 75,
+          "json": "K"
+        },
+        {
+          "name": "GCode",
+          "value": 71,
+          "json": "G"
+        },
+        {
+          "name": "MCode",
+          "value": 77,
+          "json": "M"
+        },
+        {
+          "name": "TCode",
+          "value": 84,
+          "json": "T"
+        }
+      ]
+    },
+    "CommunicationMethod": {
+      "namespace": "DuetAPI.ObjectModel",
+      "flags": false,
+      "members": [
+        {
+          "name": "SPI",
+          "value": 0,
+          "json": "spi"
+        },
+        {
+          "name": "USB",
+          "value": 1,
+          "json": "usb"
+        }
+      ]
+    },
+    "Compatibility": {
+      "namespace": "DuetAPI.ObjectModel",
+      "flags": false,
+      "members": [
+        {
+          "name": "Default",
+          "value": 0,
+          "json": "Default"
+        },
+        {
+          "name": "RepRapFirmware",
+          "value": 1,
+          "json": "RepRapFirmware"
+        },
+        {
+          "name": "Marlin",
+          "value": 2,
+          "json": "Marlin"
+        },
+        {
+          "name": "Teacup",
+          "value": 3,
+          "json": "Teacup"
+        },
+        {
+          "name": "Sprinter",
+          "value": 4,
+          "json": "Sprinter"
+        },
+        {
+          "name": "Repetier",
+          "value": 5,
+          "json": "Repetier"
+        },
+        {
+          "name": "NanoDLP",
+          "value": 6,
+          "json": "NanoDLP"
+        }
+      ]
+    },
+    "ConnectionMode": {
+      "namespace": "DuetAPI.Connection",
+      "flags": false,
+      "members": [
+        {
+          "name": "Unknown",
+          "value": 0,
+          "json": "Unknown"
+        },
+        {
+          "name": "Command",
+          "value": 1,
+          "json": "Command"
+        },
+        {
+          "name": "Intercept",
+          "value": 2,
+          "json": "Intercept"
+        },
+        {
+          "name": "Subscribe",
+          "value": 3,
+          "json": "Subscribe"
+        },
+        {
+          "name": "CodeStream",
+          "value": 4,
+          "json": "CodeStream"
+        },
+        {
+          "name": "PluginService",
+          "value": 5,
+          "json": "PluginService"
+        }
+      ]
+    },
+    "DirectDisplayController": {
+      "namespace": "DuetAPI.ObjectModel",
+      "flags": false,
+      "members": [
+        {
+          "name": "ST7920",
+          "value": 0,
+          "json": "ST7920"
+        },
+        {
+          "name": "ST7567",
+          "value": 1,
+          "json": "ST7567"
+        },
+        {
+          "name": "ILI9488",
+          "value": 2,
+          "json": "ILI9488"
+        }
+      ]
+    },
+    "DistanceUnit": {
+      "namespace": "DuetAPI.ObjectModel",
+      "flags": false,
+      "members": [
+        {
+          "name": "MM",
+          "value": 0,
+          "json": "mm"
+        },
+        {
+          "name": "Inch",
+          "value": 1,
+          "json": "in"
+        }
+      ]
+    },
+    "DriverMode": {
+      "namespace": "DuetAPI.ObjectModel",
+      "flags": false,
+      "members": [
+        {
+          "name": "ConstantOffTime",
+          "value": 0,
+          "json": 0
+        },
+        {
+          "name": "RandomOffTime",
+          "value": 1,
+          "json": 1
+        },
+        {
+          "name": "SpreadCycle",
+          "value": 2,
+          "json": 2
+        },
+        {
+          "name": "StealthChop",
+          "value": 3,
+          "json": 3
+        },
+        {
+          "name": "Direct",
+          "value": 4,
+          "json": 4
+        },
+        {
+          "name": "AssistedOpen",
+          "value": 5,
+          "json": 5
+        },
+        {
+          "name": "Unknown",
+          "value": 6,
+          "json": 6
+        }
+      ]
+    },
+    "EndstopType": {
+      "namespace": "DuetAPI.ObjectModel",
+      "flags": false,
+      "members": [
+        {
+          "name": "InputPin",
+          "value": 0,
+          "json": "inputPin"
+        },
+        {
+          "name": "ZProbeAsEndstop",
+          "value": 1,
+          "json": "zProbeAsEndstop"
+        },
+        {
+          "name": "MotorStallAny",
+          "value": 2,
+          "json": "motorStallAny"
+        },
+        {
+          "name": "MotorStallIndividual",
+          "value": 3,
+          "json": "motorStallIndividual"
+        },
+        {
+          "name": "MotorStallEncoder",
+          "value": 4,
+          "json": "motorStallEncoder"
+        },
+        {
+          "name": "Unknown",
+          "value": 5,
+          "json": "unknown"
+        }
+      ]
+    },
+    "EventLogLevel": {
+      "namespace": "DuetAPI.ObjectModel",
+      "flags": false,
+      "members": [
+        {
+          "name": "Debug",
+          "value": 0,
+          "json": "debug"
+        },
+        {
+          "name": "Info",
+          "value": 1,
+          "json": "info"
+        },
+        {
+          "name": "Warn",
+          "value": 2,
+          "json": "warn"
+        },
+        {
+          "name": "Off",
+          "value": 3,
+          "json": "off"
+        }
+      ]
+    },
+    "FilamentMonitorEnableMode": {
+      "namespace": "DuetAPI.ObjectModel",
+      "flags": false,
+      "members": [
+        {
+          "name": "Disabled",
+          "value": 0,
+          "json": 0
+        },
+        {
+          "name": "Enabled",
+          "value": 1,
+          "json": 1
+        },
+        {
+          "name": "AlwaysEnabled",
+          "value": 2,
+          "json": 2
+        }
+      ]
+    },
+    "FilamentMonitorStatus": {
+      "namespace": "DuetAPI.ObjectModel",
+      "flags": false,
+      "members": [
+        {
+          "name": "NoMonitor",
+          "value": 0,
+          "json": "noMonitor"
+        },
+        {
+          "name": "Ok",
+          "value": 1,
+          "json": "ok"
+        },
+        {
+          "name": "NoDataReceived",
+          "value": 2,
+          "json": "noDataReceived"
+        },
+        {
+          "name": "NoFilament",
+          "value": 3,
+          "json": "noFilament"
+        },
+        {
+          "name": "TooLittleMovement",
+          "value": 4,
+          "json": "tooLittleMovement"
+        },
+        {
+          "name": "TooMuchMovement",
+          "value": 5,
+          "json": "tooMuchMovement"
+        },
+        {
+          "name": "SensorError",
+          "value": 6,
+          "json": "sensorError"
+        }
+      ]
+    },
+    "FilamentMonitorType": {
+      "namespace": "DuetAPI.ObjectModel",
+      "flags": false,
+      "members": [
+        {
+          "name": "Simple",
+          "value": 0,
+          "json": "simple"
+        },
+        {
+          "name": "Laser",
+          "value": 1,
+          "json": "laser"
+        },
+        {
+          "name": "Pulsed",
+          "value": 2,
+          "json": "pulsed"
+        },
+        {
+          "name": "RotatingMagnet",
+          "value": 3,
+          "json": "rotatingMagnet"
+        },
+        {
+          "name": "Unknown",
+          "value": 4,
+          "json": "unknown"
+        }
+      ]
+    },
+    "FileDirectory": {
+      "namespace": "DuetAPI.Commands",
+      "flags": false,
+      "members": [
+        {
+          "name": "Filaments",
+          "value": 0,
+          "json": "Filaments"
+        },
+        {
+          "name": "Firmware",
+          "value": 1,
+          "json": "Firmware"
+        },
+        {
+          "name": "GCodes",
+          "value": 2,
+          "json": "GCodes"
+        },
+        {
+          "name": "Macros",
+          "value": 3,
+          "json": "Macros"
+        },
+        {
+          "name": "Menu",
+          "value": 4,
+          "json": "Menu"
+        },
+        {
+          "name": "System",
+          "value": 5,
+          "json": "System"
+        },
+        {
+          "name": "Web",
+          "value": 6,
+          "json": "Web"
+        }
+      ]
+    },
+    "HeaterMonitorAction": {
+      "namespace": "DuetAPI.ObjectModel",
+      "flags": false,
+      "members": [
+        {
+          "name": "GenerateFault",
+          "value": 0,
+          "json": 0
+        },
+        {
+          "name": "PermanentSwitchOff",
+          "value": 1,
+          "json": 1
+        },
+        {
+          "name": "TemporarySwitchOff",
+          "value": 2,
+          "json": 2
+        },
+        {
+          "name": "ShutDown",
+          "value": 3,
+          "json": 3
+        }
+      ]
+    },
+    "HeaterMonitorCondition": {
+      "namespace": "DuetAPI.ObjectModel",
+      "flags": false,
+      "members": [
+        {
+          "name": "Disabled",
+          "value": 0,
+          "json": "disabled"
+        },
+        {
+          "name": "TooHigh",
+          "value": 1,
+          "json": "tooHigh"
+        },
+        {
+          "name": "TooLow",
+          "value": 2,
+          "json": "tooLow"
+        }
+      ]
+    },
+    "HeaterState": {
+      "namespace": "DuetAPI.ObjectModel",
+      "flags": false,
+      "members": [
+        {
+          "name": "Off",
+          "value": 0,
+          "json": "off"
+        },
+        {
+          "name": "Standby",
+          "value": 1,
+          "json": "standby"
+        },
+        {
+          "name": "Active",
+          "value": 2,
+          "json": "active"
+        },
+        {
+          "name": "Fault",
+          "value": 3,
+          "json": "fault"
+        },
+        {
+          "name": "Tuning",
+          "value": 4,
+          "json": "tuning"
+        },
+        {
+          "name": "Offline",
+          "value": 5,
+          "json": "offline"
+        }
+      ]
+    },
+    "HttpEndpointType": {
+      "namespace": "DuetAPI.ObjectModel",
+      "flags": false,
+      "members": [
+        {
+          "name": "GET",
+          "value": 0,
+          "json": "GET"
+        },
+        {
+          "name": "POST",
+          "value": 1,
+          "json": "POST"
+        },
+        {
+          "name": "PUT",
+          "value": 2,
+          "json": "PUT"
+        },
+        {
+          "name": "PATCH",
+          "value": 3,
+          "json": "PATCH"
+        },
+        {
+          "name": "TRACE",
+          "value": 4,
+          "json": "TRACE"
+        },
+        {
+          "name": "DELETE",
+          "value": 5,
+          "json": "DELETE"
+        },
+        {
+          "name": "OPTIONS",
+          "value": 6,
+          "json": "OPTIONS"
+        },
+        {
+          "name": "WebSocket",
+          "value": 7,
+          "json": "WebSocket"
+        }
+      ]
+    },
+    "HttpResponseType": {
+      "namespace": "DuetAPI.Commands",
+      "flags": false,
+      "members": [
+        {
+          "name": "StatusCode",
+          "value": 0,
+          "json": "statusCode"
+        },
+        {
+          "name": "PlainText",
+          "value": 1,
+          "json": "plainText"
+        },
+        {
+          "name": "JSON",
+          "value": 2,
+          "json": "json"
+        },
+        {
+          "name": "File",
+          "value": 3,
+          "json": "file"
+        },
+        {
+          "name": "URI",
+          "value": 4,
+          "json": "uri"
+        }
+      ]
+    },
+    "InputChannelState": {
+      "namespace": "DuetAPI.ObjectModel",
+      "flags": false,
+      "members": [
+        {
+          "name": "AwaitingAcknowledgement",
+          "value": 0,
+          "json": "awaitingAcknowledgement"
+        },
+        {
+          "name": "Idle",
+          "value": 1,
+          "json": "idle"
+        },
+        {
+          "name": "Executing",
+          "value": 2,
+          "json": "executing"
+        },
+        {
+          "name": "Waiting",
+          "value": 3,
+          "json": "waiting"
+        },
+        {
+          "name": "Reading",
+          "value": 4,
+          "json": "reading"
+        },
+        {
+          "name": "Unused",
+          "value": 5,
+          "json": "unused"
+        }
+      ]
+    },
+    "InputShapingType": {
+      "namespace": "DuetAPI.ObjectModel",
+      "flags": false,
+      "members": [
+        {
+          "name": "None",
+          "value": 0,
+          "json": "none"
+        },
+        {
+          "name": "MZV",
+          "value": 1,
+          "json": "mzv"
+        },
+        {
+          "name": "ZVD",
+          "value": 2,
+          "json": "zvd"
+        },
+        {
+          "name": "ZVDD",
+          "value": 3,
+          "json": "zvdd"
+        },
+        {
+          "name": "ZVDDD",
+          "value": 4,
+          "json": "zvddd"
+        },
+        {
+          "name": "EI2",
+          "value": 5,
+          "json": "ei2"
+        },
+        {
+          "name": "EI3",
+          "value": 6,
+          "json": "ei3"
+        },
+        {
+          "name": "Custom",
+          "value": 7,
+          "json": "custom"
+        }
+      ]
+    },
+    "InterceptionMode": {
+      "namespace": "DuetAPI.Connection",
+      "flags": false,
+      "members": [
+        {
+          "name": "Pre",
+          "value": 0,
+          "json": "Pre"
+        },
+        {
+          "name": "Post",
+          "value": 1,
+          "json": "Post"
+        },
+        {
+          "name": "Executed",
+          "value": 2,
+          "json": "Executed"
+        }
+      ]
+    },
+    "KeywordType": {
+      "namespace": "DuetAPI.Commands",
+      "flags": false,
+      "members": [
+        {
+          "name": "None",
+          "value": 0,
+          "json": 0
+        },
+        {
+          "name": "If",
+          "value": 1,
+          "json": 1
+        },
+        {
+          "name": "ElseIf",
+          "value": 2,
+          "json": 2
+        },
+        {
+          "name": "Else",
+          "value": 3,
+          "json": 3
+        },
+        {
+          "name": "While",
+          "value": 4,
+          "json": 4
+        },
+        {
+          "name": "Break",
+          "value": 5,
+          "json": 5
+        },
+        {
+          "name": "Abort",
+          "value": 6,
+          "json": 6
+        },
+        {
+          "name": "Var",
+          "value": 7,
+          "json": 7
+        },
+        {
+          "name": "Set",
+          "value": 8,
+          "json": 8
+        },
+        {
+          "name": "Echo",
+          "value": 9,
+          "json": 9
+        },
+        {
+          "name": "Continue",
+          "value": 10,
+          "json": 10
+        },
+        {
+          "name": "Global",
+          "value": 11,
+          "json": 11
+        },
+        {
+          "name": "Skip",
+          "value": 12,
+          "json": 12
+        }
+      ]
+    },
+    "KinematicsName": {
+      "namespace": "DuetAPI.ObjectModel",
+      "flags": false,
+      "members": [
+        {
+          "name": "Cartesian",
+          "value": 0,
+          "json": "cartesian"
+        },
+        {
+          "name": "CoreXY",
+          "value": 1,
+          "json": "coreXY"
+        },
+        {
+          "name": "CoreXYU",
+          "value": 2,
+          "json": "coreXYU"
+        },
+        {
+          "name": "CoreXYUV",
+          "value": 3,
+          "json": "coreXYUV"
+        },
+        {
+          "name": "CoreXZ",
+          "value": 4,
+          "json": "coreXZ"
+        },
+        {
+          "name": "MarkForged",
+          "value": 5,
+          "json": "markForged"
+        },
+        {
+          "name": "FiveBarScara",
+          "value": 6,
+          "json": "FiveBarScara"
+        },
+        {
+          "name": "Hangprinter",
+          "value": 7,
+          "json": "Hangprinter"
+        },
+        {
+          "name": "LinearDelta",
+          "value": 8,
+          "json": "delta"
+        },
+        {
+          "name": "Polar",
+          "value": 9,
+          "json": "Polar"
+        },
+        {
+          "name": "RotaryDelta",
+          "value": 10,
+          "json": "Rotary delta"
+        },
+        {
+          "name": "Scara",
+          "value": 11,
+          "json": "Scara"
+        },
+        {
+          "name": "Unknown",
+          "value": 12,
+          "json": "unknown"
+        }
+      ]
+    },
+    "LedStripColorOrder": {
+      "namespace": "DuetAPI.ObjectModel",
+      "flags": false,
+      "members": [
+        {
+          "name": "BGR",
+          "value": 0,
+          "json": 0
+        },
+        {
+          "name": "BRG",
+          "value": 1,
+          "json": 1
+        },
+        {
+          "name": "RGB",
+          "value": 2,
+          "json": 2
+        },
+        {
+          "name": "RBG",
+          "value": 3,
+          "json": 3
+        },
+        {
+          "name": "GBR",
+          "value": 4,
+          "json": 4
+        },
+        {
+          "name": "GRB",
+          "value": 5,
+          "json": 5
+        }
+      ]
+    },
+    "LedStripType": {
+      "namespace": "DuetAPI.ObjectModel",
+      "flags": false,
+      "members": [
+        {
+          "name": "DotStar",
+          "value": 0,
+          "json": "DotStar"
+        },
+        {
+          "name": "NeoPixel_RGB",
+          "value": 1,
+          "json": "NeoPixel_RGB"
+        },
+        {
+          "name": "NeoPixel_RGBW",
+          "value": 2,
+          "json": "NeoPixel_RGBW"
+        }
+      ]
+    },
+    "MachineMode": {
+      "namespace": "DuetAPI.ObjectModel",
+      "flags": false,
+      "members": [
+        {
+          "name": "FFF",
+          "value": 0,
+          "json": "FFF"
+        },
+        {
+          "name": "CNC",
+          "value": 1,
+          "json": "CNC"
+        },
+        {
+          "name": "Laser",
+          "value": 2,
+          "json": "Laser"
+        }
+      ]
+    },
+    "MachineStatus": {
+      "namespace": "DuetAPI.ObjectModel",
+      "flags": false,
+      "members": [
+        {
+          "name": "Disconnected",
+          "value": 0,
+          "json": "disconnected"
+        },
+        {
+          "name": "Starting",
+          "value": 1,
+          "json": "starting"
+        },
+        {
+          "name": "Updating",
+          "value": 2,
+          "json": "updating"
+        },
+        {
+          "name": "Off",
+          "value": 3,
+          "json": "off"
+        },
+        {
+          "name": "Halted",
+          "value": 4,
+          "json": "halted"
+        },
+        {
+          "name": "Pausing",
+          "value": 5,
+          "json": "pausing"
+        },
+        {
+          "name": "Paused",
+          "value": 6,
+          "json": "paused"
+        },
+        {
+          "name": "Resuming",
+          "value": 7,
+          "json": "resuming"
+        },
+        {
+          "name": "Cancelling",
+          "value": 8,
+          "json": "cancelling"
+        },
+        {
+          "name": "Processing",
+          "value": 9,
+          "json": "processing"
+        },
+        {
+          "name": "Simulating",
+          "value": 10,
+          "json": "simulating"
+        },
+        {
+          "name": "Busy",
+          "value": 11,
+          "json": "busy"
+        },
+        {
+          "name": "ChangingTool",
+          "value": 12,
+          "json": "changingTool"
+        },
+        {
+          "name": "Idle",
+          "value": 13,
+          "json": "idle"
+        }
+      ]
+    },
+    "MessageBoxMode": {
+      "namespace": "DuetAPI.ObjectModel",
+      "flags": false,
+      "members": [
+        {
+          "name": "NoButtons",
+          "value": 0,
+          "json": 0
+        },
+        {
+          "name": "CloseOnly",
+          "value": 1,
+          "json": 1
+        },
+        {
+          "name": "OkOnly",
+          "value": 2,
+          "json": 2
+        },
+        {
+          "name": "OkCancel",
+          "value": 3,
+          "json": 3
+        },
+        {
+          "name": "MultipleChoice",
+          "value": 4,
+          "json": 4
+        },
+        {
+          "name": "IntInput",
+          "value": 5,
+          "json": 5
+        },
+        {
+          "name": "FloatInput",
+          "value": 6,
+          "json": 6
+        },
+        {
+          "name": "StringInput",
+          "value": 7,
+          "json": 7
+        }
+      ]
+    },
+    "MessageType": {
+      "namespace": "DuetAPI.ObjectModel",
+      "flags": false,
+      "members": [
+        {
+          "name": "Success",
+          "value": 0,
+          "json": 0
+        },
+        {
+          "name": "Warning",
+          "value": 1,
+          "json": 1
+        },
+        {
+          "name": "Error",
+          "value": 2,
+          "json": 2
+        }
+      ]
+    },
+    "ModelPropertyFlags": {
+      "namespace": "DuetAPI.ObjectModel",
+      "flags": true,
+      "members": [
+        {
+          "name": "None",
+          "value": 0
+        },
+        {
+          "name": "HasSetter",
+          "value": 1
+        },
+        {
+          "name": "SbcProperty",
+          "value": 2
+        },
+        {
+          "name": "Live",
+          "value": 4
+        },
+        {
+          "name": "Verbose",
+          "value": 8
+        },
+        {
+          "name": "Obsolete",
+          "value": 16
+        }
+      ],
+      "error": "Not part of any JSON context of DSF"
+    },
+    "ModelPropertyKind": {
+      "namespace": "DuetAPI.ObjectModel",
+      "flags": false,
+      "members": [
+        {
+          "name": "Value",
+          "value": 0
+        },
+        {
+          "name": "JsonElement",
+          "value": 1
+        },
+        {
+          "name": "ModelObject",
+          "value": 2
+        },
+        {
+          "name": "ModelCollection",
+          "value": 3
+        },
+        {
+          "name": "ModelDictionary",
+          "value": 4
+        },
+        {
+          "name": "ObservableCollection",
+          "value": 5
+        }
+      ],
+      "error": "Not part of any JSON context of DSF"
+    },
+    "ModelUpdateScope": {
+      "namespace": "DuetAPI.ObjectModel",
+      "flags": true,
+      "members": [
+        {
+          "name": "Patch",
+          "value": 0
+        },
+        {
+          "name": "Live",
+          "value": 1
+        },
+        {
+          "name": "Full",
+          "value": 2
+        },
+        {
+          "name": "Verbose",
+          "value": 4
+        },
+        {
+          "name": "Obsolete",
+          "value": 8
+        }
+      ],
+      "error": "Not part of any JSON context of DSF"
+    },
+    "MoveCompensationType": {
+      "namespace": "DuetAPI.ObjectModel",
+      "flags": false,
+      "members": [
+        {
+          "name": "None",
+          "value": 0,
+          "json": "none"
+        },
+        {
+          "name": "Mesh",
+          "value": 1,
+          "json": "mesh"
+        }
+      ]
+    },
+    "NetworkInterfaceType": {
+      "namespace": "DuetAPI.ObjectModel",
+      "flags": false,
+      "members": [
+        {
+          "name": "Ethernet",
+          "value": 0,
+          "json": "ethernet"
+        },
+        {
+          "name": "WiFi",
+          "value": 1,
+          "json": "wifi"
+        }
+      ]
+    },
+    "NetworkProtocol": {
+      "namespace": "DuetAPI.ObjectModel",
+      "flags": false,
+      "members": [
+        {
+          "name": "HTTP",
+          "value": 0,
+          "json": "http"
+        },
+        {
+          "name": "HTTPS",
+          "value": 1,
+          "json": "https"
+        },
+        {
+          "name": "FTP",
+          "value": 2,
+          "json": "ftp"
+        },
+        {
+          "name": "SFTP",
+          "value": 3,
+          "json": "sftp"
+        },
+        {
+          "name": "Telnet",
+          "value": 4,
+          "json": "telnet"
+        },
+        {
+          "name": "SSH",
+          "value": 5,
+          "json": "ssh"
+        }
+      ]
+    },
+    "NetworkState": {
+      "namespace": "DuetAPI.ObjectModel",
+      "flags": false,
+      "members": [
+        {
+          "name": "Disabled",
+          "value": 0,
+          "json": "disabled"
+        },
+        {
+          "name": "Enabled",
+          "value": 1,
+          "json": "enabled"
+        },
+        {
+          "name": "InitFailed",
+          "value": 2,
+          "json": "initFailed"
+        },
+        {
+          "name": "Starting1",
+          "value": 3,
+          "json": "starting1"
+        },
+        {
+          "name": "Starting2",
+          "value": 4,
+          "json": "starting2"
+        },
+        {
+          "name": "ChangingMode",
+          "value": 5,
+          "json": "changingMode"
+        },
+        {
+          "name": "EstablishingLink",
+          "value": 6,
+          "json": "establishingLink"
+        },
+        {
+          "name": "ObtainingIP",
+          "value": 7,
+          "json": "obtainingIP"
+        },
+        {
+          "name": "Connected",
+          "value": 8,
+          "json": "connected"
+        },
+        {
+          "name": "Active",
+          "value": 9,
+          "json": "active"
+        },
+        {
+          "name": "Idle",
+          "value": 10,
+          "json": "idle"
+        }
+      ]
+    },
+    "ProbeType": {
+      "namespace": "DuetAPI.ObjectModel",
+      "flags": false,
+      "members": [
+        {
+          "name": "None",
+          "value": 0,
+          "json": 0
+        },
+        {
+          "name": "Analog",
+          "value": 1,
+          "json": 1
+        },
+        {
+          "name": "DumbModulated",
+          "value": 2,
+          "json": 2
+        },
+        {
+          "name": "AlternateAnalog",
+          "value": 3,
+          "json": 3
+        },
+        {
+          "name": "EndstopSwitch_Obsolete",
+          "value": 4,
+          "json": 4
+        },
+        {
+          "name": "Digital",
+          "value": 5,
+          "json": 5
+        },
+        {
+          "name": "E1Switch_Obsolete",
+          "value": 6,
+          "json": 6
+        },
+        {
+          "name": "ZSwitch_Obsolete",
+          "value": 7,
+          "json": 7
+        },
+        {
+          "name": "UnfilteredDigital",
+          "value": 8,
+          "json": 8
+        },
+        {
+          "name": "BLTouch",
+          "value": 9,
+          "json": 9
+        },
+        {
+          "name": "ZMotorStall",
+          "value": 10,
+          "json": 10
+        },
+        {
+          "name": "ScanningAnalog",
+          "value": 11,
+          "json": 11
+        },
+        {
+          "name": "LoadCell",
+          "value": 12,
+          "json": 12
+        }
+      ]
+    },
+    "SbcPermissions": {
+      "namespace": "DuetAPI.Utility",
+      "flags": true,
+      "members": [
+        {
+          "name": "None",
+          "value": 0,
+          "json": []
+        },
+        {
+          "name": "CommandExecution",
+          "value": 1,
+          "json": [
+            "commandExecution"
+          ]
+        },
+        {
+          "name": "CodeInterceptionRead",
+          "value": 2,
+          "json": [
+            "codeInterceptionRead"
+          ]
+        },
+        {
+          "name": "CodeInterceptionReadWrite",
+          "value": 4,
+          "json": [
+            "codeInterceptionReadWrite"
+          ]
+        },
+        {
+          "name": "ManagePlugins",
+          "value": 8,
+          "json": [
+            "managePlugins"
+          ]
+        },
+        {
+          "name": "ServicePlugins",
+          "value": 16,
+          "json": [
+            "servicePlugins"
+          ]
+        },
+        {
+          "name": "ManageUserSessions",
+          "value": 32,
+          "json": [
+            "manageUserSessions"
+          ]
+        },
+        {
+          "name": "ObjectModelRead",
+          "value": 64,
+          "json": [
+            "objectModelRead"
+          ]
+        },
+        {
+          "name": "ObjectModelReadWrite",
+          "value": 128,
+          "json": [
+            "objectModelReadWrite"
+          ]
+        },
+        {
+          "name": "RegisterHttpEndpoints",
+          "value": 256,
+          "json": [
+            "registerHttpEndpoints"
+          ]
+        },
+        {
+          "name": "ReadFilaments",
+          "value": 512,
+          "json": [
+            "readFilaments"
+          ]
+        },
+        {
+          "name": "WriteFilaments",
+          "value": 1024,
+          "json": [
+            "writeFilaments"
+          ]
+        },
+        {
+          "name": "ReadFirmware",
+          "value": 2048,
+          "json": [
+            "readFirmware"
+          ]
+        },
+        {
+          "name": "WriteFirmware",
+          "value": 4096,
+          "json": [
+            "writeFirmware"
+          ]
+        },
+        {
+          "name": "ReadGCodes",
+          "value": 8192,
+          "json": [
+            "readGCodes"
+          ]
+        },
+        {
+          "name": "WriteGCodes",
+          "value": 16384,
+          "json": [
+            "writeGCodes"
+          ]
+        },
+        {
+          "name": "ReadMacros",
+          "value": 32768,
+          "json": [
+            "readMacros"
+          ]
+        },
+        {
+          "name": "WriteMacros",
+          "value": 65536,
+          "json": [
+            "writeMacros"
+          ]
+        },
+        {
+          "name": "ReadMenu",
+          "value": 131072,
+          "json": [
+            "readMenu"
+          ]
+        },
+        {
+          "name": "WriteMenu",
+          "value": 262144,
+          "json": [
+            "writeMenu"
+          ]
+        },
+        {
+          "name": "ReadSystem",
+          "value": 524288,
+          "json": [
+            "readSystem"
+          ]
+        },
+        {
+          "name": "WriteSystem",
+          "value": 1048576,
+          "json": [
+            "writeSystem"
+          ]
+        },
+        {
+          "name": "ReadWeb",
+          "value": 2097152,
+          "json": [
+            "readWeb"
+          ]
+        },
+        {
+          "name": "WriteWeb",
+          "value": 4194304,
+          "json": [
+            "writeWeb"
+          ]
+        },
+        {
+          "name": "FileSystemAccess",
+          "value": 8388608,
+          "json": [
+            "fileSystemAccess"
+          ]
+        },
+        {
+          "name": "LaunchProcesses",
+          "value": 16777216,
+          "json": [
+            "launchProcesses"
+          ]
+        },
+        {
+          "name": "NetworkAccess",
+          "value": 33554432,
+          "json": [
+            "networkAccess"
+          ]
+        },
+        {
+          "name": "WebcamAccess",
+          "value": 134217728,
+          "json": [
+            "webcamAccess"
+          ]
+        },
+        {
+          "name": "GpioAccess",
+          "value": 268435456,
+          "json": [
+            "gpioAccess"
+          ]
+        },
+        {
+          "name": "SuperUser",
+          "value": 67108864,
+          "json": [
+            "superUser"
+          ]
+        }
+      ]
+    },
+    "SessionType": {
+      "namespace": "DuetAPI.ObjectModel",
+      "flags": false,
+      "members": [
+        {
+          "name": "Local",
+          "value": 0,
+          "json": "local"
+        },
+        {
+          "name": "HTTP",
+          "value": 1,
+          "json": "http"
+        },
+        {
+          "name": "Telnet",
+          "value": 2,
+          "json": "telnet"
+        }
+      ]
+    },
+    "SpindleState": {
+      "namespace": "DuetAPI.ObjectModel",
+      "flags": false,
+      "members": [
+        {
+          "name": "Unconfigured",
+          "value": 0,
+          "json": "unconfigured"
+        },
+        {
+          "name": "Stopped",
+          "value": 1,
+          "json": "stopped"
+        },
+        {
+          "name": "Forward",
+          "value": 2,
+          "json": "forward"
+        },
+        {
+          "name": "Reverse",
+          "value": 3,
+          "json": "reverse"
+        }
+      ]
+    },
+    "SpindleType": {
+      "namespace": "DuetAPI.ObjectModel",
+      "flags": false,
+      "members": [
+        {
+          "name": "EnaDir",
+          "value": 0,
+          "json": "enaDir"
+        },
+        {
+          "name": "FwdRev",
+          "value": 1,
+          "json": "fwdRev"
+        }
+      ]
+    },
+    "SubscriptionMode": {
+      "namespace": "DuetAPI.Connection",
+      "flags": false,
+      "members": [
+        {
+          "name": "Full",
+          "value": 0,
+          "json": "Full"
+        },
+        {
+          "name": "Patch",
+          "value": 1,
+          "json": "Patch"
+        }
+      ]
+    },
+    "TemperatureError": {
+      "namespace": "DuetAPI.ObjectModel",
+      "flags": false,
+      "members": [
+        {
+          "name": "Ok",
+          "value": 0,
+          "json": "ok"
+        },
+        {
+          "name": "ShortCircuit",
+          "value": 1,
+          "json": "shortCircuit"
+        },
+        {
+          "name": "ShortToVcc",
+          "value": 2,
+          "json": "shortToVcc"
+        },
+        {
+          "name": "ShortToGround",
+          "value": 3,
+          "json": "shortToGround"
+        },
+        {
+          "name": "OpenCircuit",
+          "value": 4,
+          "json": "openCircuit"
+        },
+        {
+          "name": "Timeout",
+          "value": 5,
+          "json": "timeout"
+        },
+        {
+          "name": "IoError",
+          "value": 6,
+          "json": "ioError"
+        },
+        {
+          "name": "HardwareError",
+          "value": 7,
+          "json": "hardwareError"
+        },
+        {
+          "name": "NotReady",
+          "value": 8,
+          "json": "notReady"
+        },
+        {
+          "name": "InvalidOutputNumber",
+          "value": 9,
+          "json": "invalidOutputNumber"
+        },
+        {
+          "name": "BusBusy",
+          "value": 10,
+          "json": "busBusy"
+        },
+        {
+          "name": "BadResponse",
+          "value": 11,
+          "json": "badResponse"
+        },
+        {
+          "name": "UnknownPort",
+          "value": 12,
+          "json": "unknownPort"
+        },
+        {
+          "name": "NotInitialised",
+          "value": 13,
+          "json": "notInitialised"
+        },
+        {
+          "name": "UnknownSensor",
+          "value": 14,
+          "json": "unknownSensor"
+        },
+        {
+          "name": "OverOrUnderVoltage",
+          "value": 15,
+          "json": "overOrUnderVoltage"
+        },
+        {
+          "name": "BadVref",
+          "value": 16,
+          "json": "badVref"
+        },
+        {
+          "name": "BadVssa",
+          "value": 17,
+          "json": "badVssa"
+        },
+        {
+          "name": "ReadingTooLow",
+          "value": 18,
+          "json": "readingTooLow"
+        },
+        {
+          "name": "ReadingTooHigh",
+          "value": 19,
+          "json": "readingTooHigh"
+        },
+        {
+          "name": "AmbientReadingTooLow",
+          "value": 20,
+          "json": "ambientReadingTooLow"
+        },
+        {
+          "name": "AmbientReadingTooHigh",
+          "value": 21,
+          "json": "ambientReadingTooHigh"
+        },
+        {
+          "name": "UnknownError",
+          "value": 22,
+          "json": "unknownError"
+        }
+      ]
+    },
+    "ThumbnailInfoFormat": {
+      "namespace": "DuetAPI.ObjectModel",
+      "flags": false,
+      "members": [
+        {
+          "name": "JPEG",
+          "value": 0,
+          "json": "jpeg"
+        },
+        {
+          "name": "PNG",
+          "value": 1,
+          "json": "png"
+        },
+        {
+          "name": "QOI",
+          "value": 2,
+          "json": "qoi"
+        }
+      ]
+    },
+    "ToolState": {
+      "namespace": "DuetAPI.ObjectModel",
+      "flags": false,
+      "members": [
+        {
+          "name": "Off",
+          "value": 0,
+          "json": "off"
+        },
+        {
+          "name": "Active",
+          "value": 1,
+          "json": "active"
+        },
+        {
+          "name": "Standby",
+          "value": 2,
+          "json": "standby"
+        }
+      ]
+    }
+  }
 }
