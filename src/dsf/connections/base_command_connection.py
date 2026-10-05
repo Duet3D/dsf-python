@@ -8,6 +8,7 @@ from .. import commands, DEFAULT_BACKLOG
 from ..commands import code
 from ..commands.base_command import BaseCommand
 from ..commands.code_channel import CodeChannel
+from ..commands.file_directory import FileDirectory
 from ..http import HttpEndpointUnixSocket
 from ..object_model import HttpEndpointType, ObjectModel
 from ..object_model.job import GCodeFileInfo
@@ -187,9 +188,12 @@ class BaseCommandConnection(BaseConnection):
         """
         return self._perform_command_with_result(commands.user_sessions.remove_user_session(session_id), bool)
 
-    def resolve_path(self, path: str) -> str:
-        """Resolve a RepRapFirmware-style file path to a real file path"""
-        return self._perform_command_with_result(commands.files.resolve_path(path), str)
+    def resolve_path(self, path: str, base_directory: Optional[FileDirectory] = None) -> str:
+        """Resolve a RepRapFirmware-style file path to a real file path
+        :param path: File path to resolve
+        :param base_directory: Optional base directory to resolve the path relative to
+        """
+        return self._perform_command_with_result(commands.files.resolve_path(path, base_directory), str)
 
     def set_network_protocol(self, protocol: str, enabled: bool) -> None:
         """Set a given property to a certain value.

@@ -4,6 +4,7 @@ import unittest
 from typing import Any, Callable
 
 from src.dsf.commands.code_channel import CodeChannel
+from src.dsf.commands.file_directory import FileDirectory
 from src.dsf.commands.user_sessions import AccessLevel, SessionType
 from src.dsf.connections import CommandConnection, InternalServerException
 from src.dsf.object_model import HttpEndpointType
@@ -79,6 +80,16 @@ class TestCommandConnectionResults(unittest.TestCase):
                 value, sent = self._perform('{"success":true}', call)
                 self.assertEqual(sent["command"], command)
                 self.assertIsNone(value)
+
+    def test_resolve_path_base_directory(self):
+        # The base directory is sent as DSF reads it, and as null without one like DuetAPIClient's ResolvePath(path)
+        result = '{"success":true,"result":"/opt/dsf/sd/macros/test.g"}'
+        value, sent = self._perform(result, lambda c: c.resolve_path("test.g", FileDirectory.MACROS))
+        self.assertEqual(value, "/opt/dsf/sd/macros/test.g")
+        self.assertEqual(sent["path"], "test.g")
+        self.assertEqual(sent["baseDirectory"], "Macros")
+        _, sent = self._perform(result, lambda c: c.resolve_path("test.g"))
+        self.assertIsNone(sent["baseDirectory"])
 
     def test_unexpected_result_type(self):
         with self.assertRaisesRegex(TypeError, "Unexpected result type for Flush command"):

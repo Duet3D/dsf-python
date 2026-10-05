@@ -15,7 +15,18 @@
 //   patched:    the result of DSF updating a new instance from "values" and then from "nulls"
 // The "dynamic" list holds the class and JSON DSF produces for every discriminator value of dynamic model objects.
 // The "runtimeDefaults" list holds the properties left out of "default" because they depend on when or where DSF runs.
-// All JSON is written by DSF's own serializer (ObjectModelContext).
+// All JSON above is written by DSF's own serializer (ObjectModelContext).
+//
+// The "enums" object holds every public enum of DuetAPI (all namespaces) by its name:
+//   namespace: namespace of the enum
+//   flags:     whether it is a [Flags] enum
+//   members:   every member in declaration order (including members sharing a value with another one), each with
+//              name:  C# name
+//              value: underlying integer value
+//              json:  the JSON DSF writes for it with its default options (JsonHelper.DefaultJsonOptions),
+//                     or "error" instead if DSF cannot write it
+//   error:     only present if DSF cannot write the enum at all because it is not part of any of its JSON contexts,
+//              its members have no "json" then
 
 using System.Collections;
 using System.Reflection;
@@ -132,15 +143,64 @@ foreach ((Type baseType, string discriminator) in discriminators.OrderBy(item =>
     }
 }
 
+JsonObject enums = [];
+foreach (Type type in typeof(ObjectModel).Assembly.GetTypes().Where(IsPublicEnum).OrderBy(type => type.Name, StringComparer.Ordinal))
+{
+    if (enums.ContainsKey(type.Name))
+    {
+        throw new InvalidOperationException($"More than one public enum is called {type.Name}");
+    }
+
+    // Not part of any JSON context, so DSF never reads or writes it (e.g. enums used internally by DuetAPI)
+    bool serializable = JsonHelper.DefaultJsonOptions.TryGetTypeInfo(type, out _);
+
+    JsonArray members = [];
+    // Fields rather than Enum.GetValues so members sharing a value with another one are listed as well
+    foreach (FieldInfo field in type.GetFields(BindingFlags.Public | BindingFlags.Static).OrderBy(field => field.MetadataToken))
+    {
+        JsonObject member = new()
+        {
+            ["name"] = field.Name,
+            ["value"] = Convert.ToInt64(field.GetRawConstantValue())
+        };
+        if (serializable)
+        {
+            try
+            {
+                member["json"] = JsonSerializer.SerializeToNode(field.GetValue(null), type, JsonHelper.DefaultJsonOptions);
+            }
+            catch (Exception e)
+            {
+                // DSF cannot write this value
+                member["error"] = $"{e.GetType().Name}: {e.Message}";
+            }
+        }
+        members.Add(member);
+    }
+
+    JsonObject dsfEnum = new()
+    {
+        ["namespace"] = type.Namespace,
+        ["flags"] = type.IsDefined(typeof(FlagsAttribute), false),
+        ["members"] = members
+    };
+    if (!serializable)
+    {
+        dsfEnum["error"] = "Not part of any JSON context of DSF";
+    }
+    enums[type.Name] = dsfEnum;
+}
+
 JsonObject output = new()
 {
     ["dsfVersion"] = typeof(ObjectModel).Assembly.GetCustomAttribute<AssemblyInformationalVersionAttribute>()?.InformationalVersion,
     ["classes"] = classes,
     ["dynamic"] = dynamic,
-    ["runtimeDefaults"] = new JsonArray([.. runtimeDefaults.Order(StringComparer.Ordinal).Select(name => JsonValue.Create(name))])
+    ["runtimeDefaults"] = new JsonArray([.. runtimeDefaults.Order(StringComparer.Ordinal).Select(name => JsonValue.Create(name))]),
+    ["enums"] = enums
 };
 File.WriteAllText(args[0], output.ToJsonString(new JsonSerializerOptions(options) { WriteIndented = true }) + "\n");
-Console.WriteLine($"Wrote {classes.Count} classes and {dynamic.Count} dynamic cases to {args[0]}");
+Console.WriteLine($"Wrote {classes.Count} classes, {dynamic.Count} dynamic cases and {enums.Count} enums to {args[0]}");
 return 0;
 
 IEnumerable<string> GetDifferences(JsonNode? expected, JsonNode? actual, string path)
@@ -156,6 +216,9 @@ IEnumerable<string> GetDifferences(JsonNode? expected, JsonNode? actual, string 
     }
     return JsonNode.DeepEquals(expected, actual) ? [] : [$"{path}: {expected?.ToJsonString() ?? "null"} => {actual?.ToJsonString() ?? "null"}"];
 }
+
+// Public enums, including ones nested in public classes
+bool IsPublicEnum(Type type) => type.IsEnum && type.IsVisible;
 
 bool IsModelClass(Type type) =>
     type is { IsClass: true, IsAbstract: false, IsPublic: true, ContainsGenericParameters: false, Namespace: "DuetAPI.ObjectModel" } &&
