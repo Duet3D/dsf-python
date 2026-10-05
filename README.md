@@ -134,7 +134,6 @@ Python attributes and methods are `snake_case`. **Anything passed to DSF as a st
 | Object model properties | `state.upTime`, `move.axes[0].userPosition` | `state.up_time`, `move.axes[0].user_position` |
 | Uppercase acronyms | `move.skew.tanXY` | `move.skew.tan_XY` (acronyms stay uppercase) |
 | Global variables | `global` | `globals` (`global` is a Python keyword) |
-| Names shadowing builtins (`type`, `id`, `min`, `max`, `format`, `license`) | `axis.max` | `axis.max` (unchanged) |
 | Methods | `PerformSimpleCodeAsync()` | `perform_simple_code()` |
 | `Code` attributes | `MajorNumber`, `KeywordArgument` | `major_number`, `keyword_argument` (the camelCase names `majorNumber` etc. still work but are deprecated) |
 | `CodeParameter` attributes | `StringValue`, `IsString` | `string_value`, `is_string` |
