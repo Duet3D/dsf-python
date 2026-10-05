@@ -17,13 +17,13 @@ class InputChannel(ModelObject):
     axes_relative = model_prop("axes_relative", bool, False)
 
     # Emulation used on this channel
-    compatibility = model_prop("compatibility", Compatibility, Compatibility.RepRapFirmware)
+    compatibility = model_prop("compatibility", Compatibility, Compatibility.REPRAPFIRMWARE)
 
     # Name of the file being executed or null if none
     current_file = nullable_model_prop("current_file", str)
 
     # Whether inches are being used instead of mm
-    distance_unit = model_prop("distance_unit", DistanceUnit, DistanceUnit.mm)
+    distance_unit = model_prop("distance_unit", DistanceUnit, DistanceUnit.MM)
 
     # Whether relative extrusion is being used
     drives_relative = model_prop("drives_relative", bool, True)
@@ -47,7 +47,7 @@ class InputChannel(ModelObject):
     motion_system = model_prop("motion_system", int, 0)
 
     # Name of this channel
-    name = model_prop("name", CodeChannel, CodeChannel.Unknown)
+    name = model_prop("name", CodeChannel, CodeChannel.UNKNOWN)
 
     # Index of the selected plane
     selected_plane = model_prop("selected_plane", int, 0)
@@ -56,7 +56,7 @@ class InputChannel(ModelObject):
     stack_depth = model_prop("stack_depth", int, 0)
 
     # State of this input channel
-    state = model_prop("state", InputChannelState, InputChannelState.idle)
+    state = model_prop("state", InputChannelState, InputChannelState.IDLE)
 
     # Whether volumetric extrusion is being used
     volumetric = model_prop("volumetric", bool, False)

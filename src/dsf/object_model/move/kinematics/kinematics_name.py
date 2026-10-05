@@ -1,22 +1,39 @@
 from enum import Enum
 
+from ....utils import DeprecatedAliasEnumType
 
-class KinematicsName(str, Enum):
+
+class KinematicsName(str, Enum, metaclass=DeprecatedAliasEnumType):
     """Enumeration of supported kinematics, the values are the names written by DSF"""
 
-    cartesian = "cartesian"
-    coreXY = "coreXY"
-    coreXYU = "coreXYU"
-    coreXYUV = "coreXYUV"
-    coreXZ = "coreXZ"
-    markForged = "markForged"
-    fiveBarScara = "FiveBarScara"
-    hangprinter = "Hangprinter"
-    linearDelta = "delta"
-    polar = "Polar"
-    rotaryDelta = "Rotary delta"
-    scara = "Scara"
-    unknown = "unknown"
+    CARTESIAN = "cartesian"
+    CORE_XY = "coreXY"
+    CORE_XYU = "coreXYU"
+    CORE_XYUV = "coreXYUV"
+    CORE_XZ = "coreXZ"
+    MARKFORGED = "markForged"
+    FIVE_BAR_SCARA = "FiveBarScara"
+    HANGPRINTER = "Hangprinter"
+    LINEAR_DELTA = "delta"
+    POLAR = "Polar"
+    ROTARY_DELTA = "Rotary delta"
+    SCARA = "Scara"
+    UNKNOWN = "unknown"
+
+    # Previous names, deprecated
+    cartesian = CARTESIAN
+    coreXY = CORE_XY
+    coreXYU = CORE_XYU
+    coreXYUV = CORE_XYUV
+    coreXZ = CORE_XZ
+    fiveBarScara = FIVE_BAR_SCARA
+    hangprinter = HANGPRINTER
+    linearDelta = LINEAR_DELTA
+    markForged = MARKFORGED
+    polar = POLAR
+    rotaryDelta = ROTARY_DELTA
+    scara = SCARA
+    unknown = UNKNOWN
 
     @classmethod
     def _missing_(cls, value: object):
@@ -29,7 +46,7 @@ class KinematicsName(str, Enum):
             if member.value.lower() == name:
                 return member
         if name == "lineardelta":
-            return cls.linearDelta
+            return cls.LINEAR_DELTA
         if name == "rotarydelta":
-            return cls.rotaryDelta
-        return cls.unknown
+            return cls.ROTARY_DELTA
+        return cls.UNKNOWN

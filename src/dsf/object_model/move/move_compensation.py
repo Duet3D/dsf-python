@@ -1,5 +1,6 @@
 from enum import Enum
 
+from ...utils import DeprecatedAliasEnumType
 from .move_calibration import MoveDeviations
 from .probe_grid import ProbeGrid
 from .skew import Skew
@@ -7,14 +8,18 @@ from ..model_object import ModelObject
 from ..utils import nullable_model_prop, model_prop
 
 
-class MoveCompensationType(str, Enum):
+class MoveCompensationType(str, Enum, metaclass=DeprecatedAliasEnumType):
     """Supported compensation types"""
 
     # No compensation
-    none = "none"
+    NONE = "none"
 
     # Mesh compensation
-    mesh = "mesh"
+    MESH = "mesh"
+
+    # Previous names, deprecated
+    mesh = MESH
+    none = NONE
 
 
 class MoveCompensation(ModelObject):
@@ -39,7 +44,7 @@ class MoveCompensation(ModelObject):
     skew = model_prop("skew", Skew)
 
     # Type of the compensation in use
-    type = model_prop("type", MoveCompensationType, MoveCompensationType.none)
+    type = model_prop("type", MoveCompensationType, MoveCompensationType.NONE)
 
     def __init__(self):
         super().__init__()

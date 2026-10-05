@@ -61,15 +61,15 @@ class Code(BaseCommand):
         return cls(
             source_connection=_get(data, "sourceConnection", int, 0),
             result=None if result is None else Message.from_json(result),
-            type=CodeType(_get(data, "type", str, CodeType.CodeNone)),
+            type=CodeType(_get(data, "type", str, CodeType.NONE)),
             channel=CodeChannel(_get(data, "channel", str, CodeChannel.DEFAULT_CHANNEL)),
             line_number=_get(data, "lineNumber", int, None),
             indent=_get(data, "indent", int, 0),
-            keyword=KeywordType(_get(data, "keyword", int, KeywordType.KeywordNone)),
+            keyword=KeywordType(_get(data, "keyword", int, KeywordType.NONE)),
             keyword_argument=_get(data, "keywordArgument", str, None),
             major_number=_get(data, "majorNumber", int, None),
             minor_number=_get(data, "minorNumber", int, -1),
-            flags=CodeFlags(_get(data, "flags", int, CodeFlags.CodeFlagsNone)),
+            flags=CodeFlags(_get(data, "flags", int, CodeFlags.NONE)),
             comment=_get(data, "comment", str, None),
             file_position=_get(data, "filePosition", int, None),
             length=_get(data, "length", int, None),
@@ -78,14 +78,14 @@ class Code(BaseCommand):
 
     def __init__(
         self,
-        type: CodeType = CodeType.CodeNone,
+        type: CodeType = CodeType.NONE,
         major_number: Optional[int] = None,
         minor_number: int = -1,
         parameters: Optional[list[CodeParameter]] = None,
         channel: CodeChannel = CodeChannel.DEFAULT_CHANNEL,
-        keyword: KeywordType = KeywordType.KeywordNone,
+        keyword: KeywordType = KeywordType.NONE,
         keyword_argument: Optional[str] = None,
-        flags: CodeFlags = CodeFlags.CodeFlagsNone,
+        flags: CodeFlags = CodeFlags.NONE,
         comment: Optional[str] = None,
         line_number: Optional[int] = None,
         indent: int = 0,
@@ -157,12 +157,12 @@ class Code(BaseCommand):
     @property
     def explicit_line_number(self) -> Optional[int]:
         """Line number of this code if it was specified explicitly (N parameter)"""
-        return self.line_number if self.is_flag_set(CodeFlags.HasExplicitLineNumber) else None
+        return self.line_number if self.is_flag_set(CodeFlags.HAS_EXPLICIT_LINE_NUMBER) else None
 
     @property
     def is_from_file_channel(self) -> bool:
         """Check if this code is from a file channel"""
-        return self.channel is CodeChannel.File or self.channel is CodeChannel.File2
+        return self.channel is CodeChannel.FILE or self.channel is CodeChannel.FILE2
 
     def to_dict(self) -> JSONObj:
         """Convert this code to a JSON dictionary in the format DSF reads it"""
@@ -221,11 +221,11 @@ class Code(BaseCommand):
 
     def __str__(self) -> str:
         """Convert the parsed code back to a text-based G/M/T-code"""
-        if self.keyword != KeywordType.KeywordNone:
+        if self.keyword != KeywordType.NONE:
             text = self.keyword_to_str() or ""
             if self.keyword_argument is not None:
                 text += f" {self.keyword_argument}"
-        elif self.type == CodeType.Comment:
+        elif self.type == CodeType.COMMENT:
             return f";{self.comment}"
         else:
             str_list = [self.short_str()]
@@ -240,17 +240,17 @@ class Code(BaseCommand):
 
     def short_str(self) -> str:
         """Convert only the command portion to a text-based G/M/T-code (e.g. G28)"""
-        if self.keyword != KeywordType.KeywordNone:
+        if self.keyword != KeywordType.NONE:
             return self.keyword_to_str() or ""
 
-        if self.type == CodeType.CodeNone:
+        if self.type == CodeType.NONE:
             return ""
 
-        if self.type == CodeType.Comment:
+        if self.type == CodeType.COMMENT:
             return "(comment)"
 
         code_type = CodeType(self.type).value
-        prefix = "G53 " if self.is_flag_set(CodeFlags.EnforceAbsolutePosition) else ""
+        prefix = "G53 " if self.is_flag_set(CodeFlags.ENFORCE_ABSOLUTE_POSITION) else ""
         if self.major_number is not None:
             if self.minor_number >= 0:
                 return f"{prefix}{code_type}{self.major_number}.{self.minor_number}"
@@ -262,18 +262,18 @@ class Code(BaseCommand):
     def keyword_to_str(self) -> Optional[str]:
         """Convert the keyword to a string"""
         return {
-            KeywordType.If: "if",
-            KeywordType.ElseIf: "elif",
-            KeywordType.Else: "else",
-            KeywordType.While: "while",
-            KeywordType.Break: "break",
-            KeywordType.Continue: "continue",
-            KeywordType.Abort: "abort",
-            KeywordType.Var: "var",
-            KeywordType.Set: "set",
-            KeywordType.Echo: "echo",
-            KeywordType.Global: "global",
-            KeywordType.Skip: "skip",
+            KeywordType.IF: "if",
+            KeywordType.ELSE_IF: "elif",
+            KeywordType.ELSE: "else",
+            KeywordType.WHILE: "while",
+            KeywordType.BREAK: "break",
+            KeywordType.CONTINUE: "continue",
+            KeywordType.ABORT: "abort",
+            KeywordType.VAR: "var",
+            KeywordType.SET: "set",
+            KeywordType.ECHO: "echo",
+            KeywordType.GLOBAL: "global",
+            KeywordType.SKIP: "skip",
         }.get(self.keyword)
 
     def is_flag_set(self, flag: CodeFlags) -> bool:

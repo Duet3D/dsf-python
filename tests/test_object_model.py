@@ -473,7 +473,7 @@ class Model(unittest.TestCase):
         assert isinstance(expansion_board, ExpansionBoard)
         self.assertEqual(main_board.firmware_name, "RepRapFirmware")
         self.assertEqual(main_board.max_heaters, 32)
-        self.assertEqual(expansion_board.state, BoardState.timedOut)
+        self.assertEqual(expansion_board.state, BoardState.TIMED_OUT)
         self.assertEqual(expansion_board.timeout, 15)
 
         # Boards added by a later patch are typed by their position as well
@@ -499,7 +499,7 @@ class Model(unittest.TestCase):
 
         probe = model.sensors.probes[0]
         assert probe is not None
-        self.assertEqual(probe.type, ProbeType.LoadCell)
+        self.assertEqual(probe.type, ProbeType.LOAD_CELL)
         assert isinstance(probe.load_cell, ProbeLoadCell)
         self.assertEqual(probe.load_cell.force, 12.5)
         self.assertEqual(list(probe.load_cell.preload_window), [10.0, 100.0])
@@ -521,7 +521,7 @@ class Model(unittest.TestCase):
         self.assertTrue(model.move.using_S_curve)
         self.assertEqual(model.move.current_move.file_position, 1234)
         self.assertTrue(model.move.axes[0].phase_step)
-        self.assertEqual(model.move.shaping.type, InputShapingType.ei2)
+        self.assertEqual(model.move.shaping.type, InputShapingType.EI2)
         self.assertEqual(model.move.motion_systems[0].printing_acceleration, 3000)
         self.assertEqual(list(model.move.motion_systems[0].user_position), [1.0, 2.0, 3.0])
         assert model.job.build is not None
@@ -532,7 +532,7 @@ class Model(unittest.TestCase):
 
         # Input shaping types reported by older DSF versions are still accepted
         model.update_from_json('{"move": {"shaping": {"type": "eI3"}}}')
-        self.assertEqual(model.move.shaping.type, InputShapingType.ei3)
+        self.assertEqual(model.move.shaping.type, InputShapingType.EI3)
 
     def test_keys_with_digits_and_single_letters(self):
         # Property names must match camel_to_snake of their JSON key, e.g. is64Bit -> is_64_bit
@@ -687,7 +687,7 @@ class Model(unittest.TestCase):
         self.assertEqual(model.job.file.thumbnails[0].format, ThumbnailInfoFormat.QOI)
         self.assertEqual(model.move.axes[0].max, 336)
         self.assertEqual(model.move.axes[0].min, -20.2)
-        self.assertEqual(model.move.shaping.type, InputShapingType.ei2)
+        self.assertEqual(model.move.shaping.type, InputShapingType.EI2)
         self.assertEqual(model.plugins["TestPlugin"].id, "TestPlugin")
         self.assertEqual(model.plugins["TestPlugin"].license, "MIT")
         assert model.state.message_box is not None
@@ -733,19 +733,19 @@ class Model(unittest.TestCase):
             [channel.name if channel else None for channel in model.inputs],
             [
                 CodeChannel.HTTP,
-                CodeChannel.Telnet,
-                CodeChannel.File,
+                CodeChannel.TELNET,
+                CodeChannel.FILE,
                 CodeChannel.USB,
-                CodeChannel.Aux,
-                CodeChannel.Trigger,
-                CodeChannel.Queue,
+                CodeChannel.AUX,
+                CodeChannel.TRIGGER,
+                CodeChannel.QUEUE,
                 CodeChannel.LCD,
                 CodeChannel.SBC,
-                CodeChannel.Daemon,
-                CodeChannel.Aux2,
-                CodeChannel.Autopause,
-                CodeChannel.File2,
-                CodeChannel.Queue2,
+                CodeChannel.DAEMON,
+                CodeChannel.AUX2,
+                CodeChannel.AUTOPAUSE,
+                CodeChannel.FILE2,
+                CodeChannel.QUEUE2,
                 CodeChannel.USB2,
             ],
         )
@@ -761,14 +761,14 @@ class Model(unittest.TestCase):
         assert isinstance(third_channel, InputChannel)
         self.assertIsNone(fourth_channel)
         self.assertEqual(first_channel.name, CodeChannel.HTTP)
-        self.assertEqual(third_channel.name, CodeChannel.File)
+        self.assertEqual(third_channel.name, CodeChannel.FILE)
         self.assertEqual(third_channel.line_number, 42)
 
         # Existing channels are updated in place, not replaced
         model.update_from_json('{"inputs":[{"state":"executing"},null,{"lineNumber":43},null]}')
         self.assertIs(model.inputs[0], first_channel)
         self.assertIs(model.inputs[2], third_channel)
-        self.assertEqual(first_channel.state, InputChannelState.executing)
+        self.assertEqual(first_channel.state, InputChannelState.EXECUTING)
         self.assertEqual(third_channel.line_number, 43)
 
         # A channel may become null, and a previously null one may become a channel
@@ -776,12 +776,12 @@ class Model(unittest.TestCase):
         self.assertIsNone(model.inputs[0])
         second_channel = model.inputs[1]
         assert isinstance(second_channel, InputChannel)
-        self.assertEqual(second_channel.name, CodeChannel.Telnet)
+        self.assertEqual(second_channel.name, CodeChannel.TELNET)
         self.assertIsNone(model.inputs[2])
 
         # Helper properties still work
         self.assertEqual(model.inputs.total, len(model.inputs.valid_channels))
-        self.assertNotIn(CodeChannel.Unknown, model.inputs.valid_channels)
+        self.assertNotIn(CodeChannel.UNKNOWN, model.inputs.valid_channels)
 
     @staticmethod
     def test_job():
@@ -828,7 +828,7 @@ class Model(unittest.TestCase):
         model.update_from_json(json_patch)
         self.assertEqual(len(model.messages), 1)
         self.assertEqual(str(model.messages[0].time), "2022-12-31 16:42:22.805893+00:00")
-        self.assertEqual(model.messages[0].type, MessageType.Success)
+        self.assertEqual(model.messages[0].type, MessageType.SUCCESS)
 
         # Like DSF, messages from later updates are added because DSF only sends new messages
         messages = model.messages
@@ -840,7 +840,7 @@ class Model(unittest.TestCase):
             [message.content for message in model.messages],
             ["File 0:/gcodes/Veil_Token.gcode will print in 0h 14m plus heating time", "Done"],
         )
-        self.assertEqual(model.messages[1].type, MessageType.Error)
+        self.assertEqual(model.messages[1].type, MessageType.ERROR)
 
         # Messages are only removed by the client once processed
         model.messages.clear()
@@ -854,26 +854,26 @@ class Model(unittest.TestCase):
         model.update_from_json(json_patch)
 
         assert isinstance(model.move.kinematics, DeltaKinematics)
-        self.assertEqual(model.move.kinematics.name, KinematicsName.linearDelta)
+        self.assertEqual(model.move.kinematics.name, KinematicsName.LINEAR_DELTA)
         self.assertEqual(model.move.kinematics.delta_radius, 123)
 
         # Switch to CoreXY (eg: M669 K1)
         json_patch = '{"move":{"kinematics":{"forwardMatrix":[[0.5,0.5,0],[0.5,-0.5,0],[0,0,1]],"inverseMatrix":[[1,1,0],[1,-1,0],[0,0,1]],"tiltCorrection":{"correctionFactor":1,"lastCorrections":[],"maxCorrection":1,"screwPitch":0.5,"screwX":[],"screwY":[]},"name":"coreXY","segmentation":null}}}'
         model.update_from_json(json_patch)
         self.assertIsInstance(model.move.kinematics, CoreKinematics)
-        self.assertEqual(model.move.kinematics.name, KinematicsName.coreXY)
+        self.assertEqual(model.move.kinematics.name, KinematicsName.CORE_XY)
 
         # Switch to linear delta (eg: M669 K3)
         json_patch = '{"move":{"kinematics":{"deltaRadius":105.6,"homedHeight":240,"printRadius":80,"towers":[{"angleCorrection":0,"diagonal":215,"endstopAdjustment":0,"xPos":-91.452,"yPos":-52.8},{"angleCorrection":0,"diagonal":215,"endstopAdjustment":0,"xPos":91.452,"yPos":-52.8},{"angleCorrection":0,"diagonal":215,"endstopAdjustment":0,"xPos":0,"yPos":105.6}],"xTilt":0,"yTilt":0,"name":"delta","segmentation":null}}}'
         model.update_from_json(json_patch)
         assert isinstance(model.move.kinematics, DeltaKinematics)
-        self.assertEqual(model.move.kinematics.name, KinematicsName.linearDelta)
+        self.assertEqual(model.move.kinematics.name, KinematicsName.LINEAR_DELTA)
         self.assertEqual(model.move.kinematics.delta_radius, 105.6)
 
         # Kinematics without a dedicated class use the base type (eg: M669 K0 on an unconfigured machine)
         model.update_from_json('{"move":{"kinematics":{"name":"unknown"}}}')
         self.assertIs(type(model.move.kinematics), Kinematics)
-        self.assertEqual(model.move.kinematics.name, KinematicsName.unknown)
+        self.assertEqual(model.move.kinematics.name, KinematicsName.UNKNOWN)
 
     def test_get_kinematics_type(self):
         from src.dsf.object_model.move.kinematics import (
@@ -887,16 +887,16 @@ class Model(unittest.TestCase):
         )
 
         expected_types = {
-            KinematicsName.cartesian: CoreKinematics,
-            KinematicsName.coreXY: CoreKinematics,
-            KinematicsName.markForged: CoreKinematics,
-            KinematicsName.linearDelta: DeltaKinematics,
-            KinematicsName.rotaryDelta: Kinematics,
-            KinematicsName.hangprinter: HangprinterKinematics,
-            KinematicsName.fiveBarScara: ScaraKinematics,
-            KinematicsName.scara: ScaraKinematics,
-            KinematicsName.polar: PolarKinematics,
-            KinematicsName.unknown: Kinematics,
+            KinematicsName.CARTESIAN: CoreKinematics,
+            KinematicsName.CORE_XY: CoreKinematics,
+            KinematicsName.MARKFORGED: CoreKinematics,
+            KinematicsName.LINEAR_DELTA: DeltaKinematics,
+            KinematicsName.ROTARY_DELTA: Kinematics,
+            KinematicsName.HANGPRINTER: HangprinterKinematics,
+            KinematicsName.FIVE_BAR_SCARA: ScaraKinematics,
+            KinematicsName.SCARA: ScaraKinematics,
+            KinematicsName.POLAR: PolarKinematics,
+            KinematicsName.UNKNOWN: Kinematics,
         }
         for name, expected_type in expected_types.items():
             kinematics = Kinematics.get_kinematics_type(name)
@@ -905,11 +905,11 @@ class Model(unittest.TestCase):
 
         # Like DSF, names are case-insensitive, aliases are accepted and other names are unknown
         self.assertIs(type(Kinematics.get_kinematics_type("COREXY")), CoreKinematics)
-        self.assertEqual(Kinematics.get_kinematics_type("Rotary Delta").name, KinematicsName.rotaryDelta)
-        self.assertEqual(Kinematics.get_kinematics_type("rotarydelta").name, KinematicsName.rotaryDelta)
+        self.assertEqual(Kinematics.get_kinematics_type("Rotary Delta").name, KinematicsName.ROTARY_DELTA)
+        self.assertEqual(Kinematics.get_kinematics_type("rotarydelta").name, KinematicsName.ROTARY_DELTA)
         self.assertIs(type(Kinematics.get_kinematics_type("lineardelta")), DeltaKinematics)
         self.assertIs(type(Kinematics.get_kinematics_type("not a kinematics")), Kinematics)
-        self.assertEqual(Kinematics.get_kinematics_type("not a kinematics").name, KinematicsName.unknown)
+        self.assertEqual(Kinematics.get_kinematics_type("not a kinematics").name, KinematicsName.UNKNOWN)
 
         # Names are written like DSF does
         self.assertEqual(json.loads(Kinematics.get_kinematics_type("rotarydelta").to_json())["name"], "Rotary delta")
@@ -949,7 +949,7 @@ class Model(unittest.TestCase):
         self.assertEqual(len(model.sensors.filament_monitors), 1)
         filament_monitor = model.sensors.filament_monitors[0]
         assert filament_monitor is not None
-        self.assertEqual(filament_monitor.type, FilamentMonitorType.Simple)
+        self.assertEqual(filament_monitor.type, FilamentMonitorType.SIMPLE)
 
         # Change filament monitor to Pulsed (rg: M591 D0 P7 C"io2.in" S1)
         json_patch = '{"sensors":{"filamentMonitors":[{"calibrated":null,"configured":{"mmPerPulse":1,"percentMax":160,"percentMin":60,"sampleDistance":5},"enabled":true,"status":"ok","type":"pulsed"}]}}'
@@ -957,7 +957,7 @@ class Model(unittest.TestCase):
         self.assertEqual(len(model.sensors.filament_monitors), 1)
         filament_monitor = model.sensors.filament_monitors[0]
         assert filament_monitor is not None
-        self.assertEqual(filament_monitor.type, FilamentMonitorType.Pulsed)
+        self.assertEqual(filament_monitor.type, FilamentMonitorType.PULSED)
 
     def test_get_filament_monitor(self):
         from src.dsf.object_model.sensors.filament_monitors import (
@@ -969,11 +969,11 @@ class Model(unittest.TestCase):
         )
 
         expected_types = {
-            FilamentMonitorType.Laser: LaserFilamentMonitor,
-            FilamentMonitorType.Pulsed: PulsedFilamentMonitor,
-            FilamentMonitorType.RotatingMagnet: RotatingMagnetFilamentMonitor,
-            FilamentMonitorType.Simple: FilamentMonitor,
-            FilamentMonitorType.Unknown: FilamentMonitor,
+            FilamentMonitorType.LASER: LaserFilamentMonitor,
+            FilamentMonitorType.PULSED: PulsedFilamentMonitor,
+            FilamentMonitorType.ROTATING_MAGNET: RotatingMagnetFilamentMonitor,
+            FilamentMonitorType.SIMPLE: FilamentMonitor,
+            FilamentMonitorType.UNKNOWN: FilamentMonitor,
         }
         for monitor_type, expected_type in expected_types.items():
             # Both the enum and its JSON string value are accepted
@@ -1012,8 +1012,8 @@ class Model(unittest.TestCase):
         json_patch = '{"sbc":{"dsf":{"userSessions":[{"accessLevel":"readWrite","id":2,"origin":"::ffff:192.168.1.200","originId":-1,"sessionType":"http"}]}}}'
         model.update_from_json(json_patch)
         self.assertEqual(len(model.sbc.dsf.user_sessions), 1)
-        self.assertEqual(model.sbc.dsf.user_sessions[0].access_level, AccessLevel.readWrite)
-        self.assertEqual(model.sbc.dsf.user_sessions[0].session_type, SessionType.http)
+        self.assertEqual(model.sbc.dsf.user_sessions[0].access_level, AccessLevel.READ_WRITE)
+        self.assertEqual(model.sbc.dsf.user_sessions[0].session_type, SessionType.HTTP)
 
 
 if __name__ == "__main__":

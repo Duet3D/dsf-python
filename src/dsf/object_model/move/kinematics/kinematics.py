@@ -8,10 +8,10 @@ from ....utils import JSONElement
 class Kinematics(ModelObject):
     """Information about the configured geometry"""
 
-    name = model_prop("name", KinematicsName, KinematicsName.unknown)
+    name = model_prop("name", KinematicsName, KinematicsName.UNKNOWN)
     segmentation = nullable_model_prop("segmentation", MoveSegmentation)
 
-    def __init__(self, name: KinematicsName = KinematicsName.unknown):
+    def __init__(self, name: KinematicsName = KinematicsName.UNKNOWN):
         super().__init__()
         self._name = name
         self._segmentation = None
@@ -32,23 +32,23 @@ class Kinematics(ModelObject):
         name = KinematicsName(name)
 
         if name in [
-            KinematicsName.cartesian,
-            KinematicsName.coreXY,
-            KinematicsName.coreXYU,
-            KinematicsName.coreXYUV,
-            KinematicsName.coreXZ,
-            KinematicsName.markForged,
+            KinematicsName.CARTESIAN,
+            KinematicsName.CORE_XY,
+            KinematicsName.CORE_XYU,
+            KinematicsName.CORE_XYUV,
+            KinematicsName.CORE_XZ,
+            KinematicsName.MARKFORGED,
         ]:
             return CoreKinematics(name)
-        elif name == KinematicsName.linearDelta:
+        elif name == KinematicsName.LINEAR_DELTA:
             return DeltaKinematics(name)
-        elif name == KinematicsName.rotaryDelta:
+        elif name == KinematicsName.ROTARY_DELTA:
             return Kinematics(name)
-        elif name == KinematicsName.hangprinter:
+        elif name == KinematicsName.HANGPRINTER:
             return HangprinterKinematics()
-        elif name in [KinematicsName.fiveBarScara, KinematicsName.scara]:
+        elif name in [KinematicsName.FIVE_BAR_SCARA, KinematicsName.SCARA]:
             return ScaraKinematics(name)
-        elif name == KinematicsName.polar:
+        elif name == KinematicsName.POLAR:
             return PolarKinematics()
         return Kinematics(name)
 

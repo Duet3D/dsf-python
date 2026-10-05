@@ -1,6 +1,7 @@
 from enum import Enum
 from typing import List, Optional
 
+from ...utils import DeprecatedAliasEnumType
 from .board_closed_loop import BoardClosedLoop
 from .direct_display import DirectDisplay
 from .driver import Driver
@@ -11,28 +12,36 @@ from ..model_object import ModelObject
 from ..utils import nullable_model_prop, model_prop
 
 
-class BoardState(str, Enum):
+class BoardState(str, Enum, metaclass=DeprecatedAliasEnumType):
     """
     Enumeration of possible expansion board states
     """
 
     # Unknown state
-    unknown = "unknown"
+    UNKNOWN = "unknown"
 
     # Flashing new firmware
-    flashing = "flashing"
+    FLASHING = "flashing"
 
     # Failed to flash new firmware
-    flashFailed = "flashFailed"
+    FLASH_FAILED = "flashFailed"
 
     # Board is being reset
-    resetting = "resetting"
+    RESETTING = "resetting"
 
     # Board is up and running
-    running = "running"
+    RUNNING = "running"
 
     # Board has stopped responding
-    timedOut = "timedOut"
+    TIMED_OUT = "timedOut"
+
+    # Previous names, deprecated
+    flashFailed = FLASH_FAILED
+    flashing = FLASHING
+    resetting = RESETTING
+    running = RUNNING
+    timedOut = TIMED_OUT
+    unknown = UNKNOWN
 
 
 class Board(ModelObject):
@@ -122,7 +131,7 @@ class ExpansionBoard(Board):
     inductive_sensor = nullable_model_prop("inductive_sensor", InductiveSensor)
 
     # State of this board
-    state = model_prop("state", BoardState, BoardState.unknown)
+    state = model_prop("state", BoardState, BoardState.UNKNOWN)
 
     # Connection timeout of this board (in s)
     timeout = model_prop("timeout", int, 10)

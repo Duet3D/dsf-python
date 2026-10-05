@@ -55,4 +55,4 @@ class PulsedFilamentMonitor(FilamentMonitor):
     position = model_prop("position", float)
 
     def __init__(self):
-        super(PulsedFilamentMonitor, self).__init__(FilamentMonitorType.Pulsed)
+        super(PulsedFilamentMonitor, self).__init__(FilamentMonitorType.PULSED)

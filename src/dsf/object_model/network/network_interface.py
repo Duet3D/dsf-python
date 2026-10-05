@@ -47,7 +47,7 @@ class NetworkInterface(ModelObject):
     subnet = nullable_model_prop("subnet", str)
 
     # Type of this network interface
-    type = model_prop("type", NetworkInterfaceType, NetworkInterfaceType.wifi)
+    type = model_prop("type", NetworkInterfaceType, NetworkInterfaceType.WIFI)
 
     # WiFi country code if this is a WiFi adapter and if the country code can be determined
     wifi_country = nullable_model_prop("wifi_country", str)

@@ -1,44 +1,61 @@
 from enum import IntEnum
 
+from ..utils import DeprecatedAliasEnumType
 
-class KeywordType(IntEnum):
+
+class KeywordType(IntEnum, metaclass=DeprecatedAliasEnumType):
     """Enumeration of conditional G-code keywords"""
 
     # No conditional code
-    KeywordNone = 0
+    NONE = 0
 
     # If condition
-    If = 1
+    IF = 1
 
     # Else-if condition
-    ElseIf = 2
+    ELSE_IF = 2
 
     # Else condition
-    Else = 3
+    ELSE = 3
 
     # While condition
-    While = 4
+    WHILE = 4
 
     # Break instruction
-    Break = 5
+    BREAK = 5
 
     # Abort instruction
-    Abort = 6
+    ABORT = 6
 
     # Var operation
-    Var = 7
+    VAR = 7
 
     # Set operation
-    Set = 8
+    SET = 8
 
     # Echo operation
-    Echo = 9
+    ECHO = 9
 
     # Continue instruction
-    Continue = 10
+    CONTINUE = 10
 
     # Global operation
-    Global = 11
+    GLOBAL = 11
 
     # Skip the rest of the current line (no-op)
-    Skip = 12
+    SKIP = 12
+
+    # Previous names, deprecated
+    Abort = ABORT
+    Break = BREAK
+    Continue = CONTINUE
+    Echo = ECHO
+    Else = ELSE
+    ElseIf = ELSE_IF
+    Global = GLOBAL
+    If = IF
+    KeywordNone = NONE
+    Set = SET
+    Skip = SKIP
+    Var = VAR
+    While = WHILE

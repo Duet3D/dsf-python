@@ -32,7 +32,7 @@ class Probe(ModelObject):
     touch_mode = nullable_model_prop("touch_mode", ProbeTouchMode)
     travel_speed = model_prop("travel_speed", float, 6000)
     trigger_height = model_prop("trigger_height", float, 0.7)
-    type = model_prop("type", ProbeType, ProbeType.NoProbe)
+    type = model_prop("type", ProbeType, ProbeType.NONE)
     value = model_prop("value", ModelCollection[int], ModelCollection(int))
 
     def __init__(self):

@@ -1,37 +1,47 @@
 from enum import Enum
 
-
+from ...utils import DeprecatedAliasEnumType
 from ..model_object import ModelObject
 from ..model_collection import ModelCollection
 from ..utils import model_prop
 
 
-class InputShapingType(str, Enum):
+class InputShapingType(str, Enum, metaclass=DeprecatedAliasEnumType):
     """Enumeration of possible input shaping methods"""
 
     # none
-    none = "none"
+    NONE = "none"
 
     # MZV
-    mzv = "mzv"
+    MZV = "mzv"
 
     # ZVD
-    zvd = "zvd"
+    ZVD = "zvd"
 
     # ZVDD
-    zvdd = "zvdd"
+    ZVDD = "zvdd"
 
     # ZVDDD
-    zvddd = "zvddd"
+    ZVDDD = "zvddd"
 
     # EI2 (2-hump)
-    ei2 = "ei2"
+    EI2 = "ei2"
 
     # EI3 (3-hump)
-    ei3 = "ei3"
+    EI3 = "ei3"
 
     # Custom
-    custom = "custom"
+    CUSTOM = "custom"
+
+    # Previous names, deprecated
+    custom = CUSTOM
+    ei2 = EI2
+    ei3 = EI3
+    mzv = MZV
+    none = NONE
+    zvd = ZVD
+    zvdd = ZVDD
+    zvddd = ZVDDD
 
     @classmethod
     def _missing_(cls, value: object):
@@ -59,7 +69,7 @@ class InputShaping(ModelObject):
     frequency = model_prop("frequency", float, 40.0)
 
     # Configured input shaping type
-    type = model_prop("type", InputShapingType, InputShapingType.none)
+    type = model_prop("type", InputShapingType, InputShapingType.NONE)
 
     def __init__(self):
         super().__init__()

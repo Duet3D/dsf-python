@@ -27,7 +27,7 @@ async def hello(connection: HttpEndpointConnection) -> None:
     # Query parameters are available as a dictionary
     name: str = request.queries.get("name", "world")
     # The connection is closed automatically once the response is sent
-    await connection.send_response(200, f"Hello {name}!", HttpResponseType.PlainText)
+    await connection.send_response(200, f"Hello {name}!", HttpResponseType.PLAIN_TEXT)
 
 
 async def echo(connection: HttpEndpointConnection) -> None:
@@ -35,7 +35,7 @@ async def echo(connection: HttpEndpointConnection) -> None:
     try:
         data: Any = json.loads(request.body)
     except json.JSONDecodeError:
-        await connection.send_response(400, "Body must be valid JSON", HttpResponseType.PlainText)
+        await connection.send_response(400, "Body must be valid JSON", HttpResponseType.PLAIN_TEXT)
         return
     response: dict[str, Any] = {"received": data, "sessionId": request.session_id}
     await connection.send_response(200, json.dumps(response), HttpResponseType.JSON)

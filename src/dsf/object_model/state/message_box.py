@@ -1,35 +1,47 @@
 from enum import IntEnum
+
+from ...utils import DeprecatedAliasEnumType
 from ..model_object import ModelObject
 from ..model_collection import ModelCollection
 from ..utils import model_prop, nullable_model_prop
 
 
-class MessageBoxMode(IntEnum):
+class MessageBoxMode(IntEnum, metaclass=DeprecatedAliasEnumType):
     """Supported modes of displaying a message box"""
 
     # Display a message box without any buttons
-    NoButtons = 0
+    NO_BUTTONS = 0
 
     # Display a message box with only a Close button
-    CloseOnly = 1
+    CLOSE_ONLY = 1
 
     # Display a message box with only an Ok button which is supposed to send M292 when pressed
-    OkOnly = 2
+    OK_ONLY = 2
 
     # Display a message box with an Ok button that sends M292 P0 or a cancel button that sends M292 P1 when clicked
-    OkCancel = 3
+    OK_CANCEL = 3
 
     # Multiple choices, blocking
-    MultipleChoice = 4
+    MULTIPLE_CHOICE = 4
 
     # Integer value required, blocking
-    IntInput = 5
+    INT_INPUT = 5
 
     # Floating-point value required, blocking
-    FloatInput = 6
+    FLOAT_INPUT = 6
 
     # String value required, blocking
-    StringInput = 7
+    STRING_INPUT = 7
+
+    # Previous names, deprecated
+    CloseOnly = CLOSE_ONLY
+    FloatInput = FLOAT_INPUT
+    IntInput = INT_INPUT
+    MultipleChoice = MULTIPLE_CHOICE
+    NoButtons = NO_BUTTONS
+    OkCancel = OK_CANCEL
+    OkOnly = OK_ONLY
+    StringInput = STRING_INPUT
 
 
 class MessageBox(ModelObject):
@@ -42,7 +54,7 @@ class MessageBox(ModelObject):
     max = nullable_model_prop("max", float)
     message = model_prop("message", str, "")
     min = nullable_model_prop("min", float)
-    mode = model_prop("mode", MessageBoxMode, MessageBoxMode.OkOnly)
+    mode = model_prop("mode", MessageBoxMode, MessageBoxMode.OK_ONLY)
     seq = model_prop("seq", int, -1)
     timeout = model_prop("timeout", int, 0)
     title = model_prop("title", str, "")

@@ -1,11 +1,17 @@
 from enum import Enum
 
+from ...utils import DeprecatedAliasEnumType
 
-class NetworkInterfaceType(str, Enum):
+
+class NetworkInterfaceType(str, Enum, metaclass=DeprecatedAliasEnumType):
     """Supported types of network interfaces"""
 
     # Wired network interface
-    ethernet = "ethernet"
+    ETHERNET = "ethernet"
 
     # Wireless network interface
-    wifi = "wifi"
+    WIFI = "wifi"
+
+    # Previous names, deprecated
+    ethernet = ETHERNET
+    wifi = WIFI

@@ -17,7 +17,7 @@ async def respond_something(http_endpoint_connection: HttpEndpointConnection):
     if len(r.body) > 0:
         data = json.loads(r.body)
         print(data)
-    await http_endpoint_connection.send_response(200, "so happy you asked for it!", HttpResponseType.PlainText)
+    await http_endpoint_connection.send_response(200, "so happy you asked for it!", HttpResponseType.PLAIN_TEXT)
     http_endpoint_connection.close()
 
 

@@ -10,19 +10,24 @@ from typing import Optional, Any, Callable, TypeAlias, Coroutine
 
 from . import DEFAULT_BACKLOG
 from .object_model import HttpEndpointType
-from .utils import JSONObj, get_typed_value
+from .utils import DeprecatedAliasEnumType, JSONObj, get_typed_value
 
 HttpCallback: TypeAlias = Callable[["HttpEndpointConnection"], Coroutine[Any, Any, None]]
 
 
-class HttpResponseType(str, Enum):
+class HttpResponseType(str, Enum, metaclass=DeprecatedAliasEnumType):
     """Enumeration of supported HTTP responses"""
 
-    StatusCode = "statuscode"
-    PlainText = "plainText"
+    STATUS_CODE = "statusCode"
+    PLAIN_TEXT = "plainText"
     JSON = "json"
-    File = "file"
+    FILE = "file"
     URI = "uri"
+
+    # Previous names, deprecated
+    File = FILE
+    PlainText = PLAIN_TEXT
+    StatusCode = STATUS_CODE
 
 
 class ReceivedHttpRequest:
@@ -81,7 +86,7 @@ class HttpEndpointConnection:
         self,
         status_code: int = 204,
         response: str = "",
-        response_type: HttpResponseType = HttpResponseType.StatusCode,
+        response_type: HttpResponseType = HttpResponseType.STATUS_CODE,
     ):
         """
         Send a simple HTTP response to the client and dispose
@@ -225,7 +230,7 @@ class HttpEndpointUnixSocket:
         http_endpoint_connection = HttpEndpointConnection(
             reader,
             writer,
-            self.endpoint_type == HttpEndpointType.WebSocket,
+            self.endpoint_type == HttpEndpointType.WEBSOCKET,
             debug=self.debug,
         )
         if self.handler is not None:

@@ -8,7 +8,7 @@ from ...commands.code_channel import CodeChannel
 class Inputs(ModelCollection[Optional[InputChannel]]):
 
     def __init__(self):
-        self._valid_channels = [CodeChannel(c) for c in CodeChannel if c is not CodeChannel.Unknown]
+        self._valid_channels = [CodeChannel(c) for c in CodeChannel if c is not CodeChannel.UNKNOWN]
         # Like DSF, start with one input channel per code channel
         super().__init__(Optional[InputChannel], [self._create_channel(channel) for channel in self._valid_channels])
 

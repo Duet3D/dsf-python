@@ -36,11 +36,11 @@ class Model(unittest.TestCase):
         json_str = '{"sourceConnection":30,"result":null,"type":"M","channel":"HTTP","lineNumber":null,"indent":0,"keyword":0,"keywordArgument":null,"majorNumber":98,"minorNumber":null,"flags":2048,"comment":null,"filePosition":null,"length":22,"parameters":[{"letter":"P","value":"0:/macros/test","isString":true}],"command":"Code"}'
         c = Code.from_json(json.loads(json_str))
         self.assertEqual(str(c), 'M98 P"0:/macros/test"')
-        self.assertEqual(c.type, CodeType.MCode)
+        self.assertEqual(c.type, CodeType.MCODE)
         self.assertEqual(c.major_number, 98)
         self.assertEqual(c.minor_number, -1)
-        self.assertEqual(c.flags, CodeFlags.IsLastCode)
-        self.assertEqual(c.keyword, KeywordType.KeywordNone)
+        self.assertEqual(c.flags, CodeFlags.IS_LAST_CODE)
+        self.assertEqual(c.keyword, KeywordType.NONE)
         self.assertEqual(c.keyword_argument, None)
         self.assertEqual(c.comment, None)
         self.assertEqual(c.length, 22)
@@ -54,8 +54,8 @@ class Model(unittest.TestCase):
     def test_code_keyword(self):
         json_str = '{"sourceConnection":33,"result":null,"type":"K","channel":"HTTP","lineNumber":null,"indent":0,"keyword":9,"keywordArgument":"test","majorNumber":null,"minorNumber":null,"flags":2048,"comment":null,"filePosition":null,"length":12,"parameters":[],"command":"Code"}'
         c = Code.from_json(json.loads(json_str))
-        self.assertEqual(c.type, CodeType.Keyword)
-        self.assertEqual(c.keyword, KeywordType.Echo)
+        self.assertEqual(c.type, CodeType.KEYWORD)
+        self.assertEqual(c.keyword, KeywordType.ECHO)
 
     def test_dsf_codes(self):
         # Codes written by DSF are converted back to the same JSON and text
@@ -78,22 +78,22 @@ class Model(unittest.TestCase):
         c = Code.from_json(json.loads(DSF_CODES["G1 X1"]))
         self.assertEqual(c.line_number, 123)
         self.assertEqual(c.explicit_line_number, 123)
-        c.flags = CodeFlags.IsLastCode
+        c.flags = CodeFlags.IS_LAST_CODE
         self.assertEqual(c.explicit_line_number, None)
 
     def test_flags(self):
         # DSF sends several flags as one number
         c = Code.from_json({"type": "G", "majorNumber": 1, "flags": 2048 | 8})
-        self.assertTrue(c.is_flag_set(CodeFlags.IsLastCode))
-        self.assertTrue(c.is_flag_set(CodeFlags.IsFromMacro))
-        self.assertFalse(c.is_flag_set(CodeFlags.IsFromConfig))
+        self.assertTrue(c.is_flag_set(CodeFlags.IS_LAST_CODE))
+        self.assertTrue(c.is_flag_set(CodeFlags.IS_FROM_MACRO))
+        self.assertFalse(c.is_flag_set(CodeFlags.IS_FROM_CONFIG))
 
     def test_result(self):
         data: dict[str, Any] = json.loads(DSF_CODES["G1 X1"])
         data["result"] = {"type": 1, "content": "homed", "time": "2026-10-05T12:00:00"}
         c = Code.from_json(data)
         assert c.result is not None
-        self.assertEqual(c.result.type, MessageType.Warning)
+        self.assertEqual(c.result.type, MessageType.WARNING)
         self.assertEqual(c.result.content, "homed")
         self.assertEqual(str(c), "G1 X1 => Warning: homed")
         self.assertEqual(json.loads(c.to_json())["result"], data["result"])
@@ -101,7 +101,7 @@ class Model(unittest.TestCase):
     def test_new_code(self):
         # Codes created in Python are written the same way as DSF writes them
         c = Code(
-            type=CodeType.MCode,
+            type=CodeType.MCODE,
             major_number=569,
             minor_number=1,
             parameters=[
@@ -131,7 +131,7 @@ class Model(unittest.TestCase):
     def test_send(self):
         # Connections send codes in the format DSF reads them
         c = Code.from_json(json.loads(DSF_CODES["G1 X10 Y-2.5 E1:2.5 F{global.speed} ; move here"]))
-        c.result = Message(MessageType.Error, "failed")
+        c.result = Message(MessageType.ERROR, "failed")
         connection = BaseConnection()
         connection.socket = MagicMock()
         connection.send(c)
@@ -141,14 +141,14 @@ class Model(unittest.TestCase):
     def test_constructor_defaults(self):
         c = Code()
         self.assertEqual(c.command, "Code")
-        self.assertEqual(c.type, CodeType.CodeNone)
+        self.assertEqual(c.type, CodeType.NONE)
         self.assertEqual(c.major_number, None)
         self.assertEqual(c.minor_number, -1)
         self.assertEqual(c.parameters, [])
         self.assertEqual(c.channel, CodeChannel.DEFAULT_CHANNEL)
-        self.assertEqual(c.keyword, KeywordType.KeywordNone)
+        self.assertEqual(c.keyword, KeywordType.NONE)
         self.assertEqual(c.keyword_argument, None)
-        self.assertEqual(c.flags, CodeFlags.CodeFlagsNone)
+        self.assertEqual(c.flags, CodeFlags.NONE)
         self.assertEqual(c.comment, None)
         self.assertEqual(c.line_number, None)
         self.assertEqual(c.indent, 0)
@@ -163,16 +163,16 @@ class Model(unittest.TestCase):
 
     def test_constructor(self):
         parameters = [CodeParameter("X", 10)]
-        result = Message(MessageType.Warning, "done")
+        result = Message(MessageType.WARNING, "done")
         c = Code(
-            type=CodeType.GCode,
+            type=CodeType.GCODE,
             major_number=54,
             minor_number=3,
             parameters=parameters,
-            channel=CodeChannel.File,
-            keyword=KeywordType.KeywordNone,
+            channel=CodeChannel.FILE,
+            keyword=KeywordType.NONE,
             keyword_argument="arg",
-            flags=CodeFlags.IsFromMacro | CodeFlags.HasExplicitLineNumber,
+            flags=CodeFlags.IS_FROM_MACRO | CodeFlags.HAS_EXPLICIT_LINE_NUMBER,
             comment="comment",
             line_number=12,
             indent=4,
@@ -182,14 +182,14 @@ class Model(unittest.TestCase):
             result=result,
         )
         self.assertEqual(c.command, "Code")
-        self.assertEqual(c.type, CodeType.GCode)
+        self.assertEqual(c.type, CodeType.GCODE)
         self.assertEqual(c.major_number, 54)
         self.assertEqual(c.minor_number, 3)
         self.assertIs(c.parameters, parameters)
-        self.assertEqual(c.channel, CodeChannel.File)
-        self.assertEqual(c.keyword, KeywordType.KeywordNone)
+        self.assertEqual(c.channel, CodeChannel.FILE)
+        self.assertEqual(c.keyword, KeywordType.NONE)
         self.assertEqual(c.keyword_argument, "arg")
-        self.assertEqual(c.flags, CodeFlags.IsFromMacro | CodeFlags.HasExplicitLineNumber)
+        self.assertEqual(c.flags, CodeFlags.IS_FROM_MACRO | CodeFlags.HAS_EXPLICIT_LINE_NUMBER)
         self.assertEqual(c.comment, "comment")
         self.assertEqual(c.line_number, 12)
         self.assertEqual(c.explicit_line_number, 12)

@@ -2,6 +2,7 @@ import inspect
 import re
 import warnings
 
+from enum import Enum, EnumType
 from types import UnionType
 from typing import Any, Optional, Callable, TypeVar, TypeAlias, Union, get_args, get_origin, cast, overload
 
@@ -9,6 +10,52 @@ from typing import Any, Optional, Callable, TypeVar, TypeAlias, Union, get_args,
 # We don't want our deprecations to be ignored by default, so create our own type.
 class DeprecatedWarning(UserWarning):
     pass
+
+
+TEnum = TypeVar("TEnum", bound=Enum)
+
+
+def _warn_deprecated_alias(cls: type[Enum], alias: str, member: Enum) -> None:
+    warnings.warn(
+        f"{cls.__name__}.{alias} is deprecated, use {cls.__name__}.{member.name} instead",
+        DeprecatedWarning,
+        stacklevel=3,
+    )
+
+
+class _DeprecatedEnumAlias:
+    """Class attribute of an enum alias that raises a DeprecatedWarning when it is used"""
+
+    def __init__(self, alias: str, member: Enum) -> None:
+        self._alias = alias
+        self._member = member
+
+    def __get__(self, instance: object, owner: Optional[type] = None) -> Enum:
+        _warn_deprecated_alias(type(self._member), self._alias, self._member)
+        return self._member
+
+
+class DeprecatedAliasEnumType(EnumType):
+    """
+    Metaclass of enums whose aliases are previous member names.
+    Using an alias raises a DeprecatedWarning, except for the aliases listed in __kept_aliases__
+    """
+
+    def __new__(metacls, cls: str, bases: tuple[type, ...], classdict: Any, **kwds: Any):
+        enum_class = super().__new__(metacls, cls, bases, classdict, **kwds)
+        kept_aliases: tuple[str, ...] = classdict.get("__kept_aliases__", ())
+        members = cast(dict[str, Enum], enum_class.__members__)
+        for alias, member in members.items():
+            if alias != member.name and alias not in kept_aliases:
+                # Replace the alias, EnumType does not allow members to be reassigned
+                type.__setattr__(enum_class, alias, _DeprecatedEnumAlias(alias, member))
+        return enum_class
+
+    def __getitem__(cls: type[TEnum], name: str) -> TEnum:  # type: ignore[misc]
+        member = cast(TEnum, cls.__members__[name])
+        if isinstance(cls.__dict__.get(name), _DeprecatedEnumAlias):
+            _warn_deprecated_alias(cls, name, member)
+        return member
 
 
 JSONElement: TypeAlias = dict[str, "JSONElement"] | list["JSONElement"] | str | int | float | bool | None

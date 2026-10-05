@@ -96,7 +96,7 @@ interceptor.connect()
 while True:
     code = interceptor.receive_code()
     name = code.parameter("S", "world").string_value
-    interceptor.resolve_code(MessageType.Success, f"Hello {name}!")
+    interceptor.resolve_code(MessageType.SUCCESS, f"Hello {name}!")
 ```
 
 Every intercepted code must be answered with `resolve_code()`, `ignore_code()` or `cancel_code()`.
@@ -111,7 +111,7 @@ from dsf.object_model import HttpEndpointType
 
 async def hello(connection: HttpEndpointConnection) -> None:
     request = await connection.read_request()
-    await connection.send_response(200, f"Hello {request.queries.get('name', 'world')}!", HttpResponseType.PlainText)
+    await connection.send_response(200, f"Hello {request.queries.get('name', 'world')}!", HttpResponseType.PLAIN_TEXT)
 
 endpoint = command_connection.add_http_endpoint(HttpEndpointType.GET, "example", "hello")
 endpoint.set_endpoint_handler(hello)  # Serves GET /machine/example/hello in a background thread
@@ -126,17 +126,15 @@ See [custom_http_endpoint.py](https://github.com/Duet3D/dsf-python/blob/HEAD/exa
 
 ### Naming
 
-Python attributes and methods are `snake_case`, e.g. `state.upTime` is `state.up_time` and
-`PerformSimpleCodeAsync()` is `perform_simple_code()`, with the exceptions below. **Anything passed to DSF
-as a string stays in DSF's `camelCase` format**, because DSF interprets it and not this library.
-
 | | DSF / C# | dsf-python |
 |---|---|---|
+| Attributes and methods are `snake_case` | `state.upTime`, `PerformSimpleCodeAsync()` | `state.up_time`, `perform_simple_code()` |
+| Enum members are `UPPER_SNAKE_CASE` | `MachineStatus.ChangingTool` | `MachineStatus.CHANGING_TOOL` |
 | Uppercase acronyms | `move.skew.tanXY` | `move.skew.tan_XY` (acronyms stay uppercase) |
 | Global variables | `global` | `globals` (`global` is a Python keyword) |
-| Enum members | `MessageType.Success` | Not normalised: `MessageType.Success`, `MachineStatus.idle`, `SubscriptionMode.PATCH`, `HttpEndpointType.GET`. Values match the DSF JSON. |
 
-These strings keep DSF naming:
+**Anything passed to DSF as a string stays in DSF's `camelCase` format**, because DSF interprets it and
+not this library:
 
 | Where | Format | Example |
 |---|---|---|

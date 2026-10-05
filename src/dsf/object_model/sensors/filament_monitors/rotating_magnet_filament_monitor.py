@@ -58,4 +58,4 @@ class RotatingMagnetFilamentMonitor(Duet3DFilamentMonitor):
     configured = model_prop("configured", RotatingMagnetFilamentMonitorConfigured)
 
     def __init__(self):
-        super(RotatingMagnetFilamentMonitor, self).__init__(FilamentMonitorType.RotatingMagnet)
+        super(RotatingMagnetFilamentMonitor, self).__init__(FilamentMonitorType.ROTATING_MAGNET)

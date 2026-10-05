@@ -16,7 +16,7 @@ class Endstop(ModelObject):
     triggered = model_prop("triggered", bool)
 
     # Type of the endstop
-    type = model_prop("type", EndstopType, EndstopType.Unknown)
+    type = model_prop("type", EndstopType, EndstopType.UNKNOWN)
 
     def __init__(self):
         super(Endstop, self).__init__()

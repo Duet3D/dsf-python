@@ -1,5 +1,6 @@
 from enum import Enum
 
+from ...utils import DeprecatedAliasEnumType
 from .heater_model import HeaterModel
 from .heater_monitor import HeaterMonitor
 from ..model_collection import ModelCollection
@@ -7,26 +8,34 @@ from ..model_object import ModelObject
 from ..utils import model_prop, nullable_model_prop
 
 
-class HeaterState(str, Enum):
+class HeaterState(str, Enum, metaclass=DeprecatedAliasEnumType):
     """State of a heater"""
 
     # Heater is turned off
-    off = "off"
+    OFF = "off"
 
     # Heater is in standby mode
-    standby = "standby"
+    STANDBY = "standby"
 
     # Heater is active
-    active = "active"
+    ACTIVE = "active"
 
     # Heater faulted
-    fault = "fault"
+    FAULT = "fault"
 
     # Heater is being tuned
-    tuning = "tuning"
+    TUNING = "tuning"
 
     # Heater is offline
-    offline = "offline"
+    OFFLINE = "offline"
+
+    # Previous names, deprecated
+    active = ACTIVE
+    fault = FAULT
+    off = OFF
+    offline = OFFLINE
+    standby = STANDBY
+    tuning = TUNING
 
 
 class Heater(ModelObject):
@@ -75,7 +84,7 @@ class Heater(ModelObject):
     standby = model_prop("standby", float, 0)
 
     # State of the heater
-    state = model_prop("state", HeaterState, HeaterState.off)
+    state = model_prop("state", HeaterState, HeaterState.OFF)
 
     def __init__(self):
         super().__init__()

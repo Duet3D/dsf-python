@@ -35,7 +35,7 @@ class Spindle(ModelObject):
     min_pwm = nullable_model_prop("min_pwm", float)
 
     # Current state
-    state = model_prop("state", SpindleState, SpindleState.unconfigured)
+    state = model_prop("state", SpindleState, SpindleState.UNCONFIGURED)
 
     # Spindle type
     type = nullable_model_prop("type", SpindleType, lambda: None)

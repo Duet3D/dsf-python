@@ -21,7 +21,7 @@ def send_commands() -> None:
 
         # Evaluate a meta G-code expression without running a code.
         # The result can be any JSON value depending on the expression
-        up_time = command_connection.evaluate_expression("state.upTime").result
+        up_time = command_connection.evaluate_expression("state.upTime")
         print(f"Machine has been up for {up_time}s")
 
         # Get parts of the object model as typed Python objects.
@@ -32,7 +32,7 @@ def send_commands() -> None:
             print(f"Axis {axis.letter.value}: {axis.min} to {axis.max}mm, homed: {axis.homed}")
 
         # Show a message in the web interface and write it to the log file
-        command_connection.write_message(MessageType.Success, "Hello from dsf-python!", True, LogLevel.Info)
+        command_connection.write_message(MessageType.SUCCESS, "Hello from dsf-python!", True, LogLevel.INFO)
 
         # Errors reported by DSF are raised as exceptions
         try:

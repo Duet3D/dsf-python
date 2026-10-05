@@ -1,17 +1,25 @@
 from enum import Enum
 
+from ...utils import DeprecatedAliasEnumType
 
-class SpindleState(str, Enum):
+
+class SpindleState(str, Enum, metaclass=DeprecatedAliasEnumType):
     """Possible state of a spindles"""
 
     # Spinde not configured
-    unconfigured = "unconfigured"
+    UNCONFIGURED = "unconfigured"
 
     # Spindle is stopped (inactive)
-    stopped = "stopped"
+    STOPPED = "stopped"
 
     # Spindle is going forwards
-    forward = "forward"
+    FORWARD = "forward"
 
     # Spindle is going in reverse
-    reverse = "reverse"
+    REVERSE = "reverse"
+
+    # Previous names, deprecated
+    forward = FORWARD
+    reverse = REVERSE
+    stopped = STOPPED
+    unconfigured = UNCONFIGURED

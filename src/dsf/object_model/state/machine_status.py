@@ -1,47 +1,65 @@
 from enum import Enum
 
+from ...utils import DeprecatedAliasEnumType
 
-class MachineStatus(str, Enum):
+
+class MachineStatus(str, Enum, metaclass=DeprecatedAliasEnumType):
     """Possible states of the firmware"""
 
     # Not connected to the Duet
-    disconnected = "disconnected"
+    DISCONNECTED = "disconnected"
 
     # Processing config.g
-    starting = "starting"
+    STARTING = "starting"
 
     # The firmware is being updated
-    updating = "updating"
+    UPDATING = "updating"
 
     # The machine is turned off (i.e. the input voltage is too low for operation)
-    off = "off"
+    OFF = "off"
 
     # The machine has encountered an emergency stop and is ready to reset
-    halted = "halted"
+    HALTED = "halted"
 
     # The machine is about to pause a file job
-    pausing = "pausing"
+    PAUSING = "pausing"
 
     # The machine has paused a file job
-    paused = "paused"
+    PAUSED = "paused"
 
     # The machine is about to resume a paused file job
-    resuming = "resuming"
+    RESUMING = "resuming"
 
     # Job file is being cancelled
-    cancelling = "cancelling"
+    CANCELLING = "cancelling"
 
     # The machine is processing a file job
-    processing = "processing"
+    PROCESSING = "processing"
 
     # The machine is simulating a file job to determine its processing time
-    simulating = "simulating"
+    SIMULATING = "simulating"
 
     # The machine is busy doing something (e.g. moving)
-    busy = "busy"
+    BUSY = "busy"
 
     # The machine is changing the current tool
-    changingTool = "changingTool"
+    CHANGING_TOOL = "changingTool"
 
     # The machine is on but has nothing to do
-    idle = "idle"
+    IDLE = "idle"
+
+    # Previous names, deprecated
+    busy = BUSY
+    cancelling = CANCELLING
+    changingTool = CHANGING_TOOL
+    disconnected = DISCONNECTED
+    halted = HALTED
+    idle = IDLE
+    off = OFF
+    paused = PAUSED
+    pausing = PAUSING
+    processing = PROCESSING
+    resuming = RESUMING
+    simulating = SIMULATING
+    starting = STARTING
+    updating = UPDATING

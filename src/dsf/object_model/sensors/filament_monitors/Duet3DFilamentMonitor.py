@@ -24,5 +24,5 @@ class Duet3DFilamentMonitor(FilamentMonitor):
     # Total extrusion commanded (in mm)
     total_extrusion = model_prop("total_extrusion", float, 0)
 
-    def __init__(self, type_: FilamentMonitorType = FilamentMonitorType.Unknown):
+    def __init__(self, type_: FilamentMonitorType = FilamentMonitorType.UNKNOWN):
         super(Duet3DFilamentMonitor, self).__init__(type_)

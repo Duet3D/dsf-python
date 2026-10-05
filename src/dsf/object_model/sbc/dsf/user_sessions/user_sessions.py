@@ -8,7 +8,7 @@ class UserSession(ModelObject):
     """Class representing a user session"""
 
     # Access level of this session
-    access_level = model_prop("access_level", AccessLevel, AccessLevel.readOnly)
+    access_level = model_prop("access_level", AccessLevel, AccessLevel.READ_ONLY)
 
     # Identifier of this session
     id = model_prop("id", int, 0)
@@ -20,7 +20,7 @@ class UserSession(ModelObject):
     origin_id = model_prop("origin_id", int, -1)
 
     # Type of this session
-    session_type = model_prop("session_type", SessionType, SessionType.local)
+    session_type = model_prop("session_type", SessionType, SessionType.LOCAL)
 
     def __init__(self):
         super().__init__()

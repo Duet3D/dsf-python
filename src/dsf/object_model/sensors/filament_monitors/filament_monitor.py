@@ -14,18 +14,18 @@ class FilamentMonitor(ModelObject):
     enabled = model_prop("enabled", bool, False)
 
     # Enable mode of this filament monitor
-    enable_mode = model_prop("enable_mode", FilamentMonitorEnableMode, FilamentMonitorEnableMode.Disabled)
+    enable_mode = model_prop("enable_mode", FilamentMonitorEnableMode, FilamentMonitorEnableMode.DISABLED)
 
     # Indicates if filament is present in this filament monitor (None if unknown)
     filament_present = nullable_model_prop("filament_present", bool)
 
     # Last reported status of this filament monitor
-    status = model_prop("status", FilamentMonitorStatus, FilamentMonitorStatus.NoDataReceived)
+    status = model_prop("status", FilamentMonitorStatus, FilamentMonitorStatus.NO_DATA_RECEIVED)
 
     # Type of this filament monitor
-    type = model_prop("type", FilamentMonitorType, FilamentMonitorType.Unknown)
+    type = model_prop("type", FilamentMonitorType, FilamentMonitorType.UNKNOWN)
 
-    def __init__(self, type_: FilamentMonitorType = FilamentMonitorType.Unknown):
+    def __init__(self, type_: FilamentMonitorType = FilamentMonitorType.UNKNOWN):
         super(FilamentMonitor, self).__init__()
         self.type = type_
 
@@ -37,11 +37,11 @@ class FilamentMonitor(ModelObject):
 
         type_ = FilamentMonitorType(type_)
 
-        if type_ == FilamentMonitorType.Laser:
+        if type_ == FilamentMonitorType.LASER:
             return LaserFilamentMonitor()
-        elif type_ == FilamentMonitorType.Pulsed:
+        elif type_ == FilamentMonitorType.PULSED:
             return PulsedFilamentMonitor()
-        elif type_ == FilamentMonitorType.RotatingMagnet:
+        elif type_ == FilamentMonitorType.ROTATING_MAGNET:
             return RotatingMagnetFilamentMonitor()
         else:
             return FilamentMonitor(type_)

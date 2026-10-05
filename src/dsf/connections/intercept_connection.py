@@ -71,7 +71,7 @@ class InterceptConnection(BaseCommandConnection):
         """Instruct the control server to ignore the last received code (in intercepting mode)"""
         self.send(commands.code_interception.ignore())
 
-    def resolve_code(self, rtype: MessageType = MessageType.Success, content: Optional[str] = None):
+    def resolve_code(self, rtype: MessageType = MessageType.SUCCESS, content: Optional[str] = None):
         """
         Instruct the control server to resolve the last received code with the given
         message details (in intercepting mode)

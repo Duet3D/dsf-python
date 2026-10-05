@@ -1,74 +1,101 @@
 from enum import Enum
 
+from ...utils import DeprecatedAliasEnumType
 
-class TemperatureError(str, Enum):
+
+class TemperatureError(str, Enum, metaclass=DeprecatedAliasEnumType):
     """Result codes returned by temperature sensor drivers"""
 
     # Sensor is functional
-    ok = "ok"
+    OK = "ok"
 
     # Short circuit detected
-    shortCircuit = "shortCircuit"
+    SHORT_CIRCUIT = "shortCircuit"
 
     # Short to VCC detected
-    shortToVcc = "shortToVcc"
+    SHORT_TO_VCC = "shortToVcc"
 
     # Short to GND detected
-    shortToGround = "shortToGround"
+    SHORT_TO_GROUND = "shortToGround"
 
     # Sensor circuit is open
-    openCircuit = "openCircuit"
+    OPEN_CIRCUIT = "openCircuit"
 
     # Timeout while waiting for sensor data
-    timeout = "timeout"
+    TIMEOUT = "timeout"
 
     # IO error
-    ioError = "ioError"
+    IO_ERROR = "ioError"
 
     # Hardware error
-    hardwareError = "hardwareError"
+    HARDWARE_ERROR = "hardwareError"
 
     # Not ready
-    notReady = "notReady"
+    NOT_READY = "notReady"
 
     # Invalid output number
-    invalidOutputNumber = "invalidOutputNumber"
+    INVALID_OUTPUT_NUMBER = "invalidOutputNumber"
 
     # Sensor bus is busy
-    busBusy = "busBusy"
+    BUS_BUSY = "busBusy"
 
     # Bad sensor response
-    badResponse = "badResponse"
+    BAD_RESPONSE = "badResponse"
 
     # Unknown sensor port
-    unknownPort = "unknownPort"
+    UNKNOWN_PORT = "unknownPort"
 
     # Sensor not initialized
-    notInitialised = "notInitialised"
+    NOT_INITIALISED = "notInitialised"
 
     # Unknown sensor
-    unknownSensor = "unknownSensor"
+    UNKNOWN_SENSOR = "unknownSensor"
 
     # Sensor exceeded min/max voltage
-    overOrUnderVoltage = "overOrUnderVoltage"
+    OVER_OR_UNDER_VOLTAGE = "overOrUnderVoltage"
 
     # Bad VREF detected
-    badVref = "badVref"
+    BAD_VREF = "badVref"
 
     # Bad VSSA detected
-    badVssa = "badVssa"
+    BAD_VSSA = "badVssa"
 
     # Sensor reading too low
-    readingTooLow = "readingTooLow"
+    READING_TOO_LOW = "readingTooLow"
 
     # Sensor reading too high
-    readingTooHigh = "readingTooHigh"
+    READING_TOO_HIGH = "readingTooHigh"
 
     # Ambient reading too low (for composite sensors that read ambient temperature to calculate object temperature)
-    ambientReadingTooLow = "ambientReadingTooLow"
+    AMBIENT_READING_TOO_LOW = "ambientReadingTooLow"
 
     # Ambient reading too high (for composite sensors that read ambient temperature to calculate object temperature)
-    ambientReadingTooHigh = "ambientReadingTooHigh"
+    AMBIENT_READING_TOO_HIGH = "ambientReadingTooHigh"
 
     # Unknown error
-    unknownError = "unknownError"
+    UNKNOWN_ERROR = "unknownError"
+
+    # Previous names, deprecated
+    ambientReadingTooHigh = AMBIENT_READING_TOO_HIGH
+    ambientReadingTooLow = AMBIENT_READING_TOO_LOW
+    badResponse = BAD_RESPONSE
+    badVref = BAD_VREF
+    badVssa = BAD_VSSA
+    busBusy = BUS_BUSY
+    hardwareError = HARDWARE_ERROR
+    invalidOutputNumber = INVALID_OUTPUT_NUMBER
+    ioError = IO_ERROR
+    notInitialised = NOT_INITIALISED
+    notReady = NOT_READY
+    ok = OK
+    openCircuit = OPEN_CIRCUIT
+    overOrUnderVoltage = OVER_OR_UNDER_VOLTAGE
+    readingTooHigh = READING_TOO_HIGH
+    readingTooLow = READING_TOO_LOW
+    shortCircuit = SHORT_CIRCUIT
+    shortToGround = SHORT_TO_GROUND
+    shortToVcc = SHORT_TO_VCC
+    timeout = TIMEOUT
+    unknownError = UNKNOWN_ERROR
+    unknownPort = UNKNOWN_PORT
+    unknownSensor = UNKNOWN_SENSOR

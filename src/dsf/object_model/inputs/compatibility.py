@@ -1,26 +1,37 @@
 from enum import Enum
 
+from ...utils import DeprecatedAliasEnumType
 
-class Compatibility(str, Enum):
+
+class Compatibility(str, Enum, metaclass=DeprecatedAliasEnumType):
     """Compatibility level for emulation"""
 
     # No emulation (same as RepRapFirmware)
-    Default = "Default"
+    DEFAULT = "Default"
 
     # Emulating RepRapFirmware
-    RepRapFirmware = "RepRapFirmware"
+    REPRAPFIRMWARE = "RepRapFirmware"
 
     # Emulating Marlin
-    Marlin = "Marlin"
+    MARLIN = "Marlin"
 
     # Emulating Teacup
-    Teacup = "Teacup"
+    TEACUP = "Teacup"
 
     # Emulating Sprinter
-    Sprinter = "Sprinter"
+    SPRINTER = "Sprinter"
 
     # Emulating Repetier
-    Repetier = "Repetier"
+    REPETIER = "Repetier"
 
     # Emulating NanoDLP
-    NanoDLP = "NanoDLP"
+    NANODLP = "NanoDLP"
+
+    # Previous names, deprecated
+    Default = DEFAULT
+    Marlin = MARLIN
+    NanoDLP = NANODLP
+    RepRapFirmware = REPRAPFIRMWARE
+    Repetier = REPETIER
+    Sprinter = SPRINTER
+    Teacup = TEACUP

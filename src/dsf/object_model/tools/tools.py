@@ -29,7 +29,7 @@ class Tool(ModelObject):
     spindle = model_prop("spindle", int, -1)
     spindle_rpm = model_prop("spindle_rpm", int, 0)
     standby = model_prop("standby", ModelCollection[float], ModelCollection(float))
-    state = model_prop("state", ToolState, ToolState.off)
+    state = model_prop("state", ToolState, ToolState.OFF)
 
     def __init__(self):
         super().__init__()

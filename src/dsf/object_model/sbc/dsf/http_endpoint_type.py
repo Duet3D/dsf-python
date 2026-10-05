@@ -1,7 +1,9 @@
 from enum import Enum
 
+from ....utils import DeprecatedAliasEnumType
 
-class HttpEndpointType(str, Enum):
+
+class HttpEndpointType(str, Enum, metaclass=DeprecatedAliasEnumType):
     """Enumeration of supported HTTP request types"""
 
     # HTTP GET request
@@ -26,4 +28,7 @@ class HttpEndpointType(str, Enum):
     OPTIONS = "OPTIONS"
 
     # WebSocket request for bidirection communication with a custom endpoint
-    WebSocket = "webSocket"
+    WEBSOCKET = "WebSocket"
+
+    # Previous names, deprecated
+    WebSocket = WEBSOCKET

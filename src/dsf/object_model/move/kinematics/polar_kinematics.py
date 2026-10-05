@@ -25,4 +25,4 @@ class PolarKinematics(Kinematics):
 
     def __init__(self):
         super(PolarKinematics, self).__init__()
-        self._name = KinematicsName.polar
+        self._name = KinematicsName.POLAR

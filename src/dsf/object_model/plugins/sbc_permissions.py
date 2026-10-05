@@ -1,95 +1,129 @@
 from enum import Enum
 
+from ...utils import DeprecatedAliasEnumType
 
-class SbcPermissions(Enum):
+
+class SbcPermissions(Enum, metaclass=DeprecatedAliasEnumType):
     """Enumeration of supported plugin permissions"""
 
     # No permissions set (default value)
-    noPermissions = "none"
+    NONE = "none"
 
     # Execute generic commands
-    commandExecution = "commandExecution"
+    COMMAND_EXECUTION = "commandExecution"
 
     # Intercept codes but don't interact with them
-    codeInterceptionRead = "codeInterceptionRead"
+    CODE_INTERCEPTION_READ = "codeInterceptionRead"
 
     # Intercept codes in a blocking way with options to resolve or cancel them
-    codeInterceptionReadWrite = "codeInterceptionReadWrite"
+    CODE_INTERCEPTION_READ_WRITE = "codeInterceptionReadWrite"
 
     # Install, load, unload, and uninstall plugins. Grants FS access to all third-party plugins too
-    managePlugins = "managePlugins"
+    MANAGE_PLUGINS = "managePlugins"
 
     # Service plugin runtime information (for internal purposes only, do not use)
-    servicePlugins = "servicePlugins"
+    SERVICE_PLUGINS = "servicePlugins"
 
     # Manage user sessions
-    manageUserSessions = "manageUserSessions"
+    MANAGE_USER_SESSIONS = "manageUserSessions"
 
     # Read from the object model
-    objectModelRead = "objectModelRead"
+    OBJECT_MODEL_READ = "objectModelRead"
 
     # Read from and write to the object model
-    objectModelReadWrite = "objectModelReadWrite"
+    OBJECT_MODEL_READ_WRITE = "objectModelReadWrite"
 
     # Create new HTTP endpoints
-    registerHttpEndpoints = "registerHttpEndpoints"
+    REGISTER_HTTP_ENDPOINTS = "registerHttpEndpoints"
 
     # Read files in 0:/filaments
-    readFilaments = "readFilaments"
+    READ_FILAMENTS = "readFilaments"
 
     # Write files in 0:/filaments
-    writeFilaments = "writeFilaments"
+    WRITE_FILAMENTS = "writeFilaments"
 
     # Read files in 0:/firmware
-    readFirmware = "readFirmware"
+    READ_FIRMWARE = "readFirmware"
 
     # Write files in 0:/firmware
-    writeFirmware = "writeFirmware"
+    WRITE_FIRMWARE = "writeFirmware"
 
     # Read files in 0:/gcodes
-    readGCodes = "readGCodes"
+    READ_GCODES = "readGCodes"
 
     # Write files in 0:/gcodes
-    writeGCodes = "writeGCodes"
+    WRITE_GCODES = "writeGCodes"
 
     # Read files in 0:/macros
-    readMacros = "readMacros"
+    READ_MACROS = "readMacros"
 
     # Write files in 0:/macros
-    writeMacros = "writeMacros"
+    WRITE_MACROS = "writeMacros"
 
     # Read files in 0:/menu
-    readMenu = "readMenu"
+    READ_MENU = "readMenu"
 
     # Write files in 0:/menu
-    writeMenu = "writeMenu"
+    WRITE_MENU = "writeMenu"
 
     # Read files in 0:/sys
-    readSystem = "readSystem"
+    READ_SYSTEM = "readSystem"
 
     # Write files in 0:/sys
-    writeSystem = "writeSystem"
+    WRITE_SYSTEM = "writeSystem"
 
     # Read files in 0:/www
-    readWeb = "readWeb"
+    READ_WEB = "readWeb"
 
     # Write files in 0:/www
-    writeWeb = "writeWeb"
+    WRITE_WEB = "writeWeb"
 
     # Access files including all subdirecotires of the virtual SD directory as DSF user
-    fileSystemAccess = "fileSystemAccess"
+    FILE_SYSTEM_ACCESS = "fileSystemAccess"
 
     # Launch new processes
-    launchProcesses = "launchProcesses"
+    LAUNCH_PROCESSES = "launchProcesses"
 
     # Communicate over the network (stand-alone)
-    networkAccess = "networkAccess"
+    NETWORK_ACCESS = "networkAccess"
 
     # Access /dev/video* devices
-    webcamAccess = "webcamAccess"
+    WEBCAM_ACCESS = "webcamAccess"
 
     # Access /dev/gpio*, /dev/i2c*, and /dev/spidev* devices
-    gpioAccess = "gpioAccess"
+    GPIO_ACCESS = "gpioAccess"
 
     # Launch process as root user (for full device control - potentially dangerous)
-    superUser = "superUser"
+    SUPER_USER = "superUser"
+
+    # Previous names, deprecated
+    codeInterceptionRead = CODE_INTERCEPTION_READ
+    codeInterceptionReadWrite = CODE_INTERCEPTION_READ_WRITE
+    commandExecution = COMMAND_EXECUTION
+    fileSystemAccess = FILE_SYSTEM_ACCESS
+    gpioAccess = GPIO_ACCESS
+    launchProcesses = LAUNCH_PROCESSES
+    managePlugins = MANAGE_PLUGINS
+    manageUserSessions = MANAGE_USER_SESSIONS
+    networkAccess = NETWORK_ACCESS
+    noPermissions = NONE
+    objectModelRead = OBJECT_MODEL_READ
+    objectModelReadWrite = OBJECT_MODEL_READ_WRITE
+    readFilaments = READ_FILAMENTS
+    readFirmware = READ_FIRMWARE
+    readGCodes = READ_GCODES
+    readMacros = READ_MACROS
+    readMenu = READ_MENU
+    readSystem = READ_SYSTEM
+    readWeb = READ_WEB
+    registerHttpEndpoints = REGISTER_HTTP_ENDPOINTS
+    servicePlugins = SERVICE_PLUGINS
+    superUser = SUPER_USER
+    webcamAccess = WEBCAM_ACCESS
+    writeFilaments = WRITE_FILAMENTS
+    writeFirmware = WRITE_FIRMWARE
+    writeGCodes = WRITE_GCODES
+    writeMacros = WRITE_MACROS
+    writeMenu = WRITE_MENU
+    writeSystem = WRITE_SYSTEM
+    writeWeb = WRITE_WEB

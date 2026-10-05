@@ -1,23 +1,33 @@
 from enum import Enum
 
+from ...utils import DeprecatedAliasEnumType
 
-class EndstopType(str, Enum):
+
+class EndstopType(str, Enum, metaclass=DeprecatedAliasEnumType):
     """Type of configured endstop"""
 
     # Generic input pin
-    InputPin = "inputPin"
+    INPUT_PIN = "inputPin"
 
     # Z-probe acts as an endstop
-    ZProbeAsEndstop = "zProbeAsEndstop"
+    Z_PROBE_AS_ENDSTOP = "zProbeAsEndstop"
 
     # Motor stall detection stops all the drives when triggered
-    MotorStallAny = "motorStallAny"
+    MOTOR_STALL_ANY = "motorStallAny"
 
     # Motor stall detection stops individual drives when triggered
-    MotorStallIndividual = "motorStallIndividual"
+    MOTOR_STALL_INDIVIDUAL = "motorStallIndividual"
 
     # Encoder position error stops all the drives when triggered
-    MotorStallEncoder = "motorStallEncoder"
+    MOTOR_STALL_ENCODER = "motorStallEncoder"
 
     # Unknown
-    Unknown = "unknown"
+    UNKNOWN = "unknown"
+
+    # Previous names, deprecated
+    InputPin = INPUT_PIN
+    MotorStallAny = MOTOR_STALL_ANY
+    MotorStallEncoder = MOTOR_STALL_ENCODER
+    MotorStallIndividual = MOTOR_STALL_INDIVIDUAL
+    Unknown = UNKNOWN
+    ZProbeAsEndstop = Z_PROBE_AS_ENDSTOP

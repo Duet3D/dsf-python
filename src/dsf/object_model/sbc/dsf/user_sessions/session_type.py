@@ -1,14 +1,21 @@
 from enum import Enum
 
+from .....utils import DeprecatedAliasEnumType
 
-class SessionType(str, Enum):
+
+class SessionType(str, Enum, metaclass=DeprecatedAliasEnumType):
     """Types of user sessions"""
 
     # Local client
-    local = "local"
+    LOCAL = "local"
 
     # Remote client via HTTP
-    http = "http"
+    HTTP = "http"
 
     # Remote client via Telnet
-    telnet = "telnet"
+    TELNET = "telnet"
+
+    # Previous names, deprecated
+    http = HTTP
+    local = LOCAL
+    telnet = TELNET

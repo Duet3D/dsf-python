@@ -36,7 +36,7 @@ def start_intercept() -> None:
             # Wait for a code to arrive
             code: Code = intercept_connection.receive_code()
 
-            if code.type != CodeType.MCode:
+            if code.type != CodeType.MCODE:
                 # Let DSF process codes we don't handle as if they were never intercepted
                 intercept_connection.ignore_code()
 
@@ -44,12 +44,12 @@ def start_intercept() -> None:
                 # Read a parameter, falling back to a default value if it is missing
                 name: str = code.parameter("S", "world").string_value
                 # Resolve the code with a reply so that DSF does not process it any further
-                intercept_connection.resolve_code(MessageType.Success, f"Hello {name}!")
+                intercept_connection.resolve_code(MessageType.SUCCESS, f"Hello {name}!")
 
             elif code.major_number == 1235:
                 text: Optional[CodeParameter] = code.parameter("S")
                 if text is None:
-                    intercept_connection.resolve_code(MessageType.Error, "Missing S parameter")
+                    intercept_connection.resolve_code(MessageType.ERROR, "Missing S parameter")
                     continue
                 # Codes can be run while a code is intercepted. Use the channel of the intercepted
                 # code so that they are executed in the same context
@@ -57,7 +57,7 @@ def start_intercept() -> None:
                 intercept_connection.resolve_code()
 
             elif code.major_number == 1236:
-                intercept_connection.resolve_code(MessageType.Warning, "Custom M-code example stopped")
+                intercept_connection.resolve_code(MessageType.WARNING, "Custom M-code example stopped")
                 return
 
             else:

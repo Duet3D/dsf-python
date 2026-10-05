@@ -13,4 +13,4 @@ class HangprinterKinematics(Kinematics):
 
     def __init__(self):
         super(HangprinterKinematics, self).__init__()
-        self.name = KinematicsName.hangprinter
+        self.name = KinematicsName.HANGPRINTER

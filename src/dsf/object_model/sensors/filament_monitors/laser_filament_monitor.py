@@ -55,4 +55,4 @@ class LaserFilamentMonitor(Duet3DFilamentMonitor):
     configured = model_prop("configured", LaserFilamentMonitorConfigured, LaserFilamentMonitorConfigured())
 
     def __init__(self):
-        super(LaserFilamentMonitor, self).__init__(FilamentMonitorType.Laser)
+        super(LaserFilamentMonitor, self).__init__(FilamentMonitorType.LASER)

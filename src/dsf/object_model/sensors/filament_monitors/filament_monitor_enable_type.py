@@ -1,14 +1,21 @@
 from enum import IntEnum
 
+from ....utils import DeprecatedAliasEnumType
 
-class FilamentMonitorEnableMode(IntEnum):
+
+class FilamentMonitorEnableMode(IntEnum, metaclass=DeprecatedAliasEnumType):
     """Enumeration of supported filament sensors"""
 
     # Filament monitor is disabled
-    Disabled = 0
+    DISABLED = 0
 
     # Filament monitor is enabled during prints from SD card
-    Enabled = 1
+    ENABLED = 1
 
     # Filament monitor is always enabled (when printing from USB)
-    AlwaysEnabled = 2
+    ALWAYS_ENABLED = 2
+
+    # Previous names, deprecated
+    AlwaysEnabled = ALWAYS_ENABLED
+    Disabled = DISABLED
+    Enabled = ENABLED

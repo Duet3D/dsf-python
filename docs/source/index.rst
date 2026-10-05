@@ -104,28 +104,27 @@ Differences From The DSF API
 Naming
 ^^^^^^
 
-Python attributes and methods are ``snake_case``, e.g. ``state.upTime`` is ``state.up_time`` and
-``PerformSimpleCodeAsync()`` is ``perform_simple_code()``, with the exceptions below. **Anything passed to DSF**
-**as a string stays in DSF's camelCase format**, because DSF interprets it and not this library.
-
 .. list-table::
    :header-rows: 1
 
    * -
      - DSF / C#
      - dsf-python
+   * - Attributes and methods are ``snake_case``
+     - ``state.upTime``, ``PerformSimpleCodeAsync()``
+     - ``state.up_time``, ``perform_simple_code()``
+   * - Enum members are ``UPPER_SNAKE_CASE``
+     - ``MachineStatus.ChangingTool``
+     - ``MachineStatus.CHANGING_TOOL``
    * - Uppercase acronyms
      - ``move.skew.tanXY``
      - ``move.skew.tan_XY`` (acronyms stay uppercase)
    * - Global variables
      - ``global``
      - ``globals`` (``global`` is a Python keyword)
-   * - Enum members
-     - ``MessageType.Success``
-     - Not normalised: ``MessageType.Success``, ``MachineStatus.idle``, ``SubscriptionMode.PATCH``,
-       ``HttpEndpointType.GET``. Values match the DSF JSON.
 
-These strings keep DSF naming:
+**Anything passed to DSF as a string stays in DSF's camelCase format**, because DSF interprets it and
+not this library:
 
 .. list-table::
    :header-rows: 1

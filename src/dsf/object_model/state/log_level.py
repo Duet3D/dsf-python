@@ -1,17 +1,25 @@
 from enum import Enum
 
+from ...utils import DeprecatedAliasEnumType
 
-class LogLevel(str, Enum):
+
+class LogLevel(str, Enum, metaclass=DeprecatedAliasEnumType):
     """Class representing the configured log level"""
 
     # Log everything including debug messages
-    Debug = "debug"
+    DEBUG = "debug"
 
     # Log information and warning messages
-    Info = "info"
+    INFO = "info"
 
     # Log warning messages only
-    Warn = "warn"
+    WARN = "warn"
 
     # Logging is disabled
-    Off = "off"
+    OFF = "off"
+
+    # Previous names, deprecated
+    Debug = DEBUG
+    Info = INFO
+    Off = OFF
+    Warn = WARN

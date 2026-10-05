@@ -1,20 +1,29 @@
 from enum import Enum
 
+from ....utils import DeprecatedAliasEnumType
 
-class FilamentMonitorType(str, Enum):
+
+class FilamentMonitorType(str, Enum, metaclass=DeprecatedAliasEnumType):
     """Enumeration of supported filament sensors"""
 
     # Simple filament sensor
-    Simple = "simple"
+    SIMPLE = "simple"
 
     # Laser filament sensor
-    Laser = "laser"
+    LASER = "laser"
 
     # Pulsed filament sensor
-    Pulsed = "pulsed"
+    PULSED = "pulsed"
 
     # Rotating magnet filament sensor
-    RotatingMagnet = "rotatingMagnet"
+    ROTATING_MAGNET = "rotatingMagnet"
 
     # Unknown sensor type
-    Unknown = "unknown"
+    UNKNOWN = "unknown"
+
+    # Previous names, deprecated
+    Laser = LASER
+    Pulsed = PULSED
+    RotatingMagnet = ROTATING_MAGNET
+    Simple = SIMPLE
+    Unknown = UNKNOWN

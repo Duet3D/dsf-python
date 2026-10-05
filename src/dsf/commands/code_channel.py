@@ -1,29 +1,31 @@
 from enum import Enum
 
+from ..utils import DeprecatedAliasEnumType
 
-class CodeChannel(str, Enum):
+
+class CodeChannel(str, Enum, metaclass=DeprecatedAliasEnumType):
     """Enumeration of every available code channel"""
 
     # Code channel for HTTP requests
     HTTP = "HTTP"
 
     # Code channel for Telnet requests
-    Telnet = "Telnet"
+    TELNET = "Telnet"
 
     # Code channel for primary file prints
-    File = "File"
+    FILE = "File"
 
     # Code channel for USB requests
     USB = "USB"
 
     # Code channel for serial devices (e.g. PanelDue)
-    Aux = "Aux"
+    AUX = "Aux"
 
     # Code channel for running triggers or config.g
-    Trigger = "Trigger"
+    TRIGGER = "Trigger"
 
     # Code channel for the code queue that executes a couple of codes in-sync with moves of the primary print file
-    Queue = "Queue"
+    QUEUE = "Queue"
 
     # Code channel for auxiliary LCD devices (e.g. PanelOne)
     LCD = "LCD"
@@ -32,27 +34,42 @@ class CodeChannel(str, Enum):
     SBC = "SBC"
 
     # Code channel that executes the daemon process
-    Daemon = "Daemon"
+    DAEMON = "Daemon"
 
     # Code channel for the second UART port
-    Aux2 = "Aux2"
+    AUX2 = "Aux2"
 
     # Code channel that executes macros on power fail, heater faults and filament out
-    Autopause = "Autopause"
+    AUTOPAUSE = "Autopause"
 
     # Code channel for secondary file prints
-    File2 = "File2"
+    FILE2 = "File2"
 
     # Code channel for the code queue that executes a couple of codes in-sync with moves of the primary print file
-    Queue2 = "Queue2"
+    QUEUE2 = "Queue2"
 
     # Code channel for secondary USB requests
     USB2 = "USB2"
 
     # Unknown code channel
-    Unknown = "Unknown"
+    UNKNOWN = "Unknown"
 
+    # Default channel for codes sent by dsf-python
     DEFAULT_CHANNEL = SBC
+    __kept_aliases__ = ("DEFAULT_CHANNEL",)
+
+    # Previous names, deprecated
+    Autopause = AUTOPAUSE
+    Aux = AUX
+    Aux2 = AUX2
+    Daemon = DAEMON
+    File = FILE
+    File2 = FILE2
+    Queue = QUEUE
+    Queue2 = QUEUE2
+    Telnet = TELNET
+    Trigger = TRIGGER
+    Unknown = UNKNOWN
 
     @staticmethod
     def list():

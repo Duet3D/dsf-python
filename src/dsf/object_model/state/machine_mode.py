@@ -1,7 +1,9 @@
 from enum import Enum
 
+from ...utils import DeprecatedAliasEnumType
 
-class MachineMode(str, Enum):
+
+class MachineMode(str, Enum, metaclass=DeprecatedAliasEnumType):
     """Possible operation modes of the machine"""
 
     # Fused Filament Fabrication (default)
@@ -11,4 +13,7 @@ class MachineMode(str, Enum):
     CNC = "CNC"
 
     # Laser operation mode (e.g. laser cutters)
-    Laser = "Laser"
+    LASER = "Laser"
+
+    # Previous names, deprecated
+    Laser = LASER

@@ -1,23 +1,33 @@
 from enum import Enum
 
+from ...utils import DeprecatedAliasEnumType
 
-class InputChannelState(str, Enum):
+
+class InputChannelState(str, Enum, metaclass=DeprecatedAliasEnumType):
     """State of a channel"""
 
     # Awaiting message acknowledgement
-    awaitingAcknowledgement = "awaitingAcknowledgement"
+    AWAITING_ACKNOWLEDGEMENT = "awaitingAcknowledgement"
 
     # Channel is idle
-    idle = "idle"
+    IDLE = "idle"
 
     # Channel is executing a G/M/T-code
-    executing = "executing"
+    EXECUTING = "executing"
 
     # Channel is waiting for more data
-    waiting = "waiting"
+    WAITING = "waiting"
 
     # Channel is reading a G/M/T-code
-    reading = "reading"
+    READING = "reading"
 
     # Channel is unused
-    unused = "unused"
+    UNUSED = "unused"
+
+    # Previous names, deprecated
+    awaitingAcknowledgement = AWAITING_ACKNOWLEDGEMENT
+    executing = EXECUTING
+    idle = IDLE
+    reading = READING
+    unused = UNUSED
+    waiting = WAITING

@@ -37,7 +37,7 @@ class ModelObject(ModelType[Union[JSONObj, str]]):
         if isinstance(obj, datetime):
             return obj.isoformat()
         if isinstance(obj, SbcPermissions):
-            return obj.name
+            return obj.value
         if isinstance(obj, DriverId):
             return str(obj)
         if isinstance(obj, ModelObject):

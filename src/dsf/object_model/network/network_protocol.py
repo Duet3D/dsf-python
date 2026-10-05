@@ -1,7 +1,9 @@
 from enum import Enum
 
+from ...utils import DeprecatedAliasEnumType
 
-class NetworkProtocol(str, Enum):
+
+class NetworkProtocol(str, Enum, metaclass=DeprecatedAliasEnumType):
     """Supported network protocols"""
 
     # HTTP protocol
@@ -17,7 +19,10 @@ class NetworkProtocol(str, Enum):
     SFTP = "sftp"
 
     # Telnet protocol
-    Telnet = "telnet"
+    TELNET = "telnet"
 
     # SSH protocol
     SSH = "ssh"
+
+    # Previous names, deprecated
+    Telnet = TELNET

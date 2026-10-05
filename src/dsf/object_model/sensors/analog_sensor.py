@@ -18,8 +18,8 @@ class AnalogSensor(ModelObject):
     r_25 = nullable_model_prop("r_25", float)
     r_ref = nullable_model_prop("r_ref", float)
     slope_adj = model_prop("slope_adj", float, 0.0)
-    state = model_prop("state", TemperatureError, TemperatureError.ok)
-    type = model_prop("type", AnalogSensorType, AnalogSensorType.Unknown)
+    state = model_prop("state", TemperatureError, TemperatureError.OK)
+    type = model_prop("type", AnalogSensorType, AnalogSensorType.UNKNOWN)
 
     def __init__(self):
         super(AnalogSensor, self).__init__()

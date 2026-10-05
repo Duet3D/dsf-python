@@ -1,26 +1,37 @@
 from enum import Enum
 
+from ....utils import DeprecatedAliasEnumType
 
-class FilamentMonitorStatus(str, Enum):
+
+class FilamentMonitorStatus(str, Enum, metaclass=DeprecatedAliasEnumType):
     """Possible filament sensor status"""
 
     # No monitor is present
-    NoMonitor = "noMonitor"
+    NO_MONITOR = "noMonitor"
 
     # Filament working normally
-    Ok = "ok"
+    OK = "ok"
 
     # No data received from the remote filament sensor
-    NoDataReceived = "noDataReceived"
+    NO_DATA_RECEIVED = "noDataReceived"
 
     # No filament present
-    NoFilament = "noFilament"
+    NO_FILAMENT = "noFilament"
 
     # Sensor reads less movement than expected
-    TooLittleMovement = "tooLittleMovement"
+    TOO_LITTLE_MOVEMENT = "tooLittleMovement"
 
     # Sensor reads more movment than expected
-    TooMuchMovement = "tooMuchMovement"
+    TOO_MUCH_MOVEMENT = "tooMuchMovement"
 
     # Sensor encountered an error
-    SensorError = "sensorError"
+    SENSOR_ERROR = "sensorError"
+
+    # Previous names, deprecated
+    NoDataReceived = NO_DATA_RECEIVED
+    NoFilament = NO_FILAMENT
+    NoMonitor = NO_MONITOR
+    Ok = OK
+    SensorError = SENSOR_ERROR
+    TooLittleMovement = TOO_LITTLE_MOVEMENT
+    TooMuchMovement = TOO_MUCH_MOVEMENT

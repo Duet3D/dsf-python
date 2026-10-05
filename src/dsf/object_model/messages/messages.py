@@ -1,21 +1,27 @@
 from datetime import datetime
 from enum import IntEnum
 
+from ...utils import DeprecatedAliasEnumType
 from ..model_object import ModelObject
 from ..utils import model_prop
 
 
-class MessageType(IntEnum):
+class MessageType(IntEnum, metaclass=DeprecatedAliasEnumType):
     """Type of generic message"""
 
     # This is a success message
-    Success = 0
+    SUCCESS = 0
 
     # This is a warning message
-    Warning = 1
+    WARNING = 1
 
     # This is an error message
-    Error = 2
+    ERROR = 2
+
+    # Previous names, deprecated
+    Error = ERROR
+    Success = SUCCESS
+    Warning = WARNING
 
 
 class Message(ModelObject):
@@ -33,18 +39,18 @@ class Message(ModelObject):
     time = model_prop("time", datetime, datetime.now)
 
     # Type of this message
-    type = model_prop("type", MessageType, MessageType.Success)
+    type = model_prop("type", MessageType, MessageType.SUCCESS)
 
-    def __init__(self, msg_type: MessageType = MessageType.Success, content: str = "", time: datetime = datetime.now()):
+    def __init__(self, msg_type: MessageType = MessageType.SUCCESS, content: str = "", time: datetime = datetime.now()):
         super().__init__()
         self.content = content
         self.time = time
         self.type = msg_type
 
     def __repr__(self):
-        if self.type == MessageType.Error:
+        if self.type == MessageType.ERROR:
             return f"Error: {self.content}"
-        elif self.type == MessageType.Warning:
+        elif self.type == MessageType.WARNING:
             return f"Warning: {self.content}"
         else:
             return f"{self.content}"

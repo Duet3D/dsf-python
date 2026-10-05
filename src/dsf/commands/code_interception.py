@@ -12,7 +12,7 @@ def cancel():
 def ignore():
     """
     Ignore the code to intercept and allow it to be processed without any modifications.
-    This command is only permitted in ConnectionMode.Intercept mode.
+    This command is only permitted in ConnectionMode.INTERCEPT mode.
     """
     return BaseCommand("Ignore")
 
@@ -20,7 +20,7 @@ def ignore():
 def resolve_code(rtype: MessageType, content: Optional[str]):
     """
     Resolve the code to intercept and return the given message details for its completion.
-    This command is only permitted in ConnectionMode.Intercept mode.
+    This command is only permitted in ConnectionMode.INTERCEPT mode.
     :param rtype: Type of the resolving message
     :param content: Content of the resolving message
     """

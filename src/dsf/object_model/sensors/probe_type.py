@@ -1,47 +1,64 @@
 from enum import IntEnum
 
+from ...utils import DeprecatedAliasEnumType
 
-class ProbeType(IntEnum):
+
+class ProbeType(IntEnum, metaclass=DeprecatedAliasEnumType):
     """Supported probe types"""
 
     # No probe
-    NoProbe = 0
+    NONE = 0
 
     # A simple unmodulated probe (like dc42's infrared probe)
-    Analog = 1
+    ANALOG = 1
 
     # A modulated probe (like the original one shipped with the RepRapPro Ormerod)
-    DumbModulated = 2
+    DUMB_MODULATED = 2
 
     # Alternate analog probe (like the ultrasonic probe)
-    AlternateAnalog = 3
+    ALTERNATE_ANALOG = 3
 
     # Endstop switch (obsolete, should not be used anymore)
-    EndstopSwitch_Obsolete = 4
+    ENDSTOP_SWITCH_OBSOLETE = 4
 
     # A switch that is triggered when the probe is activated (filtered)
-    Digital = 5
+    DIGITAL = 5
 
     # Endstop switch on the E1 endstop pin (obsolete, should not be used anymore)
-    E1Switch_Obsolete = 6
+    E1_SWITCH_OBSOLETE = 6
 
     # Endstop switch on Z endstop pin (obsolete, should not be used anymore)
-    ZSwitch_Obsolete = 7
+    Z_SWITCH_OBSOLETE = 7
 
     # A switch that is triggered when the probe is activated (unfiltered)
-    UnfilteredDigital = 8
+    UNFILTERED_DIGITAL = 8
 
     # A BLTouch probe
-    BLTouch = 9
+    BLTOUCH = 9
 
     # Z motor stall detection
-    ZMotorStall = 10
+    Z_MOTOR_STALL = 10
 
     # Analog scanning probe
-    ScanningAnalog = 11
+    SCANNING_ANALOG = 11
 
     # Deprecated alias of ScanningAnalog
     ScanningZProbe = 11
 
     # Load cell probe measuring the contact force
-    LoadCell = 12
+    LOAD_CELL = 12
+
+    # Previous names, deprecated
+    AlternateAnalog = ALTERNATE_ANALOG
+    Analog = ANALOG
+    BLTouch = BLTOUCH
+    Digital = DIGITAL
+    DumbModulated = DUMB_MODULATED
+    E1Switch_Obsolete = E1_SWITCH_OBSOLETE
+    EndstopSwitch_Obsolete = ENDSTOP_SWITCH_OBSOLETE
+    LoadCell = LOAD_CELL
+    NoProbe = NONE
+    ScanningAnalog = SCANNING_ANALOG
+    UnfilteredDigital = UNFILTERED_DIGITAL
+    ZMotorStall = Z_MOTOR_STALL
+    ZSwitch_Obsolete = Z_SWITCH_OBSOLETE

@@ -26,5 +26,5 @@ class DeltaKinematics(Kinematics):
     # How much Z needs to be raised for each unit of movement in the +Y direction
     y_tilt = model_prop("y_tilt", float, 0.0)
 
-    def __init__(self, name: KinematicsName = KinematicsName.linearDelta):
+    def __init__(self, name: KinematicsName = KinematicsName.LINEAR_DELTA):
         super().__init__(name)

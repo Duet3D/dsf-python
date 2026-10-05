@@ -1,22 +1,28 @@
 from enum import Enum
 
+from ...utils import DeprecatedAliasEnumType
 from .led_strip_color_order import LedStripColorOrder
 
 from ..model_object import ModelObject
 from ..utils import model_prop
 
 
-class LedStripType(str, Enum):
+class LedStripType(str, Enum, metaclass=DeprecatedAliasEnumType):
     """Types of supported LED strips"""
 
     # DotStar LED strip
-    DotStar = "DotStar"
+    DOTSTAR = "DotStar"
 
     # NeoPixel LED strip with only RGB capability
-    NeoPixel_RGB = "NeoPixel_RGB"
+    NEOPIXEL_RGB = "NeoPixel_RGB"
 
     # NeoPixel RGB LED strip with additional white output
-    NeoPixel_RGBW = "NeoPixel_RGBW"
+    NEOPIXEL_RGBW = "NeoPixel_RGBW"
+
+    # Previous names, deprecated
+    DotStar = DOTSTAR
+    NeoPixel_RGB = NEOPIXEL_RGB
+    NeoPixel_RGBW = NEOPIXEL_RGBW
 
 
 class LedStrip(ModelObject):
@@ -38,7 +44,7 @@ class LedStrip(ModelObject):
     stop_movement = model_prop("stop_movement", bool, False)
 
     # Type of this LED strip
-    type = model_prop("type", LedStripType, LedStripType.DotStar)
+    type = model_prop("type", LedStripType, LedStripType.DOTSTAR)
 
     def __init__(self):
         super().__init__()
