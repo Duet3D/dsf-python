@@ -166,8 +166,8 @@ Behaviour
 - **Key callbacks** (``subscribe_to_keys()``) are specific to dsf-python.
 - **Messages are cleared for you.** In C#, messages pile up in ``Model.Messages`` until you clear them.
   ``get_object_model()`` clears them at the start of each call unless ``clear_messages=False``.
-- **Return values.** ``perform_simple_code()`` returns the reply as a string. ``evaluate_expression()`` and the
-  lower-level methods return a ``Response`` whose value is in ``.result``.
+- **Return values.** Connection methods return the same values as in C#. Only the lower-level
+  ``perform_command()`` returns a ``Response``, whose value is in ``.result``.
 - **Interception.** ``resolve_code()`` takes a ``MessageType`` and an optional string, not a ``Message``.
   There is no ``rewrite_code()``. ``flush()`` takes a channel instead of flushing the intercepted code's channel.
 - **HTTP endpoints.** Handlers are registered with ``set_endpoint_handler()`` instead of an event.

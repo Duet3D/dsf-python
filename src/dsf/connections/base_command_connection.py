@@ -1,21 +1,32 @@
 import os
 
-from typing import Optional
+from typing import Optional, TypeVar
 
 from .base_connection import BaseConnection
 from .exceptions import InternalServerException
 from .. import commands, DEFAULT_BACKLOG
 from ..commands import code
+from ..commands.base_command import BaseCommand
 from ..commands.code_channel import CodeChannel
 from ..http import HttpEndpointUnixSocket
 from ..object_model import HttpEndpointType, ObjectModel
 from ..object_model.job import GCodeFileInfo
 from ..object_model.messages import Message, MessageType
 from ..object_model.state import LogLevel
+from ..utils import JSONElement
+
+T = TypeVar("T")
 
 
 class BaseCommandConnection(BaseConnection):
     """Base connection class for sending commands to the control server"""
+
+    def _perform_command_with_result(self, command: BaseCommand, result_type: type[T]) -> T:
+        """Perform a command and check the type of its result"""
+        res = self.perform_command(command)
+        if not isinstance(res.result, result_type):
+            raise TypeError(f"Unexpected result type for {command.command} command: {type(res.result)}")
+        return res.result
 
     def add_http_endpoint(
         self,
@@ -24,15 +35,11 @@ class BaseCommandConnection(BaseConnection):
         path: str,
         is_upload_request: bool = False,
         backlog: int = DEFAULT_BACKLOG,
-    ):
+    ) -> HttpEndpointUnixSocket:
         """Add a new third-party HTTP endpoint in the format /machine/{ns}/{path}"""
-        res = self.perform_command(
-            commands.http_endpoints.add_http_endpoint(endpoint_type, namespace, path, is_upload_request)
+        socket_file = self._perform_command_with_result(
+            commands.http_endpoints.add_http_endpoint(endpoint_type, namespace, path, is_upload_request), str
         )
-        if not isinstance(res.result, str):
-            raise TypeError(f"Unexpected result type for AddHttpEndpoint command: {type(res.result)}")
-
-        socket_file = res.result
         return HttpEndpointUnixSocket(endpoint_type, namespace, path, socket_file, backlog, self.debug)
 
     def add_user_session(
@@ -40,7 +47,7 @@ class BaseCommandConnection(BaseConnection):
         access_level: commands.user_sessions.AccessLevel,
         session_type: commands.user_sessions.SessionType,
         origin: Optional[str],
-    ):
+    ) -> int:
         """
         Add a new user session
         :param access_level: Access level of this session
@@ -51,27 +58,32 @@ class BaseCommandConnection(BaseConnection):
         if origin is None:
             origin = str(os.getpid())
 
-        res = self.perform_command(commands.user_sessions.add_user_session(access_level, session_type, origin))
-        if not isinstance(res.result, int):
-            raise TypeError(f"Unexpected result type for AddUserSession command: {type(res.result)}")
-        return int(res.result)
+        return self._perform_command_with_result(
+            commands.user_sessions.add_user_session(access_level, session_type, origin), int
+        )
 
-    def check_password(self, password: str):
-        """Check the given password (see M551)"""
-        return self.perform_command(commands.generic.check_password(password))
+    def check_password(self, password: str) -> bool:
+        """
+        Check the given password (see M551)
+        :returns: True if the password is correct or no password is set
+        """
+        return self._perform_command_with_result(commands.generic.check_password(password), bool)
 
-    def evaluate_expression(self, expression: str, channel: CodeChannel = CodeChannel.SBC):
+    def evaluate_expression(self, expression: str, channel: CodeChannel = CodeChannel.SBC) -> JSONElement:
         """
         Evaluate an arbitrary expression
         :param expression: Expression to evaluate
         :param channel: Context of the evaluation
         :returns: Evaluation result
         """
-        return self.perform_command(commands.generic.evaluate_expression(channel, expression))
+        return self.perform_command(commands.generic.evaluate_expression(channel, expression)).result
 
-    def flush(self, channel: CodeChannel = CodeChannel.SBC):
-        """Wait for all pending codes of the given channel to finish"""
-        return self.perform_command(commands.generic.flush(channel))
+    def flush(self, channel: CodeChannel = CodeChannel.SBC) -> bool:
+        """
+        Wait for all pending codes of the given channel to finish
+        :returns: True if the flush request was successful
+        """
+        return self._perform_command_with_result(commands.generic.flush(channel), bool)
 
     def get_file_info(self, file_name: str, read_thumbnail_content: bool = False) -> GCodeFileInfo:
         """Parse a G-code file and returns file information about it"""
@@ -96,30 +108,28 @@ class BaseCommandConnection(BaseConnection):
             raise InternalServerException(command, "InvalidResponseType", "Expected object model, got null")
         return res.result
 
-    def get_serialized_object_model(self):
+    def get_serialized_object_model(self) -> str:
         """Optimized method to directly query the machine model UTF-8 JSON"""
         self.send(commands.object_model.get_object_model())
         return self.receive_json()
 
-    def install_plugin(self, plugin_file: str):
+    def install_plugin(self, plugin_file: str) -> None:
         """Install or upgrade a plugin"""
-        res = self.perform_command(commands.plugins.install_plugin(plugin_file))
-        return res.result
+        self.perform_command(commands.plugins.install_plugin(plugin_file))
 
-    def install_system_package(self, package_file: str):
+    def install_system_package(self, package_file: str) -> None:
         """Install or upgrade a system package
         :param package_file: Absolute file path to the package file
         """
-        res = self.perform_command(commands.packages.install_system_package(package_file))
-        return res.result
+        self.perform_command(commands.packages.install_system_package(package_file))
 
-    def invalidate_channel(self, channel: CodeChannel = CodeChannel.SBC):
+    def invalidate_channel(self, channel: CodeChannel = CodeChannel.SBC) -> None:
         """Invalidate all pending codes and files on a given channel
         (including buffered codes from DSF in RepRapFirmware)
         :param channel: Code channel to invalidate"""
-        return self.perform_command(commands.generic.invalidate_channel(channel))
+        self.perform_command(commands.generic.invalidate_channel(channel))
 
-    def query_object_model(self, key: str = "", flags: str = ""):
+    def query_object_model(self, key: str = "", flags: str = "") -> JSONElement:
         """
         Query the object model using a key and flags, returning a formatted JSON response
         compatible with the M409 response format without going through the code execution pipeline
@@ -127,15 +137,13 @@ class BaseCommandConnection(BaseConnection):
         :param flags: RRF-compatible flags string controlling response content (see M409 F parameter)
         :returns: M409-compatible JSON response
         """
-        res = self.perform_command(commands.object_model.query_object_model(key, flags))
-        return res.result
+        return self.perform_command(commands.object_model.query_object_model(key, flags)).result
 
-    def patch_object_model(self, key: str, patch: str):
+    def patch_object_model(self, key: str, patch: str) -> None:
         """
         Apply a full patch to the object model. Use with care!
         """
-        res = self.perform_command(commands.object_model.patch_object_model(key, patch))
-        return res.result
+        self.perform_command(commands.object_model.patch_object_model(key, patch))
 
     def perform_code(self, cde: code.Code) -> Optional[Message]:
         """Execute an arbitrary pre-parsed code
@@ -154,55 +162,56 @@ class BaseCommandConnection(BaseConnection):
                            If set, the code reply is output as a generic message
         :returns: The result as a string if async_exec is not set (default)
         """
-        res = self.perform_command(commands.generic.simple_code(cde, channel, async_exec))
-        if not isinstance(res.result, str):
-            raise TypeError(f"Unexpected result type for SimpleCode command: {type(res.result)}")
-        return res.result
+        return self._perform_command_with_result(commands.generic.simple_code(cde, channel, async_exec), str)
 
-    def reload_plugin(self, plugin: str):
+    def reload_plugin(self, plugin: str) -> None:
         """
         Reload the manifest of a given plugin. Useful for packaged plugins
         :param plugin: Identifier of the plugin
         """
-        return self.perform_command(commands.plugins.reload_plugin(plugin))
+        self.perform_command(commands.plugins.reload_plugin(plugin))
 
-    def remove_http_endpoint(self, endpoint_type: HttpEndpointType, namespace: str, path: str):
-        """Remove an existing HTTP endpoint"""
-        res = self.perform_command(commands.http_endpoints.remove_http_endpoint(endpoint_type, namespace, path))
-        return res.result
+    def remove_http_endpoint(self, endpoint_type: HttpEndpointType, namespace: str, path: str) -> bool:
+        """
+        Remove an existing HTTP endpoint
+        :returns: True if the endpoint could be removed
+        """
+        return self._perform_command_with_result(
+            commands.http_endpoints.remove_http_endpoint(endpoint_type, namespace, path), bool
+        )
 
-    def remove_user_session(self, session_id: int):
-        """Remove an existing user session"""
-        res = self.perform_command(commands.user_sessions.remove_user_session(session_id))
-        return res.result
+    def remove_user_session(self, session_id: int) -> bool:
+        """
+        Remove an existing user session
+        :returns: True if the session could be removed
+        """
+        return self._perform_command_with_result(commands.user_sessions.remove_user_session(session_id), bool)
 
-    def resolve_path(self, path: str):
+    def resolve_path(self, path: str) -> str:
         """Resolve a RepRapFirmware-style file path to a real file path"""
-        return self.perform_command(commands.files.resolve_path(path))
+        return self._perform_command_with_result(commands.files.resolve_path(path), str)
 
-    def set_network_protocol(self, protocol: str, enabled: bool):
+    def set_network_protocol(self, protocol: str, enabled: bool) -> None:
         """Set a given property to a certain value.
         Make sure to lock the object model before calling this
         :param protocol: Protocol to change
         :param enabled: Whether the protocol is enabled or not
         """
-        res = self.perform_command(commands.object_model.set_network_protocol(protocol, enabled))
-        return res.result
+        self.perform_command(commands.object_model.set_network_protocol(protocol, enabled))
 
-    def set_wifi_country(self, country_code: Optional[str] = None):
+    def set_wifi_country(self, country_code: Optional[str] = None) -> None:
         """
         Set the WiFi country code. This is a global setting on Linux, so it is applied to every WiFi interface
         in the object model
         :param country_code: New WiFi country code, or null to clear it
         """
-        return self.perform_command(commands.object_model.set_wifi_country(country_code))
+        self.perform_command(commands.object_model.set_wifi_country(country_code))
 
-    def set_plugin_data(self, plugin: str, key: str, value: object):
+    def set_plugin_data(self, plugin: str, key: str, value: object) -> None:
         """Set custom plugin data in the object model"""
-        res = self.perform_command(commands.plugins.set_plugin_data(plugin, key, value))
-        return res.result
+        self.perform_command(commands.plugins.set_plugin_data(plugin, key, value))
 
-    def set_update_status(self, is_updating: bool, message: str = "", progress: Optional[float] = None):
+    def set_update_status(self, is_updating: bool, message: str = "", progress: Optional[float] = None) -> None:
         """
         Override the current machine status if a software update is in progress
         :param is_updating: Whether an update is now in progress
@@ -210,51 +219,44 @@ class BaseCommandConnection(BaseConnection):
         :param progress: Progress of the current update step (0..1) or None if indeterminate,
             only used if is_updating is true
         """
-        res = self.perform_command(commands.generic.set_update_status(is_updating, message, progress))
-        return res.result
+        self.perform_command(commands.generic.set_update_status(is_updating, message, progress))
 
-    def start_plugin(self, plugin: str, save_state: bool = True):
+    def start_plugin(self, plugin: str, save_state: bool = True) -> None:
         """Start a plugin
         :param plugin: Identifier of the plugin
         :param save_state: Defines if the list of executing plugins may be saved
         """
-        res = self.perform_command(commands.plugins.start_plugin(plugin, save_state))
-        return res.result
+        self.perform_command(commands.plugins.start_plugin(plugin, save_state))
 
-    def start_plugins(self):
+    def start_plugins(self) -> None:
         """Start all the previously started plugins again"""
-        res = self.perform_command(commands.plugins.start_plugins())
-        return res.result
+        self.perform_command(commands.plugins.start_plugins())
 
-    def stop_plugin(self, plugin: str, save_state: bool = True):
+    def stop_plugin(self, plugin: str, save_state: bool = True) -> None:
         """Stop a plugin
         :param plugin: Identifier of the plugin
         :param save_state: Defines if the list of executing plugins may be saved
         """
-        res = self.perform_command(commands.plugins.stop_plugin(plugin, save_state))
-        return res.result
+        self.perform_command(commands.plugins.stop_plugin(plugin, save_state))
 
-    def stop_plugins(self):
+    def stop_plugins(self) -> None:
         """Stop all the plugins and save which plugins were started before.
         This command is intended for shutdown or update requests"""
-        res = self.perform_command(commands.plugins.stop_plugins())
-        return res.result
+        self.perform_command(commands.plugins.stop_plugins())
 
-    def sync_object_model(self):
+    def sync_object_model(self) -> None:
         """Wait for the full object model to be updated from RepRapFirmware"""
-        return self.perform_command(commands.object_model.sync_object_model())
+        self.perform_command(commands.object_model.sync_object_model())
 
-    def uninstall_plugin(self, plugin: str):
+    def uninstall_plugin(self, plugin: str) -> None:
         """Uninstall a plugin"""
-        res = self.perform_command(commands.plugins.uninstall_plugin(plugin))
-        return res.result
+        self.perform_command(commands.plugins.uninstall_plugin(plugin))
 
-    def uninstall_system_package(self, package: str):
+    def uninstall_system_package(self, package: str) -> None:
         """Uninstall a system package
         :param package: Identifier of the package
         """
-        res = self.perform_command(commands.packages.uninstall_system_package(package))
-        return res.result
+        self.perform_command(commands.packages.uninstall_system_package(package))
 
     def write_message(
         self,
@@ -262,7 +264,6 @@ class BaseCommandConnection(BaseConnection):
         message: str,
         output_message: bool,
         log_level: LogLevel,
-    ):
+    ) -> None:
         """Write an arbitrary message"""
-        res = self.perform_command(commands.generic.write_message(message_type, message, output_message, log_level))
-        return res.result
+        self.perform_command(commands.generic.write_message(message_type, message, output_message, log_level))

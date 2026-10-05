@@ -162,8 +162,8 @@ object_model.to_json()        # '{..."state": {..."upTime": 1234...}...}'
   `get_object_model_patch()` and `get_serialized_object_model()` still return raw JSON if you need it.
 - **Key callbacks** (`subscribe_to_keys()`) are specific to dsf-python.
 - **Messages are cleared for you.** In C#, it is the developers responsibility to clear `Model.Messages` manually. The `get_object_model()` helper method clears them at the start of each call unless `clear_messages=False`.
-- **Return values.** `perform_simple_code()` returns the reply as a string. `evaluate_expression()`
-  and the lower-level methods return a `Response` whose value is in `.result`.
+- **Return values.** Connection methods return the same values as in C#. Only the lower-level
+  `perform_command()` returns a `Response`, whose value is in `.result`.
 - **Interception.** `resolve_code()` takes a `MessageType` and an optional string, not a `Message`.
   There is no `rewrite_code()`. `flush()` takes a channel instead of flushing the intercepted code's channel.
 - **HTTP endpoints.** Handlers are registered with `set_endpoint_handler()` instead of an event.
