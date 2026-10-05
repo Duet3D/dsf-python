@@ -17,6 +17,13 @@ class ConnectionMode(str, Enum):
     # Subscription mode. In this mode object model updates are transmitted to the client after each update
     SUBSCRIBE = "Subscribe"
 
+    # Code stream mode. This mode lets users send and receive code replies asynchronously using a single socket
+    # connection
+    CODE_STREAM = "CodeStream"
+
+    # Plugin service mode. This mode is used internally and should not be used by third-party plugins!
+    PLUGIN_SERVICE = "PluginService"
+
 
 class InterceptionMode(str, Enum):
     """Type of the intercepting connection"""
