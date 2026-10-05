@@ -362,12 +362,13 @@ class TestDsfEnums(unittest.TestCase):
                     missing, extra = _enum_differences(cls, dsf_name, dsf_enum)
                 except ValueError as e:
                     self.fail(str(e))
-                if missing or extra:
-                    self.fail(
-                        f"{cls.__name__} differs from DSF's {dsf_name}: "
-                        f"values missing from dsf-python: {', '.join(missing) or 'none'}; "
-                        f"values DSF does not have: {', '.join(extra) or 'none'}"
-                    )
+                differences: list[str] = []
+                if missing:
+                    differences.append(f"values missing from dsf-python: {', '.join(missing)}")
+                if extra:
+                    differences.append(f"values DSF does not have: {', '.join(extra)}")
+                if differences:
+                    self.fail(f"{cls.__name__} differs from DSF's {dsf_name}, {'; '.join(differences)}")
 
     def test_enum_differences(self):
         # The comparison above detects both missing and extra values, but no aliases
