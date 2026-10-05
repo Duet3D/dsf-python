@@ -2,31 +2,33 @@
 codeparameter contains all classes and methods dealing with deserialized code parameters.
 """
 
-import json
-from typing import Self, TypeAlias, TypedDict, cast, Optional
+from typing import Optional, Self, TypeAlias, cast
 
 from ..exceptions import CodeParserException
 from ..object_model.move.driver_id import DriverId
+from ..utils import JSONObj, get_typed_value
 
 CodeParameterScalar: TypeAlias = str | int | float | DriverId
 CodeParameterArray: TypeAlias = list[int] | list[float] | list[DriverId]
 CodeParameterValue: TypeAlias = CodeParameterScalar | CodeParameterArray
 
 
-class CodeParameterJSON(TypedDict):
-    letter: str
-    value: object
-    isString: Optional[bool]
-    isDriverId: Optional[bool]
+def _to_string_value(value: object) -> str:
+    """Convert a parameter value to its G-code representation (arrays are separated by colons)"""
+    if value is None:
+        return ""
+    if isinstance(value, list):
+        return ":".join(str(item) for item in cast(list[object], value))
+    return str(value)
 
 
-class CodeParameter(json.JSONEncoder):
+class CodeParameter:
     """Represents a parsed parameter of a G/M/T-code"""
 
     LETTER_FOR_UNPRECEDENTED_STRING = "@"
     letter: str
     string_value: str
-    is_string: Optional[bool]
+    is_string: bool
     is_expression: bool
     is_driver_id: bool
     __parsed_value: object
@@ -35,18 +37,27 @@ class CodeParameter(json.JSONEncoder):
     def value(self) -> object:
         return self.__parsed_value
 
-    def default(self, o: Self) -> dict[str, object]:
-        return {
-            "letter": o.letter,
-            "value": o.value,
-            "isString": isinstance(o.value, str),
-            "isDriverId": o.is_driver_id,
-        }
-
     @classmethod
-    def from_json(cls, data: CodeParameterJSON) -> Self:
+    def from_json(cls, data: JSONObj) -> Self:
         """Instantiate a new instance of this class from JSON deserialized dictionary"""
-        return cls(**data)
+        return cls(
+            get_typed_value(data, "letter", str),
+            get_typed_value(data, "value", str),
+            isString=get_typed_value(data, "isString", bool) if "isString" in data else False,
+            isDriverId=get_typed_value(data, "isDriverId", bool) if "isDriverId" in data else False,
+        )
+
+    def to_dict(self) -> JSONObj:
+        """Convert this parameter to a JSON dictionary in the format DSF reads it"""
+        data: JSONObj = {"letter": self.letter, "value": self.string_value}
+        if self.is_driver_id:
+            data["isDriverId"] = True
+        data["isString"] = self._is_string_value()
+        return data
+
+    def _is_string_value(self) -> bool:
+        """Check if the parsed value is a string that must be quoted, like DSF does"""
+        return isinstance(self.__parsed_value, str) and not self.is_expression
 
     @classmethod
     def simple_param(cls, letter: str, value: object, isDriverId: bool = False) -> Self:
@@ -68,14 +79,17 @@ class CodeParameter(json.JSONEncoder):
         # This is the simple path to create a CodeParameter
         if isString is None and isDriverId is None:
             self.letter = letter
-            self.string_value = str(value)
+            self.string_value = _to_string_value(value)
             self.__parsed_value = value
             self.is_expression = self.string_value.startswith("{") and self.string_value.endswith("}")
+            self.is_string = isinstance(value, str) and not self.is_expression
+            items = cast(list[object], value) if isinstance(value, list) else [value]
+            self.is_driver_id = len(items) > 0 and all(isinstance(item, DriverId) for item in items)
             return
 
         self.letter = letter
-        self.string_value = str(value)
-        self.is_string = isString
+        self.string_value = _to_string_value(value)
+        self.is_string = bool(isString)
         self.is_expression = False
         self.is_driver_id = isDriverId if isDriverId is not None else False
         if self.is_string:
@@ -84,6 +98,7 @@ class CodeParameter(json.JSONEncoder):
         elif self.is_driver_id:
             drivers = [DriverId(as_str=driver_value) for driver_value in self.string_value.split(":")]
             self.__parsed_value = drivers[0] if len(drivers) == 1 else drivers
+            return
 
         value = self.string_value.strip()
         # Empty parameters are represented as integers with the value 0 (e.g. G92 XY => G92 X0 Y0)
@@ -246,7 +261,7 @@ class CodeParameter(json.JSONEncoder):
 
     def __str__(self) -> str:
         letter = self.letter if not self.letter == CodeParameter.LETTER_FOR_UNPRECEDENTED_STRING else ""
-        if self.is_string and not self.is_expression:
+        if self._is_string_value():
             double_quoted = self.string_value.replace('"', '""')
             return f'{letter}"{double_quoted}"'
 

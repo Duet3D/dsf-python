@@ -101,7 +101,7 @@ class TestCustomMCodes(unittest.TestCase):
             cde = intercept_connection.receive_code()
 
             # Check for the type of the code
-            if cde.type == CodeType.MCode and cde.majorNumber == 1234:
+            if cde.type == CodeType.MCode and cde.major_number == 1234:
                 # --------------- BEGIN FLUSH ---------------------
                 # Flushing is only necessary if the action below needs to be in sync with the machine
                 # at this point in the GCode stream. Otherwise, it can and should be skipped
@@ -121,7 +121,7 @@ class TestCustomMCodes(unittest.TestCase):
 
                 # Resolve it so that DCS knows we took care of it
                 intercept_connection.resolve_code()
-            elif cde.type == CodeType.MCode and cde.majorNumber == 5678:
+            elif cde.type == CodeType.MCode and cde.major_number == 5678:
                 intercept_connection.resolve_code()
                 intercept_connection.close()
                 # Exit this example

@@ -1,7 +1,7 @@
-from enum import IntEnum
+from enum import IntFlag
 
 
-class CodeFlags(IntEnum):
+class CodeFlags(IntFlag):
     """Code bits to classify G/M/T-codes"""
 
     # Placeholder to indicate that no flags are set

@@ -5,7 +5,7 @@ class CodeType(str, Enum):
     """Type of generic G/M/T-code. If none is applicable, it is treated as a comment"""
 
     # Undetermined
-    CodeNone = "\0"
+    CodeNone = ""
 
     # Whole line comment
     Comment = "Q"

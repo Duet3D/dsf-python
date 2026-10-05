@@ -2,7 +2,7 @@ import json
 import select
 import socket
 import time
-from typing import Any, Optional, Protocol, Self, TypeVar, overload
+from typing import Any, Optional, Protocol, Self, TypeVar, overload, runtime_checkable
 
 from .exceptions import IncompatibleVersionException, InternalServerException, TaskCanceledException
 from .init_messages import client_init_messages, server_init_message
@@ -10,12 +10,24 @@ from ..commands import responses
 from ..commands.responses import Response, ErrorResponse
 from ..commands.base_command import BaseCommand
 from ..object_model.model_object import TModelObject
-from ..utils import JSONElement
+from ..utils import JSONElement, JSONObj
 
 
 class _JSONDeserializable(Protocol):
     @classmethod
     def from_json(cls, data: Any) -> Self: ...
+
+
+@runtime_checkable
+class _DictSerializable(Protocol):
+    def to_dict(self) -> JSONObj: ...
+
+
+def _serialize(obj: object) -> object:
+    """Convert an object that the json module cannot serialize to a JSON element"""
+    if isinstance(obj, _DictSerializable):
+        return obj.to_dict()
+    return obj.__dict__
 
 
 TDeserializable = TypeVar("TDeserializable", bound=_JSONDeserializable)
@@ -101,7 +113,7 @@ class BaseConnection:
 
     def send(self, msg: object):
         """Serialize an arbitrary object into JSON and send it to the server plus NL"""
-        json_string = json.dumps(msg, separators=(",", ":"), default=lambda o: o.__dict__)
+        json_string = json.dumps(msg, separators=(",", ":"), default=_serialize)
         if self.debug:
             print(f"send: {json_string}")
         if self.socket:

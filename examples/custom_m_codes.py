@@ -40,13 +40,13 @@ def start_intercept() -> None:
                 # Let DSF process codes we don't handle as if they were never intercepted
                 intercept_connection.ignore_code()
 
-            elif code.majorNumber == 1234:
+            elif code.major_number == 1234:
                 # Read a parameter, falling back to a default value if it is missing
                 name: str = code.parameter("S", "world").string_value
                 # Resolve the code with a reply so that DSF does not process it any further
                 intercept_connection.resolve_code(MessageType.Success, f"Hello {name}!")
 
-            elif code.majorNumber == 1235:
+            elif code.major_number == 1235:
                 text: Optional[CodeParameter] = code.parameter("S")
                 if text is None:
                     intercept_connection.resolve_code(MessageType.Error, "Missing S parameter")
@@ -56,7 +56,7 @@ def start_intercept() -> None:
                 intercept_connection.perform_simple_code(f'M117 "{text.string_value}"', code.channel)
                 intercept_connection.resolve_code()
 
-            elif code.majorNumber == 1236:
+            elif code.major_number == 1236:
                 intercept_connection.resolve_code(MessageType.Warning, "Custom M-code example stopped")
                 return
 

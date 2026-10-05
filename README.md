@@ -136,7 +136,7 @@ Python attributes and methods are `snake_case`. **Anything passed to DSF as a st
 | Global variables | `global` | `globals` (`global` is a Python keyword) |
 | Names shadowing builtins (`type`, `id`, `min`, `max`, `format`, `license`) | `axis.max` | `axis.max` (unchanged) |
 | Methods | `PerformSimpleCodeAsync()` | `perform_simple_code()` |
-| Intercepted `Code` attributes | `MajorNumber`, `KeywordArgument` | `majorNumber`, `keywordArgument` (**camelCase, as in the JSON**) |
+| `Code` attributes | `MajorNumber`, `KeywordArgument` | `major_number`, `keyword_argument` (the camelCase names `majorNumber` etc. still work but are deprecated) |
 | `CodeParameter` attributes | `StringValue`, `IsString` | `string_value`, `is_string` |
 | HTTP request fields | `SessionId`, `ContentType` | `session_id`, `content_type` |
 | Error responses | `errorType`, `errorMessage` | `error_type`, `error_message` |

@@ -128,9 +128,9 @@ Python attributes and methods are ``snake_case``. **Anything passed to DSF as a 
    * - Methods
      - ``PerformSimpleCodeAsync()``
      - ``perform_simple_code()``
-   * - Intercepted ``Code`` attributes
+   * - ``Code`` attributes
      - ``MajorNumber``, ``KeywordArgument``
-     - ``majorNumber``, ``keywordArgument`` (**camelCase, as in the JSON**)
+     - ``major_number``, ``keyword_argument`` (the camelCase names ``majorNumber`` etc. still work but are deprecated)
    * - ``CodeParameter`` attributes
      - ``StringValue``, ``IsString``
      - ``string_value``, ``is_string``
