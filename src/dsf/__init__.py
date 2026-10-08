@@ -1,4 +1,4 @@
-__version__ = "3.7.0-beta.1"
+__version__ = "3.7.0"
 
 import json
 import os
