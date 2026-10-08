@@ -36,7 +36,7 @@
             "name": "Python: Send Simple Code",
             "type": "debugpy",
             "request": "launch",
-            "program": "${workspaceFolder}/examples/send_simple_code.py",
+            "program": "${workspaceFolder}/examples/send_commands.py",
             "console": "integratedTerminal",
             "autoReload": {
                 "enable": true
