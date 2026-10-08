@@ -5,6 +5,7 @@ from .extruder import Extruder
 from .extruder_non_linear import ExtruderNonlinear
 from .input_shaping import InputShaping, InputShapingType
 from .microstepping import Microstepping
+from .motion_system_current_move import MotionSystemCurrentMove
 from .motors_idle_control import MotorsIdleControl
 from .move import Move
 from .move_calibration import MoveCalibration
@@ -26,6 +27,7 @@ __all__ = [
     "InputShaping",
     "InputShapingType",
     "Microstepping",
+    "MotionSystemCurrentMove",
     "MotorsIdleControl",
     "Move",
     "MoveCalibration",

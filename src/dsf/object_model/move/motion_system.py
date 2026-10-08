@@ -2,7 +2,7 @@ from ..model_object import ModelObject
 from ..model_collection import ModelCollection
 from ..utils import model_prop, nullable_model_prop
 
-from .current_move import CurrentMove
+from .motion_system_current_move import MotionSystemCurrentMove
 from .move_rotation import MoveRotation
 from ..state.restore_point import RestorePoint
 
@@ -11,7 +11,7 @@ class MotionSystem(ModelObject):
     """Information about a motion system"""
 
     # Information about the current move
-    current_move = model_prop("current_move", CurrentMove)
+    current_move = model_prop("current_move", MotionSystemCurrentMove)
 
     # Number of the current object being printed or null if not printing
     current_object = nullable_model_prop("current_object", int)

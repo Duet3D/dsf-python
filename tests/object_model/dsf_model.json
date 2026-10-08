@@ -1,5 +1,5 @@
 {
-  "dsfVersion": "3.7.0-rc.2",
+  "dsfVersion": "3.7.0",
   "classes": {
     "Accelerometer": {
       "properties": {
@@ -125,7 +125,7 @@
         "rRef": 20000.25,
         "slopeAdj": 21000.25,
         "state": "busBusy",
-        "type": "bmehumidity"
+        "type": "currentloop"
       },
       "nulls": {
         "beta": null,
@@ -140,7 +140,7 @@
         "rRef": null,
         "slopeAdj": 71000.25,
         "state": "invalidOutputNumber",
-        "type": "bmepressure"
+        "type": "bme68xgas"
       },
       "patched": {
         "beta": null,
@@ -155,7 +155,7 @@
         "rRef": null,
         "slopeAdj": 71000.25,
         "state": "invalidOutputNumber",
-        "type": "bmepressure"
+        "type": "bme68xgas"
       }
     },
     "Axis": {
@@ -3411,7 +3411,7 @@
       },
       "default": {
         "amplitudes": [],
-        "damping": 0.1,
+        "damping": 0.05,
         "delays": [],
         "frequency": 40,
         "type": "none"
@@ -4870,7 +4870,6 @@
           "duration": 0,
           "extrusionRate": 0,
           "filePosition": null,
-          "laserPwm": null,
           "requestedSpeed": 0,
           "topSpeed": 0
         },
@@ -4901,9 +4900,8 @@
           "duration": 14000.25,
           "extrusionRate": 15000.25,
           "filePosition": 8,
-          "laserPwm": 17000.25,
-          "requestedSpeed": 18000.25,
-          "topSpeed": 19000.25
+          "requestedSpeed": 17000.25,
+          "topSpeed": 18000.25
         },
         "currentObject": 4,
         "currentTool": 5,
@@ -4946,9 +4944,8 @@
           "duration": 64000.25,
           "extrusionRate": 65000.25,
           "filePosition": null,
-          "laserPwm": null,
-          "requestedSpeed": 68000.25,
-          "topSpeed": 69000.25
+          "requestedSpeed": 67000.25,
+          "topSpeed": 68000.25
         },
         "currentObject": null,
         "currentTool": 105,
@@ -4991,9 +4988,8 @@
           "duration": 64000.25,
           "extrusionRate": 65000.25,
           "filePosition": null,
-          "laserPwm": null,
-          "requestedSpeed": 68000.25,
-          "topSpeed": 69000.25
+          "requestedSpeed": 67000.25,
+          "topSpeed": 68000.25
         },
         "currentObject": null,
         "currentTool": 105,
@@ -5027,6 +5023,74 @@
         ],
         "virtualEPos": 72000.25,
         "workplaceNumber": 115
+      }
+    },
+    "MotionSystemCurrentMove": {
+      "properties": {
+        "acceleration": {
+          "nullable": false
+        },
+        "deceleration": {
+          "nullable": false
+        },
+        "distance": {
+          "nullable": false
+        },
+        "duration": {
+          "nullable": false
+        },
+        "extrusionRate": {
+          "nullable": false
+        },
+        "filePosition": {
+          "nullable": true
+        },
+        "requestedSpeed": {
+          "nullable": false
+        },
+        "topSpeed": {
+          "nullable": false
+        }
+      },
+      "default": {
+        "acceleration": 0,
+        "deceleration": 0,
+        "distance": 0,
+        "duration": 0,
+        "extrusionRate": 0,
+        "filePosition": null,
+        "requestedSpeed": 0,
+        "topSpeed": 0
+      },
+      "values": {
+        "acceleration": 11000.25,
+        "deceleration": 12000.25,
+        "distance": 13000.25,
+        "duration": 14000.25,
+        "extrusionRate": 15000.25,
+        "filePosition": 8,
+        "requestedSpeed": 17000.25,
+        "topSpeed": 18000.25
+      },
+      "nulls": {
+        "acceleration": 61000.25,
+        "deceleration": 62000.25,
+        "distance": 63000.25,
+        "duration": 64000.25,
+        "extrusionRate": 65000.25,
+        "filePosition": null,
+        "requestedSpeed": 67000.25,
+        "topSpeed": 68000.25
+      },
+      "patched": {
+        "acceleration": 61000.25,
+        "deceleration": 62000.25,
+        "distance": 63000.25,
+        "duration": 64000.25,
+        "extrusionRate": 65000.25,
+        "filePosition": null,
+        "requestedSpeed": 67000.25,
+        "topSpeed": 68000.25
       }
     },
     "MotorsIdleControl": {
@@ -5210,7 +5274,7 @@
         },
         "shaping": {
           "amplitudes": [],
-          "damping": 0.1,
+          "damping": 0.05,
           "delays": [],
           "frequency": 40,
           "type": "none"
@@ -5423,9 +5487,8 @@
               "duration": 14000.25,
               "extrusionRate": 15000.25,
               "filePosition": 8,
-              "laserPwm": 17000.25,
-              "requestedSpeed": 18000.25,
-              "topSpeed": 19000.25
+              "requestedSpeed": 17000.25,
+              "topSpeed": 18000.25
             },
             "currentObject": 4,
             "currentTool": 5,
@@ -5673,9 +5736,8 @@
               "duration": 64000.25,
               "extrusionRate": 65000.25,
               "filePosition": null,
-              "laserPwm": null,
-              "requestedSpeed": 68000.25,
-              "topSpeed": 69000.25
+              "requestedSpeed": 67000.25,
+              "topSpeed": 68000.25
             },
             "currentObject": null,
             "currentTool": 105,
@@ -5923,9 +5985,8 @@
               "duration": 64000.25,
               "extrusionRate": 65000.25,
               "filePosition": null,
-              "laserPwm": null,
-              "requestedSpeed": 68000.25,
-              "topSpeed": 69000.25
+              "requestedSpeed": 67000.25,
+              "topSpeed": 68000.25
             },
             "currentObject": null,
             "currentTool": 105,
@@ -7054,7 +7115,7 @@
           },
           "shaping": {
             "amplitudes": [],
-            "damping": 0.1,
+            "damping": 0.05,
             "delays": [],
             "frequency": 40,
             "type": "none"
@@ -7691,9 +7752,8 @@
                 "duration": 14000.25,
                 "extrusionRate": 15000.25,
                 "filePosition": 8,
-                "laserPwm": 17000.25,
-                "requestedSpeed": 18000.25,
-                "topSpeed": 19000.25
+                "requestedSpeed": 17000.25,
+                "topSpeed": 18000.25
               },
               "currentObject": 4,
               "currentTool": 5,
@@ -7983,7 +8043,7 @@
               "rRef": 20000.25,
               "slopeAdj": 21000.25,
               "state": "busBusy",
-              "type": "bmehumidity"
+              "type": "currentloop"
             }
           ],
           "endstops": [
@@ -8041,7 +8101,7 @@
                 "percentMin": 13000.25,
                 "sampleDistance": 14000.25
               },
-              "position": 13000.25,
+              "position": 5,
               "enabled": false,
               "enableMode": 2,
               "filamentPresent": false,
@@ -8746,9 +8806,8 @@
                 "duration": 64000.25,
                 "extrusionRate": 65000.25,
                 "filePosition": null,
-                "laserPwm": null,
-                "requestedSpeed": 68000.25,
-                "topSpeed": 69000.25
+                "requestedSpeed": 67000.25,
+                "topSpeed": 68000.25
               },
               "currentObject": null,
               "currentTool": 105,
@@ -8929,7 +8988,7 @@
               "rRef": null,
               "slopeAdj": 71000.25,
               "state": "invalidOutputNumber",
-              "type": "bmepressure"
+              "type": "bme68xgas"
             }
           ],
           "endstops": [
@@ -8979,7 +9038,7 @@
                 "percentMin": 63000.25,
                 "sampleDistance": 64000.25
               },
-              "position": 63000.25,
+              "position": 105,
               "enabled": true,
               "enableMode": 2,
               "filamentPresent": null,
@@ -9654,9 +9713,8 @@
                 "duration": 64000.25,
                 "extrusionRate": 65000.25,
                 "filePosition": null,
-                "laserPwm": null,
-                "requestedSpeed": 68000.25,
-                "topSpeed": 69000.25
+                "requestedSpeed": 67000.25,
+                "topSpeed": 68000.25
               },
               "currentObject": null,
               "currentTool": 105,
@@ -9836,7 +9894,7 @@
               "rRef": null,
               "slopeAdj": 71000.25,
               "state": "invalidOutputNumber",
-              "type": "bmepressure"
+              "type": "bme68xgas"
             }
           ],
           "endstops": [
@@ -9886,7 +9944,7 @@
                 "percentMin": 63000.25,
                 "sampleDistance": 64000.25
               },
-              "position": 63000.25,
+              "position": 105,
               "enabled": true,
               "enableMode": 2,
               "filamentPresent": null,
@@ -10916,7 +10974,7 @@
           "percentMin": 13000.25,
           "sampleDistance": 14000.25
         },
-        "position": 13000.25,
+        "position": 5,
         "enabled": false,
         "enableMode": 2,
         "filamentPresent": false,
@@ -10931,7 +10989,7 @@
           "percentMin": 63000.25,
           "sampleDistance": 64000.25
         },
-        "position": 63000.25,
+        "position": 105,
         "enabled": true,
         "enableMode": 2,
         "filamentPresent": null,
@@ -10946,7 +11004,7 @@
           "percentMin": 63000.25,
           "sampleDistance": 64000.25
         },
-        "position": 63000.25,
+        "position": 105,
         "enabled": true,
         "enableMode": 2,
         "filamentPresent": null,
@@ -11762,7 +11820,7 @@
             "rRef": 20000.25,
             "slopeAdj": 21000.25,
             "state": "busBusy",
-            "type": "bmehumidity"
+            "type": "currentloop"
           }
         ],
         "endstops": [
@@ -11820,7 +11878,7 @@
               "percentMin": 13000.25,
               "sampleDistance": 14000.25
             },
-            "position": 13000.25,
+            "position": 5,
             "enabled": false,
             "enableMode": 2,
             "filamentPresent": false,
@@ -11938,7 +11996,7 @@
             "rRef": null,
             "slopeAdj": 71000.25,
             "state": "invalidOutputNumber",
-            "type": "bmepressure"
+            "type": "bme68xgas"
           }
         ],
         "endstops": [
@@ -11988,7 +12046,7 @@
               "percentMin": 63000.25,
               "sampleDistance": 64000.25
             },
-            "position": 63000.25,
+            "position": 105,
             "enabled": true,
             "enableMode": 2,
             "filamentPresent": null,
@@ -12089,7 +12147,7 @@
             "rRef": null,
             "slopeAdj": 71000.25,
             "state": "invalidOutputNumber",
-            "type": "bmepressure"
+            "type": "bme68xgas"
           }
         ],
         "endstops": [
@@ -12139,7 +12197,7 @@
               "percentMin": 63000.25,
               "sampleDistance": 64000.25
             },
-            "position": 63000.25,
+            "position": 105,
             "enabled": true,
             "enableMode": 2,
             "filamentPresent": null,
@@ -14453,13 +14511,38 @@
           "json": "driversduex"
         },
         {
-          "name": "Remote",
+          "name": "BoardTemp",
           "value": 23,
+          "json": "boardtemp"
+        },
+        {
+          "name": "Current",
+          "value": 24,
+          "json": "current"
+        },
+        {
+          "name": "ThermopileTPiSObject",
+          "value": 25,
+          "json": "thermopile_tpis.object"
+        },
+        {
+          "name": "ThermopileTPiSAmbient",
+          "value": 26,
+          "json": "thermopile_tpis.ambient"
+        },
+        {
+          "name": "ThermopileTPiSEnvironment",
+          "value": 27,
+          "json": "thermopile_tpis.environment"
+        },
+        {
+          "name": "Remote",
+          "value": 28,
           "json": "remote"
         },
         {
           "name": "Unknown",
-          "value": 24,
+          "value": 29,
           "json": "unknown"
         }
       ]
@@ -15934,7 +16017,7 @@
           "json": 2
         },
         {
-          "name": "AlternateAnalog",
+          "name": "AlternateAnalog_Obsolete",
           "value": 3,
           "json": 3
         },

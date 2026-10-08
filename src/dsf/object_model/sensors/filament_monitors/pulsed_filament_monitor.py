@@ -51,8 +51,8 @@ class PulsedFilamentMonitor(FilamentMonitor):
     # Configured properties of this filament monitor
     configured = model_prop("configured", PulsedFilamentMonitorConfigured, PulsedFilamentMonitorConfigured())
 
-    # Position of the sensor (in mm)
-    position = model_prop("position", float)
+    # Raw pulse count of this filament monitor (0..4095)
+    position = model_prop("position", int)
 
     def __init__(self):
         super(PulsedFilamentMonitor, self).__init__(FilamentMonitorType.PULSED)

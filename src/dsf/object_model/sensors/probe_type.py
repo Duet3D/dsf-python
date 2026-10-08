@@ -15,8 +15,8 @@ class ProbeType(IntEnum, metaclass=DeprecatedAliasEnumType):
     # A modulated probe (like the original one shipped with the RepRapPro Ormerod)
     DUMB_MODULATED = 2
 
-    # Alternate analog probe (like the ultrasonic probe)
-    ALTERNATE_ANALOG = 3
+    # Alternate analog probe (obsolete, should not be used anymore)
+    ALTERNATE_ANALOG_OBSOLETE = 3
 
     # Endstop switch (obsolete, should not be used anymore)
     ENDSTOP_SWITCH_OBSOLETE = 4
@@ -49,7 +49,6 @@ class ProbeType(IntEnum, metaclass=DeprecatedAliasEnumType):
     LOAD_CELL = 12
 
     # Previous names, deprecated
-    AlternateAnalog = ALTERNATE_ANALOG
     Analog = ANALOG
     BLTouch = BLTOUCH
     Digital = DIGITAL

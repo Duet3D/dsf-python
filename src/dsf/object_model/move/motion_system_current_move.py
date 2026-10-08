@@ -1,0 +1,41 @@
+from ..model_object import ModelObject
+from ..utils import model_prop, nullable_model_prop
+
+
+class MotionSystemCurrentMove(ModelObject):
+    """Information about the current move of a motion system"""
+
+    # Acceleration of the current move (in mm/s^2)
+    acceleration = model_prop("acceleration", float, 0.0)
+
+    # Deceleration of the current move (in mm/s^2)
+    deceleration = model_prop("deceleration", float, 0.0)
+
+    # Total distance of the current move (in mm)
+    distance = model_prop("distance", float, 0.0)
+
+    # Duration of the current move (in s)
+    duration = model_prop("duration", float, 0.0)
+
+    # Current extrusion rate (in mm/s)
+    extrusion_rate = model_prop("extrusion_rate", float, 0.0)
+
+    # Position in the job file of the move being executed (in bytes or None)
+    file_position = nullable_model_prop("file_position", int)
+
+    # Requested speed of the current move (in mm/s)
+    requested_speed = model_prop("requested_speed", float, 0.0)
+
+    # Top speed of the current move (in mm/s)
+    top_speed = model_prop("top_speed", float, 0.0)
+
+    def __init__(self):
+        super().__init__()
+        self._acceleration = 0.0
+        self._deceleration = 0.0
+        self._distance = 0.0
+        self._duration = 0.0
+        self._extrusion_rate = 0.0
+        self._file_position = None
+        self._requested_speed = 0.0
+        self._top_speed = 0.0

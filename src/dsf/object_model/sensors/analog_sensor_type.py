@@ -75,6 +75,21 @@ class AnalogSensorType(str, Enum, metaclass=DeprecatedAliasEnumType):
     # Stepper driver sensors on the DueX expansion board
     DRIVERS_DUEX = "driversduex"
 
+    # Board temperature sensor of an expansion board
+    BOARD_TEMP = "boardtemp"
+
+    # Heater current sensor of an expansion board
+    CURRENT = "current"
+
+    # TPiS thermopile object temperature
+    THERMOPILE_TPIS_OBJECT = "thermopile_tpis.object"
+
+    # TPiS thermopile ambient temperature
+    THERMOPILE_TPIS_AMBIENT = "thermopile_tpis.ambient"
+
+    # TPiS thermopile environment temperature
+    THERMOPILE_TPIS_ENVIRONMENT = "thermopile_tpis.environment"
+
     # Sensor on a CAN-connected expansion board
     REMOTE = "remote"
 
